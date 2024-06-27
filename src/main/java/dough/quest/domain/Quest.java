@@ -1,6 +1,7 @@
 package dough.quest.domain;
 
 import dough.global.BaseEntity;
+import dough.quest.domain.type.QuestType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.SQLRestriction;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -24,10 +26,14 @@ public class Quest extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String content;
 
-    private String questType;
+    @Column(nullable = false)
+    @Enumerated(value = STRING)
+    private QuestType questType;
 
+    @Column(nullable = false)
     private Integer difficulty;
 
     @OneToMany(mappedBy = "quest")

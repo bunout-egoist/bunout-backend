@@ -16,9 +16,9 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@SQLDelete(sql = "UPDATE quest_feedback SET status = 'DELETE' where id = ?")
+@SQLDelete(sql = "UPDATE feedback SET status = 'DELETE' where id = ?")
 @SQLRestriction("status is 'ACTIVE'")
-public class QuestFeedback extends BaseEntity {
+public class feedback extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -28,7 +28,7 @@ public class QuestFeedback extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @OneToOne(mappedBy = "questFeedback")
+    @OneToOne(mappedBy = "feedback")
     private CompletedQuest completedQuest;
 
     private String message;
