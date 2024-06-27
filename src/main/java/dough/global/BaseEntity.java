@@ -1,7 +1,9 @@
 package dough.global;
 
+import dough.global.type.StatusType;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+
+import static jakarta.persistence.EnumType.STRING;
 
 @Getter
 @MappedSuperclass
@@ -21,5 +25,6 @@ public class BaseEntity {
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(value = STRING)
+    private StatusType status;
 }

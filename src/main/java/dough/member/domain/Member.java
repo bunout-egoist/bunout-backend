@@ -1,9 +1,8 @@
 package dough.member.domain;
 
-import dough.feedback.domain.QuestFeedback;
+import dough.feedback.domain.feedback;
 import dough.global.BaseEntity;
-import dough.member.domain.type.GenderType;
-import dough.member.domain.type.OccupationType;
+import dough.member.domain.type.RoleType;
 import dough.member.domain.type.SocialLoginType;
 import dough.quest.domain.CompletedQuest;
 import jakarta.persistence.*;
@@ -16,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -34,31 +34,37 @@ public class Member extends BaseEntity {
     private List<CompletedQuest> completedQuests = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
-    private List<QuestFeedback> questFeedbacks = new ArrayList<>();
+    private List<feedback> feedbacks = new ArrayList<>();
 
+    @Column(length = 5)
     private String nickname;
 
-    private OccupationType occupation;
+    @Column(nullable = false)
+    @Enumerated(value = STRING)
+    private RoleType role;
 
-    private GenderType gender;
-
-    private Integer birthYear;
-
-    private String burnoutType;
-
-    private String role;
-
-    private String email;
-
+    @Column(nullable = false)
     private String socialLoginId;
 
+    @Column(nullable = false)
+    @Enumerated(value = STRING)
     private SocialLoginType socialLoginType;
+
+    private String email;
 
     private Integer level;
 
     private Integer experience;
 
     private Integer maxStreak;
+
+    private String occupation;
+
+    private String gender;
+
+    private Integer birthYear;
+
+    private String burnoutType;
 
     private LocalDateTime lastLoginDate;
 }
