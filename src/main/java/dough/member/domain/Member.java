@@ -2,6 +2,9 @@ package dough.member.domain;
 
 import dough.feedback.domain.QuestFeedback;
 import dough.global.BaseEntity;
+import dough.member.domain.type.GenderType;
+import dough.member.domain.type.OccupationType;
+import dough.member.domain.type.SocialLoginType;
 import dough.quest.domain.CompletedQuest;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -35,9 +38,9 @@ public class Member extends BaseEntity {
 
     private String nickname;
 
-    private String occupation;
+    private OccupationType occupation;
 
-    private String gender;
+    private GenderType gender;
 
     private Integer birthYear;
 
@@ -49,7 +52,7 @@ public class Member extends BaseEntity {
 
     private String socialLoginId;
 
-    private String socialLoginType;
+    private SocialLoginType socialLoginType;
 
     private Integer level;
 

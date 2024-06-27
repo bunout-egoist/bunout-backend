@@ -1,4 +1,4 @@
-package dough.global.type;
+package dough.member.domain.type;
 
 public enum OccupationType {
 
