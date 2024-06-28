@@ -1,6 +1,6 @@
 package dough.quest.domain;
 
-import dough.feedback.domain.feedback;
+import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
 import dough.member.domain.Member;
 import jakarta.persistence.*;
@@ -34,5 +34,5 @@ public class CompletedQuest extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "feedback_id")
-    private feedback feedback;
+    private Feedback feedback;
 }
