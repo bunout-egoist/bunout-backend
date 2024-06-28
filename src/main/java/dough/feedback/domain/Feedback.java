@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE feedback SET status = 'DELETE' where id = ?")
 @SQLRestriction("status is 'ACTIVE'")
-public class feedback extends BaseEntity {
+public class Feedback extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
