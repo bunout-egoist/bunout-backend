@@ -1,6 +1,6 @@
 package dough.member.domain;
 
-import dough.feedback.domain.feedback;
+import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
 import dough.member.domain.type.RoleType;
 import dough.member.domain.type.SocialLoginType;
@@ -34,7 +34,7 @@ public class Member extends BaseEntity {
     private List<CompletedQuest> completedQuests = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
-    private List<feedback> feedbacks = new ArrayList<>();
+    private List<Feedback> Feedbacks = new ArrayList<>();
 
     @Column(length = 5)
     private String nickname;
