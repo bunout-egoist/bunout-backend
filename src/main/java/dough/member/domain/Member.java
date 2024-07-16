@@ -2,8 +2,8 @@ package dough.member.domain;
 
 import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
-import dough.member.domain.type.RoleType;
-import dough.member.domain.type.SocialLoginType;
+import dough.login.domain.type.RoleType;
+import dough.login.domain.type.SocialLoginType;
 import dough.quest.domain.CompletedQuest;
 import jakarta.persistence.*;
 import lombok.Getter;
