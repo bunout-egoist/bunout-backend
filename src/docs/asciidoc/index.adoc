@@ -6,3 +6,6 @@
 :seclinks:
 
 include::test.adoc[]
+
+== Exception Codes
+operation::exception-code-controller-test/get-exception-codes[snippets="exception-code-response-fields"]
