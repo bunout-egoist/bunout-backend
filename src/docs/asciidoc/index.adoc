@@ -1,0 +1,11 @@
+= Spring REST Docs Test
+:doctype: book
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:seclinks:
+
+include::test.adoc[]
+
+== Exception Codes
+operation::exception-code-controller-test/get-exception-codes[snippets="exception-code-response-fields"]
