@@ -17,7 +17,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 
 @Import(RestDocsConfiguration.class)
 @ExtendWith(RestDocumentationExtension.class)
-public class AbstractControllerTest {
+public abstract class AbstractControllerTest {
 
     @Autowired
     protected RestDocumentationResultHandler restDocs;
