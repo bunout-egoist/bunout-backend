@@ -1,4 +1,4 @@
-package dough.member.domain.type;
+package dough.login.domain.type;
 
 public enum RoleType {
 

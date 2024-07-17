@@ -2,7 +2,7 @@ package dough.feedback.domain;
 
 import dough.global.BaseEntity;
 import dough.member.domain.Member;
-import dough.quest.domain.CompletedQuest;
+import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@SQLDelete(sql = "UPDATE feedback SET status = 'DELETE' where id = ?")
+@SQLDelete(sql = "UPDATE feedback SET status = 'DELETED' where id = ?")
 @SQLRestriction("status is 'ACTIVE'")
 public class Feedback extends BaseEntity {
 
@@ -29,7 +29,7 @@ public class Feedback extends BaseEntity {
     private Member member;
 
     @OneToOne(mappedBy = "feedback")
-    private CompletedQuest completedQuest;
+    private SelectedQuest selectedQuest;
 
     private String message;
 

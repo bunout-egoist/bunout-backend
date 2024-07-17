@@ -2,9 +2,9 @@ package dough.member.domain;
 
 import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
-import dough.member.domain.type.RoleType;
-import dough.member.domain.type.SocialLoginType;
-import dough.quest.domain.CompletedQuest;
+import dough.login.domain.type.RoleType;
+import dough.login.domain.type.SocialLoginType;
+import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@SQLDelete(sql = "UPDATE member SET status = 'DELETE' where id = ?")
+@SQLDelete(sql = "UPDATE member SET status = 'DELETED' where id = ?")
 @SQLRestriction("status is 'ACTIVE'")
 public class Member extends BaseEntity {
 
@@ -31,7 +31,7 @@ public class Member extends BaseEntity {
     private Long id;
 
     @OneToMany(mappedBy = "member")
-    private List<CompletedQuest> completedQuests = new ArrayList<>();
+    private List<SelectedQuest> selectedQuests = new ArrayList<>();
 
     @OneToMany(mappedBy = "member")
     private List<Feedback> Feedbacks = new ArrayList<>();
@@ -66,5 +66,7 @@ public class Member extends BaseEntity {
 
     private String burnoutType;
 
-    private LocalDateTime lastLoginDate;
+    private LocalDateTime questLastModified;
+
+    private LocalDateTime lastLogin;
 }

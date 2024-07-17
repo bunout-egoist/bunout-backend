@@ -1,7 +1,7 @@
 package dough.quest.domain.repository;
 
-import dough.quest.domain.CompletedQuest;
+import dough.quest.domain.SelectedQuest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CompletedQuestRepository extends JpaRepository<CompletedQuest, Long> {
+public interface CompletedQuestRepository extends JpaRepository<SelectedQuest, Long> {
 }
