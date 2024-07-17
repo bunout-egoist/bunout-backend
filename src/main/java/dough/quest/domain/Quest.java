@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @RequiredArgsConstructor(access = PROTECTED)
-@SQLDelete(sql = "UPDATE quest SET status = 'DELETE' where id = ?")
+@SQLDelete(sql = "UPDATE quest SET status = 'DELETED' where id = ?")
 @SQLRestriction("status is 'ACTIVE'")
 public class Quest extends BaseEntity {
 
@@ -37,5 +37,5 @@ public class Quest extends BaseEntity {
     private Integer difficulty;
 
     @OneToMany(mappedBy = "quest")
-    private List<CompletedQuest> completedQuests = new ArrayList<>();
+    private List<SelectedQuest> selectedQuests = new ArrayList<>();
 }
