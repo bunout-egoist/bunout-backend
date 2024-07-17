@@ -7,11 +7,11 @@ assignees: ''
 
 ---
 
-## Summary
+## 📃 Summary
 
 </br>
 
-## Task
+## ✅ Task
 
 - [ ] Task 1
 
