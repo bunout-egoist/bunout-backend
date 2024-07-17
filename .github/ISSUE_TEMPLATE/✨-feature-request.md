@@ -2,7 +2,7 @@
 name: "✨ Feature request"
 about: 작업 사항을 입력해주세요.
 title: ''
-labels: ''
+labels: "\U0001F4AB Feature"
 assignees: ''
 
 ---
@@ -11,6 +11,8 @@ assignees: ''
 
 </br>
 
-## Description
+## Task
+
+- [ ]
 
 </br>
