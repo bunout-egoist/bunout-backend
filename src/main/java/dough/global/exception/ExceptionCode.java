@@ -13,6 +13,8 @@ public enum ExceptionCode {
 
     // 2000 feedback
 
+    NOT_FOUND_MEMBER_ID(3000, "요청하신 ID에 해당하는 유저를 찾을 수 없습니다."),
+
 
     INTERNAL_SEVER_ERROR(9999,"서버에서 에러가 발생하였습니다.");
     
