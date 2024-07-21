@@ -2,13 +2,6 @@ package dough.login.config;
 
 import dough.login.service.OAuth2UserCustomService;
 import lombok.RequiredArgsConstructor;
-import me.kimjunhee.springbootdeveloper.config.jwt.TokenAuthenticationFilter;
-import me.kimjunhee.springbootdeveloper.config.jwt.TokenProvider;
-import me.kimjunhee.springbootdeveloper.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import me.kimjunhee.springbootdeveloper.config.oauth.OAuth2SuccessHandler;
-import me.kimjunhee.springbootdeveloper.config.oauth.OAuth2UserCustomService;
-import me.kimjunhee.springbootdeveloper.repository.RefreshTokenRepository;
-import me.kimjunhee.springbootdeveloper.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
