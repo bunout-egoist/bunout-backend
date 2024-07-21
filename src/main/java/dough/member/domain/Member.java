@@ -95,4 +95,8 @@ public class Member extends BaseEntity {
             this.questLastModified = LocalDateTime.now();
             this.lastLogin = LocalDateTime.now();
     }
+
+    public void updateMember(final String nickname) {
+        this.nickname = nickname;
+    }
 }
