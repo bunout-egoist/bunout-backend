@@ -1,11 +1,20 @@
-= Spring REST Docs Test
+= Dough REST API Docs
 :doctype: book
 :source-highlighter: highlightjs
 :toc: left
-:toclevels: 2
-:seclinks:
+:toclevels: 4
+:sectlinks:
 
-include::test.adoc[]
+== Member API
+
+=== 멤버 조회
+
+==== Request
+include::{snippets}/member-controller-test/get-member-info/http-request.adoc[]
+include::{snippets}/member-controller-test/get-member-info/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/member-controller-test/get-member-info/response-body.adoc[]
 
 == Exception Codes
-operation::exception-code-controller-test/get-exception-codes[snippets="exception-code-response-fields"]
+include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]
