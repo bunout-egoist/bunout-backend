@@ -16,5 +16,15 @@ include::{snippets}/member-controller-test/get-member-info/path-parameters.adoc[
 ==== Response
 include::{snippets}/member-controller-test/get-member-info/response-body.adoc[]
 
+=== 멤버 닉네임 수정
+
+==== Request
+include::{snippets}/member-controller-test/update-member-info/http-request.adoc[]
+include::{snippets}/member-controller-test/update-member-info/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/member-controller-test/update-member-info/response-body.adoc[]
+
+
 == Exception Codes
 include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]
