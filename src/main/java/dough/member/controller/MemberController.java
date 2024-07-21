@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/member")
+@RequestMapping("/api/v1/members")
 public class MemberController {
 
     public final MemberService memberService;
 
-    @GetMapping
-    public ResponseEntity<MemberInfoResponse> getMemberInfo(@PathVariable final Long memberId) {
+    @GetMapping("/{memberId}")
+    public ResponseEntity<MemberInfoResponse> getMemberInfo(@PathVariable("memberId") final Long memberId) {
         final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(memberId);
         return ResponseEntity.ok().body(memberInfoResponse);
     }
