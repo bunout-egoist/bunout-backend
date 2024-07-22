@@ -3,6 +3,7 @@ package dough.member.service;
 import dough.global.exception.BadRequestException;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
+import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,16 @@ public class MemberService {
     public MemberInfoResponse getMemberInfo(final Long memberId) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+        return MemberInfoResponse.from(member);
+    }
+
+    public MemberInfoResponse updateMemberInfo(final Long memberId, final MemberInfoRequest memberInfoRequest) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+
+        member.updateMember(memberInfoRequest.getNickname());
+        memberRepository.save(member);
+
         return MemberInfoResponse.from(member);
     }
 }

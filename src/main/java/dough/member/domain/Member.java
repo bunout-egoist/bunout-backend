@@ -8,6 +8,7 @@ import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -21,6 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@DynamicInsert
 @NoArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE member SET status = 'DELETED' where id = ?")
 @SQLRestriction("status is 'ACTIVE'")
@@ -94,5 +96,9 @@ public class Member extends BaseEntity {
             this.burnoutType = burnoutType;
             this.questLastModified = LocalDateTime.now();
             this.lastLogin = LocalDateTime.now();
+    }
+
+    public void updateMember(final String nickname) {
+        this.nickname = nickname;
     }
 }
