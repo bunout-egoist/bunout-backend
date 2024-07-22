@@ -24,6 +24,7 @@ include::{snippets}/member-controller-test/update-member-info/path-parameters.ad
 
 ==== Response
 include::{snippets}/member-controller-test/update-member-info/response-body.adoc[]
+include::{snippets}/member-controller-test/update-member-info_-nickname-size-invalid/http-response.adoc[]
 
 
 == Exception Codes
