@@ -1,6 +1,5 @@
 package dough.global.member.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.AbstractControllerTest;
 import dough.member.controller.MemberController;
@@ -26,6 +25,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(MemberController.class)
@@ -41,6 +41,15 @@ class MemberControllerTest extends AbstractControllerTest {
     @MockBean
     private MemberService memberService;
 
+    private ResultActions performPutUpdateMemberInfoRequest(
+            final Long memberId,
+            final MemberInfoRequest memberInfoRequest)
+            throws Exception {
+        return mockMvc.perform(put("/api/v1/members/{memberId}", memberId)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(memberInfoRequest)));
+    }
+
     @DisplayName("멤버의 닉네임을 조회할 수 있다.")
     @Test
     void getMemberInfo() throws Exception {
@@ -48,7 +57,7 @@ class MemberControllerTest extends AbstractControllerTest {
         Long id = 1L;
         final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(id, "goeun");
 
-        when(memberService.getMemberInfo(id))
+        when(memberService.getMemberInfo(anyLong()))
                 .thenReturn(memberInfoResponse);
 
         final ResultActions resultActions = mockMvc.perform(get("/api/v1/members/{memberId}", id));
@@ -73,7 +82,7 @@ class MemberControllerTest extends AbstractControllerTest {
                 ));
 
         // then
-        verify(memberService).getMemberInfo(id);
+        verify(memberService).getMemberInfo(anyLong());
     }
 
     @DisplayName("멤버 닉네임을 수정할 수 있다.")
@@ -87,9 +96,7 @@ class MemberControllerTest extends AbstractControllerTest {
         when(memberService.updateMemberInfo(anyLong(), any()))
                 .thenReturn(memberInfoResponse);
 
-        final ResultActions resultActions = mockMvc.perform(put("/api/v1/members/{memberId}", id)
-                .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(memberInfoRequest)));
+        final ResultActions resultActions = performPutUpdateMemberInfoRequest(id, memberInfoRequest);
 
         // when
         resultActions.andExpect(status().isOk())
@@ -118,5 +125,19 @@ class MemberControllerTest extends AbstractControllerTest {
 
         // then
         verify(memberService).updateMemberInfo(anyLong(), any());
+    }
+
+    @DisplayName("닉네임이 5자를 초과할 경우 예외가 발생한다.")
+    @Test
+    void updateMemberInfo_NicknameSizeInvalid() throws Exception {
+        // given
+        final MemberInfoRequest memberInfoRequest = new MemberInfoRequest("jjanggu");
+
+        // when
+        final ResultActions resultActions = performPutUpdateMemberInfoRequest(1L, memberInfoRequest);
+
+        // then
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("닉네임은 5자를 초과할 수 없습니다."));
     }
 }
