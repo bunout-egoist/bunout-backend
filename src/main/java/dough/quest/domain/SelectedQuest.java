@@ -7,6 +7,7 @@ import dough.quest.domain.type.QuestStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -18,6 +19,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@DynamicInsert
 @RequiredArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE selected_quest SET status = 'DELETED' where id = ?")
 @SQLRestriction("status is 'ACTIVE'")
