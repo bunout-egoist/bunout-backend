@@ -1,7 +1,8 @@
-package dough.global.member.fixture;
+package dough.member.fixture;
 
 import dough.member.domain.Member;
 
+import static dough.login.domain.type.SocialLoginType.APPLE;
 import static dough.login.domain.type.SocialLoginType.KAKAO;
 
 public class MemberFixture {
@@ -15,6 +16,18 @@ public class MemberFixture {
             "기타",
             "여성",
             2002,
+            "빵"
+    );
+
+    public static final Member MEMBER2 = new Member(
+            2L,
+            "heeji",
+            "1111",
+            APPLE,
+            "heeji@mail.com",
+            "기타",
+            "여성",
+            1999,
             "빵"
     );
 }

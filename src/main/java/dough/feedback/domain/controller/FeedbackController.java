@@ -1,4 +1,4 @@
-package dough.feedback.controller;
+package dough.feedback.domain.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
