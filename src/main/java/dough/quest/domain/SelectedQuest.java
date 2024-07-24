@@ -43,4 +43,21 @@ public class SelectedQuest extends BaseEntity {
 
     @Enumerated(value = STRING)
     private QuestStatus questStatus = IN_PROGRESS;
+
+    public SelectedQuest(
+            final Member member,
+            final Quest quest,
+            final Feedback feedback
+    ) {
+        this.member = member;
+        this.quest = quest;
+        this.feedback = feedback;
+    }
+
+    public SelectedQuest(
+            final Member member,
+            final Quest quest
+    ) {
+        this(member, quest, null);
+    }
 }
