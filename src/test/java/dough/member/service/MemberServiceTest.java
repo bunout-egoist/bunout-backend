@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static dough.member.fixture.MemberFixture.MEMBER;
+import static dough.member.fixture.MemberFixture.MEMBER1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -33,14 +33,14 @@ class MemberServiceTest {
     @Test
     void getMemberInfo() {
         // given
-        given(memberRepository.findById(MEMBER.getId()))
-                .willReturn(Optional.of(MEMBER));
+        given(memberRepository.findById(MEMBER1.getId()))
+                .willReturn(Optional.of(MEMBER1));
 
         // when
-        final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(MEMBER.getId());
+        final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(MEMBER1.getId());
 
         // then
-        assertThat(memberInfoResponse).usingRecursiveComparison().isEqualTo(MemberInfoResponse.from(MEMBER));
+        assertThat(memberInfoResponse).usingRecursiveComparison().isEqualTo(MemberInfoResponse.from(MEMBER1));
     }
 
     @DisplayName("멤버의 닉네임을 수정할 수 있다.")
@@ -48,15 +48,15 @@ class MemberServiceTest {
     void updateMemberInfo() {
         // given
         final MemberInfoRequest memberInfoRequest = new MemberInfoRequest("minju");
-        MEMBER.updateMember("minju");
+        MEMBER1.updateMember("minju");
 
         given(memberRepository.findById(any()))
-                .willReturn(Optional.of(MEMBER));
+                .willReturn(Optional.of(MEMBER1));
         given(memberRepository.save(any()))
-                .willReturn(MEMBER);
+                .willReturn(MEMBER1);
 
         // when
-        memberService.updateMemberInfo(MEMBER.getId(), memberInfoRequest);
+        memberService.updateMemberInfo(MEMBER1.getId(), memberInfoRequest);
 
         // then
         verify(memberRepository).findById(any());

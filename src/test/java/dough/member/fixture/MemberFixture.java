@@ -7,7 +7,7 @@ import static dough.login.domain.type.SocialLoginType.KAKAO;
 
 public class MemberFixture {
 
-    public static final Member MEMBER = new Member(
+    public static final Member MEMBER1 = new Member(
             1L,
             "goeun",
             "0000",
