@@ -33,7 +33,7 @@ public class QuestServiceTest {
         final QuestRequest questRequest = new QuestRequest(
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "15분 운동하기",
-                "데일리퀘스트",
+                "데일리",
                 3
         );
 
