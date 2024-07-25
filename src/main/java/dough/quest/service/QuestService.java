@@ -17,12 +17,12 @@ public class QuestService {
 
     private final SelectedQuestRepository selectedQuestRepository;
 
-    public List<CompletedQuestDetailResponse> getCompletedQuestDetail(final Long memberId, final LocalDate searchDate) {
-        List<CompletedQuestFeedbackElement> completedQuestFeedbackElements = selectedQuestRepository.findCompletedQuestFeedbackByMemberIdAndSearchDate(memberId, searchDate);
-        return completedQuestFeedbackElements.stream()
-                .map(completedQuest -> CompletedQuestDetailResponse.of(
-                        completedQuest.getFeedback(),
-                        completedQuest.getQuest()
+    public List<CompletedQuestDetailResponse> getCompletedQuestDetail(final Long memberId, final LocalDate date) {
+        List<CompletedQuestFeedbackElement> questElements = selectedQuestRepository.findCompletedQuestFeedbackByMemberIdAndDate(memberId, date);
+        return questElements.stream()
+                .map(questElement -> CompletedQuestDetailResponse.of(
+                        questElement.getFeedback(),
+                        questElement.getQuest()
                 )).toList();
     }
 }

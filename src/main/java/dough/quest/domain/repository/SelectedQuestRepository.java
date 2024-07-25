@@ -15,9 +15,9 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
             "FROM SelectedQuest s " +
             "LEFT JOIN FETCH s.feedback f " +
             "LEFT JOIN FETCH s.quest q " +
-            "WHERE s.member.id = :memberId AND s.createdAt = :searchDate AND s.questStatus = 'COMPLETED'")
-    List<CompletedQuestFeedbackElement> findCompletedQuestFeedbackByMemberIdAndSearchDate(
+            "WHERE s.member.id = :memberId AND s.createdAt = :date AND s.questStatus = 'COMPLETED'")
+    List<CompletedQuestFeedbackElement> findCompletedQuestFeedbackByMemberIdAndDate(
             @Param("memberId") final Long memberId,
-            @Param("searchDate") final LocalDate searchDate
+            @Param("searchDate") final LocalDate date
     );
 }

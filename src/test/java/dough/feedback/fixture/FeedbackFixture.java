@@ -2,15 +2,13 @@ package dough.feedback.fixture;
 
 import dough.feedback.domain.Feedback;
 
-import static dough.member.fixture.MemberFixture.MEMBER2;
-import static dough.member.fixture.MemberFixture.MEMBER3;
-import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
-import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST2;
+import static dough.member.fixture.MemberFixture.*;
+import static dough.quest.fixture.SelectedQuestFixture.*;
 
 public class FeedbackFixture {
 
     public static final Feedback FEEDBACK1 = new Feedback(
-            MEMBER2,
+            MEMBER1,
             COMPLETED_QUEST1,
             "미션 완료 메시지",
             "https://~",
@@ -18,7 +16,7 @@ public class FeedbackFixture {
     );
 
     public static final Feedback FEEDBACK2 = new Feedback(
-            MEMBER2,
+            MEMBER1,
             COMPLETED_QUEST2,
             "미션 완료 메시지",
             "https://~",
@@ -26,8 +24,8 @@ public class FeedbackFixture {
     );
 
     public static final Feedback FEEDBACK3 = new Feedback(
-            MEMBER3,
-            COMPLETED_QUEST1,
+            MEMBER2,
+            COMPLETED_QUEST3,
             "미션 완료 메시지",
             "https://~",
             3
