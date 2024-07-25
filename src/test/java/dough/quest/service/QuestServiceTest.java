@@ -1,5 +1,6 @@
 package dough.quest.service;
 
+import dough.global.exception.InvalidDomainException;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
 import dough.quest.dto.request.QuestRequest;
@@ -11,8 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static dough.global.exception.ExceptionCode.INVALID_QUEST_TYPE;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -44,5 +47,23 @@ public class QuestServiceTest {
 
         // then
         assertThat(actualId).isEqualTo(DAILY_QUEST1.getId());
+    }
+
+    @DisplayName("퀘스트 타입이 맞지 않을 경우 예외가 발생한다.")
+    @Test
+    void saveQuest_QuestTypeInvalid() {
+        // given
+        final QuestRequest questRequest = new QuestRequest(
+                "점심시간, 몸과 마음을 건강하게 유지하며",
+                "15분 운동하기",
+                "퀘스트 타입 오류",
+                3
+        );
+
+        // when & then
+        assertThatThrownBy(() -> questService.save(questRequest))
+                .isInstanceOf(InvalidDomainException.class)
+                .extracting("code")
+                .isEqualTo(INVALID_QUEST_TYPE.getCode());
     }
 }

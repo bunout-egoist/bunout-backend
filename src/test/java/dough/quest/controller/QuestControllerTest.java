@@ -50,6 +50,7 @@ class QuestControllerTest extends AbstractControllerTest {
         when(questService.save(any()))
                 .thenReturn(1L);
 
+        // when
         final ResultActions resultActions = mockMvc.perform(post("/api/v1/quests")
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(questRequest)));
@@ -75,6 +76,8 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
+
+        // then
         verify(questService).save(any());
     }
 }
