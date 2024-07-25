@@ -10,8 +10,8 @@
 === 멤버 조회
 
 ==== Request
-include::{snippets}/member-controller-test/get-member-info/http-request.adoc[]
 include::{snippets}/member-controller-test/get-member-info/path-parameters.adoc[]
+include::{snippets}/member-controller-test/get-member-info/http-request.adoc[]
 
 ==== Response
 include::{snippets}/member-controller-test/get-member-info/response-body.adoc[]
@@ -19,8 +19,8 @@ include::{snippets}/member-controller-test/get-member-info/response-body.adoc[]
 === 멤버 닉네임 수정
 
 ==== Request
-include::{snippets}/member-controller-test/update-member-info/http-request.adoc[]
 include::{snippets}/member-controller-test/update-member-info/path-parameters.adoc[]
+include::{snippets}/member-controller-test/update-member-info/http-request.adoc[]
 
 ==== Response
 include::{snippets}/member-controller-test/update-member-info/response-body.adoc[]
@@ -34,6 +34,15 @@ include::{snippets}/member-controller-test/update-member-info_-nickname-size-inv
 include::{snippets}/quest-controller-test/save-quest/http-request.adoc[]
 ==== Response
 include::{snippets}/quest-controller-test/save-quest/http-response.adoc[]
+
+=== 퀘스트 수정
+
+==== Request
+include::{snippets}/quest-controller-test/update-quest/path-parameters.adoc[]
+include::{snippets}/quest-controller-test/update-quest/http-request.adoc[]
+
+==== Response
+include::{snippets}/quest-controller-test/update-quest/http-response.adoc[]
 
 == Exception Codes
 include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]
