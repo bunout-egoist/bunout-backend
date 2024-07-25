@@ -1,5 +1,6 @@
 package dough.quest.service;
 
+import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
@@ -14,9 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
 import static dough.global.exception.ExceptionCode.INVALID_QUEST_TYPE;
+import static dough.global.exception.ExceptionCode.NOT_FOUND_QUEST_ID;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -36,7 +36,7 @@ public class QuestServiceTest {
 
     @DisplayName("퀘스트를 추가할 수 있다.")
     @Test
-    void saveQuest() {
+    void save() {
         // given
         final QuestRequest questRequest = new QuestRequest(
                 "점심시간, 몸과 마음을 건강하게 유지하며",
@@ -56,7 +56,7 @@ public class QuestServiceTest {
 
     @DisplayName("퀘스트 타입이 맞지 않을 경우 예외가 발생한다.")
     @Test
-    void saveQuest_QuestTypeInvalid() {
+    void save_QuestTypeInvalid() {
         // given
         final QuestRequest questRequest = new QuestRequest(
                 "점심시간, 몸과 마음을 건강하게 유지하며",
@@ -74,7 +74,7 @@ public class QuestServiceTest {
 
     @DisplayName("퀘스트를 업데이트 할 수 있다.")
     @Test
-    void updateQuest() {
+    void update() {
         // given
         final QuestUpdateRequest questUpdateRequest = new QuestUpdateRequest(
                 "점심시간, 몸과 마음을 건강하게 유지하며",
@@ -104,5 +104,26 @@ public class QuestServiceTest {
         // then
         verify(questRepository).existsById(any());
         verify(questRepository).save(any());
+    }
+
+    @DisplayName("존재하지 않는 questId를 입력받으면 예외가 발생한다.")
+    @Test
+    void update_NotFoundQuestId() {
+        // given
+        final QuestUpdateRequest questUpdateRequest = new QuestUpdateRequest(
+                "점심시간, 몸과 마음을 건강하게 유지하며",
+                "20분 운동하기",
+                "스페셜",
+                4
+        );
+
+        given(questRepository.existsById(any()))
+                .willThrow(new BadRequestException(NOT_FOUND_QUEST_ID));
+
+        // when & then
+        assertThatThrownBy(() -> questService.update(any(), questUpdateRequest))
+                .isInstanceOf(BadRequestException.class)
+                .extracting("code")
+                .isEqualTo(NOT_FOUND_QUEST_ID.getCode());
     }
 }
