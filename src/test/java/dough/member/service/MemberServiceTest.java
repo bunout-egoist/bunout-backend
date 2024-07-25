@@ -1,9 +1,9 @@
-package dough.global.member.service;
+package dough.member.service;
 
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberInfoResponse;
-import dough.member.service.MemberService;
+import dough.member.fixture.MemberFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static dough.global.member.fixture.MemberFixture.MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -34,14 +33,14 @@ class MemberServiceTest {
     @Test
     void getMemberInfo() {
         // given
-        given(memberRepository.findById(MEMBER.getId()))
-                .willReturn(Optional.of(MEMBER));
+        given(memberRepository.findById(MemberFixture.MEMBER.getId()))
+                .willReturn(Optional.of(MemberFixture.MEMBER));
 
         // when
-        final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(MEMBER.getId());
+        final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(MemberFixture.MEMBER.getId());
 
         // then
-        assertThat(memberInfoResponse).usingRecursiveComparison().isEqualTo(MemberInfoResponse.from(MEMBER));
+        assertThat(memberInfoResponse).usingRecursiveComparison().isEqualTo(MemberInfoResponse.from(MemberFixture.MEMBER));
     }
 
     @DisplayName("멤버의 닉네임을 수정할 수 있다.")
@@ -49,15 +48,15 @@ class MemberServiceTest {
     void updateMemberInfo() {
         // given
         final MemberInfoRequest memberInfoRequest = new MemberInfoRequest("minju");
-        MEMBER.updateMember("minju");
+        MemberFixture.MEMBER.updateMember("minju");
 
         given(memberRepository.findById(any()))
-                .willReturn(Optional.of(MEMBER));
+                .willReturn(Optional.of(MemberFixture.MEMBER));
         given(memberRepository.save(any()))
-                .willReturn(MEMBER);
+                .willReturn(MemberFixture.MEMBER);
 
         // when
-        memberService.updateMemberInfo(MEMBER.getId(), memberInfoRequest);
+        memberService.updateMemberInfo(MemberFixture.MEMBER.getId(), memberInfoRequest);
 
         // then
         verify(memberRepository).findById(any());

@@ -1,4 +1,4 @@
-package dough.global.member.fixture;
+package dough.member.fixture;
 
 import dough.member.domain.Member;
 

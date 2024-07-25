@@ -1,4 +1,4 @@
-package dough.global.member.controller;
+package dough.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.AbstractControllerTest;
