@@ -10,8 +10,8 @@ import static dough.global.exception.ExceptionCode.INVALID_QUEST_TYPE;
 @Getter
 public enum QuestType {
 
-    DAILY("데일리퀘스트"),
-    SPECIAL("스페셜퀘스트");
+    DAILY("데일리"),
+    SPECIAL("스페셜");
 
     private final String code;
 

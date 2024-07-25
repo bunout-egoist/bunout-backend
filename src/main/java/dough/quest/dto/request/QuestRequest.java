@@ -1,6 +1,7 @@
 package dough.quest.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,6 @@ public class QuestRequest {
     @NotBlank(message = "퀘스트 타입을 입력해주세요.")
     private String questType;
 
-    @NotBlank(message = "퀘스트 난이도를 입력해주세요.")
+    @NotNull(message = "퀘스트 난이도를 입력해주세요.")
     private Integer difficulty;
 }
