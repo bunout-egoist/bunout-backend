@@ -45,6 +45,15 @@ include::{snippets}/quest-controller-test/update-quest/http-request.adoc[]
 ==== Response
 include::{snippets}/quest-controller-test/update-quest/http-response.adoc[]
 
+=== 퀘스트 삭제
+
+==== Request
+include::{snippets}/quest-controller-test/delete-quest/path-parameters.adoc[]
+include::{snippets}/quest-controller-test/delete-quest/http-request.adoc[]
+
+==== Response
+include::{snippets}/quest-controller-test/delete-quest/http-response.adoc[]
+
 == Exception Codes
 include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]
 
