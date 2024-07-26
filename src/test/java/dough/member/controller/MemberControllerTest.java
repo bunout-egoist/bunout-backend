@@ -1,8 +1,7 @@
-package dough.global.member.controller;
+package dough.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.AbstractControllerTest;
-import dough.member.controller.MemberController;
 import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.member.service.MemberService;
