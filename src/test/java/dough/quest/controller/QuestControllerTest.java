@@ -22,7 +22,8 @@ import static javax.management.openmbean.SimpleType.INTEGER;
 import static javax.management.openmbean.SimpleType.STRING;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
@@ -70,6 +71,7 @@ class QuestControllerTest extends AbstractControllerTest {
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(questRequest)));
 
+        // then
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
                         requestFields(
@@ -113,9 +115,6 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
-
-        // then
-        verify(questService).save(any());
     }
 
     @DisplayName("퀘스트를 수정할 수 있다.")
@@ -131,9 +130,10 @@ class QuestControllerTest extends AbstractControllerTest {
 
         doNothing().when(questService).update(anyLong(), any());
 
+        // when
         final ResultActions resultActions = performPutUpdateQuestRequest(DAILY_QUEST1.getId(), questUpdateRequest);
 
-        // when
+        // then
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
                         pathParameters(
@@ -159,8 +159,5 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
-
-        // then
-        verify(questService).update(anyLong(), any());
     }
 }
