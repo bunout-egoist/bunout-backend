@@ -2,6 +2,7 @@ package dough.quest.controller;
 
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
+import dough.quest.dto.response.QuestResponse;
 import dough.quest.service.QuestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +17,9 @@ public class QuestController {
     private final QuestService questService;
 
     @PostMapping
-    public ResponseEntity<Void> saveQuest(@RequestBody @Valid final QuestRequest questRequest) {
-        questService.save(questRequest);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<QuestResponse> createQuest(@RequestBody @Valid final QuestRequest questRequest) {
+        final QuestResponse questResponse = questService.save(questRequest);
+        return ResponseEntity.ok().body(questResponse);
     }
 
     @PutMapping("/{questId}")
