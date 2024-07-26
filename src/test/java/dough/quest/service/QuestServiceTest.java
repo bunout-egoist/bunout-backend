@@ -4,9 +4,9 @@ import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
-import dough.quest.domain.type.QuestType;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
+import dough.quest.dto.response.QuestResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,13 +45,15 @@ public class QuestServiceTest {
                 3
         );
 
-        given(questRepository.save(any(Quest.class))).willReturn(DAILY_QUEST1);
+        given(questRepository.save(any(Quest.class)))
+                .willReturn(DAILY_QUEST1);
 
         // when
-        final Long actualId = questService.save(questRequest);
+        final QuestResponse questResponse = questService.save(questRequest);
 
         // then
-        assertThat(actualId).isEqualTo(DAILY_QUEST1.getId());
+        assertThat(questResponse).usingRecursiveComparison()
+                .isEqualTo(QuestResponse.of(DAILY_QUEST1));
     }
 
     @DisplayName("퀘스트 타입이 맞지 않을 경우 예외가 발생한다.")
@@ -83,20 +85,10 @@ public class QuestServiceTest {
                 4
         );
 
-        final QuestType questType = QuestType.getMappedQuestType(questUpdateRequest.getQuestType());
-
-        final Quest updateQuest = new Quest(
-                DAILY_QUEST1.getId(),
-                "점심시간, 몸과 마음을 건강하게 유지하며",
-                "20분 운동하기",
-                questType,
-                4
-        );
-
-        given(questRepository.existsById(DAILY_QUEST1.getId()))
+        given(questRepository.existsById(any()))
                 .willReturn(true);
         given(questRepository.save(any()))
-                .willReturn(updateQuest);
+                .willReturn(DAILY_QUEST1);
 
         // when
         questService.update(DAILY_QUEST1.getId(), questUpdateRequest);

@@ -31,9 +31,10 @@ include::{snippets}/member-controller-test/update-member-info_-nickname-size-inv
 === 퀘스트 추가
 
 ==== Request
-include::{snippets}/quest-controller-test/save-quest/http-request.adoc[]
+include::{snippets}/quest-controller-test/create-quest/http-request.adoc[]
+
 ==== Response
-include::{snippets}/quest-controller-test/save-quest/http-response.adoc[]
+include::{snippets}/quest-controller-test/create-quest/http-response.adoc[]
 
 === 퀘스트 수정
 
