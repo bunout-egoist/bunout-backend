@@ -29,4 +29,10 @@ public class QuestController {
         questService.update(questId, questUpdateRequest);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{questId}")
+    public ResponseEntity<Void> deleteQuest(@PathVariable("questId") final Long questId) {
+        questService.delete(questId);
+        return ResponseEntity.ok().build();
+    }
 }
