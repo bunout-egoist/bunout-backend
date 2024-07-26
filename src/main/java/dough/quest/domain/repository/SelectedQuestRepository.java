@@ -9,7 +9,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
     @Query("""
             SELECT CASE WHEN COUNT(sq) > 0 THEN true ELSE false END 
             FROM SelectedQuest sq 
-            WHERE sq.quest = :questId
+            WHERE sq.quest.id = :questId
             """)
     Boolean existsByQuestId(final Long questId);
 }
