@@ -101,7 +101,7 @@ public class QuestServiceTest {
                 .isEqualTo(COMPLETED_QUEST_DETAILS.stream()
                         .map(completedQuestDetail ->
                                 CompletedQuestDetailResponse.of(
-                                        completedQuestDetail.quest, 
+                                        completedQuestDetail.quest,
                                         completedQuestDetail.feedback
                                 ))
                         .toList());

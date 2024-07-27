@@ -31,9 +31,19 @@ include::{snippets}/member-controller-test/update-member-info_-nickname-size-inv
 === 퀘스트 추가
 
 ==== Request
-include::{snippets}/quest-controller-test/save-quest/http-request.adoc[]
+include::{snippets}/quest-controller-test/create-quest/http-request.adoc[]
 ==== Response
-include::{snippets}/quest-controller-test/save-quest/http-response.adoc[]
+include::{snippets}/quest-controller-test/create-quest/http-response.adoc[]
+
+== Dashboard API
+
+=== 달성 퀘스트 상세 조회
+
+==== Request
+include::{snippets}/dashboard-controller-test/get-completed-quest-detail/path-parameters.adoc[]
+include::{snippets}/dashboard-controller-test/get-completed-quest-detail/http-request.adoc[]
+==== Response
+include::{snippets}/dashboard-controller-test/get-completed-quest-detail/http-response.adoc[]
 
 == Exception Codes
 include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]
