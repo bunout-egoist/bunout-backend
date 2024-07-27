@@ -11,13 +11,13 @@ import java.util.List;
 
 public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Long> {
 
-    @Query("SELECT DISTINCT new dough.quest.dto.CompletedQuestFeedbackElement(s.quest, s.feedback) " +
+    @Query(value = "SELECT DISTINCT new dough.quest.dto.CompletedQuestFeedbackElement(s.quest, s.feedback) " +
             "FROM SelectedQuest s " +
-            "LEFT JOIN FETCH s.feedback f " +
-            "LEFT JOIN FETCH s.quest q " +
-            "WHERE s.member.id = :memberId AND s.createdAt = :date AND s.questStatus = 'COMPLETED'")
+            "LEFT JOIN FETCH s.feedback " +
+            "LEFT JOIN FETCH s.quest " +
+            "WHERE s.member.id = :memberId AND s.createdAt = :date AND s.questStatus = 'COMPLETED'", nativeQuery = true)
     List<CompletedQuestFeedbackElement> findCompletedQuestFeedbackByMemberIdAndDate(
             @Param("memberId") final Long memberId,
-            @Param("searchDate") final LocalDate date
+            @Param("date") final LocalDate date
     );
 }
