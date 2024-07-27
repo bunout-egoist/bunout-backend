@@ -18,7 +18,7 @@ public class CompletedQuestDetailResponse {
     private String activity;
     private String questType;
 
-        public static CompletedQuestDetailResponse of(final Feedback feedback, final Quest quest) {
+        public static CompletedQuestDetailResponse of(final Quest quest, final Feedback feedback) {
             return new CompletedQuestDetailResponse(
                     feedback.getId(),
                     feedback.getImageUrl(),

@@ -26,8 +26,8 @@ public class QuestService {
         List<CompletedQuestFeedbackElement> questElements = selectedQuestRepository.findCompletedQuestFeedbackByMemberIdAndDate(memberId, date);
         return questElements.stream()
                 .map(questElement -> CompletedQuestDetailResponse.of(
-                        questElement.getFeedback(),
-                        questElement.getQuest()
+                        questElement.getQuest(),
+                        questElement.getFeedback()
                 )).toList();
     }
 
