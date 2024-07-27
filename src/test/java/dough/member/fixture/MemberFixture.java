@@ -30,16 +30,4 @@ public class MemberFixture {
             1999,
             "빵"
     );
-
-    public static final Member MEMBER3 = new Member(
-            3L,
-            "hanni",
-            "2222",
-            APPLE,
-            "hanni@mail.com",
-            "기타",
-            "여성",
-            2004,
-            "빵"
-    );
 }

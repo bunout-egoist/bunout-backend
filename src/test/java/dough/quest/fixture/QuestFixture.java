@@ -22,20 +22,4 @@ public class QuestFixture {
             DAILY,
             2
     );
-
-    public static final Quest DAILY_QUEST3 = new Quest(
-            3L,
-            "저녁시간, 조용히 앉아",
-            "5분간 명상하기",
-            DAILY,
-            1
-    );
-
-    public static final Quest SPECIAL_QUEST1 = new Quest(
-            10L,
-            "점심시간, 마음이 편안해지는 노래 들으면서",
-            "10분 산책하기",
-            SPECIAL,
-            3
-    );
 }

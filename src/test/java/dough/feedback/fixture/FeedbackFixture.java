@@ -24,13 +24,4 @@ public class FeedbackFixture {
             "https://~",
             2
     );
-
-    public static final Feedback FEEDBACK3 = new Feedback(
-            3L,
-            MEMBER2,
-            COMPLETED_QUEST3,
-            "미션 완료 메시지",
-            "https://~",
-            3
-    );
 }
