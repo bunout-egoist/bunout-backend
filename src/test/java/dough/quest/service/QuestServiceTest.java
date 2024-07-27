@@ -1,6 +1,5 @@
 package dough.quest.service;
 
-import dough.feedback.fixture.CompletedQuestDetailFixture;
 import dough.global.exception.InvalidDomainException;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
@@ -20,12 +19,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static dough.feedback.fixture.CompletedQuestDetailFixture.*;
-import static dough.feedback.fixture.FeedbackFixture.FEEDBACK1;
-import static dough.feedback.fixture.FeedbackFixture.FEEDBACK2;
 import static dough.global.exception.ExceptionCode.INVALID_QUEST_TYPE;
 import static dough.member.fixture.MemberFixture.MEMBER1;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
-import static dough.quest.fixture.QuestFixture.DAILY_QUEST2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -89,7 +85,11 @@ public class QuestServiceTest {
     void getCompletedQuestDetail() {
         // given
         final List<CompletedQuestFeedbackElement> responses = COMPLETED_QUEST_DETAILS.stream()
-                .map(completedQuestDetail -> new CompletedQuestFeedbackElement(completedQuestDetail.quest, completedQuestDetail.feedback))
+                .map(completedQuestDetail ->
+                        new CompletedQuestFeedbackElement(
+                                completedQuestDetail.quest,
+                                completedQuestDetail.feedback
+                        ))
                 .toList();
 
         given(selectedQuestRepository.findCompletedQuestFeedbackByMemberIdAndDate(anyLong(), any()))
@@ -99,7 +99,11 @@ public class QuestServiceTest {
 
         assertThat(actualResponse).usingRecursiveComparison()
                 .isEqualTo(COMPLETED_QUEST_DETAILS.stream()
-                        .map(completedQuestDetail -> CompletedQuestDetailResponse.of(completedQuestDetail.quest, completedQuestDetail.feedback))
+                        .map(completedQuestDetail ->
+                                CompletedQuestDetailResponse.of(
+                                        completedQuestDetail.quest, 
+                                        completedQuestDetail.feedback
+                                ))
                         .toList());
     }
 }

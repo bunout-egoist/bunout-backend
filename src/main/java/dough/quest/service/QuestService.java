@@ -23,11 +23,11 @@ public class QuestService {
     private final SelectedQuestRepository selectedQuestRepository;
 
     public List<CompletedQuestDetailResponse> getCompletedQuestDetail(final Long memberId, final LocalDate date) {
-        List<CompletedQuestFeedbackElement> questElements = selectedQuestRepository.findCompletedQuestFeedbackByMemberIdAndDate(memberId, date);
-        return questElements.stream()
-                .map(questElement -> CompletedQuestDetailResponse.of(
-                        questElement.getQuest(),
-                        questElement.getFeedback()
+        List<CompletedQuestFeedbackElement> elements = selectedQuestRepository.findCompletedQuestFeedbackByMemberIdAndDate(memberId, date);
+        return elements.stream()
+                .map(element -> CompletedQuestDetailResponse.of(
+                        element.getQuest(),
+                        element.getFeedback()
                 )).toList();
     }
 
