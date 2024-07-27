@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.Where;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @DynamicInsert
 @RequiredArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE quest SET status = 'DELETED' where id = ?")
-@SQLRestriction("status is 'ACTIVE'")
+@SQLRestriction("status = 'ACTIVE'")
 public class Quest extends BaseEntity {
 
     @Id
