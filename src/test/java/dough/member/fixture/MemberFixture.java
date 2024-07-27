@@ -32,7 +32,7 @@ public class MemberFixture {
     );
 
     public static final Member MEMBER3 = new Member(
-            2L,
+            3L,
             "hanni",
             "2222",
             APPLE,
