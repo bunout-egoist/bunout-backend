@@ -1,6 +1,8 @@
 package dough.quest.service;
 
+import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
+import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
@@ -18,13 +20,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 
-import static dough.feedback.fixture.CompletedQuestDetailFixture.*;
+import static dough.feedback.fixture.CompletedQuestDetailFixture.COMPLETED_QUEST_DETAILS;
 import static dough.global.exception.ExceptionCode.INVALID_QUEST_TYPE;
+import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static dough.member.fixture.MemberFixture.MEMBER1;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -35,6 +37,9 @@ public class QuestServiceTest {
 
     @InjectMocks
     private QuestService questService;
+
+    @Mock
+    private MemberRepository memberRepository;
 
     @Mock
     private QuestRepository questRepository;
@@ -105,5 +110,18 @@ public class QuestServiceTest {
                                         completedQuestDetail.feedback
                                 ))
                         .toList());
+    }
+
+    @DisplayName("멤버 아이디가 존재하지 않을 경우 예외가 발생한다.")
+    @Test
+    void getCompletedQuestDetail_NotFoundMemberId() {
+        // given
+        Long id = 1L;
+
+        // given & when & then
+        assertThatThrownBy(() -> questService.getCompletedQuestDetail(id, any()))
+                .isInstanceOf(BadRequestException.class)
+                .extracting("code")
+                .isEqualTo(NOT_FOUND_MEMBER_ID.getCode());
     }
 }
