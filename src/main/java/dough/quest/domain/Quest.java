@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +45,10 @@ public class Quest extends BaseEntity {
     private List<SelectedQuest> selectedQuests = new ArrayList<>();
 
     public Quest(final Long id,
-                  final String description,
-                  final String activity,
-                  final QuestType questType,
-                  final Integer difficulty
+                 final String description,
+                 final String activity,
+                 final QuestType questType,
+                 final Integer difficulty
     ) {
         this.id = id;
         this.description = description;
