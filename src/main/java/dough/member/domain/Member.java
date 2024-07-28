@@ -25,7 +25,7 @@ import static lombok.AccessLevel.PROTECTED;
 @DynamicInsert
 @NoArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE member SET status = 'DELETED' where id = ?")
-@SQLRestriction("status is 'ACTIVE'")
+@SQLRestriction("status = 'ACTIVE'")
 public class Member extends BaseEntity {
 
     @Id

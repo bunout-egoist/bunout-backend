@@ -2,6 +2,7 @@ package dough.quest.domain;
 
 import dough.global.BaseEntity;
 import dough.quest.domain.type.QuestType;
+import dough.quest.dto.request.QuestUpdateRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @DynamicInsert
 @RequiredArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE quest SET status = 'DELETED' where id = ?")
-@SQLRestriction("status is 'ACTIVE'")
+@SQLRestriction("status = 'ACTIVE'")
 public class Quest extends BaseEntity {
 
     @Id
