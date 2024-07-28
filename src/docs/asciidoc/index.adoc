@@ -45,6 +45,12 @@ include::{snippets}/dashboard-controller-test/get-completed-quest-detail/http-re
 ==== Response
 include::{snippets}/dashboard-controller-test/get-completed-quest-detail/http-response.adoc[]
 
+==== Request
+include::{snippets}/dashboard-controller-test/get-completed-quest-detail_-invalid-local-date-type/http-request.adoc[]
+
+==== Response
+include::{snippets}/dashboard-controller-test/get-completed-quest-detail_-invalid-local-date-type/http-response.adoc[]
+
 == Exception Codes
 include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]
 

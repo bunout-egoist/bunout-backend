@@ -1,6 +1,7 @@
 package dough.dashboard.controller;
 
 import dough.global.AbstractControllerTest;
+import dough.member.dto.request.MemberInfoRequest;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.service.QuestService;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,9 @@ import static javax.management.openmbean.SimpleType.STRING;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -106,5 +109,12 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "문자열"))
                         )
                 ));
+    }
+
+    @DisplayName("조회 날짜 타입이 맞지 않을 경우 예외가 발생한다.")
+    @Test
+    void getCompletedQuestDetail_InvalidLocalDateType() throws Exception {
+        mockMvc.perform(get("/api/v1/dashboard/quests/{memberId}/{searchDate}", 1, "2024-07"))
+                .andExpect(status().isBadRequest());
     }
 }
