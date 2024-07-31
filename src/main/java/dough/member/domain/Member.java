@@ -11,9 +11,13 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
@@ -26,7 +30,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE member SET status = 'DELETED' where id = ?")
 @SQLRestriction("status is 'ACTIVE'")
-public class Member extends BaseEntity {
+public class Member extends BaseEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -80,7 +84,8 @@ public class Member extends BaseEntity {
                   final String occupation,
                   final String gender,
                   final Integer birthYear,
-                  final String burnoutType
+                  final String burnoutType,
+                  final RoleType role
                   ) {
             this.id = id;
             this.nickname = nickname;
@@ -96,9 +101,45 @@ public class Member extends BaseEntity {
             this.burnoutType = burnoutType;
             this.questLastModified = LocalDateTime.now();
             this.lastLogin = LocalDateTime.now();
+            this.role = role;
     }
 
     public void updateMember(final String nickname) {
         this.nickname = nickname;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return nickname;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 }
