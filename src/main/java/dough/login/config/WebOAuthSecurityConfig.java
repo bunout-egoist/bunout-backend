@@ -1,12 +1,18 @@
 package dough.login.config;
 
-import dough.login.service.OAuth2UserCustomService;
+
+import dough.login.config.jwt.TokenAuthenticationFilter;
+import dough.login.config.jwt.TokenProvider;
+import dough.login.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import dough.login.config.oauth.OAuth2SuccessHandler;
+import dough.login.service.CustomOAuth2UserService;
+import dough.login.domain.repository.RefreshTokenRepository;
+import dough.login.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -21,42 +27,30 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 @Configuration
 public class WebOAuthSecurityConfig {
 
-
-    private final OAuth2UserCustomService oAuth2UserCustomService;
-
-    @Bean
-    public WebSecurityCustomizer configure() { // 스프링 시큐리티 기능 비활성화
-        return (web) -> web.ignoring()
-                .requestMatchers(toH2Console())
-                .requestMatchers(
-                        new AntPathRequestMatcher("/img/**"),
-                        new AntPathRequestMatcher("/css/**"),
-                        new AntPathRequestMatcher("/static/js/**")
-                );
-    }
-
-
-
-
-
-
+    private final CustomOAuth2UserService oAuth2UserCustomService;
+    private final TokenProvider tokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final LoginService loginService;
 
     @Bean
-     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // 경로별 인가 작업
+                .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/api/token")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/api/**")).authenticated()
+                        .requestMatchers(toH2Console()).permitAll()
+                        .requestMatchers("/img/**", "/css/**", "/static/js/**").permitAll()
+                        .requestMatchers("/api/v1/auth/login/kakao").permitAll()
+                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll())
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/login")
+                        .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint.authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(oAuth2UserCustomService))
+                        .successHandler(oAuth2SuccessHandler())
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .defaultAuthenticationEntryPointFor(
@@ -64,6 +58,30 @@ public class WebOAuthSecurityConfig {
                                 new AntPathRequestMatcher("/api/**")
                         ))
                 .build();
+    }
+
+
+
+
+    @Bean
+    public OAuth2SuccessHandler oAuth2SuccessHandler() {
+        return new OAuth2SuccessHandler(tokenProvider,
+                refreshTokenRepository,
+                oAuth2AuthorizationRequestBasedOnCookieRepository(),
+                loginService
+        );
+    }
+
+
+    @Bean
+    public TokenAuthenticationFilter tokenAuthenticationFilter() {
+        return new TokenAuthenticationFilter(tokenProvider);
+    }
+
+
+    @Bean
+    public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
+        return new OAuth2AuthorizationRequestBasedOnCookieRepository();
     }
 
 
