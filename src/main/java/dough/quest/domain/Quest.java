@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @DynamicInsert
 @RequiredArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE quest SET status = 'DELETED' where id = ?")
-@SQLRestriction("status is 'ACTIVE'")
+@SQLRestriction("status = 'ACTIVE'")
 public class Quest extends BaseEntity {
 
     @Id
