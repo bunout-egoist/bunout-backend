@@ -3,6 +3,7 @@ package dough.quest.service;
 import dough.global.exception.BadRequestException;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
+import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.domain.type.QuestType;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
@@ -11,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static dough.global.exception.ExceptionCode.ALREADY_USED_QUEST_ID;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_QUEST_ID;
 
 @Service
@@ -19,6 +21,7 @@ import static dough.global.exception.ExceptionCode.NOT_FOUND_QUEST_ID;
 public class QuestService {
 
     private final QuestRepository questRepository;
+    private final SelectedQuestRepository selectedQuestRepository;
 
     public QuestResponse save(final QuestRequest questRequest) {
         final QuestType questType = QuestType.getMappedQuestType(questRequest.getQuestType());
@@ -48,5 +51,20 @@ public class QuestService {
         );
 
         questRepository.save(updateQuest);
+    }
+
+    public void delete(Long questId) {
+        if (!questRepository.existsById(questId)) {
+            throw new BadRequestException(NOT_FOUND_QUEST_ID);
+        }
+
+        checkQuestInUse(questId);
+
+        questRepository.deleteByQuestId(questId);
+    }
+    private void checkQuestInUse(final Long questId) {
+        if (selectedQuestRepository.existsByQuestId(questId)) {
+            throw new BadRequestException(ALREADY_USED_QUEST_ID);
+        }
     }
 }

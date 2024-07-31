@@ -4,6 +4,7 @@ import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
+import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.QuestResponse;
@@ -15,8 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static dough.global.exception.ExceptionCode.INVALID_QUEST_TYPE;
-import static dough.global.exception.ExceptionCode.NOT_FOUND_QUEST_ID;
+import static dough.global.exception.ExceptionCode.*;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -33,6 +33,9 @@ public class QuestServiceTest {
 
     @Mock
     private QuestRepository questRepository;
+
+    @Mock
+    private SelectedQuestRepository selectedQuestRepository;
 
     @DisplayName("퀘스트를 추가할 수 있다.")
     @Test
@@ -117,5 +120,52 @@ public class QuestServiceTest {
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_QUEST_ID.getCode());
+    }
+
+    @DisplayName("퀘스트를 삭제할 수 있다.")
+    @Test
+    void delete() {
+        // given
+        given(questRepository.existsById(any()))
+                .willReturn(true);
+        given(selectedQuestRepository.existsByQuestId(any()))
+                .willReturn(false);
+
+        // when
+        questService.delete(DAILY_QUEST1.getId());
+
+        // then
+        verify(questRepository).deleteByQuestId(any());
+        verify(selectedQuestRepository).existsByQuestId(any());
+    }
+
+    @DisplayName("존재하지 않는 questId를 삭제할 시 예외가 발생한다.")
+    @Test
+    void delete_NotFoundQuestId() {
+        // given
+        given(questRepository.existsById(any()))
+                .willThrow(new BadRequestException(NOT_FOUND_QUEST_ID));
+
+        // when & then
+        assertThatThrownBy(() -> questService.delete(any()))
+                .isInstanceOf(BadRequestException.class)
+                .extracting("code")
+                .isEqualTo(NOT_FOUND_QUEST_ID.getCode());
+    }
+
+    @DisplayName("questId를 이미 사용하고 있는 회원이 있을 시 예외가 발생한다.")
+    @Test
+    void delete_AlreadyUsedQuestId() {
+        // given
+        given(questRepository.existsById(any()))
+                .willReturn(true);
+        given(selectedQuestRepository.existsByQuestId(any()))
+                .willReturn(true);
+
+        // when & then
+        assertThatThrownBy(() -> questService.delete(any()))
+                .isInstanceOf(BadRequestException.class)
+                .extracting("code")
+                .isEqualTo(ALREADY_USED_QUEST_ID.getCode());
     }
 }

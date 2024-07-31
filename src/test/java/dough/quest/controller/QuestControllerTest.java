@@ -25,8 +25,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -157,6 +156,25 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(INTEGER)
                                         .description("난이도")
                                         .attributes(field("constraint", "양의 정수"))
+                        )
+                ));
+    }
+
+    @DisplayName("퀘스트를 삭제할 수 있다.")
+    @Test
+    void deleteQuest() throws Exception {
+        // given
+        doNothing().when(questService).delete(anyLong());
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(delete("/api/v1/quests/{questId}", 1L));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        pathParameters(
+                                parameterWithName("questId")
+                                        .description("퀘스트 아이디")
                         )
                 ));
     }
