@@ -19,7 +19,7 @@ public class FeedbackService {
     private final SelectedQuestRepository selectedQuestRepository;
     private final MemberRepository memberRepository;
 
-    public Feedback save(Long questId, FeedbackRequest feedbackRequest) {
+    public Feedback createFeedback(Long questId, FeedbackRequest feedbackRequest) {
         // questId로 SelectedQuest 조회
         SelectedQuest selectedQuest = selectedQuestRepository.findById(questId)
                 .orElseThrow(() -> new IllegalArgumentException("quest ID: " + questId + " is not exist"));
