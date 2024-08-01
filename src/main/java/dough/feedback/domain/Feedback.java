@@ -33,8 +33,6 @@ public class Feedback extends BaseEntity {
     @OneToOne(mappedBy = "feedback")
     private SelectedQuest selectedQuest;
 
-    private String message;
-
     private String imageUrl;
 
     private Integer difficulty;
