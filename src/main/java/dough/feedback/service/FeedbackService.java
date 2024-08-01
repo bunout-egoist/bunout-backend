@@ -3,10 +3,12 @@ package dough.feedback.service;
 import dough.feedback.domain.Feedback;
 import dough.feedback.domain.repository.FeedbackRepository;
 import dough.feedback.dto.request.FeedbackRequest;
+import dough.feedback.dto.response.FeedbackResponse;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.SelectedQuestRepository;
+import dough.quest.service.QuestService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +20,11 @@ public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private final SelectedQuestRepository selectedQuestRepository;
     private final MemberRepository memberRepository;
+    private final QuestService questService;
 
-    public Feedback createFeedback(Long questId, FeedbackRequest feedbackRequest) {
+    public FeedbackResponse createFeedback(Long questId, FeedbackRequest feedbackRequest) {
         // questId로 SelectedQuest 조회
-        SelectedQuest selectedQuest = selectedQuestRepository.findById(questId)
+        SelectedQuest selectedQuest = selectedQuestRepository.findByQuestId(questId)
                 .orElseThrow(() -> new IllegalArgumentException("quest ID: " + questId + " is not exist"));
 
         // Member 찾기
@@ -42,6 +45,10 @@ public class FeedbackService {
         // 저장
         final Feedback savedFeedback = feedbackRepository.save(feedback);
 
-        return savedFeedback;
+        // SelectedQuest 객체에 Feedback 설정, 상태 COMPLETED로 변경후 저장
+        questService.completeSelectedQuestWithFeedback(selectedQuest.getId(), savedFeedback);
+
+
+        return FeedbackResponse.from(savedFeedback);
     }
 }
