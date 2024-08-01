@@ -4,6 +4,8 @@ import dough.quest.domain.SelectedQuest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Long> {
 
     @Query("""
@@ -12,4 +14,5 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
             WHERE sq.quest.id = :questId
             """)
     Boolean existsByQuestId(final Long questId);
+    Optional<SelectedQuest> findByQuestId(Long questId);
 }
