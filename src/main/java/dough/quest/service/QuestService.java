@@ -1,7 +1,9 @@
 package dough.quest.service;
 
+import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
 import dough.quest.domain.Quest;
+import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.domain.type.QuestType;
@@ -66,5 +68,14 @@ public class QuestService {
         if (selectedQuestRepository.existsByQuestId(questId)) {
             throw new BadRequestException(ALREADY_USED_QUEST_ID);
         }
+    }
+
+//    public void completeSelectedQuestWithFeedback(Long selectedQuestId, Feedback feedback) {
+//        selectedQuestRepository.updateFeedbackAndStatus(selectedQuestId, feedback);
+//    }
+
+    public void completeSelectedQuestWithFeedback(final SelectedQuest selectedQuest, final Feedback feedback) {
+        selectedQuest.AddFeedbackToSelectedQuest(feedback);
+        selectedQuestRepository.save(selectedQuest);
     }
 }

@@ -46,7 +46,7 @@ public class FeedbackService {
         final Feedback savedFeedback = feedbackRepository.save(feedback);
 
         // SelectedQuest 객체에 Feedback 설정, 상태 COMPLETED로 변경후 저장
-        questService.completeSelectedQuestWithFeedback(selectedQuest.getId(), savedFeedback);
+        questService.completeSelectedQuestWithFeedback(selectedQuest, savedFeedback);
 
 
         return FeedbackResponse.from(savedFeedback);
