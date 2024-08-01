@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static dough.global.exception.ExceptionCode.ALREADY_UPDATED_BURNOUT_TYPE;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
@@ -43,18 +45,17 @@ public class MemberService {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        validateBurnoutTypeUpdate(member);
+        validateBurnoutTypeUpdate(member.getBurnoutTypeLastModified());
 
         member.changeBurnoutType(burnoutTypeRequest.getBurnoutType());
         memberRepository.save(member);
     }
 
-    public void validateBurnoutTypeUpdate(final Member member) {
-        if (member.getBurnoutTypeLastModified() != null) {
-            final LocalDateTime current = LocalDateTime.now();
-            final LocalDateTime lastModified = member.getQuestLastModified();
+    public void validateBurnoutTypeUpdate(final LocalDate lastModified) {
+        if (Optional.ofNullable(lastModified).isPresent()) {
+            final LocalDate current = LocalDate.now();
 
-            if (current.getYear() == lastModified.getYear() && current.getMonthValue() == lastModified.getMonthValue()) {
+            if (current.withDayOfMonth(1).equals(lastModified.withDayOfMonth(1))) {
                 throw new BadRequestException(ALREADY_UPDATED_BURNOUT_TYPE);
             }
         }
