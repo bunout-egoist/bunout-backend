@@ -84,8 +84,7 @@ public class Member extends BaseEntity implements UserDetails {
                   final String occupation,
                   final String gender,
                   final Integer birthYear,
-                  final String burnoutType,
-                  final RoleType role
+                  final String burnoutType
                   ) {
             this.id = id;
             this.nickname = nickname;
@@ -101,7 +100,6 @@ public class Member extends BaseEntity implements UserDetails {
             this.burnoutType = burnoutType;
             this.questLastModified = LocalDateTime.now();
             this.lastLogin = LocalDateTime.now();
-            this.role = role;
     }
 
     public void updateMember(final String nickname) {
