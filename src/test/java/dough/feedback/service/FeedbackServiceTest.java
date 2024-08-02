@@ -62,7 +62,7 @@ class FeedbackServiceTest {
     void createFeedbackSuccess() {
         // given
         Long questId = 1L;
-        FeedbackRequest feedbackRequest = new FeedbackRequest("http://example.com/image.png", 3);
+        FeedbackRequest feedbackRequest = new FeedbackRequest("png1", 3);
 
         Member member = new Member(1L, "JohnDoe", "john123", SocialLoginType.KAKAO, "john@example.com",
                 "Developer", "Male", 1990, "TypeA");
@@ -98,7 +98,7 @@ class FeedbackServiceTest {
     void createFeedbackQuestNotFound() {
         // given
         Long questId = 1L;
-        FeedbackRequest feedbackRequest = new FeedbackRequest("http://example.com/image.png", 3);
+        FeedbackRequest feedbackRequest = new FeedbackRequest("png2", 3);
 
         when(selectedQuestRepository.findByQuestId(questId)).thenReturn(Optional.empty());
 
@@ -111,7 +111,7 @@ class FeedbackServiceTest {
     void createFeedbackMemberNotFound() {
         // given
         Long questId = 1L;
-        FeedbackRequest feedbackRequest = new FeedbackRequest("http://example.com/image.png", 3);
+        FeedbackRequest feedbackRequest = new FeedbackRequest("png3", 3);
 
         Member member = new Member(1L, "JohnDoe", "john123", SocialLoginType.APPLE, "john@example.com",
                 "Developer", "Male", 1990, "TypeA");
