@@ -17,7 +17,7 @@ public enum ExceptionCode {
     // 3000 member
 
     NOT_FOUND_MEMBER_ID(3000, "요청하신 ID에 해당하는 유저를 찾을 수 없습니다."),
-    ALREADY_UPDATED_BURNOUT_TYPE(3000, "번아웃 타입은 이번 달에 이미 수정 되었습니다."),
+    ALREADY_UPDATED_BURNOUT_TYPE(3001, "번아웃 유형은 이번 달에 이미 수정되었습니다."),
 
     // 4000 feedback
 
