@@ -30,7 +30,7 @@ public class MemberController {
         return ResponseEntity.ok().body(memberInfoResponse);
     }
 
-    @PutMapping("/{memberId}")
+    @PutMapping("/{memberId}/burnoutType")
     public ResponseEntity<Void> changeBurnoutType(@PathVariable("memberId") final Long memberId,
                                                   @RequestBody @Valid final BurnoutTypeRequest burnoutTypeRequest
     ) {

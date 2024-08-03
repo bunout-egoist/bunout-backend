@@ -2,6 +2,7 @@ package dough.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.AbstractControllerTest;
+import dough.member.dto.request.BurnoutTypeRequest;
 import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.member.service.MemberService;
@@ -15,12 +16,12 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static dough.global.restdocs.RestDocsConfiguration.field;
-import static javax.management.openmbean.SimpleType.LONG;
-import static javax.management.openmbean.SimpleType.STRING;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -70,7 +71,7 @@ class MemberControllerTest extends AbstractControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("id")
-                                        .type(LONG)
+                                        .type(NUMBER)
                                         .description("멤버 아이디")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("nickname")
@@ -112,7 +113,7 @@ class MemberControllerTest extends AbstractControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("id")
-                                        .type(LONG)
+                                        .type(NUMBER)
                                         .description("멤버 아이디")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("nickname")
@@ -138,5 +139,35 @@ class MemberControllerTest extends AbstractControllerTest {
         // then
         resultActions.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("닉네임은 5자를 초과할 수 없습니다."));
+    }
+
+    @DisplayName("멤버의 번아웃 유형을 수정할 수 있다.")
+    @Test
+    void changeBurnoutType() throws Exception {
+        // given
+        Long id = 1L;
+        final BurnoutTypeRequest burnoutTypeRequest = new BurnoutTypeRequest("호빵");
+
+        doNothing().when(memberService).changeBurnoutType(anyLong(), any());
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(put("/api/v1/members/{memberId}/burnoutType", id)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(burnoutTypeRequest)));
+
+        // then
+        resultActions.andExpect(status().isNoContent())
+                .andDo(restDocs.document(
+                        pathParameters(
+                                parameterWithName("memberId")
+                                        .description("멤버 아이디")
+                        ),
+                        requestFields(
+                                fieldWithPath("burnoutType")
+                                        .type(STRING)
+                                        .description("번아웃 유형")
+                                        .attributes(field("constraint", "문자열"))
+                        )
+                ));
     }
 }
