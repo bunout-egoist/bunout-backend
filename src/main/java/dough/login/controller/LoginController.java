@@ -61,8 +61,10 @@ public class LoginController {
                     .body(ApiResponse.error("Failed to retrieve access token from Kakao"));
         }
 
+        // 카카오로부터 엑세스 토큰을 가져온다.
         String accessToken = (String) tokenResponse.get("access_token");
 
+        // 받은 토큰으로 사용자 정보 요청하기
         Map<String, Object> userInfoResponse = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
@@ -81,6 +83,7 @@ public class LoginController {
 
         //////////////////
 
+        // 카카오에서 사용자 정보 가져오기
         Map<String, Object> kakaoAccount = (Map<String, Object>) userInfoResponse.get("kakao_account");
         String socialLoginId = String.valueOf(userInfoResponse.get("id")); // 카카오 사용자 ID를 가져옴
         String nickname = (String) kakaoAccount.get("nickname"); // 카카오 닉네임 가져옴
