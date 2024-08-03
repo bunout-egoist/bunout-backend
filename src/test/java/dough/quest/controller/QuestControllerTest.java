@@ -17,15 +17,16 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static dough.global.restdocs.RestDocsConfiguration.field;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
-import static java.util.TimeZone.LONG;
-import static javax.management.openmbean.SimpleType.INTEGER;
-import static javax.management.openmbean.SimpleType.STRING;
+
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
+import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
+import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -87,13 +88,13 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .description("퀘스트 타입 (데일리/스페셜)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("difficulty")
-                                        .type(INTEGER)
+                                        .type(NUMBER)
                                         .description("난이도")
                                         .attributes(field("constraint", "양의 정수"))
                         ),
                         responseFields(
                                 fieldWithPath("id")
-                                        .type(LONG)
+                                        .type(NUMBER)
                                         .description("퀘스트 아이디")
                                         .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("description")
@@ -109,7 +110,7 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .description("퀘스트 타입 (데일리/스페셜)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("difficulty")
-                                        .type(INTEGER)
+                                        .type(NUMBER)
                                         .description("난이도")
                                         .attributes(field("constraint", "양의 정수"))
                         )
@@ -153,7 +154,7 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .description("퀘스트 타입 (데일리/스페셜)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("difficulty")
-                                        .type(INTEGER)
+                                        .type(NUMBER)
                                         .description("난이도")
                                         .attributes(field("constraint", "양의 정수"))
                         )

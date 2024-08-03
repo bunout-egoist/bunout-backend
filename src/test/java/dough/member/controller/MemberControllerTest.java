@@ -43,11 +43,21 @@ class MemberControllerTest extends AbstractControllerTest {
 
     private ResultActions performPutUpdateMemberInfoRequest(
             final Long memberId,
-            final MemberInfoRequest memberInfoRequest)
-            throws Exception {
+            final MemberInfoRequest memberInfoRequest
+    ) throws Exception {
         return mockMvc.perform(put("/api/v1/members/{memberId}", memberId)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(memberInfoRequest)));
+    }
+
+    private ResultActions performPutChangeBurnoutType(
+            final Long memberId,
+            final BurnoutTypeRequest burnoutTypeRequest
+    ) throws Exception {
+        return mockMvc.perform(put("/api/v1/members/{memberId}/burnoutType", memberId)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(burnoutTypeRequest)));
+
     }
 
     @DisplayName("멤버의 닉네임을 조회할 수 있다.")
@@ -151,9 +161,7 @@ class MemberControllerTest extends AbstractControllerTest {
         doNothing().when(memberService).changeBurnoutType(anyLong(), any());
 
         // when
-        final ResultActions resultActions = mockMvc.perform(put("/api/v1/members/{memberId}/burnoutType", id)
-                .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(burnoutTypeRequest)));
+        final ResultActions resultActions = performPutChangeBurnoutType(id, burnoutTypeRequest);
 
         // then
         resultActions.andExpect(status().isNoContent())
@@ -169,5 +177,22 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "문자열"))
                         )
                 ));
+    }
+
+    @DisplayName("번아웃 유형이 null일 경우 예외가 발생한다.")
+    @Test
+    void changeBurnoutType_BurnoutTypeNull() throws Exception {
+        // given
+        Long id = 1L;
+        final BurnoutTypeRequest burnoutTypeRequest = new BurnoutTypeRequest(null);
+
+        doNothing().when(memberService).changeBurnoutType(anyLong(), any());
+
+        // when
+        final ResultActions resultActions = performPutChangeBurnoutType(id, burnoutTypeRequest);
+
+        // then
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("번아웃 타입을 입력해주세요."));
     }
 }
