@@ -103,7 +103,7 @@ public class Member extends BaseEntity implements UserDetails {
 
 
     /**
-     * RoleType이 포함된 생성자
+     *
      */
     public Member(final Long id,
                   final String nickname,
