@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import java.time.Duration;
 import java.util.Map;
 
@@ -26,13 +25,13 @@ public class LoginController {
     private final TokenProvider tokenProvider;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-    private final String kakaoClientId;
+    private  String kakaoClientId;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
-    private final String kakaoClientSecret;
+    private  String kakaoClientSecret;
 
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    private final String kakaoRedirectUri;
+    private  String kakaoRedirectUri;
 
     private final WebClient webClient = WebClient.create();
 
@@ -40,6 +39,7 @@ public class LoginController {
     public ResponseEntity<ApiResponse<String>> loginWithKakao(@RequestBody Map<String, String> request) {
         String code = request.get("code");
 
+        // 카카오 서버로부터 토큰 발급하기
         Map<String, Object> tokenResponse = webClient.post()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
