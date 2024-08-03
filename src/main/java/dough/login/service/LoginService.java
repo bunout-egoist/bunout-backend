@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     private final MemberRepository memberRepository;
 
-    public Member createMember(String socialLoginId, SocialLoginType socialLoginType, String nickname, RoleType role) {
+    public Member createMember(String socialLoginId, SocialLoginType socialLoginType, String nickname, RoleType roleType) {
         Member member = new Member(
                 null,
                 nickname,
@@ -24,7 +24,7 @@ public class LoginService {
                 null,
                 null,
                 null,
-                role
+                roleType
         );
         return memberRepository.save(member);
     }

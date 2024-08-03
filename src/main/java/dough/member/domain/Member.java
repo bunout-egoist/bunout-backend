@@ -12,7 +12,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
@@ -100,6 +99,38 @@ public class Member extends BaseEntity implements UserDetails {
             this.burnoutType = burnoutType;
             this.questLastModified = LocalDateTime.now();
             this.lastLogin = LocalDateTime.now();
+    }
+
+
+    /**
+     * RoleType이 포함된 생성자
+     */
+    public Member(final Long id,
+                  final String nickname,
+                  final String socialLoginId,
+                  final SocialLoginType socialLoginType,
+                  final String email,
+                  final String occupation,
+                  final String gender,
+                  final Integer birthYear,
+                  final String burnoutType,
+                  final RoleType roleType
+    ) {
+        this.id = id;
+        this.nickname = nickname;
+        this.socialLoginId = socialLoginId;
+        this.socialLoginType = socialLoginType;
+        this.email = email;
+        this.level = 0;
+        this.experience = 0;
+        this.maxStreak = 0;
+        this.occupation = occupation;
+        this.gender = gender;
+        this.birthYear = birthYear;
+        this.burnoutType = burnoutType;
+        this.questLastModified = LocalDateTime.now();
+        this.lastLogin = LocalDateTime.now();
+        this.role = roleType;
     }
 
     public void updateMember(final String nickname) {
