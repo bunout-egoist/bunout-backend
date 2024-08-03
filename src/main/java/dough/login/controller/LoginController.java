@@ -26,13 +26,13 @@ public class LoginController {
     private final TokenProvider tokenProvider;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-    private String kakaoClientId;
+    private final String kakaoClientId;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
-    private String kakaoClientSecret;
+    private final String kakaoClientSecret;
 
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    private String kakaoRedirectUri;
+    private final String kakaoRedirectUri;
 
     private final WebClient webClient = WebClient.create();
 
@@ -86,13 +86,12 @@ public class LoginController {
         // 카카오에서 사용자 정보 가져오기
         Map<String, Object> kakaoAccount = (Map<String, Object>) userInfoResponse.get("kakao_account");
         String socialLoginId = String.valueOf(userInfoResponse.get("id")); // 카카오 사용자 ID를 가져옴
-        String nickname = (String) kakaoAccount.get("nickname"); // 카카오 닉네임 가져옴
 
         Member member;
         try {
             member = memberService.findBySocialLoginId(socialLoginId);
         } catch (IllegalArgumentException e) {
-            member = memberService.createMember(socialLoginId, SocialLoginType.KAKAO, nickname, RoleType.MEMBER);
+            member = memberService.createMember(socialLoginId, SocialLoginType.KAKAO, null, RoleType.MEMBER);
         }
 
         // 멤버 정보로 JWT 토큰 생성
