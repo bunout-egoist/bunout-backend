@@ -1,4 +1,5 @@
 package dough.login.service;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -16,6 +17,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User user = super.loadUser(userRequest);
         memberService.saveOrUpdate(user);
+
+        try {
+            System.out.println(new ObjectMapper().writeValueAsString(user.getAttributes()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return user;
     }
