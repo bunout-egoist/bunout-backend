@@ -60,4 +60,9 @@ public class SelectedQuest extends BaseEntity {
     ) {
         this(member, quest, null);
     }
+
+    public void AddFeedbackToSelectedQuest(final Feedback feedback) {
+        this.feedback = feedback;
+        this.questStatus = QuestStatus.COMPLETED;
+    }
 }

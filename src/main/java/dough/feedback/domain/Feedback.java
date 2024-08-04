@@ -4,6 +4,8 @@ import dough.global.BaseEntity;
 import dough.member.domain.Member;
 import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -33,9 +35,16 @@ public class Feedback extends BaseEntity {
     @OneToOne(mappedBy = "feedback")
     private SelectedQuest selectedQuest;
 
-    private String message;
-
     private String imageUrl;
 
+    @Min(1)
+    @Max(5)
     private Integer difficulty;
+
+    public Feedback(Member member, SelectedQuest selectedQuest, String imageUrl, Integer difficulty) {
+        this.member = member;
+        this.selectedQuest = selectedQuest;
+        this.imageUrl = imageUrl;
+        this.difficulty = difficulty;
+    }
 }
