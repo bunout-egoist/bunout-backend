@@ -62,7 +62,7 @@ public class TokenProvider {
                 (), "", authorities), token, authorities);
     }
 
-    public Long getUserId(String token) {
+    public Long getUserIdFromToken(String token) {
         Claims claims = getClaims(token);
         return claims.get("id", Long.class);
     }
