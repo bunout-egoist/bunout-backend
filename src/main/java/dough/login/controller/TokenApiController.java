@@ -2,6 +2,7 @@ package dough.login.controller;
 
 import dough.login.dto.request.CreateAccessTokenRequest;
 import dough.login.dto.response.CreateAccessTokenResponse;
+import dough.login.dto.response.TokensResponse;
 import dough.login.service.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,11 +17,19 @@ public class TokenApiController {
 
     private final TokenService tokenService;
 
-    @PostMapping(value = "/api/token")
+    @PostMapping("/api/token")
     public ResponseEntity<CreateAccessTokenResponse> createNewAccessToken(@RequestBody CreateAccessTokenRequest request) {
         String newAccessToken = tokenService.createNewAccessToken(request.getRefreshToken());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CreateAccessTokenResponse(newAccessToken));
+    }
+
+    @PostMapping("/api/refreshToken")
+    public ResponseEntity<TokensResponse> refreshExpiredTokens(@RequestBody CreateAccessTokenRequest request) {
+        TokensResponse access_refresh_tokens = tokenService.refreshTokens(request.getRefreshToken());
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(access_refresh_tokens);
     }
 }
