@@ -8,7 +8,6 @@ import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.domain.type.QuestType;
-import dough.quest.dto.CompletedQuestFeedbackElement;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
@@ -36,11 +35,11 @@ public class QuestService {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
 
-        List<CompletedQuestFeedbackElement> elements = selectedQuestRepository.findCompletedQuestFeedbackByMemberIdAndDate(memberId, date);
-        return elements.stream()
-                .map(element -> CompletedQuestDetailResponse.of(
-                        element.getQuest(),
-                        element.getFeedback()
+        List<SelectedQuest> selectedQuests = selectedQuestRepository.findConpletedQuestByMemberIdAndDate(memberId, date);
+        return selectedQuests.stream()
+                .map(selectedQuest -> CompletedQuestDetailResponse.of(
+                        selectedQuest.getQuest(),
+                        selectedQuest.getFeedback()
                 )).toList();
     }
 

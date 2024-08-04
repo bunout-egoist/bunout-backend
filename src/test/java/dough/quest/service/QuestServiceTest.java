@@ -4,9 +4,9 @@ import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
+import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
-import dough.quest.dto.CompletedQuestFeedbackElement;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
@@ -26,6 +26,8 @@ import static dough.feedback.fixture.CompletedQuestDetailFixture.COMPLETED_QUEST
 import static dough.global.exception.ExceptionCode.*;
 import static dough.member.fixture.MemberFixture.MEMBER;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
+import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
+import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -93,16 +95,12 @@ public class QuestServiceTest {
     @Test
     void getCompletedQuestDetail() {
         // given
-        final List<CompletedQuestFeedbackElement> responses = COMPLETED_QUEST_DETAILS.stream()
-                .map(completedQuestDetail ->
-                        new CompletedQuestFeedbackElement(
-                                completedQuestDetail.quest,
-                                completedQuestDetail.feedback
-                        ))
-                .toList();
+        final List<SelectedQuest> selectedQuests = List.of(COMPLETED_QUEST1, COMPLETED_QUEST2);
 
-        given(selectedQuestRepository.findCompletedQuestFeedbackByMemberIdAndDate(anyLong(), any()))
-                .willReturn(responses);
+        given(memberRepository.existsById(any()))
+                .willReturn(true);
+        given(selectedQuestRepository.findConpletedQuestByMemberIdAndDate(anyLong(), any()))
+                .willReturn(selectedQuests);
 
         List<CompletedQuestDetailResponse> actualResponse = questService.getCompletedQuestDetail(MEMBER.getId(), LocalDate.now());
 
