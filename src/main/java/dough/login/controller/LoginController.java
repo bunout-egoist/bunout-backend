@@ -111,14 +111,16 @@ public class LoginController {
             member = memberService.createMember(socialLoginId, SocialLoginType.KAKAO, null, RoleType.MEMBER);
         }
 
-        // 리프레시 토큰 저장 by memberId
+        // 리프레시 토큰 저장
+        // Save refresh token in database
         RefreshToken newRefreshToken = new RefreshToken(member.getId(), refreshToken);
         refreshTokenRepository.save(newRefreshToken);
 
-        // 멤버 정보로 JWT 토큰 생성
+        // 멤버 정보로 자체 JWT 토큰 생성
         String jwtToken = tokenProvider.generateToken(member, Duration.ofHours(1));
+        String jwtRefreshToken = tokenProvider.generateToken(member, Duration.ofDays(14));
 
-        TokensResponse tokensResponse = new TokensResponse(jwtToken, refreshToken);
+        TokensResponse tokensResponse = new TokensResponse(jwtToken, jwtRefreshToken);
 
         return ResponseEntity.ok(ApiResponse.success("tokens", tokensResponse));
     }
