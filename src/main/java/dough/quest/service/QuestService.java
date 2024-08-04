@@ -35,7 +35,7 @@ public class QuestService {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
 
-        List<SelectedQuest> selectedQuests = selectedQuestRepository.findConpletedQuestByMemberIdAndDate(memberId, date);
+        List<SelectedQuest> selectedQuests = selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, date);
         return selectedQuests.stream()
                 .map(selectedQuest -> CompletedQuestDetailResponse.of(
                         selectedQuest.getQuest(),
