@@ -1,7 +1,7 @@
 package dough.feedback.controller;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dough.feedback.domain.controller.FeedbackController;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.feedback.feedbackFixture.FeedbackFixture;
@@ -24,9 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

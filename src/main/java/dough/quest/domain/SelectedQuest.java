@@ -48,14 +48,19 @@ public class SelectedQuest extends BaseEntity {
             final Long id,
             final Member member,
             final Quest quest,
-            final Feedback feedback,
-            final QuestStatus questStatus
+            final Feedback feedback
     ) {
         this.id = id;
         this.member = member;
         this.quest = quest;
         this.feedback = feedback;
-        this.questStatus = questStatus;
+    }
+
+    public SelectedQuest(
+            final Member member,
+            final Quest quest
+    ) {
+        this(null, member, quest, null);
     }
 
     public void AddFeedbackToSelectedQuest(final Feedback feedback) {
