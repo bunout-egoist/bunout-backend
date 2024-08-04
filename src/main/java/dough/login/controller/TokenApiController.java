@@ -17,7 +17,7 @@ public class TokenApiController {
 
     private final TokenService tokenService;
 
-    @PostMapping("/api/token")
+    @PostMapping("/api/v1/token")
     public ResponseEntity<CreateAccessTokenResponse> createNewAccessToken(@RequestBody CreateAccessTokenRequest request) {
         String newAccessToken = tokenService.createNewAccessToken(request.getRefreshToken());
 
@@ -25,7 +25,7 @@ public class TokenApiController {
                 .body(new CreateAccessTokenResponse(newAccessToken));
     }
 
-    @PostMapping("/api/refreshToken")
+    @PostMapping("/api/v1/refreshToken")
     public ResponseEntity<TokensResponse> refreshExpiredTokens(@RequestBody CreateAccessTokenRequest request) {
         TokensResponse access_refresh_tokens = tokenService.refreshTokens(request.getRefreshToken());
 
