@@ -12,6 +12,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +69,8 @@ public class Member extends BaseEntity {
 
     private String burnoutType;
 
+    private LocalDate burnoutTypeLastModified;
+
     private LocalDateTime questLastModified;
 
     private LocalDateTime lastLogin;
@@ -100,5 +103,10 @@ public class Member extends BaseEntity {
 
     public void updateMember(final String nickname) {
         this.nickname = nickname;
+    }
+
+    public void changeBurnoutType(final String burnoutType) {
+        this.burnoutType = burnoutType;
+        this.burnoutTypeLastModified = LocalDate.now();
     }
 }

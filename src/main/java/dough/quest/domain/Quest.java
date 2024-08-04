@@ -2,6 +2,7 @@ package dough.quest.domain;
 
 import dough.global.BaseEntity;
 import dough.quest.domain.type.QuestType;
+import dough.quest.dto.request.QuestUpdateRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
