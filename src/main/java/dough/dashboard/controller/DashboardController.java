@@ -28,4 +28,6 @@ public class DashboardController {
         final List<CompletedQuestDetailResponse> detailResponse = questService.getCompletedQuestDetail(memberId, date);
         return ResponseEntity.ok().body(detailResponse);
     }
+
+
 }

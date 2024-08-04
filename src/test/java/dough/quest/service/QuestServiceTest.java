@@ -99,7 +99,7 @@ public class QuestServiceTest {
 
         given(memberRepository.existsById(any()))
                 .willReturn(true);
-        given(selectedQuestRepository.findConpletedQuestByMemberIdAndDate(anyLong(), any()))
+        given(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(anyLong(), any()))
                 .willReturn(selectedQuests);
 
         List<CompletedQuestDetailResponse> actualResponse = questService.getCompletedQuestDetail(MEMBER.getId(), LocalDate.now());

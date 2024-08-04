@@ -11,6 +11,7 @@ import static dough.global.exception.ExceptionCode.INVALID_QUEST_TYPE;
 public enum QuestType {
 
     DAILY("데일리"),
+    FIXED("고정"),
     SPECIAL("스페셜");
 
     private final String code;
