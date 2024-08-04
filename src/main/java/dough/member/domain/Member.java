@@ -1,11 +1,13 @@
 package dough.member.domain;
 
+import dough.dashboard.domain.Dashboard;
 import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
 import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
 import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -38,6 +40,9 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member")
     private List<Feedback> Feedbacks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Dashboard> dashboards = new ArrayList<>();
 
     @Column(length = 5)
     private String nickname;

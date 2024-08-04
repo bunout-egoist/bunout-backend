@@ -1,5 +1,6 @@
 package dough.quest.domain;
 
+import dough.dashboard.domain.Dashboard;
 import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
 import dough.member.domain.Member;
@@ -36,6 +37,10 @@ public class SelectedQuest extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "quest_id", nullable = false)
     private Quest quest;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "dashboard_id", nullable = false)
+    private Dashboard dashboard;
 
     @OneToOne
     @JoinColumn(name = "feedback_id")
