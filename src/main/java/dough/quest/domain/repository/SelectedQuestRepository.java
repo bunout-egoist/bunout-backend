@@ -1,25 +1,37 @@
 package dough.quest.domain.repository;
 
-import dough.feedback.domain.Feedback;
 import dough.quest.domain.SelectedQuest;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Long> {
 
     @Query("""
-            SELECT CASE WHEN COUNT(sq) > 0 THEN true ELSE false END 
-            FROM SelectedQuest sq 
-            WHERE sq.quest.id = :questId
+             SELECT s FROM SelectedQuest s
+             LEFT JOIN FETCH  s.feedback f
+             LEFT JOIN FETCH s.quest q
+             WHERE s.member.id = :memberId AND FUNCTION('DATE', s.createdAt) = :date AND s.questStatus = 'COMPLETED'
+            """)
+    List<SelectedQuest> findConpletedQuestByMemberIdAndDate(
+            @Param("memberId") final Long memberId,
+            @Param("date") final LocalDate date
+    );
+
+    @Query("""
+             SELECT CASE WHEN COUNT(sq) > 0 THEN true ELSE false END 
+             FROM SelectedQuest sq 
+             WHERE sq.quest.id = :questId
             """)
     Boolean existsByQuestId(final Long questId);
+
     Optional<SelectedQuest> findByQuestId(Long questId);
 
 //    @Modifying
 //    @Query("UPDATE SelectedQuest sq SET sq.feedback = :feedback, sq.questStatus = 'COMPLETED' WHERE sq.id = :selectedQuestId")
 //    void updateFeedbackAndStatus(Long selectedQuestId, Feedback feedback);
-
 }

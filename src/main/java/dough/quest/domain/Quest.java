@@ -45,11 +45,12 @@ public class Quest extends BaseEntity {
     @OneToMany(mappedBy = "quest")
     private List<SelectedQuest> selectedQuests = new ArrayList<>();
 
-    public Quest(final Long id,
-                  final String description,
-                  final String activity,
-                  final QuestType questType,
-                  final Integer difficulty
+    public Quest(
+            final Long id,
+            final String description,
+            final String activity,
+            final QuestType questType,
+            final Integer difficulty
     ) {
         this.id = id;
         this.description = description;
@@ -58,10 +59,11 @@ public class Quest extends BaseEntity {
         this.difficulty = difficulty;
     }
 
-    public Quest(final String description,
-                 final String activity,
-                 final QuestType questType,
-                 final Integer difficulty
+    public Quest(
+            final String description,
+            final String activity,
+            final QuestType questType,
+            final Integer difficulty
     ) {
         this(null, description, activity, questType, difficulty);
     }

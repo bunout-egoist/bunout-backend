@@ -5,7 +5,6 @@ import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.BurnoutTypeRequest;
 import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberInfoResponse;
-import dough.member.fixture.MemberFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,16 +14,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 import static dough.global.exception.ExceptionCode.ALREADY_UPDATED_BURNOUT_TYPE;
-import static dough.global.exception.ExceptionCode.NOT_FOUND_QUEST_ID;
 import static dough.member.fixture.MemberFixture.MEMBER;
 import static dough.member.fixture.MemberFixture.UPDATED_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;

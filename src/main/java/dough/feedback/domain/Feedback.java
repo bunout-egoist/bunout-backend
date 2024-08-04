@@ -41,10 +41,26 @@ public class Feedback extends BaseEntity {
     @Max(5)
     private Integer difficulty;
 
-    public Feedback(Member member, SelectedQuest selectedQuest, String imageUrl, Integer difficulty) {
+    public Feedback(
+            final Long id,
+            final Member member,
+            final SelectedQuest selectedQuest,
+            final String imageUrl,
+            final Integer difficulty
+    ) {
+        this.id = id;
         this.member = member;
         this.selectedQuest = selectedQuest;
         this.imageUrl = imageUrl;
         this.difficulty = difficulty;
+    }
+
+    public Feedback(
+            final Member member,
+            final SelectedQuest selectedQuest,
+            final String imageUrl,
+            final Integer difficulty
+    ) {
+        this(null, member, selectedQuest, imageUrl, difficulty);
     }
 }

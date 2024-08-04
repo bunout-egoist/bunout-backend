@@ -2,6 +2,7 @@ package dough.quest.service;
 
 import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
+import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
@@ -9,13 +10,16 @@ import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.domain.type.QuestType;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
+import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.QuestResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static dough.global.exception.ExceptionCode.ALREADY_USED_QUEST_ID;
-import static dough.global.exception.ExceptionCode.NOT_FOUND_QUEST_ID;
+import java.time.LocalDate;
+import java.util.List;
+
+import static dough.global.exception.ExceptionCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +28,20 @@ public class QuestService {
 
     private final QuestRepository questRepository;
     private final SelectedQuestRepository selectedQuestRepository;
+    private final MemberRepository memberRepository;
+
+    public List<CompletedQuestDetailResponse> getCompletedQuestDetail(final Long memberId, final LocalDate date) {
+        if (!memberRepository.existsById(memberId)) {
+            throw new BadRequestException(NOT_FOUND_MEMBER_ID);
+        }
+
+        List<SelectedQuest> selectedQuests = selectedQuestRepository.findConpletedQuestByMemberIdAndDate(memberId, date);
+        return selectedQuests.stream()
+                .map(selectedQuest -> CompletedQuestDetailResponse.of(
+                        selectedQuest.getQuest(),
+                        selectedQuest.getFeedback()
+                )).toList();
+    }
 
     public QuestResponse save(final QuestRequest questRequest) {
         final QuestType questType = QuestType.getMappedQuestType(questRequest.getQuestType());
@@ -64,6 +82,7 @@ public class QuestService {
 
         questRepository.deleteByQuestId(questId);
     }
+
     private void checkQuestInUse(final Long questId) {
         if (selectedQuestRepository.existsByQuestId(questId)) {
             throw new BadRequestException(ALREADY_USED_QUEST_ID);

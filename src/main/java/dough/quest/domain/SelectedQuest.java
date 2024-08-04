@@ -45,10 +45,12 @@ public class SelectedQuest extends BaseEntity {
     private QuestStatus questStatus = IN_PROGRESS;
 
     public SelectedQuest(
+            final Long id,
             final Member member,
             final Quest quest,
             final Feedback feedback
     ) {
+        this.id = id;
         this.member = member;
         this.quest = quest;
         this.feedback = feedback;
@@ -58,7 +60,7 @@ public class SelectedQuest extends BaseEntity {
             final Member member,
             final Quest quest
     ) {
-        this(member, quest, null);
+        this(null, member, quest, null);
     }
 
     public void AddFeedbackToSelectedQuest(final Feedback feedback) {
