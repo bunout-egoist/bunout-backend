@@ -17,7 +17,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              LEFT JOIN FETCH s.quest q
              WHERE s.member.id = :memberId AND FUNCTION('DATE', s.createdAt) = :date AND s.questStatus = 'COMPLETED'
             """)
-    List<SelectedQuest> findConpletedQuestByMemberIdAndDate(
+    List<SelectedQuest> findCompletedQuestsByMemberIdAndDate(
             @Param("memberId") final Long memberId,
             @Param("date") final LocalDate date
     );
