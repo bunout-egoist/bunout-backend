@@ -6,7 +6,6 @@ import dough.login.dto.request.SignUpRequest;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.response.MemberInfoResponse;
-import dough.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
