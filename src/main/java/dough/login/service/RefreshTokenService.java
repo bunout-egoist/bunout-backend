@@ -1,12 +1,9 @@
 package dough.login.service;
 
-
 import dough.login.domain.repository.RefreshTokenRepository;
 import dough.login.domain.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.sql.Ref;
 
 @RequiredArgsConstructor
 @Service
