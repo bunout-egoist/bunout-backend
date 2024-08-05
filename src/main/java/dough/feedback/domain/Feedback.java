@@ -4,6 +4,8 @@ import dough.global.BaseEntity;
 import dough.member.domain.Member;
 import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -19,7 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @DynamicInsert
 @NoArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE feedback SET status = 'DELETED' where id = ?")
-@SQLRestriction("status is 'ACTIVE'")
+@SQLRestriction("status = 'ACTIVE'")
 public class Feedback extends BaseEntity {
 
     @Id
@@ -33,9 +35,32 @@ public class Feedback extends BaseEntity {
     @OneToOne(mappedBy = "feedback")
     private SelectedQuest selectedQuest;
 
-    private String message;
-
     private String imageUrl;
 
+    @Min(1)
+    @Max(5)
     private Integer difficulty;
+
+    public Feedback(
+            final Long id,
+            final Member member,
+            final SelectedQuest selectedQuest,
+            final String imageUrl,
+            final Integer difficulty
+    ) {
+        this.id = id;
+        this.member = member;
+        this.selectedQuest = selectedQuest;
+        this.imageUrl = imageUrl;
+        this.difficulty = difficulty;
+    }
+
+    public Feedback(
+            final Member member,
+            final SelectedQuest selectedQuest,
+            final String imageUrl,
+            final Integer difficulty
+    ) {
+        this(null, member, selectedQuest, imageUrl, difficulty);
+    }
 }

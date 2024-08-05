@@ -14,6 +14,7 @@ import org.hibernate.annotations.SQLRestriction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,6 +72,8 @@ public class Member extends BaseEntity implements UserDetails {
 
     private String burnoutType;
 
+    private LocalDate burnoutTypeLastModified;
+
     private LocalDateTime questLastModified;
 
     private LocalDateTime lastLogin;
@@ -84,21 +87,21 @@ public class Member extends BaseEntity implements UserDetails {
                   final String gender,
                   final Integer birthYear,
                   final String burnoutType
-                  ) {
-            this.id = id;
-            this.nickname = nickname;
-            this.socialLoginId = socialLoginId;
-            this.socialLoginType = socialLoginType;
-            this.email = email;
-            this.level = 0;
-            this.experience = 0;
-            this.maxStreak = 0;
-            this.occupation = occupation;
-            this.gender = gender;
-            this.birthYear = birthYear;
-            this.burnoutType = burnoutType;
-            this.questLastModified = LocalDateTime.now();
-            this.lastLogin = LocalDateTime.now();
+    ) {
+        this.id = id;
+        this.nickname = nickname;
+        this.socialLoginId = socialLoginId;
+        this.socialLoginType = socialLoginType;
+        this.email = email;
+        this.level = 0;
+        this.experience = 0;
+        this.maxStreak = 0;
+        this.occupation = occupation;
+        this.gender = gender;
+        this.birthYear = birthYear;
+        this.burnoutType = burnoutType;
+        this.questLastModified = LocalDateTime.now();
+        this.lastLogin = LocalDateTime.now();
     }
 
 
@@ -170,5 +173,10 @@ public class Member extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
+    }
+
+    public void changeBurnoutType(final String burnoutType) {
+        this.burnoutType = burnoutType;
+        this.burnoutTypeLastModified = LocalDate.now();
     }
 }

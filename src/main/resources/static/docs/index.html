@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>Spring REST Docs Test</title>
+<title>Dough REST API Docs</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -439,54 +439,342 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>Spring REST Docs Test</h1>
+<h1>Dough REST API Docs</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_restdocscontroller">RestDocsController</a>
+<li><a href="#_member_api">Member API</a>
 <ul class="sectlevel2">
-<li><a href="#_restdocscontroller_http_request">HTTP request</a></li>
-<li><a href="#_restdocscontroller_http_response">HTTP response</a></li>
+<li><a href="#_멤버_조회">멤버 조회</a>
+<ul class="sectlevel3">
+<li><a href="#_request">Request</a></li>
+<li><a href="#_response">Response</a></li>
 </ul>
 </li>
+<li><a href="#_멤버_닉네임_수정">멤버 닉네임 수정</a>
+<ul class="sectlevel3">
+<li><a href="#_request_2">Request</a></li>
+<li><a href="#_response_2">Response</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_quest_api">Quest API</a>
+<ul class="sectlevel2">
+<li><a href="#_퀘스트_추가">퀘스트 추가</a>
+<ul class="sectlevel3">
+<li><a href="#_request_3">Request</a></li>
+<li><a href="#_response_3">Response</a></li>
+</ul>
+</li>
+<li><a href="#_퀘스트_수정">퀘스트 수정</a>
+<ul class="sectlevel3">
+<li><a href="#_request_4">Request</a></li>
+<li><a href="#_response_4">Response</a></li>
+</ul>
+</li>
+<li><a href="#_퀘스트_삭제">퀘스트 삭제</a>
+<ul class="sectlevel3">
+<li><a href="#_request_5">Request</a></li>
+<li><a href="#_response_5">Response</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_exception_codes">Exception Codes</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_restdocscontroller">RestDocsController</h2>
+<h2 id="_member_api"><a class="link" href="#_member_api">Member API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_restdocscontroller_http_request">HTTP request</h3>
+<h3 id="_멤버_조회"><a class="link" href="#_멤버_조회">멤버 조회</a></h3>
+<div class="sect3">
+<h4 id="_request"><a class="link" href="#_request">Request</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/v1/members/{memberId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
+</tr>
+</tbody>
+</table>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /rest-docs HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/members/1 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_response"><a class="link" href="#_response">Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "id" : 1,
+  "nickname" : "goeun"
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 <div class="sect2">
-<h3 id="_restdocscontroller_http_response">HTTP response</h3>
+<h3 id="_멤버_닉네임_수정"><a class="link" href="#_멤버_닉네임_수정">멤버 닉네임 수정</a></h3>
+<div class="sect3">
+<h4 id="_request_2"><a class="link" href="#_request_2">Request</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. /api/v1/members/{memberId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/members/1 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 28
+Host: localhost:8080
+
+{
+  "nickname" : "minju"
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_2"><a class="link" href="#_response_2">Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "id" : 1,
+  "nickname" : "minju"
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 400 Bad Request
+Content-Type: application/json;charset=UTF-8
+Content-Length: 88
+
+{
+  "code" : 1000,
+  "message" : "닉네임은 5자를 초과할 수 없습니다."
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_quest_api"><a class="link" href="#_quest_api">Quest API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_퀘스트_추가"><a class="link" href="#_퀘스트_추가">퀘스트 추가</a></h3>
+<div class="sect3">
+<h4 id="_request_3"><a class="link" href="#_request_3">Request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/quests HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 171
+Host: localhost:8080
+
+{
+  "description" : "점심시간, 몸과 마음을 건강하게 유지하며",
+  "activity" : "15분 운동하기",
+  "questType" : "데일리",
+  "difficulty" : 3
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_3"><a class="link" href="#_response_3">Response</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Content-Type: text/plain;charset=UTF-8
-Content-Length: 10
+Content-Type: application/json;charset=UTF-8
+Content-Length: 184
 
-rest docs!</code></pre>
+{
+  "id" : 1,
+  "description" : "점심시간, 몸과 마음을 건강하게 유지하며",
+  "activity" : "15분 운동하기",
+  "questType" : "데일리",
+  "difficulty" : 3
+}</code></pre>
 </div>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_퀘스트_수정"><a class="link" href="#_퀘스트_수정">퀘스트 수정</a></h3>
+<div class="sect3">
+<h4 id="_request_4"><a class="link" href="#_request_4">Request</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. /api/v1/quests/{questId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 아이디</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/quests/1 HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Length: 171
+Host: localhost:8080
+
+{
+  "description" : "점심시간, 몸과 마음을 건강하게 유지하며",
+  "activity" : "20분 운동하기",
+  "questType" : "스페셜",
+  "difficulty" : 4
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_4"><a class="link" href="#_response_4">Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_퀘스트_삭제"><a class="link" href="#_퀘스트_삭제">퀘스트 삭제</a></h3>
+<div class="sect3">
+<h4 id="_request_5"><a class="link" href="#_request_5">Request</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. /api/v1/quests/{questId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 아이디</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /api/v1/quests/1 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_5"><a class="link" href="#_response_5">Response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_exception_codes"><a class="link" href="#_exception_codes">Exception Codes</a></h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Code</th>
+<th class="tableblock halign-left valign-top">Message</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">올바르지 않은 요청입니다.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유효하지 않은 퀘스트 타입입니다.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">요청하신 ID에 해당하는 퀘스트를 찾을 수 없습니다.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2002</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">요청하신 퀘스트 ID를 사용하고 있습니다.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">요청하신 ID에 해당하는 유저를 찾을 수 없습니다.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9999</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">서버에서 에러가 발생하였습니다.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-07-16 10:47:33 +0900
+Last updated 2024-08-01 22:23:36 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

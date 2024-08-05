@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @DynamicInsert
 @RequiredArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE selected_quest SET status = 'DELETED' where id = ?")
-@SQLRestriction("status is 'ACTIVE'")
+@SQLRestriction("status = 'ACTIVE'")
 public class SelectedQuest extends BaseEntity {
 
     @Id
@@ -43,4 +43,28 @@ public class SelectedQuest extends BaseEntity {
 
     @Enumerated(value = STRING)
     private QuestStatus questStatus = IN_PROGRESS;
+
+    public SelectedQuest(
+            final Long id,
+            final Member member,
+            final Quest quest,
+            final Feedback feedback
+    ) {
+        this.id = id;
+        this.member = member;
+        this.quest = quest;
+        this.feedback = feedback;
+    }
+
+    public SelectedQuest(
+            final Member member,
+            final Quest quest
+    ) {
+        this(null, member, quest, null);
+    }
+
+    public void AddFeedbackToSelectedQuest(final Feedback feedback) {
+        this.feedback = feedback;
+        this.questStatus = QuestStatus.COMPLETED;
+    }
 }

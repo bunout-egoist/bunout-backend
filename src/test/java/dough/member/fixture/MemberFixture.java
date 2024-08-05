@@ -1,4 +1,4 @@
-package dough.global.member.fixture;
+package dough.member.fixture;
 
 import dough.login.domain.type.RoleType;
 import dough.member.domain.Member;
@@ -18,5 +18,17 @@ public class MemberFixture {
             2002,
             "빵",
             RoleType.MEMBER
+    );
+
+    public static final Member UPDATED_MEMBER = new Member(
+            1L,
+            "goeun",
+            "0000",
+            KAKAO,
+            "goeun@mail.com",
+            "기타",
+            "여성",
+            2002,
+            "호빵"
     );
 }

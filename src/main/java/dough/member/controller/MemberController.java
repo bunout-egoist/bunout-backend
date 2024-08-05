@@ -1,6 +1,7 @@
 package dough.member.controller;
 
 import dough.member.domain.Member;
+import dough.member.dto.request.BurnoutTypeRequest;
 import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.member.service.MemberService;
@@ -27,7 +28,8 @@ public class MemberController {
 
     @PutMapping("/{memberId}")
     public ResponseEntity<MemberInfoResponse> updateMemberInfo(@PathVariable("memberId") final Long memberId,
-                                                               @RequestBody @Valid final MemberInfoRequest memberInfoRequest) {
+                                                               @RequestBody @Valid final MemberInfoRequest memberInfoRequest
+    ) {
         final MemberInfoResponse memberInfoResponse = memberService.updateMemberInfo(memberId, memberInfoRequest);
         return ResponseEntity.ok().body(memberInfoResponse);
     }
@@ -41,5 +43,13 @@ public class MemberController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Collections.singletonMap("error", "User doesn't exist"));
         }
+    }
+
+    @PutMapping("/{memberId}/burnoutType")
+    public ResponseEntity<Void> changeBurnoutType(@PathVariable("memberId") final Long memberId,
+                                                  @RequestBody @Valid final BurnoutTypeRequest burnoutTypeRequest
+    ) {
+        memberService.changeBurnoutType(memberId, burnoutTypeRequest);
+        return ResponseEntity.noContent().build();
     }
 }

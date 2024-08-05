@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class QuestRequest {
+public class QuestUpdateRequest {
 
     @NotBlank(message = "퀘스트 설명을 입력해주세요.")
     private String description;
