@@ -5,7 +5,6 @@ import dough.login.config.jwt.TokenProvider;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.service.SignUpService;
 import dough.member.dto.response.MemberInfoResponse;
-import dough.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
