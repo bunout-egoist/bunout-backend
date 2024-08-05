@@ -36,7 +36,7 @@ public class TokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .setSubject(user.getEmail())
-                .claim("id", user.getId())
+                .claim("id", user.getSocialLoginId())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret_key())
                 .compact();
     }
