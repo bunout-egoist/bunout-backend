@@ -3,6 +3,7 @@ package dough.login.controller;
 import dough.global.exception.ExceptionResponse;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.dto.request.SignUpRequest;
+import dough.login.service.SignUpService;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SignUpController {
 
     private final TokenProvider tokenProvider;
-    private final MemberService memberService;
+    private final SignUpService signUpService;
 
     @PostMapping("/api/v1/signup/info")
     public ResponseEntity<?> signupInfo(@RequestBody SignUpRequest signUpRequest) {
@@ -27,7 +28,7 @@ public class SignUpController {
             return ResponseEntity.status(401).body(new ExceptionResponse(401, "Invalid Token"));
         }
 
-        MemberInfoResponse memberInfoResponse = memberService.updateMemberInfo(signUpRequest);
+        MemberInfoResponse memberInfoResponse = signUpService.updateMemberInfo(signUpRequest);
         return ResponseEntity.ok(memberInfoResponse);
     }
 }
