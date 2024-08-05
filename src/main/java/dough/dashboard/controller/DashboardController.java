@@ -1,5 +1,7 @@
 package dough.dashboard.controller;
 
+import dough.dashboard.dto.response.TotalCompletedQuestCountResponse;
+import dough.dashboard.service.DashboardService;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.service.QuestService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.List;
 public class DashboardController {
 
     public final QuestService questService;
+    public final DashboardService dashboardService;
 
     @GetMapping("/quests/{memberId}/{searchDate}")
     public ResponseEntity<List<CompletedQuestDetailResponse>> getCompletedQuestDetail(
@@ -27,5 +30,13 @@ public class DashboardController {
     ) {
         final List<CompletedQuestDetailResponse> detailResponse = questService.getCompletedQuestDetail(memberId, date);
         return ResponseEntity.ok().body(detailResponse);
+    }
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity<TotalCompletedQuestCountResponse> getTotalCompletedQuestCount(
+            @PathVariable("memberId") final Long memberId
+    ) {
+        final TotalCompletedQuestCountResponse response = dashboardService.getTotalCompletedQuestCount(memberId);
+        return ResponseEntity.ok().body(response);
     }
 }

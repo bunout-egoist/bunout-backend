@@ -1,8 +1,8 @@
 package dough.dashboard.service;
 
-import dough.dashboard.domain.Dashboard;
 import dough.dashboard.domain.repository.DashboardRepository;
-import dough.dashboard.dto.response.DashboardResponse;
+import dough.dashboard.dto.CompletedQuestCountElement;
+import dough.dashboard.dto.response.TotalCompletedQuestCountResponse;
 import dough.global.exception.BadRequestException;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
@@ -22,12 +22,12 @@ public class DashboardService {
     private final MemberRepository memberRepository;
     private final DashboardRepository dashboardRepository;
 
-    public DashboardResponse getDashboard(final Long memberId, final Long year, final Long month) {
+    public TotalCompletedQuestCountResponse getTotalCompletedQuestCount(final Long memberId) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        final List<Dashboard> dashboards = dashboardRepository.getDashboardByMemberIdAndDate(member.getId(), year, month);
+        final List<CompletedQuestCountElement> elements = dashboardRepository.getDashboardByMemberIdAndDate(member.getId());
 
-        return DashboardResponse.of(dashboards);
+        return TotalCompletedQuestCountResponse.of(elements);
     }
 }
