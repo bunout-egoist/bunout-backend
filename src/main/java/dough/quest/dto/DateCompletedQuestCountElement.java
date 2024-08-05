@@ -13,4 +13,5 @@ import java.time.LocalDate;
 public class DateCompletedQuestCountElement {
     private LocalDate date;
     private Long dailyAndFixedCount;
+    private Long specialCount;
 }

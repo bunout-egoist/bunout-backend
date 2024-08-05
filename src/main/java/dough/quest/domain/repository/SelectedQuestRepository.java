@@ -1,5 +1,6 @@
 package dough.quest.domain.repository;
 
+import dough.global.annotation.TimeTrace;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.CompletedQuestCountElement;
 import dough.quest.dto.DateCompletedQuestCountElement;
@@ -8,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,39 +35,32 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
 
     Optional<SelectedQuest> findByQuestId(Long questId);
 
+    @TimeTrace
     @Query("""
-            SELECT
-                SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END) AS dailyAndFixedCount,
-                SUM(CASE WHEN q.questType = 'SPECAIL' THEN 1 ELSE 0 END) AS specialCount
+            SELECT new dough.quest.dto.CompletedQuestCountElement(
+                SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END),
+                SUM(CASE WHEN q.questType = 'SPECIAL' THEN 1 ELSE 0 END)
+            )
             FROM SelectedQuest sq
-            LEFT JOIN sq.quest q
+            LEFT JOIN Quest q ON sq.quest.id = q.id
             WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED'
-            """)
+           """)
     CompletedQuestCountElement countTotalCompletedQuestsByMemberId(@Param("memberId") final Long memberId);
 
-    //TODO 연월 비교 필요
     @Query("""
-            SELECT 
-                sq.createdAt,
-                SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END) AS dailyAndFixedCount
-            FROM SelectedQuest sq
-            LEFT JOIN sq.quest q
-            WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED' 
-            GROUP BY sq.createdAt
-            ORDER BY sq.createdAt
-           """)
+             SELECT
+                 sq.completedAt AS completedDate,
+                 SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END) AS dailyAndFixedCount,
+                 SUM(CASE WHEN q.questType = 'SPECIAL' THEN 1 ELSE 0 END) AS specialCount
+             FROM SelectedQuest sq
+             LEFT JOIN sq.quest q
+             WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED'
+                 AND FUNCTION('YEAR', sq.completedAt) = :year
+                 AND FUNCTION('MONTH', sq.completedAt) = :month
+             GROUP BY sq.completedAt
+             ORDER BY sq.completedAt
+            """)
     List<DateCompletedQuestCountElement> getDateAndCompletedQuestsCountByMemberId(@Param("memberId") final Long memberId, @Param("year") Long year, @Param("month") Long month);
-
-    // TODO 연월 비교 필요
-    @Query("""
-            SELECT sq.createdAt
-                FROM SelectedQuest sq
-                WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED'
-            GROUP BY sq.createdAt
-            HAVING COUNT(sq.createdAt) = 3
-            ORDER BY sq.createdAt
-        """)
-    List<LocalDateTime> getCompletedThreeQuestsDate(@Param("memberId") final Long memberId, @Param("year") Long year, @Param("month") Long month);
 
 //    @Modifying
 //    @Query("UPDATE SelectedQuest sq SET sq.feedback = :feedback, sq.questStatus = 'COMPLETED' WHERE sq.id = :selectedQuestId")
