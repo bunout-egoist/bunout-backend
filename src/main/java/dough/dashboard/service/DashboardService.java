@@ -1,13 +1,12 @@
 package dough.dashboard.service;
 
 import dough.dashboard.dto.response.DashboardResponse;
-import dough.dashboard.dto.response.TotalCompletedQuestCountResponse;
+import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import dough.global.exception.BadRequestException;
 import dough.member.domain.repository.MemberRepository;
-import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
-import dough.quest.dto.CompletedQuestCountElement;
 import dough.quest.dto.DateCompletedQuestCountElement;
+import dough.quest.dto.TotalCompletedQuestElement;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 @RequiredArgsConstructor
 public class DashboardService {
 
-    private final QuestRepository questRepository;
     private final SelectedQuestRepository selectedQuestRepository;
     private final MemberRepository memberRepository;
 
@@ -35,12 +33,16 @@ public class DashboardService {
         return DashboardResponse.of(dateCompletedQuestCountElements);
     }
 
-    public TotalCompletedQuestCountResponse getTotalCompletedQuestCount(final Long memberId) {
+    public TotalCompletedQuestsResponse getTotalCompletedQuests(final Long memberId) {
         if (!memberRepository.existsById(memberId)) {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
 
-        final CompletedQuestCountElement completedQuestCountElement = selectedQuestRepository.countTotalCompletedQuestsByMemberId(memberId);
-        return TotalCompletedQuestCountResponse.of(completedQuestCountElement.getDailyAndFixedCount(), completedQuestCountElement.getSpecialCount());
+        final TotalCompletedQuestElement totalCompletedQuestElement = selectedQuestRepository.getTotalCompletedQuestsByMemberId(memberId);
+
+        return TotalCompletedQuestsResponse.of(
+                totalCompletedQuestElement.getDailyAndFixedTotal(),
+                totalCompletedQuestElement.getSpecialTotal()
+        );
     }
 }

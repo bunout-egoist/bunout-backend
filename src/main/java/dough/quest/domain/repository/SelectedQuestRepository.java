@@ -1,9 +1,8 @@
 package dough.quest.domain.repository;
 
-import dough.global.annotation.TimeTrace;
 import dough.quest.domain.SelectedQuest;
-import dough.quest.dto.CompletedQuestCountElement;
 import dough.quest.dto.DateCompletedQuestCountElement;
+import dough.quest.dto.TotalCompletedQuestElement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,17 +26,16 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
     );
 
     @Query("""
-             SELECT CASE WHEN COUNT(sq) > 0 THEN true ELSE false END 
-             FROM SelectedQuest sq 
-             WHERE sq.quest.id = :questId
-            """)
+            SELECT CASE WHEN COUNT(sq) > 0 THEN true ELSE false END 
+            FROM SelectedQuest sq 
+            WHERE sq.quest.id = :questId
+           """)
     Boolean existsByQuestId(final Long questId);
 
     Optional<SelectedQuest> findByQuestId(Long questId);
 
-    @TimeTrace
     @Query("""
-            SELECT new dough.quest.dto.CompletedQuestCountElement(
+            SELECT new dough.quest.dto.TotalCompletedQuestElement(
                 SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END),
                 SUM(CASE WHEN q.questType = 'SPECIAL' THEN 1 ELSE 0 END)
             )
@@ -45,7 +43,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
             LEFT JOIN Quest q ON sq.quest.id = q.id
             WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED'
            """)
-    CompletedQuestCountElement countTotalCompletedQuestsByMemberId(@Param("memberId") final Long memberId);
+    TotalCompletedQuestElement getTotalCompletedQuestsByMemberId(@Param("memberId") final Long memberId);
 
     @Query("""
              SELECT
