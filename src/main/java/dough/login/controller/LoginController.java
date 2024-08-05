@@ -69,7 +69,6 @@ public class LoginController {
                 .bodyToMono(String.class)
                 .block();
 
-        //json형태로 변환
         ObjectMapper objectMapper = new ObjectMapper();
         KakaoTokenResponseDto kakaoToken = null;
 
@@ -82,7 +81,6 @@ public class LoginController {
         String accessToken = kakaoToken.getAccessToken();
         String refreshToken = kakaoToken.getRefreshToken();
 
-        // 받은 토큰으로 사용자 정보 요청하기
         Map<String, Object> userInfoResponse = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
@@ -99,9 +97,6 @@ public class LoginController {
                     .body(ApiResponse.error("Failed to retrieve user info from Kakao"));
         }
 
-        //////////////////
-
-        // 카카오에서 사용자 정보 가져오기
         String socialLoginId = String.valueOf(userInfoResponse.get("id")); // 카카오 사용자 ID를 가져옴
 
         Member member;
@@ -111,12 +106,9 @@ public class LoginController {
             member = memberService.createMember(socialLoginId, SocialLoginType.KAKAO, null, RoleType.MEMBER);
         }
 
-        // 리프레시 토큰 저장
-        // Save refresh token in database
         RefreshToken newRefreshToken = new RefreshToken(member.getId(), refreshToken);
         refreshTokenRepository.save(newRefreshToken);
 
-        // 멤버 정보로 자체 JWT 토큰 생성
         String jwtToken = tokenProvider.generateToken(member, Duration.ofHours(1));
         String jwtRefreshToken = tokenProvider.generateToken(member, Duration.ofDays(14));
 

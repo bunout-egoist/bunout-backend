@@ -29,11 +29,6 @@ public class LoginService {
         return memberRepository.save(member);
     }
 
-    /**
-     * 있으면 저장, 없으면 update
-     * @param oAuth2User 카카오에서 가져온 사용자
-     * @return
-     */
     public Member saveOrUpdate(OAuth2User oAuth2User) {
         String socialLoginId = oAuth2User.getName();
         String nickname = (String) oAuth2User.getAttributes().get("nickname");
