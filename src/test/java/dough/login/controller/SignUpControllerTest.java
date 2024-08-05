@@ -7,6 +7,7 @@ import dough.login.service.SignUpService;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,38 +47,40 @@ public class SignUpControllerTest {
         memberInfoResponse = new MemberInfoResponse(1L, "nick");
     }
 
+    @DisplayName("유효한 토큰이 있을경우 회원 정보를 업데이트할 수 있습니다.")
     @Test
     @WithMockUser
     public void testSignupInfo_withValidToken() throws Exception {
-        // Given: 유효한 토큰이 있고, 회원 가입 요청이 존재하며, 해당 요청에 대한 기대 응답이 정의됨
+        // Given
         Mockito.when(tokenProvider.validToken(anyString())).thenReturn(true);
         Mockito.when(signUpService.updateMemberInfo(any(SignUpRequest.class))).thenReturn(memberInfoResponse);
 
-        // When: 유효한 토큰과 함께 회원 가입 정보 업데이트 요청을 보내면
+        // When
         mockMvc.perform(post("/api/v1/signup/info")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()) // CSRF 토큰 추가
                         .content("{ \"accessToken\": \"" + validAccessToken + "\", \"nickname\": \"nick\", \"gender\": \"남성\", \"birth_year\": 1990, \"occupation\": \"직장인\" }"))
 
-                // Then: HTTP 200 OK 응답을 받고, 응답 내용이 기대하는 회원 정보와 일치해야 함
+                // Then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(memberInfoResponse.getId()))
                 .andExpect(jsonPath("$.nickname").value(memberInfoResponse.getNickname()));
     }
 
-    @Test
+    @DisplayName("유효하지 않으 토큰이 있을 경우 401에러를 반환합니다.")
+    @Test()
     @WithMockUser
     public void testSignupInfo_withInvalidToken() throws Exception {
-        // Given: 유효하지 않은 토큰이 있음
+        // Given
         Mockito.when(tokenProvider.validToken(anyString())).thenReturn(false);
 
-        // When: 유효하지 않은 토큰과 함께 회원 가입 정보 업데이트 요청을 보내면
+        // When
         mockMvc.perform(post("/api/v1/signup/info")
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(SecurityMockMvcRequestPostProcessors.csrf()) // CSRF 토큰 추가
                         .content("{ \"accessToken\": \"invalidAccessToken\", \"nickname\": \"nick\", \"gender\": \"남성\", \"birth_year\": 1990, \"occupation\": \"직장인\" }"))
 
-                // Then: HTTP 401 Unauthorized 응답을 받고, 응답 내용이 기대하는 에러 메시지와 일치해야 함
+                // Then
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value("Invalid Token"));
