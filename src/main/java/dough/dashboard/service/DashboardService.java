@@ -6,7 +6,7 @@ import dough.global.exception.BadRequestException;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.DateCompletedQuestCountElement;
-import dough.quest.dto.TotalCompletedQuestElement;
+import dough.quest.dto.TotalCompletedQuestsElement;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,11 +38,11 @@ public class DashboardService {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
 
-        final TotalCompletedQuestElement totalCompletedQuestElement = selectedQuestRepository.getTotalCompletedQuestsByMemberId(memberId);
+        final TotalCompletedQuestsElement totalCompletedQuestsElement = selectedQuestRepository.getTotalCompletedQuestsByMemberId(memberId);
 
         return TotalCompletedQuestsResponse.of(
-                totalCompletedQuestElement.getDailyAndFixedTotal(),
-                totalCompletedQuestElement.getSpecialTotal()
+                totalCompletedQuestsElement.getDailyAndFixedTotal(),
+                totalCompletedQuestsElement.getSpecialTotal()
         );
     }
 }

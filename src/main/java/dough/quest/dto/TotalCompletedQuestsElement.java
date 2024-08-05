@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TotalCompletedQuestElement {
+public class TotalCompletedQuestsElement {
     private Long dailyAndFixedTotal;
     private Long specialTotal;
 }

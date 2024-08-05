@@ -24,11 +24,11 @@ public class DashboardController {
     public final DashboardService dashboardService;
 
     @GetMapping("/quests/{memberId}/{searchDate}")
-    public ResponseEntity<List<CompletedQuestDetailResponse>> getCompletedQuestDetail(
+    public ResponseEntity<List<CompletedQuestDetailResponse>> getCompletedQuestsDetail(
             @PathVariable("memberId") final Long memberId,
             @PathVariable("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate date
     ) {
-        final List<CompletedQuestDetailResponse> detailResponse = questService.getCompletedQuestDetail(memberId, date);
+        final List<CompletedQuestDetailResponse> detailResponse = questService.getCompletedQuestsDetail(memberId, date);
         return ResponseEntity.ok().body(detailResponse);
     }
 

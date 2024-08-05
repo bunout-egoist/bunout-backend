@@ -102,7 +102,7 @@ public class QuestServiceTest {
         given(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(anyLong(), any()))
                 .willReturn(selectedQuests);
 
-        List<CompletedQuestDetailResponse> actualResponse = questService.getCompletedQuestDetail(MEMBER.getId(), LocalDate.now());
+        List<CompletedQuestDetailResponse> actualResponse = questService.getCompletedQuestsDetail(MEMBER.getId(), LocalDate.now());
 
         assertThat(actualResponse).usingRecursiveComparison()
                 .isEqualTo(COMPLETED_QUEST_DETAILS.stream()
@@ -121,7 +121,7 @@ public class QuestServiceTest {
         Long id = 1L;
 
         // given & when & then
-        assertThatThrownBy(() -> questService.getCompletedQuestDetail(id, any()))
+        assertThatThrownBy(() -> questService.getCompletedQuestsDetail(id, any()))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_MEMBER_ID.getCode());

@@ -30,7 +30,7 @@ public class QuestService {
     private final SelectedQuestRepository selectedQuestRepository;
     private final MemberRepository memberRepository;
 
-    public List<CompletedQuestDetailResponse> getCompletedQuestDetail(final Long memberId, final LocalDate date) {
+    public List<CompletedQuestDetailResponse> getCompletedQuestsDetail(final Long memberId, final LocalDate date) {
         if (!memberRepository.existsById(memberId)) {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }

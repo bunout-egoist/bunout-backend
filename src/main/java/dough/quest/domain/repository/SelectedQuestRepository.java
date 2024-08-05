@@ -2,7 +2,7 @@ package dough.quest.domain.repository;
 
 import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.DateCompletedQuestCountElement;
-import dough.quest.dto.TotalCompletedQuestElement;
+import dough.quest.dto.TotalCompletedQuestsElement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -43,7 +43,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
             LEFT JOIN Quest q ON sq.quest.id = q.id
             WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED'
            """)
-    TotalCompletedQuestElement getTotalCompletedQuestsByMemberId(@Param("memberId") final Long memberId);
+    TotalCompletedQuestsElement getTotalCompletedQuestsByMemberId(@Param("memberId") final Long memberId);
 
     @Query("""
              SELECT

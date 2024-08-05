@@ -2,7 +2,7 @@ package dough.dashboard.service;
 
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
-import dough.quest.dto.TotalCompletedQuestElement;
+import dough.quest.dto.TotalCompletedQuestsElement;
 import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,12 +34,12 @@ class DashboardServiceTest {
     @Test
     void getTotalCompletedQuests() {
         // given
-        final TotalCompletedQuestElement totalCompletedQuestElement = new TotalCompletedQuestElement(50L, 40L);
+        final TotalCompletedQuestsElement totalCompletedQuestsElement = new TotalCompletedQuestsElement(50L, 40L);
 
         given(memberRepository.existsById(any()))
                 .willReturn(true);
         given(selectedQuestRepository.getTotalCompletedQuestsByMemberId(any()))
-                .willReturn(totalCompletedQuestElement);
+                .willReturn(totalCompletedQuestsElement);
 
         // when
         final TotalCompletedQuestsResponse actualResponse = dashboardService.getTotalCompletedQuests(MEMBER.getId());
