@@ -25,7 +25,6 @@ import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final TokenProvider tokenProvider;
 
     @Transactional(readOnly = true)
     public MemberInfoResponse getMemberInfo(final Long memberId) {
@@ -62,22 +61,5 @@ public class MemberService {
                 throw new BadRequestException(ALREADY_UPDATED_BURNOUT_TYPE);
             }
         }
-    }
-
-    public MemberInfoResponse updateMemberInfo(SignUpRequest signUpRequest) {
-        String accessToken = signUpRequest.getAccessToken();
-        String socialLoginId = tokenProvider.getUserIdFromToken(accessToken);
-
-        final Member member = memberRepository.findBySocialLoginId(socialLoginId)
-                .orElseThrow(UserNotFoundException::new);
-
-        member.updateMember(
-                member.getNickname(),
-                member.getGender(),
-                member.getBirthYear(),
-                member.getOccupation()
-        );
-
-        return MemberInfoResponse.from(memberRepository.save(member));
     }
 }
