@@ -1,7 +1,9 @@
 package dough.login.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 
+@Getter
 public class KakaoTokenResponseDto {
 
     /**
@@ -29,36 +31,6 @@ public class KakaoTokenResponseDto {
     @JsonProperty("scope")
     private String scope;
 
-    //==Getter==//
-    public String getTokenType() {
-        return tokenType;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public Integer getExpiresIn() {
-        return expiresIn;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
-
-    public Integer getRefreshTokenExpiresIn() {
-        return refreshTokenExpiresIn;
-    }
-
-    public String getIdToken() {
-        return idToken;
-    }
-
-    public String getScope() {
-        return scope;
-    }
-
-    //==Setter==//
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
     }
