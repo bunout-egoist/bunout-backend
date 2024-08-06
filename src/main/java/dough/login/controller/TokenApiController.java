@@ -9,15 +9,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/v1")
 public class TokenApiController {
 
     private final TokenService tokenService;
 
-    @PostMapping("/api/v1/token")
+    @PostMapping("/token")
     public ResponseEntity<CreateAccessTokenResponse> createNewAccessToken(@RequestBody CreateAccessTokenRequest request) {
         String newAccessToken = tokenService.createNewAccessToken(request.getRefreshToken());
 
@@ -25,7 +27,7 @@ public class TokenApiController {
                 .body(new CreateAccessTokenResponse(newAccessToken));
     }
 
-    @PostMapping("/api/v1/refreshToken")
+    @PostMapping("/refreshToken")
     public ResponseEntity<TokensResponse> refreshExpiredTokens(@RequestBody CreateAccessTokenRequest request) {
         TokensResponse access_refresh_tokens = tokenService.refreshTokens(request.getRefreshToken());
 
