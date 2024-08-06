@@ -61,11 +61,6 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(new org.springframework.security.core.userdetails.User(claims.getSubject
                 (), "", authorities), token, authorities);
     }
-
-    public Long getUserIdFromToken(String token) {
-        Claims claims = getClaims(token);
-        return claims.get("id", Long.class);
-    }
   
     public String getUserIdFromToken(String token) {
         Claims claims = getClaims(token);
