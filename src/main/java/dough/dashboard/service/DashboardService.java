@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
@@ -43,7 +44,7 @@ public class DashboardService {
         return (totalCount * 100) / (month * 3 + 12);
     }
 
-    private static Map<String, Long> getHighestAverageCompletionDays(final List<CompletedCountDateElement> completedCountDateElements) {
+    private static Set<String> getHighestAverageCompletionDays(final List<CompletedCountDateElement> completedCountDateElements) {
         final Map<String, Long> completionCounts = completedCountDateElements.stream()
                 .collect(Collectors.groupingBy(
                         element -> element.getCompletedAt().getDayOfWeek().getDisplayName(SHORT, KOREAN),
@@ -54,7 +55,8 @@ public class DashboardService {
 
         return maxCount == 0 ? null : completionCounts.entrySet().stream()
                 .filter(entry -> entry.getValue() == maxCount)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                .keySet();
     }
 
     public DashboardResponse getMonthlyDashboard(final Long memberId, final Long year, final Long month) {
@@ -64,7 +66,7 @@ public class DashboardService {
 
         final List<CompletedCountDateElement> completedCountDateElements = selectedQuestRepository.getDateAndCompletedQuestsCountByMemberId(memberId, year, month);
         final Long completedAllQuestsCount = getCompletedAllQuestsCount(completedCountDateElements);
-        final Map<String, Long> highestAverageCompletionDays = getHighestAverageCompletionDays(completedCountDateElements);
+        final Set<String> highestAverageCompletionDays = getHighestAverageCompletionDays(completedCountDateElements);
         final Long averageCompletion = getAverageCompletion(completedCountDateElements);
 
         return DashboardResponse.of(

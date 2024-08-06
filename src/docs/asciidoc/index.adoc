@@ -89,6 +89,17 @@ include::{snippets}/dashboard-controller-test/get-completed-quests-detail_-inval
 ==== Response
 include::{snippets}/dashboard-controller-test/get-completed-quests-detail_-invalid-local-date-type/http-response.adoc[]
 
+=== 월간 분석
+
+==== Request
+include::{snippets}/dashboard-controller-test/get-monthly-dashboard/http-request.adoc[]
+include::{snippets}/dashboard-controller-test/get-monthly-dashboard/path-parameters.adoc[]
+include::{snippets}/dashboard-controller-test/get-monthly-dashboard/request-body.adoc[]
+
+==== Response
+include::{snippets}/dashboard-controller-test/get-monthly-dashboard/response-fields.adoc[]
+include::{snippets}/dashboard-controller-test/get-monthly-dashboard/response-body.adoc[]
+
 === 퀘스트 총 개수
 
 ==== Request

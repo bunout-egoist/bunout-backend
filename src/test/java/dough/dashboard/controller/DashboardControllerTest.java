@@ -1,7 +1,9 @@
 package dough.dashboard.controller;
 
+import dough.dashboard.dto.response.DashboardResponse;
 import dough.dashboard.service.DashboardService;
 import dough.global.AbstractControllerTest;
+import dough.quest.dto.CompletedCountDateElement;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import dough.quest.service.QuestService;
@@ -15,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static dough.feedback.fixture.CompletedQuestDetailFixture.COMPLETED_QUEST_DETAILS;
 import static dough.global.restdocs.RestDocsConfiguration.field;
@@ -22,8 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -149,6 +151,64 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("specialCount")
                                         .type(NUMBER)
                                         .description("스페셜 퀘스트 개수")
+                                        .attributes(field("constraint", "양의 정수"))
+                        )
+                ));
+    }
+
+    @DisplayName("월간 분석을 받을 수 있다.")
+    @Test
+    void getMonthlyDashboard() throws Exception {
+        // given
+        final DashboardResponse dashboardResponse = DashboardResponse.of(
+                List.of(new CompletedCountDateElement(LocalDate.now(), 10L, 10L)),
+                0L,
+                Set.of("화"),
+                19L
+        );
+
+        when(dashboardService.getMonthlyDashboard(anyLong(), anyLong(), anyLong()))
+                .thenReturn(dashboardResponse);
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(
+                get("/api/v1/dashboard/{memberId}/{year}/{month}", 1L, 2024L, 8L));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        pathParameters(
+                                parameterWithName("memberId")
+                                        .description("멤버 아이디"),
+                                parameterWithName("year")
+                                        .description("연도"),
+                                parameterWithName("month")
+                                        .description("월")
+                        ),
+                        responseFields(
+                                fieldWithPath("completedCountDates")
+                                        .type(ARRAY)
+                                        .description("완료 퀘스트 개수 & 완료 날짜 리스트")
+                                        .attributes(field("constraint", "배열")),
+                                fieldWithPath("completedCountDates[].completedAt")
+                                        .type(STRING)
+                                        .description("퀘스트 완료 날짜")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("completedCountDates[].completedQuestCount")
+                                        .type(NUMBER)
+                                        .description("완료한 퀘스트 개수")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("completedAllQuestsCount")
+                                        .type(NUMBER)
+                                        .description("하루에 제공되는 모든 퀘스트 완료 일수")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("highestAverageCompletionDay")
+                                        .type(ARRAY)
+                                        .description("평균 달성률이 가장 높은 요일 배열")
+                                        .attributes(field("constraint", "문자열 배열")),
+                                fieldWithPath("averageCompletion")
+                                        .type(NUMBER)
+                                        .description("이번 달 평균 달성률")
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));

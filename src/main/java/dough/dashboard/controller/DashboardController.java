@@ -1,9 +1,9 @@
 package dough.dashboard.controller;
 
 import dough.dashboard.dto.response.DashboardResponse;
-import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import dough.dashboard.service.DashboardService;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
+import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import dough.quest.service.QuestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
