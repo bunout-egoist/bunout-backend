@@ -2,14 +2,13 @@ package dough.login.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dough.global.exception.ExceptionResponse;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.domain.RefreshToken;
 import dough.login.domain.repository.RefreshTokenRepository;
-import dough.login.dto.response.ApiResponse;
 import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
 import dough.login.dto.response.KakaoTokenResponseDto;
-import dough.login.dto.response.TokensResponse;
 import dough.login.service.LoginService;
 import dough.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -49,7 +49,7 @@ public class LoginController {
     private final RefreshTokenRepository refreshTokenRepository;
 
     @PostMapping("/login/kakao")
-    public ResponseEntity<ApiResponse<TokensResponse>> loginWithKakao(@RequestBody Map<String, String> request) {
+    public ResponseEntity<?> loginWithKakao(@RequestBody Map<String, String> request) {
         String code = request.get("code");
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -59,7 +59,6 @@ public class LoginController {
         params.add("code", code);
         params.add("client_secret", kakaoClientSecret);
 
-        //request
         WebClient wc = WebClient.create("https://kauth.kakao.com");
         String response = wc.post()
                 .uri("/oauth/token")
@@ -94,10 +93,10 @@ public class LoginController {
 
         if (userInfoResponse == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.error("Failed to retrieve user info from Kakao"));
+                    .body(new ExceptionResponse(HttpStatus.BAD_REQUEST.value(), "Invalid user information response from Kakao"));
         }
 
-        String socialLoginId = String.valueOf(userInfoResponse.get("id")); // 카카오 사용자 ID를 가져옴
+        String socialLoginId = String.valueOf(userInfoResponse.get("id"));
 
         Member member;
         try {
@@ -112,8 +111,10 @@ public class LoginController {
         String jwtToken = tokenProvider.generateToken(member, Duration.ofHours(1));
         String jwtRefreshToken = tokenProvider.generateToken(member, Duration.ofDays(14));
 
-        TokensResponse tokensResponse = new TokensResponse(jwtToken, jwtRefreshToken);
+        Map<String, String> tokens = new HashMap<>();
+        tokens.put("jwtToken", jwtToken);
+        tokens.put("jwtRefreshToken", jwtRefreshToken);
 
-        return ResponseEntity.ok(ApiResponse.success("tokens", tokensResponse));
+        return ResponseEntity.ok(tokens);
     }
 }
