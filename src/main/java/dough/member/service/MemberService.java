@@ -43,6 +43,11 @@ public class MemberService {
         return MemberInfoResponse.from(member);
     }
 
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
+    }
+
     public void changeBurnoutType(final Long memberId, final BurnoutTypeRequest burnoutTypeRequest) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
