@@ -1,6 +1,9 @@
 package dough.member.service;
 
 import dough.global.exception.BadRequestException;
+import dough.global.exception.UserNotFoundException;
+import dough.login.config.jwt.TokenProvider;
+import dough.login.dto.request.SignUpRequest;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.BurnoutTypeRequest;
