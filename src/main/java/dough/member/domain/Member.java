@@ -174,6 +174,17 @@ public class Member extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+  
+    public void updateMember(
+            final String nickname,
+            final String gender,
+            final Integer birthYear,
+            final String occupation) {
+        this.nickname = nickname;
+        this.gender = gender;
+        this.birthYear = birthYear;
+        this.occupation = occupation;
+    }
 
     public void changeBurnoutType(final String burnoutType) {
         this.burnoutType = burnoutType;
