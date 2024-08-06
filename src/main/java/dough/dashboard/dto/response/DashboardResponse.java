@@ -1,70 +1,42 @@
 package dough.dashboard.dto.response;
 
-import dough.quest.dto.DateCompletedQuestCountElement;
-import dough.quest.dto.response.CompletedQuestCountResponse;
+import dough.quest.dto.CompletedCountDateElement;
+import dough.quest.dto.response.CompletedCountDateResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
+
 
 @Getter
 @RequiredArgsConstructor
 public class DashboardResponse {
 
 
-    private final List<CompletedQuestCountResponse> completedQuestCountResponses;
-    private final LocalDate completedThreeQuestsDate;
-    private final Enum highestAverageCompletionDay;
+    private final List<CompletedCountDateResponse> completedCountDateResponse;
+    private final Long completedAllQuestsCount;
+    private final Set<String> highestAverageCompletionDay;
     private final Long averageCompletion;
 
     public static DashboardResponse of(
-            final List<DateCompletedQuestCountElement> dateCompletedQuestCountElements
+            final List<CompletedCountDateElement> completedCountDateElements,
+            final Long completedAllQuestsCount,
+            final Map<String, Long> highestAverageCompletionDays,
+            final Long averageCompletion
     ) {
-        final List<CompletedQuestCountResponse> dateCompletedQuestCountResponses = dateCompletedQuestCountElements.stream()
-                .map(element -> CompletedQuestCountResponse.of(element.getDate(), element.getDailyAndFixedCount()))
+        final List<CompletedCountDateResponse> dateCompletedCountDateRespons = completedCountDateElements.stream()
+                .map(element -> CompletedCountDateResponse.of(element.getCompletedAt(), element.getDailyAndFixedCount()))
                 .toList();
 
+        final Set<String> dayOfWeeks = highestAverageCompletionDays.keySet();
+
         return new DashboardResponse(
-                dateCompletedQuestCountResponses,
-                getCompletedThreeQuestsDate(dateCompletedQuestCountElements),
-                getHighestAverageCompletionDay(dateCompletedQuestCountElements),
-                getAverageCompletion(dateCompletedQuestCountElements)
+                dateCompletedCountDateRespons,
+                completedAllQuestsCount,
+                dayOfWeeks,
+                averageCompletion
         );
-    }
-
-    private static LocalDate getCompletedThreeQuestsDate(final List<DateCompletedQuestCountElement> dateCompletedQuestCountElements) {
-        return dateCompletedQuestCountElements.stream()
-                .filter(dashboard -> dashboard.getDailyAndFixedCount() == 3)
-                .map(DateCompletedQuestCountElement::getDate)
-                .collect(Collectors.toList())
-                .get(0);
-    }
-
-    private static Long getAverageCompletion(final List<DateCompletedQuestCountElement> dateCompletedQuestCountElements) {
-        final Long totalCount = dateCompletedQuestCountElements.stream()
-                .mapToLong(dashboard -> dashboard.getDailyAndFixedCount() + dashboard.getSpecialCount())
-                .sum();
-
-        final LocalDate completedAt = dateCompletedQuestCountElements.get(0).getDate();
-        final int month = completedAt.lengthOfMonth();
-        return totalCount / (month * 3 + 12);
-    }
-
-    private static Enum getHighestAverageCompletionDay(final List<DateCompletedQuestCountElement> dateCompletedQuestCountElements) {
-        final Map<Enum, Long> map = new HashMap<>();
-        dateCompletedQuestCountElements.stream()
-                .forEach(dashboard -> {
-                    final Enum dayOfWeek = dashboard.getDate().getDayOfWeek();
-                    final Long countByDayOfWeek = dashboard.getSpecialCount() + dashboard.getDailyAndFixedCount();
-                    map.put(dayOfWeek, map.getOrDefault(dayOfWeek, 0L) + countByDayOfWeek);
-                });
-
-        // TODO 만약 그런 날이 없을 경우는?
-        return Collections.max(map.keySet());
     }
 }

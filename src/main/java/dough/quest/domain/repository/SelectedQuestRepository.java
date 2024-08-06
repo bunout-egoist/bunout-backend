@@ -1,7 +1,7 @@
 package dough.quest.domain.repository;
 
 import dough.quest.domain.SelectedQuest;
-import dough.quest.dto.DateCompletedQuestCountElement;
+import dough.quest.dto.CompletedCountDateElement;
 import dough.quest.dto.TotalCompletedQuestsElement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -35,7 +35,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
     Optional<SelectedQuest> findByQuestId(Long questId);
 
     @Query("""
-            SELECT new dough.quest.dto.TotalCompletedQuestElement(
+            SELECT new dough.quest.dto.TotalCompletedQuestsElement(
                 SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END),
                 SUM(CASE WHEN q.questType = 'SPECIAL' THEN 1 ELSE 0 END)
             )
@@ -46,19 +46,20 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
     TotalCompletedQuestsElement getTotalCompletedQuestsByMemberId(@Param("memberId") final Long memberId);
 
     @Query("""
-             SELECT
-                 sq.completedAt AS completedDate,
-                 SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END) AS dailyAndFixedCount,
-                 SUM(CASE WHEN q.questType = 'SPECIAL' THEN 1 ELSE 0 END) AS specialCount
-             FROM SelectedQuest sq
-             LEFT JOIN sq.quest q
-             WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED'
-                 AND FUNCTION('YEAR', sq.completedAt) = :year
-                 AND FUNCTION('MONTH', sq.completedAt) = :month
-             GROUP BY sq.completedAt
-             ORDER BY sq.completedAt
-            """)
-    List<DateCompletedQuestCountElement> getDateAndCompletedQuestsCountByMemberId(@Param("memberId") final Long memberId, @Param("year") Long year, @Param("month") Long month);
+            SELECT new dough.quest.dto.CompletedCountDateElement(
+                sq.completedAt,
+                SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END),
+                SUM(CASE WHEN q.questType = 'SPECIAL' THEN 1 ELSE 0 END)
+            )
+            FROM SelectedQuest sq
+            LEFT JOIN sq.quest q
+            WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED'
+                AND FUNCTION('YEAR', sq.completedAt) = :year
+                AND FUNCTION('MONTH', sq.completedAt) = :month
+            GROUP BY sq.completedAt
+            ORDER BY sq.completedAt
+           """)
+    List<CompletedCountDateElement> getDateAndCompletedQuestsCountByMemberId(@Param("memberId") final Long memberId, @Param("year") Long year, @Param("month") Long month);
 
 //    @Modifying
 //    @Query("UPDATE SelectedQuest sq SET sq.feedback = :feedback, sq.questStatus = 'COMPLETED' WHERE sq.id = :selectedQuestId")

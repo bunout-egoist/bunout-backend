@@ -10,8 +10,9 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DateCompletedQuestCountElement {
-    private LocalDate date;
+public class CompletedCountDateElement {
+
+    private LocalDate completedAt;
     private Long dailyAndFixedCount;
     private Long specialCount;
 }

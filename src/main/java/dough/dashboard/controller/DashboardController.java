@@ -1,5 +1,6 @@
 package dough.dashboard.controller;
 
+import dough.dashboard.dto.response.DashboardResponse;
 import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import dough.dashboard.service.DashboardService;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
@@ -36,5 +37,15 @@ public class DashboardController {
     public ResponseEntity<TotalCompletedQuestsResponse> getTotalCompletedQuests(@PathVariable("memberId") final Long memberId) {
         final TotalCompletedQuestsResponse totalCompletedQuestsResponse = dashboardService.getTotalCompletedQuests(memberId);
         return ResponseEntity.ok().body(totalCompletedQuestsResponse);
+    }
+
+    @GetMapping("/{memberId}/{year}/{month}")
+    public ResponseEntity<DashboardResponse> getMonthlyDashboard(
+            @PathVariable("memberId") final Long memberId,
+            @PathVariable("year") final Long year,
+            @PathVariable("month") final Long month
+    ) {
+        final DashboardResponse dashboardResponse = dashboardService.getMonthlyDashboard(memberId, year, month);
+        return ResponseEntity.ok().body(dashboardResponse);
     }
 }
