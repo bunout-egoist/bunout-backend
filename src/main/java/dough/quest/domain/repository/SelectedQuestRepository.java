@@ -1,5 +1,6 @@
 package dough.quest.domain.repository;
 
+import dough.global.annotation.TimeTrace;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.CompletedCountDateElement;
 import dough.quest.dto.TotalCompletedQuestsElement;
@@ -45,6 +46,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
            """)
     TotalCompletedQuestsElement getTotalCompletedQuestsByMemberId(@Param("memberId") final Long memberId);
 
+    @TimeTrace
     @Query("""
             SELECT new dough.quest.dto.CompletedCountDateElement(
                 sq.completedAt,

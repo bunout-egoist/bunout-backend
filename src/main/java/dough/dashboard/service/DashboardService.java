@@ -39,8 +39,8 @@ public class DashboardService {
                 .mapToLong(element -> element.getDailyAndFixedCount() + element.getSpecialCount())
                 .sum();
 
-        final int month = completedCountDateElements.get(0).getCompletedAt().getDayOfMonth();
-        return totalCount / (month * 3 + 12);
+        final int month = completedCountDateElements.get(0).getCompletedAt().lengthOfMonth();
+        return (totalCount * 100) / (month * 3 + 12);
     }
 
     private static Map<String, Long> getHighestAverageCompletionDays(final List<CompletedCountDateElement> completedCountDateElements) {
