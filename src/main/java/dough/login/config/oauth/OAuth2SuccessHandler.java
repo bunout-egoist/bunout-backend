@@ -39,7 +39,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Member user = memberService.findBySocialLoginId((String) oAuth2User.getAttributes().get("id"));
 
         String refreshToken = tokenProvider.generateToken(user, REFRESH_TOKEN_DURATION);
-        saveRefreshToken(user.getId(), refreshToken);
+        saveRefreshToken(user.getSocialLoginId(), refreshToken);
         addRefreshTokenToCookie(request, response, refreshToken);
 
         String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
@@ -50,10 +50,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    private void saveRefreshToken(Long userId, String newRefreshToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
+    private void saveRefreshToken(String socialLoginId, String newRefreshToken) {
+        RefreshToken refreshToken = refreshTokenRepository.findBySocialLoginId(socialLoginId)
                 .map(entity -> entity.update(newRefreshToken))
-                .orElse(new RefreshToken(userId, newRefreshToken));
+                .orElse(new RefreshToken(socialLoginId, newRefreshToken));
 
         refreshTokenRepository.save(refreshToken);
     }
