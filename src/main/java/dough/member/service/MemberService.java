@@ -45,7 +45,7 @@ public class MemberService {
 
     public Member findById(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
     }
 
     public void changeBurnoutType(final Long memberId, final BurnoutTypeRequest burnoutTypeRequest) {
@@ -66,5 +66,10 @@ public class MemberService {
                 throw new BadRequestException(ALREADY_UPDATED_BURNOUT_TYPE);
             }
         }
+    }
+
+    public Member findBySocialLoginId(String socialLoginId) {
+        return memberRepository.findBySocialLoginId(socialLoginId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
     }
 }
