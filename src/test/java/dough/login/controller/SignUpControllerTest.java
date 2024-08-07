@@ -69,7 +69,7 @@ public class SignUpControllerTest {
                 .andExpect(jsonPath("$.nickname").value(memberInfoResponse.getNickname()));
     }
 
-    @DisplayName("유효하지 않으 토큰이 있을 경우 401에러를 반환합니다.")
+    @DisplayName("유효하지 않은 토큰이 있을 경우 401에러를 반환합니다.")
     @Test()
     @WithMockUser
     public void testSignupInfo_withInvalidToken() throws Exception {
