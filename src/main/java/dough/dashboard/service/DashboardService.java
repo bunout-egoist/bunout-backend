@@ -1,16 +1,18 @@
 package dough.dashboard.service;
 
-import dough.dashboard.dto.response.DashboardResponse;
+import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.global.exception.BadRequestException;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
-import dough.quest.dto.CompletedCountDateElement;
+import dough.quest.dto.CompletedQuestsCountElement;
 import dough.quest.dto.TotalCompletedQuestsElement;
 import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -29,48 +31,18 @@ public class DashboardService {
     private final SelectedQuestRepository selectedQuestRepository;
     private final MemberRepository memberRepository;
 
-    private static Long getCompletedAllQuestsCount(final List<CompletedCountDateElement> completedCountDateElements) {
-        return completedCountDateElements.stream()
-                .filter(element -> element.getDailyAndFixedCount() == 3)
-                .count();
-    }
-
-    private static Long getAverageCompletion(final List<CompletedCountDateElement> completedCountDateElements) {
-        final Long totalCount = completedCountDateElements.stream()
-                .mapToLong(element -> element.getDailyAndFixedCount() + element.getSpecialCount())
-                .sum();
-
-        final int month = completedCountDateElements.get(0).getCompletedAt().lengthOfMonth();
-        return (totalCount * 100) / (month * 3 + 12);
-    }
-
-    private static Set<String> getHighestAverageCompletionDays(final List<CompletedCountDateElement> completedCountDateElements) {
-        final Map<String, Long> completionCounts = completedCountDateElements.stream()
-                .collect(Collectors.groupingBy(
-                        element -> element.getCompletedAt().getDayOfWeek().getDisplayName(SHORT, KOREAN),
-                        Collectors.summingLong(element -> element.getSpecialCount() + element.getDailyAndFixedCount())
-                ));
-
-        final Long maxCount = Collections.max(completionCounts.values());
-
-        return maxCount == 0 ? null : completionCounts.entrySet().stream()
-                .filter(entry -> entry.getValue() == maxCount)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-                .keySet();
-    }
-
-    public DashboardResponse getMonthlyDashboard(final Long memberId, final Long year, final Long month) {
+    public MonthlySummaryResponse getMonthlySummary(final Long memberId, final YearMonth yearMonth) {
         if (!memberRepository.existsById(memberId)) {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
 
-        final List<CompletedCountDateElement> completedCountDateElements = selectedQuestRepository.getDateAndCompletedQuestsCountByMemberId(memberId, year, month);
-        final Long completedAllQuestsCount = getCompletedAllQuestsCount(completedCountDateElements);
-        final Set<String> highestAverageCompletionDays = getHighestAverageCompletionDays(completedCountDateElements);
-        final Long averageCompletion = getAverageCompletion(completedCountDateElements);
+        final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndCompletedDate(memberId, yearMonth);
+        final Long completedAllQuestsCount = getCompletedAllQuestsCount(completedQuestsCountElements);
+        final Set<String> highestAverageCompletionDays = getHighestAverageCompletionDays(completedQuestsCountElements);
+        final Long averageCompletion = getAverageCompletion(completedQuestsCountElements);
 
-        return DashboardResponse.of(
-                completedCountDateElements,
+        return MonthlySummaryResponse.of(
+                completedQuestsCountElements,
                 completedAllQuestsCount,
                 highestAverageCompletionDays,
                 averageCompletion
@@ -88,5 +60,35 @@ public class DashboardService {
                 totalCompletedQuestsElement.getDailyAndFixedTotal(),
                 totalCompletedQuestsElement.getSpecialTotal()
         );
+    }
+
+    private static Long getCompletedAllQuestsCount(final List<CompletedQuestsCountElement> completedQuestsCountElements) {
+        return completedQuestsCountElements.stream()
+                .filter(element -> element.getDailyAndFixedCount() == 3)
+                .count();
+    }
+
+    private static Long getAverageCompletion(final List<CompletedQuestsCountElement> completedQuestsCountDateElements) {
+        final Long totalCount = completedQuestsCountDateElements.stream()
+                .mapToLong(element -> element.getDailyAndFixedCount() + element.getSpecialCount())
+                .sum();
+
+        final int month = completedQuestsCountDateElements.get(0).getCompletedDate().lengthOfMonth();
+        return (totalCount * 100) / (month * 3 + 12);
+    }
+
+    private static Set<String> getHighestAverageCompletionDays(final List<CompletedQuestsCountElement> completedQuestsCountDateElements) {
+        final Map<String, Long> completionCounts = completedQuestsCountDateElements.stream()
+                .collect(Collectors.groupingBy(
+                        element -> element.getCompletedDate().getDayOfWeek().getDisplayName(SHORT, KOREAN),
+                        Collectors.summingLong(element -> element.getSpecialCount() + element.getDailyAndFixedCount())
+                ));
+
+        final Long maxCount = Collections.max(completionCounts.values());
+
+        return maxCount == 0 ? null : completionCounts.entrySet().stream()
+                .filter(entry -> entry.getValue() == maxCount)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                .keySet();
     }
 }

@@ -1,9 +1,9 @@
 package dough.dashboard.controller;
 
-import dough.dashboard.dto.response.DashboardResponse;
+import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.dashboard.service.DashboardService;
 import dough.global.AbstractControllerTest;
-import dough.quest.dto.CompletedCountDateElement;
+import dough.quest.dto.CompletedQuestsCountDateElement;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import dough.quest.service.QuestService;
@@ -158,17 +158,17 @@ public class DashboardControllerTest extends AbstractControllerTest {
 
     @DisplayName("월간 분석을 받을 수 있다.")
     @Test
-    void getMonthlyDashboard() throws Exception {
+    void getMonthlySummary() throws Exception {
         // given
-        final DashboardResponse dashboardResponse = DashboardResponse.of(
-                List.of(new CompletedCountDateElement(LocalDate.now(), 10L, 10L)),
+        final MonthlySummaryResponse monthlySummaryResponse = MonthlySummaryResponse.of(
+                List.of(new CompletedQuestsCountDateElement(LocalDate.now(), 10L, 10L)),
                 0L,
                 Set.of("화"),
                 19L
         );
 
-        when(dashboardService.getMonthlyDashboard(anyLong(), anyLong(), anyLong()))
-                .thenReturn(dashboardResponse);
+        when(dashboardService.getMonthlySummary(anyLong(), any()))
+                .thenReturn(monthlySummaryResponse);
 
         // when
         final ResultActions resultActions = mockMvc.perform(

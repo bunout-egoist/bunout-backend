@@ -1,6 +1,6 @@
 package dough.dashboard.controller;
 
-import dough.dashboard.dto.response.DashboardResponse;
+import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.dashboard.service.DashboardService;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.TotalCompletedQuestsResponse;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 @RestController
@@ -39,13 +40,12 @@ public class DashboardController {
         return ResponseEntity.ok().body(totalCompletedQuestsResponse);
     }
 
-    @GetMapping("/{memberId}/{year}/{month}")
-    public ResponseEntity<DashboardResponse> getMonthlyDashboard(
+    @GetMapping("/{memberId}/{yearMonth}")
+    public ResponseEntity<MonthlySummaryResponse> getMonthlySummary(
             @PathVariable("memberId") final Long memberId,
-            @PathVariable("year") final Long year,
-            @PathVariable("month") final Long month
+            @PathVariable("yearMonth") final YearMonth yearMonth
     ) {
-        final DashboardResponse dashboardResponse = dashboardService.getMonthlyDashboard(memberId, year, month);
-        return ResponseEntity.ok().body(dashboardResponse);
+        final MonthlySummaryResponse monthlySummaryResponse = dashboardService.getMonthlySummary(memberId, yearMonth);
+        return ResponseEntity.ok().body(monthlySummaryResponse);
     }
 }

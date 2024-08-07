@@ -1,6 +1,6 @@
 package dough.dashboard.dto.response;
 
-import dough.quest.dto.CompletedCountDateElement;
+import dough.quest.dto.CompletedQuestsCountElement;
 import dough.quest.dto.response.CompletedCountDateResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Getter
 @RequiredArgsConstructor
-public class DashboardResponse {
+public class MonthlySummaryResponse {
 
 
     private final List<CompletedCountDateResponse> completedCountDates;
@@ -18,17 +18,17 @@ public class DashboardResponse {
     private final Set<String> highestAverageCompletionDay;
     private final Long averageCompletion;
 
-    public static DashboardResponse of(
-            final List<CompletedCountDateElement> completedCountDateElements,
+    public static MonthlySummaryResponse of(
+            final List<CompletedQuestsCountElement> completedQuestsCountDateElements,
             final Long completedAllQuestsCount,
             final Set<String> highestAverageCompletionDay,
             final Long averageCompletion
     ) {
-        final List<CompletedCountDateResponse> dateCompletedCountDateRespons = completedCountDateElements.stream()
-                .map(element -> CompletedCountDateResponse.of(element.getCompletedAt(), element.getDailyAndFixedCount()))
+        final List<CompletedCountDateResponse> dateCompletedCountDateRespons = completedQuestsCountDateElements.stream()
+                .map(element -> CompletedCountDateResponse.of(element.getCompletedDate(), element.getDailyAndFixedCount()))
                 .toList();
 
-        return new DashboardResponse(
+        return new MonthlySummaryResponse(
                 dateCompletedCountDateRespons,
                 completedAllQuestsCount,
                 highestAverageCompletionDay,

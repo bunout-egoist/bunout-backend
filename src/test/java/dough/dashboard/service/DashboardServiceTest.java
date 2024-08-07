@@ -1,9 +1,9 @@
 package dough.dashboard.service;
 
-import dough.dashboard.dto.response.DashboardResponse;
+import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
-import dough.quest.dto.CompletedCountDateElement;
+import dough.quest.dto.CompletedQuestsCountDateElement;
 import dough.quest.dto.TotalCompletedQuestsElement;
 import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Set;
 
@@ -62,16 +63,16 @@ class DashboardServiceTest {
         // given
         given(memberRepository.existsById(any()))
                 .willReturn(true);
-        given(selectedQuestRepository.getDateAndCompletedQuestsCountByMemberId(anyLong(), anyLong(), anyLong()))
-                .willReturn(List.of(new CompletedCountDateElement(LocalDate.now(), 10L, 10L)));
+        given(selectedQuestRepository.getDateAndCompletedQuestsCountByMemberId(anyLong(), any()))
+                .willReturn(List.of(new CompletedQuestsCountDateElement(LocalDate.now(), 10L, 10L)));
 
         // when
-        final DashboardResponse actualResponse = dashboardService.getMonthlyDashboard(MEMBER.getId(), 2024L, 8L);
+        final MonthlySummaryResponse actualResponse = dashboardService.getMonthlySummary(MEMBER.getId(), YearMonth.of(2024, 8));
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(DashboardResponse.of(
-                        List.of(new CompletedCountDateElement(LocalDate.now(), 10L, 10L)),
+                .isEqualTo(MonthlySummaryResponse.of(
+                        List.of(new CompletedQuestsCountDateElement(LocalDate.now(), 10L, 10L)),
                         0L,
                         Set.of("화"),
                         19L
