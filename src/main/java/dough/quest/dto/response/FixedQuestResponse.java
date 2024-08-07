@@ -14,16 +14,12 @@ public class FixedQuestResponse {
     private Long id;
     private String description;
     private String activity;
-    private String questType;
-    private Integer difficulty;
 
     public static FixedQuestResponse of(final Quest quest) {
         return new FixedQuestResponse(
                 quest.getId(),
                 quest.getDescription(),
-                quest.getActivity(),
-                quest.getQuestType().getCode(),
-                quest.getDifficulty()
+                quest.getActivity()
         );
     }
 }

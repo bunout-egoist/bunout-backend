@@ -1,5 +1,6 @@
 package dough.quest.service;
 
+import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
@@ -34,12 +35,11 @@ public class QuestService {
     private final MemberRepository memberRepository;
 
     public List<FixedQuestResponse> getFixedQuests(final Long burnoutId) {
-        // TODO 번아웃 아이디 유무 비교
         if (!burnoutRepository.existsById(burnoutId)) {
             throw new BadRequestException(NOT_FOUND_BURNOUT_ID);
         }
 
-        final List<Quest> fixedQuests =  questRepository.findFixedQuestsByBurnoutId(burnoutId);
+        final List<Quest> fixedQuests = questRepository.findFixedQuestsByBurnoutId(burnoutId);
         return fixedQuests.stream()
                 .map(fixedQuest -> FixedQuestResponse.of(fixedQuest))
                 .toList();
@@ -64,7 +64,8 @@ public class QuestService {
                 questRequest.getDescription(),
                 questRequest.getActivity(),
                 questType,
-                questRequest.getDifficulty()
+                questRequest.getDifficulty(),
+                new Burnout(1L, "호빵")
         );
 
         final Quest quest = questRepository.save(newQuest);
@@ -82,7 +83,8 @@ public class QuestService {
                 questUpdateRequest.getDescription(),
                 questUpdateRequest.getActivity(),
                 questType,
-                questUpdateRequest.getDifficulty()
+                questUpdateRequest.getDifficulty(),
+                new Burnout(1L, "호빵")
         );
 
         questRepository.save(updateQuest);
