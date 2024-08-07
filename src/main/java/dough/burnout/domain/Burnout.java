@@ -1,8 +1,8 @@
 package dough.burnout.domain;
 
-import dough.feedback.domain.Feedback;
+import dough.global.BaseEntity;
+import dough.member.domain.Member;
 import dough.quest.domain.Quest;
-import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE burnout SET status = 'DELETED' where id = ?")
 @SQLRestriction("status = 'ACTIVE'")
-public class Burnout {
+public class Burnout extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -35,5 +35,13 @@ public class Burnout {
     private List<Quest> quests = new ArrayList<>();
 
     @OneToMany(mappedBy = "burnout")
-    private List<Burnout> burnouts = new ArrayList<>();
+    private List<Member> members = new ArrayList<>();
+
+    public Burnout(
+            final Long id,
+            final String name
+    ) {
+        this.id = id;
+        this.name = name;
+    }
 }
