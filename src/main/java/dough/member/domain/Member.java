@@ -1,5 +1,6 @@
 package dough.member.domain;
 
+import dough.burnout.domain.Burnout;
 import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
 import dough.login.domain.type.RoleType;
@@ -21,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -55,6 +57,10 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     @Enumerated(value = STRING)
     private SocialLoginType socialLoginType;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "burnout_id", nullable = false)
+    private Burnout burnout;
 
     private String email;
 

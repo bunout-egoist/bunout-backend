@@ -1,8 +1,8 @@
 package dough.quest.domain;
 
+import dough.burnout.domain.Burnout;
 import dough.global.BaseEntity;
 import dough.quest.domain.type.QuestType;
-import dough.quest.dto.request.QuestUpdateRequest;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
+import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -42,6 +43,10 @@ public class Quest extends BaseEntity {
     @Column(nullable = false)
     private Integer difficulty;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "burnout_id", nullable = false)
+    private Burnout burnout;
+
     @OneToMany(mappedBy = "quest")
     private List<SelectedQuest> selectedQuests = new ArrayList<>();
 
@@ -50,21 +55,24 @@ public class Quest extends BaseEntity {
             final String description,
             final String activity,
             final QuestType questType,
-            final Integer difficulty
+            final Integer difficulty,
+            final Burnout burnout
     ) {
         this.id = id;
         this.description = description;
         this.activity = activity;
         this.questType = questType;
         this.difficulty = difficulty;
+        this.burnout = burnout;
     }
 
     public Quest(
             final String description,
             final String activity,
             final QuestType questType,
-            final Integer difficulty
+            final Integer difficulty,
+            final Burnout burnout
     ) {
-        this(null, description, activity, questType, difficulty);
+        this(null, description, activity, questType, difficulty, burnout);
     }
 }

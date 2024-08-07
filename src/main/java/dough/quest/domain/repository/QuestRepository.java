@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface QuestRepository extends JpaRepository<Quest, Long> {
 
     @Modifying
@@ -15,4 +17,12 @@ public interface QuestRepository extends JpaRepository<Quest, Long> {
             WHERE quest.id = :questId
             """)
     void deleteByQuestId(@Param("questId") final Long questId);
+
+    @Modifying
+    @Query("""
+            SELECT quest
+            FROM Quest quest
+            WHERE quest.burnout.id = :burnoutId AND quest.questType = 'FIXED'
+            """)
+    List<Quest> findFixedQuestsByBurnoutId(@Param("burnoutId") final Long burnoutId);
 }

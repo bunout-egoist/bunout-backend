@@ -1,5 +1,6 @@
 package dough.quest.service;
 
+import dough.burnout.domain.repository.BurnoutRepository;
 import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
 import dough.member.domain.repository.MemberRepository;
@@ -11,6 +12,7 @@ import dough.quest.domain.type.QuestType;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
+import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.QuestResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,20 @@ public class QuestService {
 
     private final QuestRepository questRepository;
     private final SelectedQuestRepository selectedQuestRepository;
+    private final BurnoutRepository burnoutRepository;
     private final MemberRepository memberRepository;
+
+    public List<FixedQuestResponse> getFixedQuests(final Long burnoutId) {
+        // TODO 번아웃 아이디 유무 비교
+        if (!burnoutRepository.existsById(burnoutId)) {
+            throw new BadRequestException(NOT_FOUND_BURNOUT_ID);
+        }
+
+        final List<Quest> fixedQuests =  questRepository.findFixedQuestsByBurnoutId(burnoutId);
+        return fixedQuests.stream()
+                .map(fixedQuest -> FixedQuestResponse.of(fixedQuest))
+                .toList();
+    }
 
     public List<CompletedQuestDetailResponse> getCompletedQuestDetail(final Long memberId, final LocalDate date) {
         if (!memberRepository.existsById(memberId)) {
