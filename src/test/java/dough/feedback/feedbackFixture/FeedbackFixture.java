@@ -20,7 +20,7 @@ public class FeedbackFixture {
             "student",
             "male",
             2002,
-            "소보루"
+            ENTHUSIAST
     );
 
     public static final Member MEMBER2 = new Member(
@@ -32,7 +32,7 @@ public class FeedbackFixture {
             "student",
             "female",
             2000,
-            "소보루"
+            ENTHUSIAST
     );
 
     public static final Member MEMBER3 = new Member(
@@ -44,7 +44,7 @@ public class FeedbackFixture {
             "student",
             "female",
             2002,
-            "당근"
+            ENTHUSIAST
     );
 
     public static final Member MEMBER4 = new Member(
@@ -56,7 +56,7 @@ public class FeedbackFixture {
             "student",
             "male",
             1988,
-            "소보루"
+            ENTHUSIAST
     );
 
     public static final Feedback FEEDBACK1 = new Feedback(

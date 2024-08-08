@@ -5,6 +5,7 @@ import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
 import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
+import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -44,6 +46,14 @@ public class Member extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "member")
     private List<Feedback> Feedbacks = new ArrayList<>();
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "burnout_id", nullable = false)
+    private Burnout burnout;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "quest_id", nullable = false)
+    private Quest quest;
+
     @Column(length = 5)
     private String nickname;
 
@@ -57,10 +67,6 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     @Enumerated(value = STRING)
     private SocialLoginType socialLoginType;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "burnout_id", nullable = false)
-    private Burnout burnout;
 
     private String email;
 
@@ -76,11 +82,9 @@ public class Member extends BaseEntity implements UserDetails {
 
     private Integer birthYear;
 
-    private String burnoutType;
-
     private LocalDate burnoutTypeLastModified;
 
-    private LocalDateTime questLastModified;
+    private LocalDate fixedQuestLastModified;
 
     private LocalDateTime lastLogin;
 
@@ -92,7 +96,7 @@ public class Member extends BaseEntity implements UserDetails {
                   final String occupation,
                   final String gender,
                   final Integer birthYear,
-                  final String burnoutType
+                  final Burnout burnout
     ) {
         this.id = id;
         this.nickname = nickname;
@@ -105,11 +109,11 @@ public class Member extends BaseEntity implements UserDetails {
         this.occupation = occupation;
         this.gender = gender;
         this.birthYear = birthYear;
-        this.burnoutType = burnoutType;
-        this.questLastModified = LocalDateTime.now();
+        this.burnout = burnout;
+        this.burnoutTypeLastModified = LocalDate.now();
+        this.fixedQuestLastModified = LocalDate.now();
         this.lastLogin = LocalDateTime.now();
     }
-
 
     /**
      *
@@ -122,7 +126,7 @@ public class Member extends BaseEntity implements UserDetails {
                   final String occupation,
                   final String gender,
                   final Integer birthYear,
-                  final String burnoutType,
+                  final Burnout burnout,
                   final RoleType roleType
     ) {
         this.id = id;
@@ -136,8 +140,7 @@ public class Member extends BaseEntity implements UserDetails {
         this.occupation = occupation;
         this.gender = gender;
         this.birthYear = birthYear;
-        this.burnoutType = burnoutType;
-        this.questLastModified = LocalDateTime.now();
+        this.burnout = burnout;
         this.lastLogin = LocalDateTime.now();
         this.role = roleType;
     }
@@ -192,8 +195,19 @@ public class Member extends BaseEntity implements UserDetails {
         this.occupation = occupation;
     }
 
-    public void changeBurnoutType(final String burnoutType) {
-        this.burnoutType = burnoutType;
-        this.burnoutTypeLastModified = LocalDate.now();
+    public void updateBurnout(
+            final Burnout burnout,
+            final LocalDate burnoutTypeLastModified
+    ) {
+        this.burnout = burnout;
+        this.burnoutTypeLastModified = burnoutTypeLastModified;
+    }
+
+    public void updateFixedQuest(
+            final Quest quest,
+            final LocalDate fixedQuestLastModified
+    ) {
+        this.quest = quest;
+        this.fixedQuestLastModified = fixedQuestLastModified;
     }
 }
