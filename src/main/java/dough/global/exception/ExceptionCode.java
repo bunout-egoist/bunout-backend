@@ -23,7 +23,7 @@ public enum ExceptionCode {
     // 4000 feedback
 
 
-    //
+    // 5000 burnout
     NOT_FOUND_BURNOUT_ID(5000, "요청하신 ID에 해당하는 번아웃 유형을 찾을 수 없습니다."),
 
     INTERNAL_SEVER_ERROR(9999,"서버에서 에러가 발생하였습니다.");
