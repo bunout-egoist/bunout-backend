@@ -82,7 +82,7 @@ public class Member extends BaseEntity implements UserDetails {
 
     private Integer birthYear;
 
-    private LocalDate burnoutTypeLastModified;
+    private LocalDate burnoutLastModified;
 
     private LocalDate fixedQuestLastModified;
 
@@ -110,7 +110,7 @@ public class Member extends BaseEntity implements UserDetails {
         this.gender = gender;
         this.birthYear = birthYear;
         this.burnout = burnout;
-        this.burnoutTypeLastModified = LocalDate.now();
+        this.burnoutLastModified = LocalDate.now();
         this.fixedQuestLastModified = LocalDate.now();
         this.lastLogin = LocalDateTime.now();
     }
@@ -197,10 +197,10 @@ public class Member extends BaseEntity implements UserDetails {
 
     public void updateBurnout(
             final Burnout burnout,
-            final LocalDate burnoutTypeLastModified
+            final LocalDate burnoutLastModified
     ) {
         this.burnout = burnout;
-        this.burnoutTypeLastModified = burnoutTypeLastModified;
+        this.burnoutLastModified = burnoutLastModified;
     }
 
     public void updateFixedQuest(

@@ -61,7 +61,7 @@ public class MemberService {
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
 
         final LocalDate currentDate = LocalDate.now();
-        validateBurnoutUpdate(member.getBurnoutTypeLastModified(), currentDate);
+        validateBurnoutUpdate(member.getBurnoutLastModified(), currentDate);
 
         member.updateBurnout(burnout, currentDate);
         memberRepository.save(member);
