@@ -27,7 +27,7 @@ public class QuestFixture {
     );
 
     public static final Quest FIXED_QUEST1 = new Quest(
-            2L,
+            3L,
             "아침시간, 조용한 방 안에서",
             "5분간 명상하기",
             FIXED,
