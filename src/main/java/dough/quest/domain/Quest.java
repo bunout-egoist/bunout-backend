@@ -2,6 +2,7 @@ package dough.quest.domain;
 
 import dough.burnout.domain.Burnout;
 import dough.global.BaseEntity;
+import dough.member.domain.Member;
 import dough.quest.domain.type.QuestType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -49,6 +50,9 @@ public class Quest extends BaseEntity {
 
     @OneToMany(mappedBy = "quest")
     private List<SelectedQuest> selectedQuests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "quest")
+    private List<Member> members = new ArrayList<>();
 
     public Quest(
             final Long id,
