@@ -46,8 +46,8 @@ public class MemberController {
         }
     }
 
-    @PutMapping("/{memberId}/burnoutType")
-    public ResponseEntity<Void> updateBurnoutType(@PathVariable("memberId") final Long memberId,
+    @PutMapping("/{memberId}/burnout")
+    public ResponseEntity<Void> updateBurnout(@PathVariable("memberId") final Long memberId,
                                                   @RequestBody @Valid final BurnoutRequest burnoutRequest
     ) {
         memberService.updateBurnout(memberId, burnoutRequest);

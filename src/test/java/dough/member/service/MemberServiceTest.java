@@ -148,6 +148,7 @@ class MemberServiceTest {
     void changeFixedQuest_AlreadyUpdatedFixedQuestType() {
         // given
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
+        MEMBER.updateFixedQuest(FIXED_QUEST1, LocalDate.of(2024, 8, 5));
 
         given(memberRepository.findById(any()))
                 .willReturn(Optional.of(MEMBER));

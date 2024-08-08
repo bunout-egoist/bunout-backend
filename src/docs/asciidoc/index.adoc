@@ -102,6 +102,19 @@ include::{snippets}/dashboard-controller-test/get-completed-quests-detail_-inval
 ==== Response
 include::{snippets}/dashboard-controller-test/get-completed-quests-detail_-invalid-local-date-type/http-response.adoc[]
 
+== Feedback API
+
+=== 피드백 추가
+
+==== Request
+include::{snippets}/feedback-controller-test/create-feedback/path-parameters.adoc[]
+include::{snippets}/feedback-controller-test/create-feedback/request-fields.adoc[]
+include::{snippets}/feedback-controller-test/create-feedback/request-body.adoc[]
+
+==== Response
+include::{snippets}/feedback-controller-test/create-feedback/response-fields.adoc[]
+include::{snippets}/feedback-controller-test/create-feedback/response-body.adoc[]
+
 == Exception Codes
 include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]
 

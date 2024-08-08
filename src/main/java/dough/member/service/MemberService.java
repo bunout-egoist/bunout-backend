@@ -96,7 +96,7 @@ public class MemberService {
             final LocalDate startOfWeek = currentDate.with(MONDAY);
             final LocalDate endOfWeek = currentDate.with(SUNDAY);
 
-            if (lastModified.isAfter(startOfWeek) && lastModified.isBefore(endOfWeek)) {
+            if (!lastModified.isBefore(startOfWeek) && !lastModified.isAfter(endOfWeek)) {
                 throw new BadRequestException(ALREADY_UPDATED_FIXED_QUEST);
             }
         }
