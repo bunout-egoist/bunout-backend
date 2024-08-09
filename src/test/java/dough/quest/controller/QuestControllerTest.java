@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.AbstractControllerTest;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
+import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.QuestResponse;
 import dough.quest.service.QuestService;
 import org.junit.jupiter.api.DisplayName;
@@ -15,10 +16,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static dough.global.restdocs.RestDocsConfiguration.field;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
-
-
+import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
@@ -176,6 +178,42 @@ class QuestControllerTest extends AbstractControllerTest {
                         pathParameters(
                                 parameterWithName("questId")
                                         .description("퀘스트 아이디")
+                        )
+                ));
+    }
+
+    @DisplayName("번아웃 유형에 해당하는 고정퀘스트를 조회할 수 있다.")
+    @Test
+    void getFixedQuests() throws Exception {
+        // given
+        final List<FixedQuestResponse> fixedQuestResponses = List.of(FixedQuestResponse.of(FIXED_QUEST1));
+
+        when(questService.getFixedQuests(anyLong()))
+                .thenReturn(fixedQuestResponses);
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(get("/api/v1/quests/fixed/{burnoutId}", 1L));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        pathParameters(
+                                parameterWithName("burnoutId")
+                                        .description("번아웃 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("[0].id")
+                                        .type(NUMBER)
+                                        .description("고정 퀘스트 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("[0].description")
+                                        .type(STRING)
+                                        .description("고정 퀘스트 설명")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[0].activity")
+                                        .type(STRING)
+                                        .description("고정 퀘스트 활동 내용")
+                                        .attributes(field("constraint", "문자열"))
                         )
                 ));
     }

@@ -28,6 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
+import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,9 +66,9 @@ class FeedbackServiceTest {
         FeedbackRequest feedbackRequest = new FeedbackRequest("png1", 3);
 
         Member member = new Member(1L, "JohnDoe", "john123", SocialLoginType.KAKAO, "john@example.com",
-                "Developer", "Male", 1990, "TypeA");
+                "Developer", "Male", 1990, ENTHUSIAST);
         SelectedQuest selectedQuest = new SelectedQuest(member, new Quest(1L, "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기", QuestType.DAILY, 3));
+                "15분 운동하기", QuestType.DAILY, 3, ENTHUSIAST));
         Feedback feedback = new Feedback(member, selectedQuest, feedbackRequest.getImageUrl(), feedbackRequest.getDifficulty());
 
         when(selectedQuestRepository.findByQuestId(questId)).thenReturn(Optional.of(selectedQuest));
@@ -114,9 +115,9 @@ class FeedbackServiceTest {
         FeedbackRequest feedbackRequest = new FeedbackRequest("png3", 3);
 
         Member member = new Member(1L, "JohnDoe", "john123", SocialLoginType.APPLE, "john@example.com",
-                "Developer", "Male", 1990, "TypeA");
+                "Developer", "Male", 1990, ENTHUSIAST);
         SelectedQuest selectedQuest = new SelectedQuest(member, new Quest(1L, "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기", QuestType.DAILY, 3));
+                "15분 운동하기", QuestType.DAILY, 3, ENTHUSIAST));
 
         when(selectedQuestRepository.findByQuestId(questId)).thenReturn(Optional.of(selectedQuest));
         when(memberRepository.findById(member.getId())).thenReturn(Optional.empty());
