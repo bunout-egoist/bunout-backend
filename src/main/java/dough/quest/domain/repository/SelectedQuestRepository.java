@@ -1,5 +1,6 @@
 package dough.quest.domain.repository;
 
+import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +18,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              LEFT JOIN FETCH s.quest q
              WHERE s.member.id = :memberId AND FUNCTION('DATE', s.createdAt) = :date AND s.questStatus = 'COMPLETED'
             """)
-    List<SelectedQuest> findConpletedQuestByMemberIdAndDate(
+    List<SelectedQuest> findCompletedQuestByMemberIdAndDate(
             @Param("memberId") final Long memberId,
             @Param("date") final LocalDate date
     );
@@ -28,6 +29,24 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              WHERE sq.quest.id = :questId
             """)
     Boolean existsByQuestId(final Long questId);
+
+    @Query("""
+             SELECT sq
+             FROM SelectedQuest sq
+             JOIN FETCH sq.quest
+             JOIN FETCH sq.member
+             WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.quest.questType = 'DAILY' AND function('DATE', sq.dueDate) = :date
+            """)
+    List<SelectedQuest> findIncompletedDailyQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
+
+    @Query("""
+             SELECT sq
+             FROM SelectedQuest sq
+             JOIN FETCH sq.quest
+             JOIN FETCH sq.member
+             WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND function('DATE', sq.dueDate) = :date
+            """)
+    List<SelectedQuest> findTodayDailyQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
 
     Optional<SelectedQuest> findByQuestId(Long questId);
 

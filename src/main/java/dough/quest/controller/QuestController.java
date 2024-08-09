@@ -4,6 +4,7 @@ import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.QuestResponse;
+import dough.quest.dto.response.TodayQuestResponse;
 import dough.quest.service.QuestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +21,16 @@ public class QuestController {
     private final QuestService questService;
 
     @GetMapping("/fixed/{burnoutId}")
-    public ResponseEntity<List<FixedQuestResponse>> getFixedQuests(
-            @PathVariable("burnoutId") final Long burnoutId
-    ) {
+    public ResponseEntity<List<FixedQuestResponse>> getFixedQuests(@PathVariable("burnoutId") final Long burnoutId) {
         final List<FixedQuestResponse> fixedQuestResponses = questService.getFixedQuests(burnoutId);
         return ResponseEntity.ok().body(fixedQuestResponses);
     }
 
+    @PostMapping("/today")
+    public ResponseEntity<List<TodayQuestResponse>> getTodayQuests(@PathVariable("memberId") final Long memberId) {
+        final List<TodayQuestResponse> todayQuestResponses = questService.updateTodayQuests(memberId);
+        return ResponseEntity.ok().body(todayQuestResponses);
+    }
 
     @PostMapping
     public ResponseEntity<QuestResponse> createQuest(@RequestBody @Valid final QuestRequest questRequest) {
