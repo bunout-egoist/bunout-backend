@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static dough.global.exception.ExceptionCode.*;
 import static java.time.DayOfWeek.*;
@@ -44,7 +45,7 @@ public class QuestService {
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate currentDate = LocalDate.now();
-        List<SelectedQuest> todayQuests = getTodayDailyQuests(member);
+        List<SelectedQuest> todayQuests = getTodayDailyQuests(member, currentDate);
 
         if (todayQuests.isEmpty()) {
             todayQuests = updateTodayDailyQuests(member, currentDate);
@@ -62,13 +63,13 @@ public class QuestService {
                 .toList();
     }
 
-    private List<SelectedQuest> getTodayDailyQuests(final Member member) {
-        final List<SelectedQuest> todayDailyQuests = selectedQuestRepository.findTodayDailyQuests(member.getId());
+    private List<SelectedQuest> getTodayDailyQuests(final Member member, final LocalDate currentDate) {
+        final List<SelectedQuest> todayDailyQuests = selectedQuestRepository.findTodayDailyQuests(member.getId(), currentDate);
         return todayDailyQuests.isEmpty() ? new ArrayList<>() : todayDailyQuests;
     }
 
     private Quest getTodaySpecialQuest(final Burnout burnout) {
-        List<Quest> specialQuests = questRepository.findSpecialQuestByBurnoutId(burnout.getId());
+        final List<Quest> specialQuests = questRepository.findSpecialQuestByBurnoutId(burnout.getId());
         Collections.shuffle(specialQuests);
         return specialQuests.get(0);
     }
@@ -84,7 +85,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> updateTodayDailyQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompletedDailyQuests = getIncompletedDailyQuests(member, currentDate);
+        List<SelectedQuest> incompletedDailyQuests = getIncompletedDailyQuests(member, currentDate);
 
         int neededCount = 2 -  incompletedDailyQuests.size();
 
@@ -92,10 +93,10 @@ public class QuestService {
             final List<Quest> quests = questRepository.findTodayDailyQuestsByMemberId(member.getId(), member.getLevel(), member.getBurnout().getId())
                     .stream()
                     .limit(neededCount)
-                    .toList();
+                    .collect(Collectors.toList());
             quests.forEach(quest -> incompletedDailyQuests.add(new SelectedQuest(member, quest)));
         }
-        return  incompletedDailyQuests;
+        return new ArrayList<>(incompletedDailyQuests);
     }
 
     private List<SelectedQuest> getIncompletedDailyQuests(final Member member, final LocalDate currentDate) {
