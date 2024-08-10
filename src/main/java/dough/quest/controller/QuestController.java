@@ -26,7 +26,7 @@ public class QuestController {
         return ResponseEntity.ok().body(fixedQuestResponses);
     }
 
-    @PostMapping("/today")
+    @PostMapping("/today/{memberId}")
     public ResponseEntity<List<TodayQuestResponse>> getTodayQuests(@PathVariable("memberId") final Long memberId) {
         final List<TodayQuestResponse> todayQuestResponses = questService.updateTodayQuests(memberId);
         return ResponseEntity.ok().body(todayQuestResponses);

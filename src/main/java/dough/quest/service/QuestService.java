@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,13 +44,15 @@ public class QuestService {
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate currentDate = LocalDate.now();
-        List<SelectedQuest> todayQuests = getTodayDailyQuests(member, currentDate);
+        List<SelectedQuest> todayQuests = getTodayDailyQuests(member);
 
         if (todayQuests.isEmpty()) {
             todayQuests = updateTodayDailyQuests(member, currentDate);
 
-            final Quest specialQuest = getTodaySpecialQuest(currentDate, member.getBurnout());
-            todayQuests.add(new SelectedQuest(member, specialQuest));
+            if (isSpecialQuestDay(currentDate)) {
+                final Quest specialQuest = getTodaySpecialQuest(member.getBurnout());
+                todayQuests.add(new SelectedQuest(member, specialQuest));
+            }
             todayQuests.add(new SelectedQuest(member, member.getQuest()));
         }
 
@@ -59,41 +62,50 @@ public class QuestService {
                 .toList();
     }
 
-    private List<SelectedQuest> getTodayDailyQuests(final Member member, final LocalDate currentDate) {
-        return selectedQuestRepository.findTodayDailyQuests(member.getId(), currentDate);
+    private List<SelectedQuest> getTodayDailyQuests(final Member member) {
+        final List<SelectedQuest> todayDailyQuests = selectedQuestRepository.findTodayDailyQuests(member.getId());
+        return todayDailyQuests.isEmpty() ? new ArrayList<>() : todayDailyQuests;
     }
 
-    private Quest getTodaySpecialQuest(final LocalDate currentDate, final Burnout burnout) {
+    private Quest getTodaySpecialQuest(final Burnout burnout) {
+        List<Quest> specialQuests = questRepository.findSpecialQuestByBurnoutId(burnout.getId());
+        Collections.shuffle(specialQuests);
+        return specialQuests.get(0);
+    }
+
+    private Boolean isSpecialQuestDay(final LocalDate currentDate) {
         if (currentDate.getDayOfWeek().equals(MONDAY) ||
                 currentDate.getDayOfWeek().equals(THURSDAY) ||
                 currentDate.getDayOfWeek().equals(SUNDAY)
         ) {
-            List<Quest> specialQuests = questRepository.findSpecialQuestByBurnoutId(burnout.getId());
-            Collections.shuffle(specialQuests);
-            return specialQuests.get(0);
+            return true;
         }
-        return null;
+        return false;
     }
 
     private List<SelectedQuest> updateTodayDailyQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> selectedQuests = selectedQuestRepository.findIncompletedDailyQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
-        final List<SelectedQuest> updatedQuests = selectedQuests.stream()
-                .map(selectedQuest -> {
-                    selectedQuest.updateDueDate(currentDate);
-                    return selectedQuest;
-                })
-                .toList();
+        final List<SelectedQuest> incompletedDailyQuests = getIncompletedDailyQuests(member, currentDate);
 
-        int neededCount = 2 - selectedQuests.size();
+        int neededCount = 2 -  incompletedDailyQuests.size();
 
         if (neededCount > 0) {
             final List<Quest> quests = questRepository.findTodayDailyQuestsByMemberId(member.getId(), member.getLevel(), member.getBurnout().getId())
                     .stream()
                     .limit(neededCount)
                     .toList();
-            quests.stream().map(quest -> updatedQuests.add(new SelectedQuest(member, quest)));
+            quests.forEach(quest -> incompletedDailyQuests.add(new SelectedQuest(member, quest)));
         }
-        return updatedQuests;
+        return  incompletedDailyQuests;
+    }
+
+    private List<SelectedQuest> getIncompletedDailyQuests(final Member member, final LocalDate currentDate) {
+        final List<SelectedQuest> selectedQuests = selectedQuestRepository.findIncompletedDailyQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
+        return selectedQuests.isEmpty() ? new ArrayList<>() : selectedQuests.stream()
+                .map(selectedQuest -> {
+                    selectedQuest.updateDueDate(currentDate);
+                    return selectedQuest;
+                })
+                .toList();
     }
 
     @Transactional(readOnly = true)
