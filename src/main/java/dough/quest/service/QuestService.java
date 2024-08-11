@@ -21,8 +21,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,27 +45,33 @@ public class QuestService {
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate currentDate = LocalDate.now();
-        List<SelectedQuest> todayQuests = getTodayDailyQuests(member, currentDate);
+
+        final List<SelectedQuest> todayQuests = getTodayQuests(member, currentDate);
 
         if (todayQuests.isEmpty()) {
-            todayQuests = updateTodayDailyQuests(member, currentDate);
-
-            if (isSpecialQuestDay(currentDate)) {
-                final Quest specialQuest = getTodaySpecialQuest(member.getBurnout());
-                todayQuests.add(new SelectedQuest(member, specialQuest));
-            }
-            todayQuests.add(new SelectedQuest(member, member.getQuest()));
+            createTodayQuests(member, currentDate)
+                    .forEach(todayQuest -> todayQuests.add(todayQuest));
         }
 
-        final List<SelectedQuest> savedTodayQuests = selectedQuestRepository.saveAll(todayQuests);
-        return savedTodayQuests.stream()
-                .map(savedTodayQuest -> TodayQuestResponse.of(savedTodayQuest.getQuest()))
+        return todayQuests.stream()
+                .map(todayQuest -> TodayQuestResponse.of(todayQuest.getQuest()))
                 .toList();
     }
 
-    private List<SelectedQuest> getTodayDailyQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> todayDailyQuests = selectedQuestRepository.findTodayDailyQuests(member.getId(), currentDate);
-        return todayDailyQuests.isEmpty() ? new ArrayList<>() : todayDailyQuests;
+    private List<SelectedQuest> createTodayQuests(final Member member, final LocalDate currentDate) {
+        final List<SelectedQuest> todayQuests = updateTodayDailyQuests(member, currentDate);
+
+        if (isSpecialQuestDay(currentDate)) {
+            final Quest specialQuest = getTodaySpecialQuest(member.getBurnout());
+            todayQuests.add(new SelectedQuest(member, specialQuest));
+        }
+        todayQuests.add(new SelectedQuest(member, member.getQuest()));
+
+        return selectedQuestRepository.saveAll(todayQuests);
+    }
+
+    private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
+        return selectedQuestRepository.findTodayDailyQuests(member.getId(), currentDate);
     }
 
     private Quest getTodaySpecialQuest(final Burnout burnout) {
@@ -75,38 +81,34 @@ public class QuestService {
     }
 
     private Boolean isSpecialQuestDay(final LocalDate currentDate) {
-        if (currentDate.getDayOfWeek().equals(MONDAY) ||
-                currentDate.getDayOfWeek().equals(THURSDAY) ||
-                currentDate.getDayOfWeek().equals(SUNDAY)
-        ) {
-            return true;
-        }
-        return false;
+        final DayOfWeek dayOfWeek = currentDate.getDayOfWeek();
+        return dayOfWeek.equals(MONDAY) ||
+                dayOfWeek.equals(THURSDAY) ||
+                dayOfWeek.equals(SUNDAY);
     }
 
     private List<SelectedQuest> updateTodayDailyQuests(final Member member, final LocalDate currentDate) {
-        List<SelectedQuest> incompletedDailyQuests = getIncompletedDailyQuests(member, currentDate);
+        final List<SelectedQuest> incompleteDailyQuests = getIncompleteDailyQuests(member, currentDate);
 
-        int neededCount = 2 -  incompletedDailyQuests.size();
+        int neededCount = 2 - incompleteDailyQuests.size();
 
         if (neededCount > 0) {
-            final List<Quest> quests = questRepository.findTodayDailyQuestsByMemberId(member.getId(), member.getLevel(), member.getBurnout().getId())
+            questRepository.findTodayDailyQuestsByMemberId(member.getId(), member.getLevel(), member.getBurnout().getId())
                     .stream()
                     .limit(neededCount)
-                    .collect(Collectors.toList());
-            quests.forEach(quest -> incompletedDailyQuests.add(new SelectedQuest(member, quest)));
+                    .collect(Collectors.toList())
+                    .forEach(todayDailyQuest -> incompleteDailyQuests.add(new SelectedQuest(member, todayDailyQuest)));
         }
-        return new ArrayList<>(incompletedDailyQuests);
+        return incompleteDailyQuests;
     }
 
-    private List<SelectedQuest> getIncompletedDailyQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> selectedQuests = selectedQuestRepository.findIncompletedDailyQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
-        return selectedQuests.isEmpty() ? new ArrayList<>() : selectedQuests.stream()
-                .map(selectedQuest -> {
-                    selectedQuest.updateDueDate(currentDate);
-                    return selectedQuest;
-                })
-                .toList();
+    private List<SelectedQuest> getIncompleteDailyQuests(final Member member, final LocalDate currentDate) {
+        final List<SelectedQuest> incompleteDailyQuests = selectedQuestRepository.findIncompleteDailyQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
+        return incompleteDailyQuests.stream()
+                .map(incompleteDailyQuest -> {
+                    incompleteDailyQuest.updateDueDate(currentDate);
+                    return incompleteDailyQuest;
+                }).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -136,13 +138,15 @@ public class QuestService {
     }
 
     public QuestResponse save(final QuestRequest questRequest) {
+        // TODO 수정 필요
         final QuestType questType = QuestType.getMappedQuestType(questRequest.getQuestType());
         final Quest newQuest = new Quest(
                 questRequest.getDescription(),
                 questRequest.getActivity(),
                 questType,
                 questRequest.getDifficulty(),
-                new Burnout(1L, "호빵")
+                new Burnout(1L, "호빵"),
+                null
         );
 
         final Quest quest = questRepository.save(newQuest);
@@ -154,6 +158,7 @@ public class QuestService {
             throw new BadRequestException(NOT_FOUND_QUEST_ID);
         }
 
+        // TODO 수정 필요
         final QuestType questType = QuestType.getMappedQuestType(questUpdateRequest.getQuestType());
         final Quest updateQuest = new Quest(
                 questId,
@@ -161,7 +166,8 @@ public class QuestService {
                 questUpdateRequest.getActivity(),
                 questType,
                 questUpdateRequest.getDifficulty(),
-                new Burnout(1L, "호빵")
+                new Burnout(1L, "호빵"),
+                null
         );
 
         questRepository.save(updateQuest);

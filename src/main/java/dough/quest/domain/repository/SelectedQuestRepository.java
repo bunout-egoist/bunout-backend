@@ -35,9 +35,9 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              FROM SelectedQuest sq
              JOIN FETCH sq.quest
              JOIN FETCH sq.member
-             WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.quest.questType = 'DAILY' AND function('DATE', sq.dueDate) = :date
+             WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.quest.questType = 'DAILY' AND sq.dueDate = :date
             """)
-    List<SelectedQuest> findIncompletedDailyQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
+    List<SelectedQuest> findIncompleteDailyQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
 
     @Query("""
              SELECT sq
