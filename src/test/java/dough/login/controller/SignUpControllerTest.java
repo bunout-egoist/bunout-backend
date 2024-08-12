@@ -1,6 +1,5 @@
 package dough.login.controller;
 
-import dough.DoughApplication;
 import dough.global.AbstractControllerTest;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.dto.request.SignUpRequest;
