@@ -1,5 +1,7 @@
 package dough.login.controller;
 
+import dough.DoughApplication;
+import dough.global.AbstractControllerTest;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.service.SignUpService;
@@ -27,12 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(SignUpController.class)
 @AutoConfigureMockMvc
-@MockBean(JpaMetamodelMappingContext.class)
-@AutoConfigureRestDocs
-public class SignUpControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
+public class SignUpControllerTest extends AbstractControllerTest {
 
     @MockBean
     private TokenProvider tokenProvider;

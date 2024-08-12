@@ -2,7 +2,8 @@ package dough.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.AbstractControllerTest;
-import dough.member.dto.request.BurnoutTypeRequest;
+import dough.member.dto.request.BurnoutRequest;
+import dough.member.dto.request.FixedQuestRequest;
 import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.member.service.MemberService;
@@ -16,6 +17,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static dough.global.restdocs.RestDocsConfiguration.field;
+import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -50,14 +52,22 @@ class MemberControllerTest extends AbstractControllerTest {
                 .content(objectMapper.writeValueAsString(memberInfoRequest)));
     }
 
-    private ResultActions performPutChangeBurnoutType(
+    private ResultActions performPutUpdateBurnout(
             final Long memberId,
-            final BurnoutTypeRequest burnoutTypeRequest
+            final BurnoutRequest burnoutRequest
     ) throws Exception {
-        return mockMvc.perform(put("/api/v1/members/{memberId}/burnoutType", memberId)
+        return mockMvc.perform(put("/api/v1/members/{memberId}/burnout", memberId)
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(burnoutTypeRequest)));
+                .content(objectMapper.writeValueAsString(burnoutRequest)));
+    }
 
+    private ResultActions performPutUpdateFixedQuest(
+            final Long memberId,
+            final FixedQuestRequest fixedQuestRequest
+    ) throws Exception {
+        return mockMvc.perform(put("/api/v1/members/{memberId}/fixed", memberId)
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(fixedQuestRequest)));
     }
 
     @DisplayName("멤버의 닉네임을 조회할 수 있다.")
@@ -153,15 +163,15 @@ class MemberControllerTest extends AbstractControllerTest {
 
     @DisplayName("멤버의 번아웃 유형을 수정할 수 있다.")
     @Test
-    void changeBurnoutType() throws Exception {
+    void updateBurnout() throws Exception {
         // given
         Long id = 1L;
-        final BurnoutTypeRequest burnoutTypeRequest = new BurnoutTypeRequest("호빵");
+        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
 
-        doNothing().when(memberService).changeBurnoutType(anyLong(), any());
+        doNothing().when(memberService).updateBurnout(anyLong(), any());
 
         // when
-        final ResultActions resultActions = performPutChangeBurnoutType(id, burnoutTypeRequest);
+        final ResultActions resultActions = performPutUpdateBurnout(id, burnoutRequest);
 
         // then
         resultActions.andExpect(status().isNoContent())
@@ -171,28 +181,73 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .description("멤버 아이디")
                         ),
                         requestFields(
-                                fieldWithPath("burnoutType")
-                                        .type(STRING)
-                                        .description("번아웃 유형")
-                                        .attributes(field("constraint", "문자열"))
+                                fieldWithPath("burnoutId")
+                                        .type(NUMBER)
+                                        .description("번아웃 아이디")
+                                        .attributes(field("constraint", "양의 정수"))
                         )
                 ));
     }
 
     @DisplayName("번아웃 유형이 null일 경우 예외가 발생한다.")
     @Test
-    void changeBurnoutType_BurnoutTypeNull() throws Exception {
+    void updateBurnout_BurnoutNull() throws Exception {
         // given
         Long id = 1L;
-        final BurnoutTypeRequest burnoutTypeRequest = new BurnoutTypeRequest(null);
+        final BurnoutRequest burnoutRequest = new BurnoutRequest(null);
 
-        doNothing().when(memberService).changeBurnoutType(anyLong(), any());
+        doNothing().when(memberService).updateBurnout(anyLong(), any());
 
         // when
-        final ResultActions resultActions = performPutChangeBurnoutType(id, burnoutTypeRequest);
+        final ResultActions resultActions = performPutUpdateBurnout(id, burnoutRequest);
 
         // then
         resultActions.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").value("번아웃 타입을 입력해주세요."));
+                .andExpect(jsonPath("$.message").value("번아웃 아이디를 입력해주세요."));
+    }
+
+    @DisplayName("멤버의 고정 퀘스트를 재설정할 수 있다.")
+    @Test
+    void updateFixedQuest() throws Exception {
+        // given
+        Long id = 1L;
+        final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
+
+        doNothing().when(memberService).updateFixedQuest(anyLong(), any());
+
+        // when
+        final ResultActions resultActions = performPutUpdateFixedQuest(id, fixedQuestRequest);
+
+        // then
+        resultActions.andExpect(status().isNoContent())
+                .andDo(restDocs.document(
+                        pathParameters(
+                                parameterWithName("memberId")
+                                        .description("멤버 아이디")
+                        ),
+                        requestFields(
+                                fieldWithPath("fixedQuestId")
+                                        .type(NUMBER)
+                                        .description("고정 퀘스트 아이디")
+                                        .attributes(field("constraint", "양의 정수"))
+                        )
+                ));
+    }
+
+    @DisplayName("멤버의 고정 퀘스트를 재설정할 수 있다.")
+    @Test
+    void updateFixedQuest_FixedQuestNull() throws Exception {
+        // given
+        Long id = 1L;
+        final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(null);
+
+        doNothing().when(memberService).updateFixedQuest(anyLong(), any());
+
+        // when
+        final ResultActions resultActions = performPutUpdateFixedQuest(id, fixedQuestRequest);
+
+        // then
+        resultActions.andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("고정 퀘스트 아이디를 입력해주세요."));
     }
 }
