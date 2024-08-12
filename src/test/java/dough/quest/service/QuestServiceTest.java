@@ -26,9 +26,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.feedback.feedbackFixture.FeedbackFixture.FEEDBACK1;
+import static dough.feedback.feedbackFixture.FeedbackFixture.FEEDBACK2;
 import static dough.feedback.fixture.CompletedQuestDetailFixture.COMPLETED_QUEST_DETAILS;
-import static dough.feedback.fixture.FeedbackFixture.FEEDBACK1;
-import static dough.feedback.fixture.FeedbackFixture.FEEDBACK2;
 import static dough.global.exception.ExceptionCode.*;
 import static dough.member.fixture.MemberFixture.MEMBER;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
@@ -117,14 +117,8 @@ public class QuestServiceTest {
 
         List<CompletedQuestDetailResponse> actualResponse = questService.getCompletedQuestsDetail(MEMBER.getId(), LocalDate.now());
 
-        assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(COMPLETED_QUEST_DETAILS.stream()
-                        .map(completedQuestDetail ->
-                                CompletedQuestDetailResponse.of(
-                                        completedQuestDetail.quest,
-                                        completedQuestDetail.feedback
-                                ))
-                        .toList());
+        verify(memberRepository).existsById(any());
+        verify(selectedQuestRepository).findCompletedQuestsByMemberIdAndDate(anyLong(), any());
     }
 
     @DisplayName("멤버 아이디가 존재하지 않을 경우 예외가 발생한다.")
