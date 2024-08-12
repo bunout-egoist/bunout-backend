@@ -37,11 +37,11 @@ public class DashboardService {
 
         final int year = yearMonth.getYear();
         final int month = yearMonth.getMonthValue();
-
         final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(memberId, year, month);
+
         final Long completedAllQuestsDateCount = getCompletedAllQuestsDateCount(completedQuestsCountElements);
         final Set<String> highestAverageCompletionDays = getHighestAverageCompletionDays(completedQuestsCountElements);
-        final Long averageCompletion = getAverageCompletion(completedQuestsCountElements);
+        final Long averageCompletion = getAverageCompletion(completedQuestsCountElements, yearMonth);
 
         return MonthlySummaryResponse.of(
                 completedQuestsCountElements,
@@ -70,27 +70,31 @@ public class DashboardService {
                 .count();
     }
 
-    private static Long getAverageCompletion(final List<CompletedQuestsCountElement> completedQuestsCountDateElements) {
+    private static Long getAverageCompletion(final List<CompletedQuestsCountElement> completedQuestsCountDateElements, final YearMonth yearMonth) {
         final Long totalCount = completedQuestsCountDateElements.stream()
                 .mapToLong(element -> element.getDailyAndFixedCount())
                 .sum();
 
-        final int month = completedQuestsCountDateElements.get(0).getCompletedDate().lengthOfMonth();
+        final int month = yearMonth.lengthOfMonth();
         return (totalCount * 100) / (month * 3);
     }
 
     private static Set<String> getHighestAverageCompletionDays(final List<CompletedQuestsCountElement> completedQuestsCountDateElements) {
-        final Map<String, Long> completionCounts = completedQuestsCountDateElements.stream()
+        if (completedQuestsCountDateElements.isEmpty()) {
+            return Collections.emptySet();
+        }
+
+        final Map<String, Double> completionCounts = completedQuestsCountDateElements.stream()
                 .collect(Collectors.groupingBy(
                         element -> element.getCompletedDate().getDayOfWeek().getDisplayName(SHORT, KOREAN),
-                        Collectors.summingLong(element -> (element.getDailyAndFixedCount() / 3)
-                )));
+                        Collectors.summingDouble(element -> element.getDailyAndFixedCount() / 3.0) // double 사용
+                ));
 
-        final Long maxCount = Collections.max(completionCounts.values());
+        final Double maxCount = Collections.max(completionCounts.values());
 
-        return maxCount == 0 ? null : completionCounts.entrySet().stream()
-                .filter(entry -> entry.getValue() == maxCount)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-                .keySet();
+        return maxCount == 0 ? Collections.emptySet() : completionCounts.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(maxCount))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 }
