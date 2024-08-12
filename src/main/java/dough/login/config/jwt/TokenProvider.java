@@ -10,7 +10,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
 import java.sql.Struct;
 import java.time.Duration;
 import java.util.Collections;
@@ -62,7 +61,7 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(new org.springframework.security.core.userdetails.User(claims.getSubject
                 (), "", authorities), token, authorities);
     }
-
+  
     public String getUserIdFromToken(String token) {
         Claims claims = getClaims(token);
         return claims.get("id", String.class);

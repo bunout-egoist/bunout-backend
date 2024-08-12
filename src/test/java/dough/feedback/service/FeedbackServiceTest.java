@@ -17,6 +17,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,37 +27,34 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith({SpringExtension.class, MockitoExtension.class})
-@ContextConfiguration(classes = {FeedbackServiceTest.TestConfig.class})
+@ExtendWith(MockitoExtension.class)
+@Transactional
 class FeedbackServiceTest {
 
-    @Autowired
+    @InjectMocks
     private FeedbackService feedbackService;
 
-    @MockBean
-    private FeedbackRepository feedbackRepository;
-
-    @MockBean
-    private SelectedQuestRepository selectedQuestRepository;
-
-    @MockBean
-    private MemberRepository memberRepository;
-
-    @MockBean
+    @Mock
     private QuestService questService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    @Mock
+    private FeedbackRepository feedbackRepository;
+
+    @Mock
+    private SelectedQuestRepository selectedQuestRepository;
+
+    @Mock
+    private MemberRepository memberRepository;
 
     @DisplayName("피드백을 성공적으로 생성할 수 있다.")
     @Test
@@ -65,9 +64,9 @@ class FeedbackServiceTest {
         FeedbackRequest feedbackRequest = new FeedbackRequest("png1", 3);
 
         Member member = new Member(1L, "JohnDoe", "john123", SocialLoginType.KAKAO, "john@example.com",
-                "Developer", "Male", 1990, "TypeA");
+                "Developer", "Male", 1990, ENTHUSIAST);
         SelectedQuest selectedQuest = new SelectedQuest(member, new Quest(1L, "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기", QuestType.DAILY, 3));
+                "15분 운동하기", QuestType.DAILY, 3, ENTHUSIAST));
         Feedback feedback = new Feedback(member, selectedQuest, feedbackRequest.getImageUrl(), feedbackRequest.getDifficulty());
 
         when(selectedQuestRepository.findByQuestId(questId)).thenReturn(Optional.of(selectedQuest));
@@ -114,19 +113,14 @@ class FeedbackServiceTest {
         FeedbackRequest feedbackRequest = new FeedbackRequest("png3", 3);
 
         Member member = new Member(1L, "JohnDoe", "john123", SocialLoginType.APPLE, "john@example.com",
-                "Developer", "Male", 1990, "TypeA");
+                "Developer", "Male", 1990, ENTHUSIAST);
         SelectedQuest selectedQuest = new SelectedQuest(member, new Quest(1L, "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기", QuestType.DAILY, 3));
+                "15분 운동하기", QuestType.DAILY, 3, ENTHUSIAST));
 
         when(selectedQuestRepository.findByQuestId(questId)).thenReturn(Optional.of(selectedQuest));
         when(memberRepository.findById(member.getId())).thenReturn(Optional.empty());
 
         // when & then
         assertThrows(IllegalArgumentException.class, () -> feedbackService.createFeedback(questId, feedbackRequest));
-    }
-
-    @Configuration
-    @ComponentScan(basePackageClasses = FeedbackService.class)
-    static class TestConfig {
     }
 }
