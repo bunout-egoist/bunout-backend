@@ -3,7 +3,7 @@ package dough.dashboard.controller;
 import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.dashboard.service.DashboardService;
 import dough.global.AbstractControllerTest;
-import dough.quest.dto.CompletedQuestsCountDateElement;
+import dough.quest.dto.CompletedQuestsCountElement;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import dough.quest.service.QuestService;
@@ -16,6 +16,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Set;
 
@@ -161,7 +162,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
     void getMonthlySummary() throws Exception {
         // given
         final MonthlySummaryResponse monthlySummaryResponse = MonthlySummaryResponse.of(
-                List.of(new CompletedQuestsCountDateElement(LocalDate.now(), 10L, 10L)),
+                List.of(new CompletedQuestsCountElement(LocalDate.now(), 10L, 10L)),
                 0L,
                 Set.of("화"),
                 19L
@@ -172,7 +173,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
 
         // when
         final ResultActions resultActions = mockMvc.perform(
-                get("/api/v1/dashboard/{memberId}/{year}/{month}", 1L, 2024L, 8L));
+                get("/api/v1/dashboard/{memberId}/{yearMonth}", 1L, YearMonth.of(2024, 8)));
 
         // then
         resultActions.andExpect(status().isOk())
@@ -180,25 +181,23 @@ public class DashboardControllerTest extends AbstractControllerTest {
                         pathParameters(
                                 parameterWithName("memberId")
                                         .description("멤버 아이디"),
-                                parameterWithName("year")
-                                        .description("연도"),
-                                parameterWithName("month")
-                                        .description("월")
+                                parameterWithName("yearMonth")
+                                        .description("연월")
                         ),
                         responseFields(
-                                fieldWithPath("completedCountDates")
+                                fieldWithPath("countDetails")
                                         .type(ARRAY)
                                         .description("완료 퀘스트 개수 & 완료 날짜 리스트")
                                         .attributes(field("constraint", "배열")),
-                                fieldWithPath("completedCountDates[].completedAt")
+                                fieldWithPath("countDetails[].completedDate")
                                         .type(STRING)
                                         .description("퀘스트 완료 날짜")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("completedCountDates[].completedQuestCount")
+                                fieldWithPath("countDetails[].dailyAndFixedCount")
                                         .type(NUMBER)
                                         .description("완료한 퀘스트 개수")
                                         .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("completedAllQuestsCount")
+                                fieldWithPath("completedAllQuestsDateCount")
                                         .type(NUMBER)
                                         .description("하루에 제공되는 모든 퀘스트 완료 일수")
                                         .attributes(field("constraint", "양의 정수")),

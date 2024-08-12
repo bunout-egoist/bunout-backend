@@ -11,7 +11,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collections;
 import java.util.List;
@@ -36,14 +35,14 @@ public class DashboardService {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
 
-        final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndCompletedDate(memberId, yearMonth);
-        final Long completedAllQuestsCount = getCompletedAllQuestsCount(completedQuestsCountElements);
+        final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(memberId, yearMonth);
+        final Long completedAllQuestsDateCount = getCompletedAllQuestsDateCount(completedQuestsCountElements);
         final Set<String> highestAverageCompletionDays = getHighestAverageCompletionDays(completedQuestsCountElements);
         final Long averageCompletion = getAverageCompletion(completedQuestsCountElements);
 
         return MonthlySummaryResponse.of(
                 completedQuestsCountElements,
-                completedAllQuestsCount,
+                completedAllQuestsDateCount,
                 highestAverageCompletionDays,
                 averageCompletion
         );
@@ -62,7 +61,7 @@ public class DashboardService {
         );
     }
 
-    private static Long getCompletedAllQuestsCount(final List<CompletedQuestsCountElement> completedQuestsCountElements) {
+    private static Long getCompletedAllQuestsDateCount(final List<CompletedQuestsCountElement> completedQuestsCountElements) {
         return completedQuestsCountElements.stream()
                 .filter(element -> element.getDailyAndFixedCount() == 3)
                 .count();
@@ -70,19 +69,19 @@ public class DashboardService {
 
     private static Long getAverageCompletion(final List<CompletedQuestsCountElement> completedQuestsCountDateElements) {
         final Long totalCount = completedQuestsCountDateElements.stream()
-                .mapToLong(element -> element.getDailyAndFixedCount() + element.getSpecialCount())
+                .mapToLong(element -> element.getDailyAndFixedCount())
                 .sum();
 
         final int month = completedQuestsCountDateElements.get(0).getCompletedDate().lengthOfMonth();
-        return (totalCount * 100) / (month * 3 + 12);
+        return (totalCount * 100) / (month * 3);
     }
 
     private static Set<String> getHighestAverageCompletionDays(final List<CompletedQuestsCountElement> completedQuestsCountDateElements) {
         final Map<String, Long> completionCounts = completedQuestsCountDateElements.stream()
                 .collect(Collectors.groupingBy(
                         element -> element.getCompletedDate().getDayOfWeek().getDisplayName(SHORT, KOREAN),
-                        Collectors.summingLong(element -> element.getSpecialCount() + element.getDailyAndFixedCount())
-                ));
+                        Collectors.summingLong(element -> (element.getDailyAndFixedCount() / 3)
+                )));
 
         final Long maxCount = Collections.max(completionCounts.values());
 

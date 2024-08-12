@@ -3,7 +3,7 @@ package dough.dashboard.service;
 import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
-import dough.quest.dto.CompletedQuestsCountDateElement;
+import dough.quest.dto.CompletedQuestsCountElement;
 import dough.quest.dto.TotalCompletedQuestsElement;
 import dough.quest.dto.response.TotalCompletedQuestsResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -63,8 +63,8 @@ class DashboardServiceTest {
         // given
         given(memberRepository.existsById(any()))
                 .willReturn(true);
-        given(selectedQuestRepository.getDateAndCompletedQuestsCountByMemberId(anyLong(), any()))
-                .willReturn(List.of(new CompletedQuestsCountDateElement(LocalDate.now(), 10L, 10L)));
+        given(selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(anyLong(), any()))
+                .willReturn(List.of(new CompletedQuestsCountElement(LocalDate.now(), 10L, 10L)));
 
         // when
         final MonthlySummaryResponse actualResponse = dashboardService.getMonthlySummary(MEMBER.getId(), YearMonth.of(2024, 8));
@@ -72,10 +72,10 @@ class DashboardServiceTest {
         // then
         assertThat(actualResponse).usingRecursiveComparison()
                 .isEqualTo(MonthlySummaryResponse.of(
-                        List.of(new CompletedQuestsCountDateElement(LocalDate.now(), 10L, 10L)),
+                        List.of(new CompletedQuestsCountElement(LocalDate.now(), 10L, 10L)),
                         0L,
-                        Set.of("화"),
-                        19L
+                        Set.of("월"),
+                        10L
                 ));
     }
 }
