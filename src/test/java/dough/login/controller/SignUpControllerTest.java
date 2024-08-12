@@ -1,7 +1,5 @@
 package dough.login.controller;
 
-import dough.DoughApplication;
-import dough.feedback.domain.controller.FeedbackController;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.service.SignUpService;
@@ -11,9 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
@@ -28,8 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SignUpController.class)
-@MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureMockMvc
+@MockBean(JpaMetamodelMappingContext.class)
+@AutoConfigureRestDocs
 public class SignUpControllerTest {
 
     @Autowired
