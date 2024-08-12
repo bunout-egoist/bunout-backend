@@ -2,6 +2,7 @@ package dough.quest.domain.repository;
 
 import dough.global.annotation.TimeTrace;
 import dough.quest.domain.SelectedQuest;
+import dough.quest.dto.CompletedQuestElement;
 import dough.quest.dto.CompletedQuestsCountElement;
 import dough.quest.dto.CompletedQuestsTotalElement;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,16 +16,14 @@ import java.util.Optional;
 public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Long> {
 
     @Query("""
-             SELECT sq 
+             SELECT new dough.quest.dto.CompletedQuestElement(q, f.imageUrl, sq.completedDate)
              FROM SelectedQuest sq
-             LEFT JOIN FETCH  sq.feedback f
-             LEFT JOIN FETCH sq.quest q
-             WHERE sq.member.id = :memberId AND FUNCTION('DATE', sq.createdAt) = :date AND sq.questStatus = 'COMPLETED'
+             LEFT JOIN sq.feedback f
+             LEFT JOIN sq.quest q
+             WHERE sq.member.id = :memberId AND sq.completedDate BETWEEN :startDate AND :endDate AND sq.questStatus = 'COMPLETED'
+             GROUP BY sq.completedDate
             """)
-    List<SelectedQuest> findCompletedQuestsByMemberIdAndDate(
-            @Param("memberId") final Long memberId,
-            @Param("date") final LocalDate date
-    );
+    List<CompletedQuestElement> findCompletedQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("startDate") final LocalDate startDate, @Param("endDate") final LocalDate endDate);
 
     @Query("""
              SELECT CASE WHEN COUNT(sq) > 0 THEN true ELSE false END 

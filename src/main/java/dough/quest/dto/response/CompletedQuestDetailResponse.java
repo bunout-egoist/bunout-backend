@@ -12,16 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CompletedQuestDetailResponse {
 
-    private Long id;
     private String imageUrl;
     private String description;
     private String activity;
     private String questType;
 
-    public static CompletedQuestDetailResponse of(final Quest quest, final Feedback feedback) {
+    public static CompletedQuestDetailResponse of(final Quest quest, final String imageUrl) {
         return new CompletedQuestDetailResponse(
-                feedback.getId(),
-                feedback.getImageUrl(),
+                imageUrl,
                 quest.getDescription(),
                 quest.getActivity(),
                 quest.getQuestType().getCode());
