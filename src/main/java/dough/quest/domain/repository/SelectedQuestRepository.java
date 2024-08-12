@@ -3,7 +3,7 @@ package dough.quest.domain.repository;
 import dough.global.annotation.TimeTrace;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.CompletedQuestsCountElement;
-import dough.quest.dto.TotalCompletedQuestsElement;
+import dough.quest.dto.CompletedQuestsTotalElement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,7 +36,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
     Optional<SelectedQuest> findByQuestId(Long questId);
 
     @Query("""
-             SELECT new dough.quest.dto.TotalCompletedQuestsElement(
+             SELECT new dough.quest.dto.CompletedQuestsTotalElement(
                  SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END),
                  SUM(CASE WHEN q.questType = 'SPECIAL' THEN 1 ELSE 0 END)
              )
@@ -44,7 +44,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              LEFT JOIN sq.quest q
              WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED'
             """)
-    TotalCompletedQuestsElement getTotalCompletedQuestsByMemberId(@Param("memberId") final Long memberId);
+    CompletedQuestsTotalElement getCompletedQuestsTotalByMemberId(@Param("memberId") final Long memberId);
 
     @TimeTrace
     @Query("""

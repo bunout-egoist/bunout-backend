@@ -5,8 +5,8 @@ import dough.feedback.domain.repository.FeedbackRepository;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.CompletedQuestsCountElement;
-import dough.quest.dto.TotalCompletedQuestsElement;
-import dough.quest.dto.response.TotalCompletedQuestsResponse;
+import dough.quest.dto.CompletedQuestsTotalElement;
+import dough.quest.dto.response.CompletedQuestsTotalResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,19 +45,19 @@ class DashboardServiceTest {
     @Test
     void getTotalCompletedQuests() {
         // given
-        final TotalCompletedQuestsElement totalCompletedQuestsElement = new TotalCompletedQuestsElement(50L, 40L);
+        final CompletedQuestsTotalElement completedQuestsTotalElement = new CompletedQuestsTotalElement(50L, 40L);
 
         given(memberRepository.existsById(any()))
                 .willReturn(true);
-        given(selectedQuestRepository.getTotalCompletedQuestsByMemberId(any()))
-                .willReturn(totalCompletedQuestsElement);
+        given(selectedQuestRepository.getCompletedQuestsTotalByMemberId(any()))
+                .willReturn(completedQuestsTotalElement);
 
         // when
-        final TotalCompletedQuestsResponse actualResponse = dashboardService.getTotalCompletedQuests(MEMBER.getId());
+        final CompletedQuestsTotalResponse actualResponse = dashboardService.getTotalCompletedQuests(MEMBER.getId());
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(TotalCompletedQuestsResponse.of(50L, 40L));
+                .isEqualTo(CompletedQuestsTotalResponse.of(50L, 40L));
     }
 
     @DisplayName("월간 분석을 받을 수 있다.")

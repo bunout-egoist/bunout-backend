@@ -5,8 +5,8 @@ import dough.global.exception.BadRequestException;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.CompletedQuestsCountElement;
-import dough.quest.dto.TotalCompletedQuestsElement;
-import dough.quest.dto.response.TotalCompletedQuestsResponse;
+import dough.quest.dto.CompletedQuestsTotalElement;
+import dough.quest.dto.response.CompletedQuestsTotalResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,28 +51,28 @@ public class DashboardService {
         );
     }
 
-    public TotalCompletedQuestsResponse getTotalCompletedQuests(final Long memberId) {
+    public CompletedQuestsTotalResponse getTotalCompletedQuests(final Long memberId) {
         if (!memberRepository.existsById(memberId)) {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
 
-        final TotalCompletedQuestsElement totalCompletedQuestsElement = selectedQuestRepository.getTotalCompletedQuestsByMemberId(memberId);
+        final CompletedQuestsTotalElement completedQuestsTotalElement = selectedQuestRepository.getCompletedQuestsTotalByMemberId(memberId);
 
-        return TotalCompletedQuestsResponse.of(
-                totalCompletedQuestsElement.getDailyAndFixedTotal(),
-                totalCompletedQuestsElement.getSpecialTotal()
+        return CompletedQuestsTotalResponse.of(
+                completedQuestsTotalElement.getDailyTotal(),
+                completedQuestsTotalElement.getSpecialTotal()
         );
     }
 
     private static Long getCompletedAllQuestsDateCount(final List<CompletedQuestsCountElement> completedQuestsCountElements) {
         return completedQuestsCountElements.stream()
-                .filter(element -> element.getDailyAndFixedCount() == 3)
+                .filter(element -> element.getDailyCount() == 3)
                 .count();
     }
 
     private static Long getAverageCompletion(final List<CompletedQuestsCountElement> completedQuestsCountDateElements, final YearMonth yearMonth) {
         final Long totalCount = completedQuestsCountDateElements.stream()
-                .mapToLong(element -> element.getDailyAndFixedCount())
+                .mapToLong(element -> element.getDailyCount())
                 .sum();
 
         final int month = yearMonth.lengthOfMonth();
@@ -87,7 +87,7 @@ public class DashboardService {
         final Map<String, Double> completionCounts = completedQuestsCountDateElements.stream()
                 .collect(Collectors.groupingBy(
                         element -> element.getCompletedDate().getDayOfWeek().getDisplayName(SHORT, KOREAN),
-                        Collectors.summingDouble(element -> element.getDailyAndFixedCount() / 3.0) // double 사용
+                        Collectors.summingDouble(element -> element.getDailyCount() / 3.0) // double 사용
                 ));
 
         final Double maxCount = Collections.max(completionCounts.values());

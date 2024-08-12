@@ -60,6 +60,7 @@ public class FeedbackFixture {
     );
 
     public static final Feedback FEEDBACK1 = new Feedback(
+            1L,
             MEMBER1,
             new SelectedQuest(
                     MEMBER1,
@@ -77,6 +78,7 @@ public class FeedbackFixture {
     );
 
     public static final Feedback FEEDBACK2 = new Feedback(
+            2L,
             MEMBER1,
             new SelectedQuest(
                     MEMBER1,

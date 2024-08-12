@@ -5,6 +5,7 @@ import dough.feedback.domain.repository.FeedbackRepository;
 import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.member.domain.repository.MemberRepository;
+import dough.member.dto.response.MemberInfoResponse;
 import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
@@ -26,13 +27,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
-import static dough.feedback.feedbackFixture.FeedbackFixture.FEEDBACK1;
-import static dough.feedback.feedbackFixture.FeedbackFixture.FEEDBACK2;
 import static dough.feedback.fixture.CompletedQuestDetailFixture.COMPLETED_QUEST_DETAILS;
 import static dough.global.exception.ExceptionCode.*;
 import static dough.member.fixture.MemberFixture.MEMBER;
-import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
-import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static dough.quest.fixture.QuestFixture.*;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST2;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,9 +58,6 @@ public class QuestServiceTest {
 
     @Mock
     private BurnoutRepository burnoutRepository;
-
-    @Mock
-    private FeedbackRepository feedbackRepository;
 
     @DisplayName("퀘스트를 추가할 수 있다.")
     @Test
@@ -115,10 +110,18 @@ public class QuestServiceTest {
         given(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(anyLong(), any()))
                 .willReturn(selectedQuests);
 
+        // when
         List<CompletedQuestDetailResponse> actualResponse = questService.getCompletedQuestsDetail(MEMBER.getId(), LocalDate.now());
 
-        verify(memberRepository).existsById(any());
-        verify(selectedQuestRepository).findCompletedQuestsByMemberIdAndDate(anyLong(), any());
+        // then
+        assertThat(actualResponse).usingRecursiveComparison()
+                .isEqualTo(COMPLETED_QUEST_DETAILS.stream()
+                        .map(completedQuestDetail ->
+                                CompletedQuestDetailResponse.of(
+                                        completedQuestDetail.quest,
+                                        completedQuestDetail.feedback
+                                ))
+                        .toList());
     }
 
     @DisplayName("멤버 아이디가 존재하지 않을 경우 예외가 발생한다.")

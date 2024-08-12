@@ -35,10 +35,14 @@ include::{snippets}/member-controller-test/update-member-info_-nickname-size-inv
 include::{snippets}/member-controller-test/update-burnout/path-parameters.adoc[]
 include::{snippets}/member-controller-test/update-burnout/request-fields.adoc[]
 include::{snippets}/member-controller-test/update-burnout/http-request.adoc[]
-include::{snippets}/member-controller-test/update-burnout_-burnout-null/http-request.adoc[]
 
 ==== Response
 include::{snippets}/member-controller-test/update-burnout/http-response.adoc[]
+
+==== Request (번아웃 아이디를 입력하지 않았을 경우)
+include::{snippets}/member-controller-test/update-burnout_-burnout-null/http-request.adoc[]
+
+==== Response
 include::{snippets}/member-controller-test/update-burnout_-burnout-null/http-response.adoc[]
 
 === 고정 퀘스트 재설정
@@ -111,6 +115,7 @@ include::{snippets}/dashboard-controller-test/get-monthly-summary/http-request.a
 ==== Response
 include::{snippets}/dashboard-controller-test/get-monthly-summary/response-fields.adoc[]
 include::{snippets}/dashboard-controller-test/get-monthly-summary/response-body.adoc[]
+include::{snippets}/dashboard-controller-test/get-monthly-summary_-no-summary/response-body.adoc[]
 
 === 퀘스트 총 개수
 
