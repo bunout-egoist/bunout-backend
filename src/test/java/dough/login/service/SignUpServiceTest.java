@@ -15,12 +15,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Optional;
+
 import static dough.member.fixture.MemberFixture.MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
@@ -49,8 +50,8 @@ class SignUpServiceTest {
     @Test
     void updateMemberInfo_withSignUpRequest() {
         // given
-        given(tokenProvider.getUserIdFromToken(anyString())).willReturn("socialLoginId");
-        given(memberRepository.findBySocialLoginId(anyString())).willReturn(Optional.of(MEMBER));
+        given(tokenProvider.getMemberIdFromToken(anyString())).willReturn(1L);
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(MEMBER));
         given(memberRepository.save(any(Member.class))).willReturn(MEMBER);
 
         // when
@@ -67,29 +68,28 @@ class SignUpServiceTest {
         Member capturedMember = memberCaptor.getValue();
 
         // then
-        assertThat(capturedMember.getNickname()).isEqualTo(MEMBER.getNickname());
-        assertThat(capturedMember.getGender()).isEqualTo(MEMBER.getGender());
-        assertThat(capturedMember.getBirthYear()).isEqualTo(MEMBER.getBirthYear());
-        assertThat(capturedMember.getOccupation()).isEqualTo(MEMBER.getOccupation());
+        assertThat(capturedMember.getNickname()).isEqualTo(signUpRequest.getNickname());
+        assertThat(capturedMember.getGender()).isEqualTo(signUpRequest.getGender());
+        assertThat(capturedMember.getBirthYear()).isEqualTo(signUpRequest.getBirth_year());
+        assertThat(capturedMember.getOccupation()).isEqualTo(signUpRequest.getOccupation());
 
-        verify(tokenProvider, times(1)).getUserIdFromToken(anyString());
-        verify(memberRepository, times(1)).findBySocialLoginId(anyString());
+        verify(tokenProvider, times(1)).getMemberIdFromToken(anyString());
+        verify(memberRepository, times(1)).findById(anyLong());
     }
 
     @DisplayName("SignUpRequest를 통해 회원 정보를 업데이트할 때 회원을 찾지 못하면 예외가 발생한다.")
     @Test
     void updateMemberInfo_withSignUpRequest_UserNotFound() {
         // given
-        given(tokenProvider.getUserIdFromToken(anyString())).willReturn("socialLoginId");
-        given(memberRepository.findBySocialLoginId(anyString())).willReturn(Optional.empty());
+        given(tokenProvider.getMemberIdFromToken(anyString())).willReturn(1L);
+        given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
 
         // when & then
         assertThatThrownBy(() -> signUpService.updateMemberInfo(signUpRequest))
                 .isInstanceOf(UserNotFoundException.class);
 
-        verify(tokenProvider, times(1)).getUserIdFromToken(anyString());
-        verify(memberRepository, times(1)).findBySocialLoginId(anyString());
+        verify(tokenProvider, times(1)).getMemberIdFromToken(anyString());
+        verify(memberRepository, times(1)).findById(anyLong());
         verify(memberRepository, times(0)).save(any(Member.class));
     }
 }
-

@@ -37,7 +37,7 @@ public class TokenProvider {
                 .setExpiration(expiry)
                 .setSubject(member.getEmail())
                 .claim("id", member.getId())
-                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret_key())
+                .signWith(SignatureAlgorithm.RS256, jwtProperties.getSecret_key())
                 .compact();
     }
 
@@ -62,9 +62,9 @@ public class TokenProvider {
                 (), "", authorities), token, authorities);
     }
   
-    public String getUserIdFromToken(String token) {
+    public Long getMemberIdFromToken(String token) {
         Claims claims = getClaims(token);
-        return claims.get("id", String.class);
+        return claims.get("id", Long.class);
     }
 
     private Claims getClaims(String token) {
