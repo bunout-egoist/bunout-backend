@@ -1,9 +1,11 @@
 package dough.quest.service;
 
 import dough.burnout.domain.repository.BurnoutRepository;
+import dough.feedback.domain.repository.FeedbackRepository;
 import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.member.domain.repository.MemberRepository;
+import dough.member.dto.response.MemberInfoResponse;
 import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
@@ -28,8 +30,7 @@ import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.feedback.fixture.CompletedQuestDetailFixture.COMPLETED_QUEST_DETAILS;
 import static dough.global.exception.ExceptionCode.*;
 import static dough.member.fixture.MemberFixture.MEMBER;
-import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
-import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static dough.quest.fixture.QuestFixture.*;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST2;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -106,11 +107,13 @@ public class QuestServiceTest {
 
         given(memberRepository.existsById(any()))
                 .willReturn(true);
-        given(selectedQuestRepository.findConpletedQuestByMemberIdAndDate(anyLong(), any()))
+        given(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(anyLong(), any()))
                 .willReturn(selectedQuests);
 
-        List<CompletedQuestDetailResponse> actualResponse = questService.getCompletedQuestDetail(MEMBER.getId(), LocalDate.now());
+        // when
+        List<CompletedQuestDetailResponse> actualResponse = questService.getCompletedQuestsDetail(MEMBER.getId(), LocalDate.now());
 
+        // then
         assertThat(actualResponse).usingRecursiveComparison()
                 .isEqualTo(COMPLETED_QUEST_DETAILS.stream()
                         .map(completedQuestDetail ->
@@ -128,7 +131,7 @@ public class QuestServiceTest {
         Long id = 1L;
 
         // given & when & then
-        assertThatThrownBy(() -> questService.getCompletedQuestDetail(id, any()))
+        assertThatThrownBy(() -> questService.getCompletedQuestsDetail(id, any()))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_MEMBER_ID.getCode());

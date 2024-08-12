@@ -17,6 +17,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -34,29 +37,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith({SpringExtension.class, MockitoExtension.class})
-@ContextConfiguration(classes = {FeedbackServiceTest.TestConfig.class})
+@ExtendWith(MockitoExtension.class)
+@Transactional
 class FeedbackServiceTest {
 
-    @Autowired
+    @InjectMocks
     private FeedbackService feedbackService;
 
-    @MockBean
-    private FeedbackRepository feedbackRepository;
-
-    @MockBean
-    private SelectedQuestRepository selectedQuestRepository;
-
-    @MockBean
-    private MemberRepository memberRepository;
-
-    @MockBean
+    @Mock
     private QuestService questService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    @Mock
+    private FeedbackRepository feedbackRepository;
+
+    @Mock
+    private SelectedQuestRepository selectedQuestRepository;
+
+    @Mock
+    private MemberRepository memberRepository;
 
     @DisplayName("피드백을 성공적으로 생성할 수 있다.")
     @Test
@@ -124,10 +122,5 @@ class FeedbackServiceTest {
 
         // when & then
         assertThrows(IllegalArgumentException.class, () -> feedbackService.createFeedback(questId, feedbackRequest));
-    }
-
-    @Configuration
-    @ComponentScan(basePackageClasses = FeedbackService.class)
-    static class TestConfig {
     }
 }
