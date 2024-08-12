@@ -36,13 +36,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        Member user = memberService.findBySocialLoginId((String) oAuth2User.getAttributes().get("id"));
+        Member member = memberService.findBySocialLoginId((String) oAuth2User.getAttributes().get("id"));
 
-        String refreshToken = tokenProvider.generateToken(user, REFRESH_TOKEN_DURATION);
-        saveRefreshToken(user.getId(), refreshToken);
+        String refreshToken = tokenProvider.generateToken(member, REFRESH_TOKEN_DURATION);
+        saveRefreshToken(member, refreshToken);
         addRefreshTokenToCookie(request, response, refreshToken);
 
-        String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
+        String accessToken = tokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
         String targetUrl = getTargetUrl(accessToken);
 
         clearAuthenticationAttributes(request, response);
@@ -50,10 +50,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
-    private void saveRefreshToken(Long userId, String newRefreshToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
+    private void saveRefreshToken(Member member, String newRefreshToken) {
+        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(member.getId())
                 .map(entity -> entity.update(newRefreshToken))
-                .orElse(new RefreshToken(userId, newRefreshToken));
+                .orElse(new RefreshToken(member, newRefreshToken));
 
         refreshTokenRepository.save(refreshToken);
     }
