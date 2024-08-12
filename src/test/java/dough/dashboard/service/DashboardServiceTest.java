@@ -43,7 +43,7 @@ class DashboardServiceTest {
 
     @DisplayName("스페셜 퀘스트와 데일리 퀘스트의 총합을 조회할 수 있다.")
     @Test
-    void getTotalCompletedQuests() {
+    void getCompletedQuestsTotal() {
         // given
         final CompletedQuestsTotalElement completedQuestsTotalElement = new CompletedQuestsTotalElement(50L, 40L);
 
@@ -53,7 +53,7 @@ class DashboardServiceTest {
                 .willReturn(completedQuestsTotalElement);
 
         // when
-        final CompletedQuestsTotalResponse actualResponse = dashboardService.getTotalCompletedQuests(MEMBER.getId());
+        final CompletedQuestsTotalResponse actualResponse = dashboardService.getCompletedQuestsTotal(MEMBER.getId());
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
