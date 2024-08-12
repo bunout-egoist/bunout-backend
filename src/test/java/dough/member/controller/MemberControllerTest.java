@@ -56,7 +56,7 @@ class MemberControllerTest extends AbstractControllerTest {
             final Long memberId,
             final BurnoutRequest burnoutRequest
     ) throws Exception {
-        return mockMvc.perform(put("/api/v1/members/{memberId}/burnoutType", memberId)
+        return mockMvc.perform(put("/api/v1/members/{memberId}/burnout", memberId)
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(burnoutRequest)));
     }

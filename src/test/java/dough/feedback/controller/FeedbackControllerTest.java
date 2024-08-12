@@ -17,13 +17,11 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static dough.global.restdocs.RestDocsConfiguration.field;
-import static java.util.TimeZone.LONG;
-import static javax.management.openmbean.SimpleType.INTEGER;
-import static javax.management.openmbean.SimpleType.STRING;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -68,14 +66,14 @@ class FeedbackControllerTest extends AbstractControllerTest {
                         ),
                         requestFields(
                                 fieldWithPath("imageUrl").type(STRING).description("이미지 URL").attributes(field("constraint", "문자열")),
-                                fieldWithPath("difficulty").type(INTEGER).description("난이도").attributes(field("constraint", "1-5 사이의 정수"))
+                                fieldWithPath("difficulty").type(NUMBER).description("난이도").attributes(field("constraint", "1-5 사이의 정수"))
                         ),
                         responseFields(
-                                fieldWithPath("id").type(LONG).description("피드백 아이디").attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("id").type(NUMBER).description("피드백 아이디").attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("imageUrl").type(STRING).description("이미지 URL").attributes(field("constraint", "문자열")),
-                                fieldWithPath("difficulty").type(INTEGER).description("난이도").attributes(field("constraint", "1-5 사이의 정수")),
-                                fieldWithPath("memberId").type(LONG).description("멤버 아이디").attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("selectedQuestId").type(LONG).description("선택된 퀘스트 아이디").attributes(field("constraint", "양의 정수"))
+                                fieldWithPath("difficulty").type(NUMBER).description("난이도").attributes(field("constraint", "1-5 사이의 정수")),
+                                fieldWithPath("memberId").type(NUMBER).description("멤버 아이디").attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("selectedQuestId").type(NULL).description("선택된 퀘스트 아이디").attributes(field("constraint", "양의 정수"))
                         )
                 ));
     }

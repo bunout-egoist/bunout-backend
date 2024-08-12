@@ -11,6 +11,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.time.LocalDate;
+
 import static dough.quest.domain.type.QuestStatus.IN_PROGRESS;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
@@ -43,6 +45,8 @@ public class SelectedQuest extends BaseEntity {
 
     @Enumerated(value = STRING)
     private QuestStatus questStatus = IN_PROGRESS;
+
+    private LocalDate completedDate;
 
     public SelectedQuest(
             final Long id,
