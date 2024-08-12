@@ -21,7 +21,6 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              LEFT JOIN sq.feedback f
              LEFT JOIN sq.quest q
              WHERE sq.member.id = :memberId AND sq.completedDate BETWEEN :startDate AND :endDate AND sq.questStatus = 'COMPLETED'
-             GROUP BY sq.completedDate
             """)
     List<CompletedQuestElement> findCompletedQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("startDate") final LocalDate startDate, @Param("endDate") final LocalDate endDate);
 
