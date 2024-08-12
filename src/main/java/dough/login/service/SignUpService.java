@@ -24,10 +24,10 @@ public class SignUpService {
                 .orElseThrow(UserNotFoundException::new);
 
         member.updateMember(
-                member.getNickname(),
-                member.getGender(),
-                member.getBirthYear(),
-                member.getOccupation()
+                signUpRequest.getNickname(),
+                signUpRequest.getGender(),
+                signUpRequest.getBirth_year(),
+                signUpRequest.getOccupation()
         );
 
         return MemberInfoResponse.from(memberRepository.save(member));
