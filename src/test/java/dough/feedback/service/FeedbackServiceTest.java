@@ -25,6 +25,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -34,8 +35,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith({SpringExtension.class, MockitoExtension.class})
-@ContextConfiguration(classes = {FeedbackServiceTest.TestConfig.class})
+@ExtendWith(MockitoExtension.class)
+@Transactional
 class FeedbackServiceTest {
 
     @Autowired
@@ -124,10 +125,5 @@ class FeedbackServiceTest {
 
         // when & then
         assertThrows(IllegalArgumentException.class, () -> feedbackService.createFeedback(questId, feedbackRequest));
-    }
-
-    @Configuration
-    @ComponentScan(basePackageClasses = FeedbackService.class)
-    static class TestConfig {
     }
 }

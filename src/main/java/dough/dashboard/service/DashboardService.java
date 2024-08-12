@@ -35,7 +35,10 @@ public class DashboardService {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
 
-        final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(memberId, yearMonth);
+        final int year = yearMonth.getYear();
+        final int month = yearMonth.getMonthValue();
+
+        final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(memberId, year, month);
         final Long completedAllQuestsDateCount = getCompletedAllQuestsDateCount(completedQuestsCountElements);
         final Set<String> highestAverageCompletionDays = getHighestAverageCompletionDays(completedQuestsCountElements);
         final Long averageCompletion = getAverageCompletion(completedQuestsCountElements);

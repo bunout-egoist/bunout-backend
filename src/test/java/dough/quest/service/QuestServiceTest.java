@@ -1,6 +1,7 @@
 package dough.quest.service;
 
 import dough.burnout.domain.repository.BurnoutRepository;
+import dough.feedback.domain.repository.FeedbackRepository;
 import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.member.domain.repository.MemberRepository;
@@ -26,6 +27,8 @@ import java.util.List;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.feedback.fixture.CompletedQuestDetailFixture.COMPLETED_QUEST_DETAILS;
+import static dough.feedback.fixture.FeedbackFixture.FEEDBACK1;
+import static dough.feedback.fixture.FeedbackFixture.FEEDBACK2;
 import static dough.global.exception.ExceptionCode.*;
 import static dough.member.fixture.MemberFixture.MEMBER;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
@@ -57,6 +60,9 @@ public class QuestServiceTest {
 
     @Mock
     private BurnoutRepository burnoutRepository;
+
+    @Mock
+    private FeedbackRepository feedbackRepository;
 
     @DisplayName("퀘스트를 추가할 수 있다.")
     @Test

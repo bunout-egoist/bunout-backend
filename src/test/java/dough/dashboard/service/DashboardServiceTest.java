@@ -1,6 +1,7 @@
 package dough.dashboard.service;
 
 import dough.dashboard.dto.response.MonthlySummaryResponse;
+import dough.feedback.domain.repository.FeedbackRepository;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.CompletedQuestsCountElement;
@@ -21,8 +22,7 @@ import java.util.Set;
 
 import static dough.member.fixture.MemberFixture.MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,6 +37,9 @@ class DashboardServiceTest {
 
     @Mock
     private SelectedQuestRepository selectedQuestRepository;
+
+    @Mock
+    private FeedbackRepository feedbackRepository;
 
     @DisplayName("스페셜 퀘스트와 데일리 퀘스트의 총합을 조회할 수 있다.")
     @Test
@@ -63,7 +66,7 @@ class DashboardServiceTest {
         // given
         given(memberRepository.existsById(any()))
                 .willReturn(true);
-        given(selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(anyLong(), any()))
+        given(selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(anyLong(), anyInt(), anyInt()))
                 .willReturn(List.of(new CompletedQuestsCountElement(LocalDate.now(), 10L, 10L)));
 
         // when
