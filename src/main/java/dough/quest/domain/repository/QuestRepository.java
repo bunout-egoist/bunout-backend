@@ -17,4 +17,12 @@ public interface QuestRepository extends JpaRepository<Quest, Long> {
             WHERE quest.id = :questId
             """)
     void deleteByQuestId(@Param("questId") final Long questId);
+
+    @Modifying
+    @Query("""
+            SELECT quest
+            FROM Quest quest
+            WHERE quest.burnout.id = :burnoutId AND quest.questType = 'FIXED'
+            """)
+    List<Quest> findFixedQuestsByBurnoutId(@Param("burnoutId") final Long burnoutId);
 }

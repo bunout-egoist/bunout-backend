@@ -7,6 +7,8 @@ import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.type.QuestType;
 
+import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+
 public class FeedbackFixture {
 
     public static final Member MEMBER1 = new Member(
@@ -18,7 +20,7 @@ public class FeedbackFixture {
             "student",
             "male",
             2002,
-            "소보루"
+            ENTHUSIAST
     );
 
     public static final Member MEMBER2 = new Member(
@@ -30,7 +32,7 @@ public class FeedbackFixture {
             "student",
             "female",
             2000,
-            "소보루"
+            ENTHUSIAST
     );
 
     public static final Member MEMBER3 = new Member(
@@ -42,7 +44,7 @@ public class FeedbackFixture {
             "student",
             "female",
             2002,
-            "당근"
+            ENTHUSIAST
     );
 
     public static final Member MEMBER4 = new Member(
@@ -54,7 +56,7 @@ public class FeedbackFixture {
             "student",
             "male",
             1988,
-            "소보루"
+            ENTHUSIAST
     );
 
     public static final Feedback FEEDBACK1 = new Feedback(
@@ -66,7 +68,8 @@ public class FeedbackFixture {
                             "점심시간, 몸과 마음을 건강하게 유지하며",
                             "15분 운동하기",
                             QuestType.DAILY,
-                            3
+                            3,
+                            ENTHUSIAST
                     )
             ),
             "img1.png",
@@ -82,7 +85,8 @@ public class FeedbackFixture {
                             "아침에 일어나자마자 해야하는 것",
                             "집 주변 10분 산책하기",
                             QuestType.DAILY,
-                            1
+                            1,
+                            ENTHUSIAST
                     )
             ),
             "img2.png",
@@ -98,7 +102,8 @@ public class FeedbackFixture {
                             "자기전에",
                             "양치하기",
                             QuestType.DAILY,
-                            1
+                            1,
+                            ENTHUSIAST
                     )
             ),
             "img3.png",
@@ -114,7 +119,8 @@ public class FeedbackFixture {
                             "저녁시간, 조용히 앉아",
                             "5분간 명상하기",
                             QuestType.DAILY,
-                            1
+                            1,
+                            ENTHUSIAST
                     )
             ),
             "img4.png",

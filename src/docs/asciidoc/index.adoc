@@ -29,16 +29,29 @@ include::{snippets}/member-controller-test/update-member-info/response-fields.ad
 include::{snippets}/member-controller-test/update-member-info/response-body.adoc[]
 include::{snippets}/member-controller-test/update-member-info_-nickname-size-invalid/http-response.adoc[]
 
-=== 번아웃 유형 수정
+=== 번아웃 유형 재설정
 
 ==== Request
-include::{snippets}/member-controller-test/change-burnout-type/path-parameters.adoc[]
-include::{snippets}/member-controller-test/change-burnout-type/request-fields.adoc[]
-include::{snippets}/member-controller-test/change-burnout-type/http-request.adoc[]
+include::{snippets}/member-controller-test/update-burnout/path-parameters.adoc[]
+include::{snippets}/member-controller-test/update-burnout/request-fields.adoc[]
+include::{snippets}/member-controller-test/update-burnout/http-request.adoc[]
+include::{snippets}/member-controller-test/update-burnout_-burnout-null/http-request.adoc[]
 
 ==== Response
-include::{snippets}/member-controller-test/change-burnout-type/http-response.adoc[]
-include::{snippets}/member-controller-test/change-burnout-type_-burnout-type-null/http-response.adoc[]
+include::{snippets}/member-controller-test/update-burnout/http-response.adoc[]
+include::{snippets}/member-controller-test/update-burnout_-burnout-null/http-response.adoc[]
+
+=== 고정 퀘스트 재설정
+
+==== Request
+include::{snippets}/member-controller-test/update-fixed-quest/path-parameters.adoc[]
+include::{snippets}/member-controller-test/update-fixed-quest/request-fields.adoc[]
+include::{snippets}/member-controller-test/update-fixed-quest/http-request.adoc[]
+include::{snippets}/member-controller-test/update-fixed-quest_-fixed-quest-null/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-controller-test/update-fixed-quest/http-response.adoc[]
+include::{snippets}/member-controller-test/update-fixed-quest_-fixed-quest-null/http-response.adoc[]
 
 == Quest API
 
@@ -109,6 +122,19 @@ include::{snippets}/dashboard-controller-test/get-total-completed-quests/http-re
 ==== Response
 include::{snippets}/dashboard-controller-test/get-total-completed-quests/response-fields.adoc[]
 include::{snippets}/dashboard-controller-test/get-total-completed-quests/http-response.adoc[]
+
+== Feedback API
+
+=== 피드백 추가
+
+==== Request
+include::{snippets}/feedback-controller-test/create-feedback/path-parameters.adoc[]
+include::{snippets}/feedback-controller-test/create-feedback/request-fields.adoc[]
+include::{snippets}/feedback-controller-test/create-feedback/request-body.adoc[]
+
+==== Response
+include::{snippets}/feedback-controller-test/create-feedback/response-fields.adoc[]
+include::{snippets}/feedback-controller-test/create-feedback/response-body.adoc[]
 
 == Exception Codes
 include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]

@@ -1,5 +1,6 @@
 package dough.quest.service;
 
+import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.member.domain.repository.MemberRepository;
@@ -10,6 +11,7 @@ import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
+import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.QuestResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -22,10 +24,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 
+import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.feedback.fixture.CompletedQuestDetailFixture.COMPLETED_QUEST_DETAILS;
 import static dough.global.exception.ExceptionCode.*;
 import static dough.member.fixture.MemberFixture.MEMBER;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
+import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST2;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,6 +54,9 @@ public class QuestServiceTest {
 
     @Mock
     private SelectedQuestRepository selectedQuestRepository;
+
+    @Mock
+    private BurnoutRepository burnoutRepository;
 
     @DisplayName("퀘스트를 추가할 수 있다.")
     @Test
@@ -217,5 +224,22 @@ public class QuestServiceTest {
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(ALREADY_USED_QUEST_ID.getCode());
+    }
+
+    @DisplayName("번아웃 유형에 해당하는 고정퀘스트를 조회할 수 있다.")
+    @Test
+    void getFixedQuests() {
+        // given
+        given(burnoutRepository.existsById(any()))
+                .willReturn(true);
+        given(questRepository.findFixedQuestsByBurnoutId(anyLong()))
+                .willReturn(List.of(FIXED_QUEST1));
+
+        // when
+        final List<FixedQuestResponse> actualResponses = questService.getFixedQuests(ENTHUSIAST.getId());
+
+        // then
+        assertThat(actualResponses).usingRecursiveComparison()
+                .isEqualTo(List.of(FixedQuestResponse.of(FIXED_QUEST1)));
     }
 }
