@@ -27,7 +27,7 @@ public class TokenProvider {
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
     }
 
-    private String makeToken(Date expiry, Member user) {
+    private String makeToken(Date expiry, Member member) {
         Date now = new Date();
 
         return Jwts.builder()
@@ -35,8 +35,8 @@ public class TokenProvider {
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .setSubject(user.getEmail())
-                .claim("id", user.getSocialLoginId())
+                .setSubject(member.getEmail())
+                .claim("id", member.getId())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret_key())
                 .compact();
     }
