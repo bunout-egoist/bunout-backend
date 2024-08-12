@@ -4,6 +4,11 @@ import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
+import dough.keyword.domain.Keyword;
+import dough.keyword.dto.response.KeywordResponse;
+import dough.keyword.service.KeywordService;
+import dough.keyword.domain.type.ParticipationType;
+import dough.keyword.domain.type.PlaceType;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
@@ -16,7 +21,7 @@ import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.QuestResponse;
-import dough.quest.dto.response.TodayQuestResponse;
+import dough.quest.dto.response.TodayQuestListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +45,7 @@ public class QuestService {
     private final BurnoutRepository burnoutRepository;
     private final MemberRepository memberRepository;
 
-    public List<TodayQuestResponse> updateTodayQuests(final Long memberId) {
+    public List<TodayQuestListResponse> updateTodayQuests(final Long memberId) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -53,9 +58,13 @@ public class QuestService {
                     .forEach(todayQuest -> todayQuests.add(todayQuest));
         }
 
-        return todayQuests.stream()
-                .map(todayQuest -> TodayQuestResponse.of(todayQuest.getQuest()))
-                .toList();
+        final List<Keyword> keywords = todayQuests.stream()
+                .map(selectedQuest -> selectedQuest.getQuest().getKeyword())
+                .collect(Collectors.toList());
+
+        final String participationCode = ParticipationType.getParticipationCode(keywords);
+        final String placeCode = PlaceType.getPlaceCode(keywords);
+
     }
 
     private List<SelectedQuest> createTodayQuests(final Member member, final LocalDate currentDate) {

@@ -4,7 +4,7 @@ import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.QuestResponse;
-import dough.quest.dto.response.TodayQuestResponse;
+import dough.quest.dto.response.TodayQuestListResponse;
 import dough.quest.service.QuestService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +27,9 @@ public class QuestController {
     }
 
     @PostMapping("/today/{memberId}")
-    public ResponseEntity<List<TodayQuestResponse>> getTodayQuests(@PathVariable("memberId") final Long memberId) {
-        final List<TodayQuestResponse> todayQuestResponses = questService.updateTodayQuests(memberId);
-        return ResponseEntity.ok().body(todayQuestResponses);
+    public ResponseEntity<List<TodayQuestListResponse>> getTodayQuests(@PathVariable("memberId") final Long memberId) {
+        final List<TodayQuestListResponse> todayQuestRespons = questService.updateTodayQuests(memberId);
+        return ResponseEntity.ok().body(todayQuestRespons);
     }
 
     @PostMapping

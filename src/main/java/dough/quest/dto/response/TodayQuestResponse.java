@@ -8,15 +8,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TodayQuestResponse {
 
-    private final Boolean isOutside;
-    private final Boolean isGroup;
     private final String activity;
     private final String description;
 
     public static TodayQuestResponse of(final Quest quest) {
         return new TodayQuestResponse(
-                false,
-                false,
                 quest.getActivity(),
                 quest.getDescription()
         );
