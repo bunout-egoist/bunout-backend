@@ -46,6 +46,8 @@ public class SelectedQuest extends BaseEntity {
     @Enumerated(value = STRING)
     private QuestStatus questStatus = IN_PROGRESS;
 
+    private LocalDate dueDate;
+
     private LocalDate completedDate;
 
     public SelectedQuest(
@@ -58,6 +60,7 @@ public class SelectedQuest extends BaseEntity {
         this.member = member;
         this.quest = quest;
         this.feedback = feedback;
+        this.dueDate = LocalDate.now();
     }
 
     public SelectedQuest(
@@ -65,6 +68,10 @@ public class SelectedQuest extends BaseEntity {
             final Quest quest
     ) {
         this(null, member, quest, null);
+    }
+
+    public void updateDueDate(final LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 
     public void AddFeedbackToSelectedQuest(final Feedback feedback) {

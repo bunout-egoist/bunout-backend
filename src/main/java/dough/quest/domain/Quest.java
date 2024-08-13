@@ -2,6 +2,7 @@ package dough.quest.domain;
 
 import dough.burnout.domain.Burnout;
 import dough.global.BaseEntity;
+import dough.keyword.domain.Keyword;
 import dough.member.domain.Member;
 import dough.quest.domain.type.QuestType;
 import jakarta.persistence.*;
@@ -48,6 +49,10 @@ public class Quest extends BaseEntity {
     @JoinColumn(name = "burnout_id", nullable = false)
     private Burnout burnout;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "keyword_id", nullable = false)
+    private Keyword keyword;
+
     @OneToMany(mappedBy = "quest")
     private List<SelectedQuest> selectedQuests = new ArrayList<>();
 
@@ -60,7 +65,8 @@ public class Quest extends BaseEntity {
             final String activity,
             final QuestType questType,
             final Integer difficulty,
-            final Burnout burnout
+            final Burnout burnout,
+            final Keyword keyword
     ) {
         this.id = id;
         this.description = description;
@@ -68,6 +74,7 @@ public class Quest extends BaseEntity {
         this.questType = questType;
         this.difficulty = difficulty;
         this.burnout = burnout;
+        this.keyword = keyword;
     }
 
     public Quest(
@@ -75,8 +82,9 @@ public class Quest extends BaseEntity {
             final String activity,
             final QuestType questType,
             final Integer difficulty,
-            final Burnout burnout
+            final Burnout burnout,
+            final Keyword keyword
     ) {
-        this(null, description, activity, questType, difficulty, burnout);
+        this(null, description, activity, questType, difficulty, burnout, keyword);
     }
 }
