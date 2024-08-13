@@ -51,7 +51,7 @@ public class DashboardService {
         );
     }
 
-    public CompletedQuestsTotalResponse getTotalCompletedQuests(final Long memberId) {
+    public CompletedQuestsTotalResponse getCompletedQuestsTotal(final Long memberId) {
         if (!memberRepository.existsById(memberId)) {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
