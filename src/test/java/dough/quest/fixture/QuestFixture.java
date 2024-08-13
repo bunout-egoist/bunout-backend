@@ -3,6 +3,8 @@ package dough.quest.fixture;
 import dough.quest.domain.Quest;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.keyword.fixture.KeywordFixture.INSIDE_ALONE;
+import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
 import static dough.quest.domain.type.QuestType.DAILY;
 import static dough.quest.domain.type.QuestType.FIXED;
 
@@ -14,7 +16,8 @@ public class QuestFixture {
             "15분 운동하기",
             DAILY,
             5,
-            ENTHUSIAST
+            ENTHUSIAST,
+            OUTSIDE_ALONE
     );
 
     public static final Quest DAILY_QUEST2 = new Quest(
@@ -23,7 +26,8 @@ public class QuestFixture {
             "5분간 새로운 책 읽기",
             DAILY,
             2,
-            ENTHUSIAST
+            ENTHUSIAST,
+            INSIDE_ALONE
     );
 
     public static final Quest FIXED_QUEST1 = new Quest(
@@ -32,6 +36,7 @@ public class QuestFixture {
             "5분간 명상하기",
             FIXED,
             2,
-            ENTHUSIAST
+            ENTHUSIAST,
+            INSIDE_ALONE
     );
 }

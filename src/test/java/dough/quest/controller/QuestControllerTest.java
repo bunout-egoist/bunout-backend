@@ -2,10 +2,13 @@ package dough.quest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.AbstractControllerTest;
+import dough.keyword.KeywordCode;
+import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.QuestResponse;
+import dough.quest.dto.response.TodayQuestListResponse;
 import dough.quest.service.QuestService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,16 +22,19 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static dough.global.restdocs.RestDocsConfiguration.field;
+import static dough.keyword.domain.type.ParticipationType.ALONE;
+import static dough.keyword.domain.type.PlaceType.ANYWHERE;
 import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
+import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST2;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -213,6 +219,59 @@ class QuestControllerTest extends AbstractControllerTest {
                                 fieldWithPath("[0].activity")
                                         .type(STRING)
                                         .description("고정 퀘스트 활동 내용")
+                                        .attributes(field("constraint", "문자열"))
+                        )
+                ));
+    }
+
+    @DisplayName("오늘의 퀘스트를 받을 수 있다.")
+    @Test
+    void updateTodayQuests() throws Exception {
+        // given
+        final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
+        final TodayQuestListResponse todayQuestListResponse = TodayQuestListResponse.of(new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests);
+
+        when(questService.updateTodayQuests(anyLong()))
+                .thenReturn(todayQuestListResponse);
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(post("/api/v1/quests/today/{memberId}", 1L));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        pathParameters(
+                                parameterWithName("memberId")
+                                        .description("멤버 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("placeKeyword")
+                                        .type(STRING)
+                                        .description("장소 키워드")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("participationKeyword")
+                                        .type(STRING)
+                                        .description("누구와 키워드")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("todayQuests")
+                                        .type(ARRAY)
+                                        .description("오늘 퀘스트")
+                                        .attributes(field("constraint", "문자열 배열")),
+                                fieldWithPath("todayQuests[0].activity")
+                                        .type(STRING)
+                                        .description("고정 퀘스트 활동 내용")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("todayQuests[0].description")
+                                        .type(STRING)
+                                        .description("고정 퀘스트 설명")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("todayQuests[1].activity")
+                                        .type(STRING)
+                                        .description("고정 퀘스트 활동 내용")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("todayQuests[1].description")
+                                        .type(STRING)
+                                        .description("고정 퀘스트 설명")
                                         .attributes(field("constraint", "문자열"))
                         )
                 ));

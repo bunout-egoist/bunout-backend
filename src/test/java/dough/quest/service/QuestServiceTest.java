@@ -4,15 +4,18 @@ import dough.burnout.domain.repository.BurnoutRepository;
 import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
+import dough.keyword.KeywordCode;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
 import dough.quest.domain.QuestFeedback;
+import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.QuestResponse;
+import dough.quest.dto.response.TodayQuestListResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,13 +26,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.global.exception.ExceptionCode.*;
+import static dough.keyword.domain.type.ParticipationType.ALONE;
+import static dough.keyword.domain.type.ParticipationType.ANYONE;
+import static dough.keyword.domain.type.PlaceType.ANYWHERE;
 import static dough.member.fixture.MemberFixture.MEMBER;
 import static dough.quest.fixture.CompletedQuestElementFixture.QUEST_ELEMENT1;
-import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
-import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static dough.quest.fixture.QuestFixture.*;
+import static dough.quest.fixture.SelectedQuestFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -239,5 +246,24 @@ public class QuestServiceTest {
         // then
         assertThat(actualResponses).usingRecursiveComparison()
                 .isEqualTo(List.of(FixedQuestResponse.of(FIXED_QUEST1)));
+    }
+
+    @DisplayName("오늘의 퀘스트를 받을 수 있다.")
+    @Test
+    void updateTodayQuests() {
+        // given
+        final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
+
+        given(memberRepository.findById(anyLong()))
+                .willReturn(Optional.of(MEMBER));
+        given(selectedQuestRepository.findTodayDailyQuests(anyLong(), any()))
+                .willReturn(todayQuests);
+
+        // when
+        final TodayQuestListResponse actualResponse = questService.updateTodayQuests(MEMBER.getId());
+
+        // then
+        assertThat(actualResponse).usingRecursiveComparison()
+                .isEqualTo(TodayQuestListResponse.of(new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests));
     }
 }
