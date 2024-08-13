@@ -39,19 +39,20 @@ public class Notification {
 
     public Notification(
             final Long id,
-            final Boolean isChecked,
+            final Member member,
             final NotificationType notificationType
     ) {
         this.id = id;
-        this.isChecked = isChecked;
+        this.member = member;
+        this.isChecked = true;
         this.notificationType = notificationType;
     }
 
     public Notification(
-            final Boolean isChecked,
+            final Member member,
             final NotificationType notificationType
     ) {
-        this(null, isChecked, notificationType);
+        this(null, member, notificationType);
     }
 
     public void changeIsChecked() {
