@@ -21,7 +21,7 @@ public class NotificationController {
         return ResponseEntity.ok().body(notificationResponses);
     }
 
-    @PutMapping("/{memberId}")
+    @PutMapping("/notification/{memberId}")
     public ResponseEntity<Void> updateAllNotifications(@PathVariable("memberId") final Long memberId) {
         notificationService.updateAllNotifications(memberId);
         return ResponseEntity.noContent().build();
