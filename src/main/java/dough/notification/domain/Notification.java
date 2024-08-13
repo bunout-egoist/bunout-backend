@@ -1,5 +1,6 @@
 package dough.notification.domain;
 
+import dough.global.BaseEntity;
 import dough.member.domain.Member;
 import dough.notification.domain.type.NotificationType;
 import jakarta.persistence.*;
@@ -20,7 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @SQLDelete(sql = "UPDATE notification SET status = 'DELETED' where id = ?")
 @SQLRestriction("status = 'ACTIVE'")
-public class Notification {
+public class Notification extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
