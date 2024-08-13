@@ -62,10 +62,10 @@ public class QuestService {
         final CompletedQuestElements completedQuestElements = new CompletedQuestElements(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate));
         final Map<LocalDate, List<QuestFeedback>> questFeedbackMap = completedQuestElements.toQuestFeedbackMap();
 
-        return getWeeklySummaryResponse(questFeedbackMap);
+        return getWeeklySummaryResponses(questFeedbackMap);
     }
 
-    private List<WeeklySummaryResponse> getWeeklySummaryResponse(Map<LocalDate, List<QuestFeedback>> questFeedbackMap) {
+    private List<WeeklySummaryResponse> getWeeklySummaryResponses(Map<LocalDate, List<QuestFeedback>> questFeedbackMap) {
         return questFeedbackMap.entrySet()
                 .stream()
                 .map(map -> WeeklySummaryResponse.of(
