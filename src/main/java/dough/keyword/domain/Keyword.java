@@ -35,4 +35,12 @@ public class Keyword extends BaseEntity {
 
     @OneToMany(mappedBy = "keyword")
     private List<Quest> quests = new ArrayList<>();
+
+    public Keyword(
+            final Boolean isOutside,
+            final Boolean isGroup
+    ) {
+        this.isOutside = isOutside;
+        this.isGroup = isGroup;
+    }
 }

@@ -5,6 +5,7 @@ import dough.burnout.domain.repository.BurnoutRepository;
 import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
+import dough.keyword.KeywordCode;
 import dough.keyword.domain.Keyword;
 import dough.keyword.domain.type.ParticipationType;
 import dough.keyword.domain.type.PlaceType;
@@ -34,6 +35,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static dough.global.exception.ExceptionCode.*;
+import static dough.quest.domain.type.QuestType.DAILY;
 import static dough.quest.domain.type.QuestType.SPECIAL;
 import static java.time.DayOfWeek.*;
 
@@ -52,7 +54,6 @@ public class QuestService {
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate currentDate = LocalDate.now();
-
         final List<SelectedQuest> todayQuests = getTodayQuests(member, currentDate);
 
         if (todayQuests.isEmpty()) {
@@ -60,14 +61,9 @@ public class QuestService {
                     .forEach(todayQuest -> todayQuests.add(todayQuest));
         }
 
-        final List<Keyword> keywords = todayQuests.stream()
-                .map(selectedQuest -> selectedQuest.getQuest().getKeyword())
-                .collect(Collectors.toList());
+        final KeywordCode keywordCode = getKeywords(todayQuests);
 
-        final String participationCode = ParticipationType.getParticipationCode(keywords);
-        final String placeCode = PlaceType.getPlaceCode(keywords);
-
-        return TodayQuestListResponse.of(participationCode, placeCode, todayQuests);
+        return TodayQuestListResponse.of(keywordCode, todayQuests);
     }
 
     private List<SelectedQuest> createTodayQuests(final Member member, final LocalDate currentDate) {
@@ -80,6 +76,18 @@ public class QuestService {
         todayQuests.add(new SelectedQuest(member, member.getQuest()));
 
         return selectedQuestRepository.saveAll(todayQuests);
+    }
+
+    private KeywordCode getKeywords(final List<SelectedQuest> todayQuests) {
+        final List<Keyword> keywords = todayQuests.stream()
+                .filter(selectedQuest -> selectedQuest.getQuest().getQuestType().equals(DAILY))
+                .map(selectedQuest -> selectedQuest.getQuest().getKeyword())
+                .collect(Collectors.toList());
+
+        final String participationCode = ParticipationType.getParticipationCode(keywords);
+        final String placeCode = PlaceType.getPlaceCode(keywords);
+
+        return new KeywordCode(placeCode, participationCode);
     }
 
     private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
