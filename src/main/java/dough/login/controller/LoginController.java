@@ -105,7 +105,7 @@ public class LoginController {
             member = memberService.createMember(socialLoginId, SocialLoginType.KAKAO, null, RoleType.MEMBER);
         }
 
-        RefreshToken newRefreshToken = new RefreshToken(member.getId(), refreshToken);
+        RefreshToken newRefreshToken = new RefreshToken(member, refreshToken);
         refreshTokenRepository.save(newRefreshToken);
 
         String jwtToken = tokenProvider.generateToken(member, Duration.ofHours(1));

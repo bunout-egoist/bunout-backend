@@ -16,8 +16,8 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected token"));
     }
 
-    public RefreshToken findByUserId(Long userId) {
-        return refreshTokenRepository.findByUserId(userId)
+    public RefreshToken findByMemberId(Long memberId) {
+        return refreshTokenRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected token"));
     }
 

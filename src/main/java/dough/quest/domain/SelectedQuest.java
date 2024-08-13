@@ -48,6 +48,8 @@ public class SelectedQuest extends BaseEntity {
 
     private LocalDate dueDate;
 
+    private LocalDate completedDate;
+
     public SelectedQuest(
             final Long id,
             final Member member,

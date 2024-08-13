@@ -2,23 +2,23 @@ package dough.quest.service;
 
 import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
+import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
 import dough.keyword.domain.Keyword;
-import dough.keyword.dto.response.KeywordResponse;
-import dough.keyword.service.KeywordService;
 import dough.keyword.domain.type.ParticipationType;
 import dough.keyword.domain.type.PlaceType;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
+import dough.quest.domain.QuestFeedback;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.domain.type.QuestType;
+import dough.quest.dto.CompletedQuestElements;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
-import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.QuestResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
@@ -30,9 +30,11 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static dough.global.exception.ExceptionCode.*;
+import static dough.quest.domain.type.QuestType.SPECIAL;
 import static java.time.DayOfWeek.*;
 
 @Service
@@ -133,17 +135,30 @@ public class QuestService {
     }
 
     @Transactional(readOnly = true)
-    public List<CompletedQuestDetailResponse> getCompletedQuestDetail(final Long memberId, final LocalDate date) {
+    public List<WeeklySummaryResponse> getWeeklySummary(final Long memberId, final LocalDate date) {
         if (!memberRepository.existsById(memberId)) {
             throw new BadRequestException(NOT_FOUND_MEMBER_ID);
         }
 
-        List<SelectedQuest> selectedQuests = selectedQuestRepository.findCompletedQuestByMemberIdAndDate(memberId, date);
-        return selectedQuests.stream()
-                .map(selectedQuest -> CompletedQuestDetailResponse.of(
-                        selectedQuest.getQuest(),
-                        selectedQuest.getFeedback()
-                )).toList();
+        final LocalDate startDate = date.minusDays(3);
+        final LocalDate endDate = date.plusDays(3);
+        final CompletedQuestElements completedQuestElements = new CompletedQuestElements(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate));
+        final Map<LocalDate, List<QuestFeedback>> questFeedbackMap = completedQuestElements.toQuestFeedbackMap();
+
+        return getWeeklySummaryResponses(questFeedbackMap);
+    }
+
+    private List<WeeklySummaryResponse> getWeeklySummaryResponses(Map<LocalDate, List<QuestFeedback>> questFeedbackMap) {
+        return questFeedbackMap.entrySet()
+                .stream()
+                .map(map -> WeeklySummaryResponse.of(
+                        map.getKey(),
+                        map.getValue(),
+                        map.getValue().stream()
+                                .filter(questFeedback -> questFeedback.getQuest().getQuestType() != SPECIAL)
+                                .count()
+                ))
+                .collect(Collectors.toList());
     }
 
     public QuestResponse save(final QuestRequest questRequest) {

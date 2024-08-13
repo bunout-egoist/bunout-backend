@@ -35,10 +35,14 @@ include::{snippets}/member-controller-test/update-member-info_-nickname-size-inv
 include::{snippets}/member-controller-test/update-burnout/path-parameters.adoc[]
 include::{snippets}/member-controller-test/update-burnout/request-fields.adoc[]
 include::{snippets}/member-controller-test/update-burnout/http-request.adoc[]
-include::{snippets}/member-controller-test/update-burnout_-burnout-null/http-request.adoc[]
 
 ==== Response
 include::{snippets}/member-controller-test/update-burnout/http-response.adoc[]
+
+==== Request (번아웃 아이디를 입력하지 않았을 경우)
+include::{snippets}/member-controller-test/update-burnout_-burnout-null/http-request.adoc[]
+
+==== Response
 include::{snippets}/member-controller-test/update-burnout_-burnout-null/http-response.adoc[]
 
 === 고정 퀘스트 재설정
@@ -87,20 +91,42 @@ include::{snippets}/quest-controller-test/delete-quest/http-response.adoc[]
 
 == Dashboard API
 
-=== 달성 퀘스트 상세 조회
+=== 주간 분석
 
 ==== Request
-include::{snippets}/dashboard-controller-test/get-completed-quests-detail/path-parameters.adoc[]
-include::{snippets}/dashboard-controller-test/get-completed-quests-detail/http-request.adoc[]
+include::{snippets}/dashboard-controller-test/get-weekly-summary/path-parameters.adoc[]
+include::{snippets}/dashboard-controller-test/get-weekly-summary/http-request.adoc[]
 
 ==== Response
-include::{snippets}/dashboard-controller-test/get-completed-quests-detail/http-response.adoc[]
+include::{snippets}/dashboard-controller-test/get-weekly-summary/response-fields.adoc[]
+include::{snippets}/dashboard-controller-test/get-weekly-summary/http-response.adoc[]
 
 ==== Request (조회 날짜가 형식에 맞지 않을 경우)
-include::{snippets}/dashboard-controller-test/get-completed-quests-detail_-invalid-local-date-type/http-request.adoc[]
+include::{snippets}/dashboard-controller-test/get-weekly-summary_-invalid-local-date-type/http-request.adoc[]
 
 ==== Response
-include::{snippets}/dashboard-controller-test/get-completed-quests-detail_-invalid-local-date-type/http-response.adoc[]
+include::{snippets}/dashboard-controller-test/get-weekly-summary_-invalid-local-date-type/http-response.adoc[]
+
+=== 월간 분석
+
+==== Request
+include::{snippets}/dashboard-controller-test/get-monthly-summary/path-parameters.adoc[]
+include::{snippets}/dashboard-controller-test/get-monthly-summary/http-request.adoc[]
+
+==== Response
+include::{snippets}/dashboard-controller-test/get-monthly-summary/response-fields.adoc[]
+include::{snippets}/dashboard-controller-test/get-monthly-summary/response-body.adoc[]
+include::{snippets}/dashboard-controller-test/get-monthly-summary_-no-summary/response-body.adoc[]
+
+=== 퀘스트 총 개수
+
+==== Request
+include::{snippets}/dashboard-controller-test/get-total-completed-quests/path-parameters.adoc[]
+include::{snippets}/dashboard-controller-test/get-total-completed-quests/http-request.adoc[]
+
+==== Response
+include::{snippets}/dashboard-controller-test/get-total-completed-quests/response-fields.adoc[]
+include::{snippets}/dashboard-controller-test/get-total-completed-quests/http-response.adoc[]
 
 == Feedback API
 

@@ -4,6 +4,7 @@ import dough.feedback.domain.Feedback;
 import dough.feedback.domain.repository.FeedbackRepository;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
+import dough.login.domain.type.SocialLoginType;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
@@ -12,19 +13,13 @@ import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.domain.type.QuestStatus;
 import dough.quest.domain.type.QuestType;
 import dough.quest.service.QuestService;
-import dough.login.domain.type.SocialLoginType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockitoAnnotations;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -34,29 +29,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith({SpringExtension.class, MockitoExtension.class})
-@ContextConfiguration(classes = {FeedbackServiceTest.TestConfig.class})
+@ExtendWith(MockitoExtension.class)
+@Transactional
 class FeedbackServiceTest {
 
-    @Autowired
+    @InjectMocks
     private FeedbackService feedbackService;
 
-    @MockBean
-    private FeedbackRepository feedbackRepository;
-
-    @MockBean
-    private SelectedQuestRepository selectedQuestRepository;
-
-    @MockBean
-    private MemberRepository memberRepository;
-
-    @MockBean
+    @Mock
     private QuestService questService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    @Mock
+    private FeedbackRepository feedbackRepository;
+
+    @Mock
+    private SelectedQuestRepository selectedQuestRepository;
+
+    @Mock
+    private MemberRepository memberRepository;
 
     @DisplayName("피드백을 성공적으로 생성할 수 있다.")
     @Test
@@ -124,10 +114,5 @@ class FeedbackServiceTest {
 
         // when & then
         assertThrows(IllegalArgumentException.class, () -> feedbackService.createFeedback(questId, feedbackRequest));
-    }
-
-    @Configuration
-    @ComponentScan(basePackageClasses = FeedbackService.class)
-    static class TestConfig {
     }
 }

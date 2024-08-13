@@ -22,8 +22,8 @@ public class TokenService {
         if(!tokenProvider.validToken(refreshToken)) {
             throw new IllegalArgumentException("Unexpected token");
         }
-        Long userId = refreshTokenService.findByRefreshToken(refreshToken).getUserId();
-        Member user = memberService.findById(userId);
+        Long memberId = refreshTokenService.findByRefreshToken(refreshToken).getMember().getId();
+        Member user = memberService.findById(memberId);
 
         return tokenProvider.generateToken(user, Duration.ofHours(1));
     }
@@ -33,13 +33,13 @@ public class TokenService {
             throw new IllegalArgumentException("Invalid token");
         }
 
-        Long userId = refreshTokenService.findByRefreshToken(refreshToken).getUserId();
-        Member user = memberService.findById(userId);
+        Long memberId = refreshTokenService.findByRefreshToken(refreshToken).getMember().getId();
+        Member member = memberService.findById(memberId);
 
-        String newAccessToken = tokenProvider.generateToken(user, Duration.ofHours(1));
-        String newRefreshToken = tokenProvider.generateToken(user, Duration.ofDays(14));
+        String newAccessToken = tokenProvider.generateToken(member, Duration.ofHours(1));
+        String newRefreshToken = tokenProvider.generateToken(member, Duration.ofDays(14));
 
-        RefreshToken savedRefreshToken = refreshTokenService.findByUserId(userId);
+        RefreshToken savedRefreshToken = refreshTokenService.findByMemberId(member.getId());
 
         savedRefreshToken.update(newRefreshToken);
         refreshTokenService.save(savedRefreshToken);
