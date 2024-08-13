@@ -44,7 +44,6 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              SELECT sq
              FROM SelectedQuest sq
              JOIN FETCH sq.quest
-             JOIN FETCH sq.member
              WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.dueDate = :date
             """)
     List<SelectedQuest> findTodayDailyQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);

@@ -20,7 +20,16 @@ public enum PlaceType {
         this.code = code;
     }
 
-    public static String getPlaceCode(final List<Keyword> keyword) {
-        keyword.forEach();
+    public static String getPlaceCode(final List<Keyword> keywords) {
+        final Map<Boolean, List<Keyword>> groupedKeyword = keywords.stream()
+                .collect(Collectors.groupingBy(Keyword::getIsOutside));
+
+        if (groupedKeyword.size() == 2) {
+            return ANYWHERE.getCode();
+        }
+
+        return groupedKeyword.containsKey(true)
+                ? OUTSIDE.getCode()
+                : INSIDE.getCode();
     }
 }

@@ -1,10 +1,12 @@
 package dough.quest.dto.response;
 
+import dough.keyword.domain.Keyword;
 import dough.quest.domain.SelectedQuest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor

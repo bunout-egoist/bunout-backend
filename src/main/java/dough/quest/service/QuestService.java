@@ -47,7 +47,7 @@ public class QuestService {
     private final BurnoutRepository burnoutRepository;
     private final MemberRepository memberRepository;
 
-    public List<TodayQuestListResponse> updateTodayQuests(final Long memberId) {
+    public TodayQuestListResponse updateTodayQuests(final Long memberId) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -67,6 +67,7 @@ public class QuestService {
         final String participationCode = ParticipationType.getParticipationCode(keywords);
         final String placeCode = PlaceType.getPlaceCode(keywords);
 
+        return TodayQuestListResponse.of(participationCode, placeCode, todayQuests);
     }
 
     private List<SelectedQuest> createTodayQuests(final Member member, final LocalDate currentDate) {
@@ -104,6 +105,7 @@ public class QuestService {
         int neededCount = 2 - incompleteDailyQuests.size();
 
         if (neededCount > 0) {
+            // TODO keyword가 같은 퀘스트 위주로 반환
             questRepository.findTodayDailyQuestsByMemberId(member.getId(), member.getLevel(), member.getBurnout().getId())
                     .stream()
                     .limit(neededCount)
