@@ -34,8 +34,9 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
     @Query("""
              SELECT sq
              FROM SelectedQuest sq
-             JOIN FETCH sq.quest
-             JOIN FETCH sq.member
+             JOIN FETCH sq.quest q
+             JOIN FETCH sq.member m
+             JOIN FETCH q.keyword k
              WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.quest.questType = 'DAILY' AND sq.dueDate = :date
             """)
     List<SelectedQuest> findIncompleteDailyQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
@@ -43,7 +44,8 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
     @Query("""
              SELECT sq
              FROM SelectedQuest sq
-             JOIN FETCH sq.quest
+             JOIN FETCH sq.quest q
+             JOIN FETCH q.keyword k
              WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.dueDate = :date
             """)
     List<SelectedQuest> findTodayDailyQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
@@ -57,6 +59,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              )
              FROM SelectedQuest sq
              LEFT JOIN sq.quest q
+             LEFT JOIN q.keyword k
              WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED'
             """)
     CompletedQuestsTotalElement getCompletedQuestsTotalByMemberId(@Param("memberId") final Long memberId);

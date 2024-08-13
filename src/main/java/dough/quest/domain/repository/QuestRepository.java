@@ -38,7 +38,7 @@ public interface QuestRepository extends JpaRepository<Quest, Long> {
             SELECT q
             FROM Quest q
             LEFT JOIN FETCH q.selectedQuests sq
-            LEFT JOIN FETCH q.keyword
+            LEFT JOIN FETCH q.keyword k
             WHERE q.questType = 'DAILY' AND q.difficulty = :level AND q.burnout.id = :burnoutId
             AND (sq.id IS NULL OR sq.member.id = :memberId)
             ORDER BY q.difficulty ASC
