@@ -64,7 +64,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
 
         // when
         final ResultActions resultActions = mockMvc.perform(
-                get("/api/v1/dashboard/quests/{memberId}/{searchDate}", 1L, LocalDate.now()));
+                get("/api/v1/dashboard/quests/{memberId}/{searchDate}", 1L, LocalDate.of(2024, 8, 13)));
 
         // then
         resultActions.andExpect(status().isOk())
