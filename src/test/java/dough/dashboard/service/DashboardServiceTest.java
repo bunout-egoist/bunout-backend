@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Set;
 
 import static dough.member.fixture.MemberFixture.MEMBER;
+import static java.time.format.TextStyle.SHORT;
+import static java.util.Locale.KOREAN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -73,7 +75,7 @@ class DashboardServiceTest {
                 .isEqualTo(MonthlySummaryResponse.of(
                         List.of(new CompletedQuestsCountElement(LocalDate.now(), 10L, 10L)),
                         0L,
-                        Set.of("수"),
+                        Set.of(LocalDate.now().getDayOfWeek().getDisplayName(SHORT, KOREAN)),
                         10L
                 ));
     }
