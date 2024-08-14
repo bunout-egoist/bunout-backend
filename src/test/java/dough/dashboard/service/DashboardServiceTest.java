@@ -77,7 +77,7 @@ class DashboardServiceTest {
                 .isEqualTo(MonthlySummaryResponse.of(
                         List.of(new CompletedQuestsCountElement(LocalDate.now(), 10L, 10L)),
                         0L,
-                        Set.of("월"),
+                        Set.of("수"),
                         10L
                 ));
     }
