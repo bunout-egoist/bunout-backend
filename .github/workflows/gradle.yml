@@ -65,6 +65,9 @@ jobs:
           touch ./application-oauth.yml 
           echo "${{ secrets.YML_OAUTH }}" > ./application-oauth.yml
         shell: bash
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
         
       - name: Build with Gradle
         run: ./gradlew build -x test
