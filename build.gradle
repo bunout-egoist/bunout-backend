@@ -89,7 +89,7 @@ tasks.resolveMainClassName {
 tasks.register('copyDocument', Copy) {
 	dependsOn asciidoctor
 
-	from file("build/docs/asciidoc")
+	from file("build/docs/asciidoc/")
 	into file("build/resources/main/static/docs")
 }
 
