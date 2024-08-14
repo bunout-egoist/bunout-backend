@@ -70,37 +70,48 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
+jar {
+	enabled = false
+}
+
+tasks.named('testClasses') {
+	doFirst {
+		delete file('build/docs/asciidoc')
+	}
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 	outputs.dir snippetsDir
+	finalizedBy asciidoctor
 }
 
-asciidoctor {
-	configurations 'asciidoctorExt'
-	baseDirFollowsSourceFile()
-	inputs.dir snippetsDir
+tasks.named('asciidoctor') {
 	dependsOn test
+	configurations 'asciidoctorExt'
+	inputs.dir snippetsDir
+	finalizedBy copyDocument
+	doFirst {
+		delete file('src/main/resources/static/docs')
+	}
 }
 
-tasks.resolveMainClassName {
-	dependsOn 'copyDocument'
-}
-
-tasks.register('copyDocument', Copy) {
+task copyDocument(type: Copy) {
 	dependsOn asciidoctor
-
-	from file("build/docs/asciidoc/")
-	into file("build/resources/main/static/docs")
+	from file('build/docs/asciidoc')
+	into file('src/main/resources/static/docs')
 }
 
 bootJar {
-	dependsOn copyDocument
+	dependsOn asciidoctor
+	doFirst {
+		delete file('static/docs')
+	}
+	from("${asciidoctor.outputDir}") {
+		into 'static/docs'
+	}
 }
 
 build {
-	dependsOn copyDocument
-}
-
-jar {
-	enabled = false
+	finalizedBy copyDocument
 }
