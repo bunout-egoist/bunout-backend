@@ -1,7 +1,6 @@
 package dough.dashboard.service;
 
 import dough.dashboard.dto.response.MonthlySummaryResponse;
-import dough.feedback.domain.repository.FeedbackRepository;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.CompletedQuestsCountElement;
@@ -37,9 +36,6 @@ class DashboardServiceTest {
 
     @Mock
     private SelectedQuestRepository selectedQuestRepository;
-
-    @Mock
-    private FeedbackRepository feedbackRepository;
 
     @DisplayName("스페셜 퀘스트와 데일리 퀘스트의 총합을 조회할 수 있다.")
     @Test
