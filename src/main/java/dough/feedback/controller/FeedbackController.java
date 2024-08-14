@@ -1,4 +1,4 @@
-package dough.feedback.domain.controller;
+package dough.feedback.controller;
 
 import dough.feedback.domain.Feedback;
 import dough.feedback.dto.request.FeedbackRequest;
