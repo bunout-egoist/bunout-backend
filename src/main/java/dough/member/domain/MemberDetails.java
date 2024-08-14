@@ -3,6 +3,7 @@ package dough.member.domain;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -12,13 +13,13 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 public class MemberDetails implements UserDetails, OAuth2User {
-    @Getter
+
     private final Member member;
     private final Map<String, Object> attributes; // OAuth2User가 요구하는 attributes 필드 추가
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority("ROLE" + member.getRole().name()));
     }
 
     @Override
@@ -59,6 +60,10 @@ public class MemberDetails implements UserDetails, OAuth2User {
     @Override
     public String getName() {
         return member.getSocialLoginId(); // OAuth2User의 필수 메서드, SocialLoginId를 반환
+    }
+
+    public Member getMember() {
+        return member;
     }
 
 }
