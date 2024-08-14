@@ -60,15 +60,21 @@ asciidoctor {
 	dependsOn test
 }
 
-asciidoctor.doFirst {
-	delete file('src/main/resources/static/docs')
+tasks.resolveMainClassName {
+	dependsOn 'copyDocument'
 }
 
-task copyDocument(type: Copy) {
+tasks.register('copyDocument', Copy) {
 	dependsOn asciidoctor
+
 	from file("build/docs/asciidoc")
-	into file("src/main/resources/static/docs")
+	into file("build/resources/main/static/docs")
 }
+
+bootJar {
+	dependsOn copyDocument
+}
+
 
 build {
 	dependsOn copyDocument
