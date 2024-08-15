@@ -2,10 +2,8 @@ package dough.login.service;
 
 
 import dough.global.exception.BadRequestException;
-import dough.global.exception.ExceptionCode;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.domain.RefreshToken;
-import dough.login.dto.request.GetAccessTokenRequest;
 import dough.login.dto.response.TokensResponse;
 import dough.member.domain.Member;
 import dough.member.service.MemberService;
@@ -51,5 +49,4 @@ public class TokenService {
 
         return new TokensResponse(newAccessToken, newRefreshToken);
     }
-    
 }
