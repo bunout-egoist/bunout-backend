@@ -27,9 +27,4 @@ public class RefreshTokenService {
     public RefreshToken save(RefreshToken refreshToken) {
         return refreshTokenRepository.save(refreshToken);
     }
-
-    public RefreshToken findBySocialLoginId(String socialLoginId) {
-        return refreshTokenRepository.findBySocialLoginId(socialLoginId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-    }
 }
