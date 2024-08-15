@@ -25,7 +25,7 @@ public class TokenService {
         Long memberId = refreshTokenService.findByRefreshToken(refreshToken).getMember().getId();
         Member user = memberService.findById(memberId);
 
-        return tokenProvider.generateToken(member, Duration.ofHours(1));
+        return tokenProvider.generateToken(user, Duration.ofHours(1));
     }
 
     public TokensResponse refreshTokens(String refreshToken) {
