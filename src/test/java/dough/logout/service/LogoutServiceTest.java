@@ -39,33 +39,33 @@ public class LogoutServiceTest {
     private TokenProvider tokenProvider;
 
     private String validAccessToken;
-    private Long memberId;
+    private String socialLoginId;
     private Member member;
     private RefreshToken refreshToken;
 
     @BeforeEach
     public void setUp() {
         validAccessToken = "validAccessToken";
-        memberId = 1L;
+        socialLoginId = "socialLoginId";
+        refreshToken = new RefreshToken(socialLoginId, "refreshToken");
         member = MemberFixture.MEMBER;
-        refreshToken = new RefreshToken(member, "refreshToken");
     }
 
     @Test
     public void logout() {
-        // given
+        // Given
         DeleteAccessTokenRequest request = new DeleteAccessTokenRequest();
         request.setAccessToken(validAccessToken);
 
         when(tokenProvider.validToken(validAccessToken)).thenReturn(true);
-        when(tokenProvider.getMemberIdFromToken(validAccessToken)).thenReturn(memberId);
-        when(refreshTokenRepository.findByMemberId(memberId)).thenReturn(Optional.of(refreshToken));
-        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+        when(tokenProvider.getUserIdFromToken(validAccessToken)).thenReturn(socialLoginId);
+        when(refreshTokenRepository.findBySocialLoginId(socialLoginId)).thenReturn(Optional.of(refreshToken));
+        when(memberRepository.findBySocialLoginId(socialLoginId)).thenReturn(Optional.of(member));
 
-        // when
+        // When
         DeleteAccessTokenResponse response = logoutService.logout(request);
 
-        // then
+        // Then
         verify(refreshTokenRepository, times(1)).delete(refreshToken);
         assertEquals(member.getId(), response.getId());
         assertEquals(member.getNickname(), response.getNickname());
@@ -73,14 +73,15 @@ public class LogoutServiceTest {
 
     @Test
     public void logoutWithInvalidToken() {
-        // given
+        // Given
         String invalidAccessToken = "invalidAccessToken";
         DeleteAccessTokenRequest request = new DeleteAccessTokenRequest();
         request.setAccessToken(invalidAccessToken);
 
+        // Only the stub necessary for this test
         when(tokenProvider.validToken(invalidAccessToken)).thenReturn(false);
 
-        // when & then
+        // When & Then
         BadRequestException exception = assertThrows(BadRequestException.class, () -> {
             logoutService.logout(request);
         });
@@ -90,16 +91,17 @@ public class LogoutServiceTest {
 
     @Test
     public void logoutWithNonExistingMember() {
-        // given
-        Long nonExistingMemberId = 99L;
+        // Given
+        String nonExistingSocialLoginId = "nonExistingSocialLoginId";
         DeleteAccessTokenRequest request = new DeleteAccessTokenRequest();
         request.setAccessToken(validAccessToken);
 
+        // Only the stubs necessary for this test
         when(tokenProvider.validToken(validAccessToken)).thenReturn(true);
-        when(tokenProvider.getMemberIdFromToken(validAccessToken)).thenReturn(nonExistingMemberId);
-        when(refreshTokenRepository.findByMemberId(nonExistingMemberId)).thenReturn(Optional.empty());
+        when(tokenProvider.getUserIdFromToken(validAccessToken)).thenReturn(nonExistingSocialLoginId);
+        when(refreshTokenRepository.findBySocialLoginId(nonExistingSocialLoginId)).thenReturn(Optional.empty());
 
-        // when & then
+        // When & Then
         BadRequestException exception = assertThrows(BadRequestException.class, () -> {
             logoutService.logout(request);
         });
