@@ -32,16 +32,16 @@ public class LogoutService {
             throw new BadRequestException(INVALID_REQUEST);
         }
 
-        String socialLoginId = tokenProvider.getUserIdFromToken(accessToken);
+        Long memberId = tokenProvider.getMemberIdFromToken(accessToken);
 
-        RefreshToken refreshToken = refreshTokenRepository.findBySocialLoginId(socialLoginId)
+        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         if(refreshToken != null) {
             refreshTokenRepository.delete(refreshToken);
         }
 
-        Member member = memberRepository.findBySocialLoginId(socialLoginId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         return DeleteAccessTokenResponse.from(member);

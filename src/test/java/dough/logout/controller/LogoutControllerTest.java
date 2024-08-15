@@ -52,10 +52,10 @@ public class LogoutControllerTest {
     @Test
     @WithMockUser
     public void testLogout() throws Exception {
-        // Given
+        // given
         given(logoutService.logout(any(DeleteAccessTokenRequest.class))).willReturn(deleteAccessTokenResponse);
 
-        // When & Then
+        // when & then
         mockMvc.perform(delete("/api/v1/logout")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(deleteAccessTokenRequest))
