@@ -1,20 +1,21 @@
 package dough.quest.service;
 
 import dough.burnout.domain.repository.BurnoutRepository;
-import dough.feedback.domain.repository.FeedbackRepository;
+import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
+import dough.keyword.KeywordCode;
 import dough.member.domain.repository.MemberRepository;
-import dough.member.dto.response.MemberInfoResponse;
 import dough.quest.domain.Quest;
+import dough.quest.domain.QuestFeedback;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
-import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.QuestResponse;
+import dough.quest.dto.response.TodayQuestListResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,14 +26,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
-import static dough.feedback.fixture.CompletedQuestDetailFixture.COMPLETED_QUEST_DETAILS;
 import static dough.global.exception.ExceptionCode.*;
+import static dough.keyword.domain.type.ParticipationType.ALONE;
+import static dough.keyword.domain.type.ParticipationType.ANYONE;
+import static dough.keyword.domain.type.PlaceType.ANYWHERE;
 import static dough.member.fixture.MemberFixture.MEMBER;
+import static dough.quest.fixture.CompletedQuestElementFixture.QUEST_ELEMENT1;
 import static dough.quest.fixture.QuestFixture.*;
-import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
-import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST2;
+import static dough.quest.fixture.SelectedQuestFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -101,37 +105,35 @@ public class QuestServiceTest {
 
     @DisplayName("달성한 퀘스트의 상세 정보를 조회할 수 있다.")
     @Test
-    void getCompletedQuestDetail() {
+    void getWeeklySummary() {
         // given
-        final List<SelectedQuest> selectedQuests = List.of(COMPLETED_QUEST1, COMPLETED_QUEST2);
+        final Long memberId = 1L;
+
+        final LocalDate date = LocalDate.now();
+        final LocalDate startDate = date.minusDays(3);
+        final LocalDate endDate = date.plusDays(3);
 
         given(memberRepository.existsById(any()))
                 .willReturn(true);
-        given(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(anyLong(), any()))
-                .willReturn(selectedQuests);
+        given(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate))
+                .willReturn(List.of(QUEST_ELEMENT1));
 
         // when
-        List<CompletedQuestDetailResponse> actualResponse = questService.getCompletedQuestsDetail(MEMBER.getId(), LocalDate.now());
+        final List<WeeklySummaryResponse> actualResponse = questService.getWeeklySummary(MEMBER.getId(), LocalDate.now());
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(COMPLETED_QUEST_DETAILS.stream()
-                        .map(completedQuestDetail ->
-                                CompletedQuestDetailResponse.of(
-                                        completedQuestDetail.quest,
-                                        completedQuestDetail.feedback
-                                ))
-                        .toList());
+                .isEqualTo(List.of(WeeklySummaryResponse.of(LocalDate.of(2024, 8, 11), List.of(new QuestFeedback(DAILY_QUEST1, "https://~")), 1L)));
     }
 
     @DisplayName("멤버 아이디가 존재하지 않을 경우 예외가 발생한다.")
     @Test
-    void getCompletedQuestDetail_NotFoundMemberId() {
+    void getWeeklySummary_NotFoundMemberId() {
         // given
         Long id = 1L;
 
         // given & when & then
-        assertThatThrownBy(() -> questService.getCompletedQuestsDetail(id, any()))
+        assertThatThrownBy(() -> questService.getWeeklySummary(id, any()))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_MEMBER_ID.getCode());
@@ -244,5 +246,24 @@ public class QuestServiceTest {
         // then
         assertThat(actualResponses).usingRecursiveComparison()
                 .isEqualTo(List.of(FixedQuestResponse.of(FIXED_QUEST1)));
+    }
+
+    @DisplayName("오늘의 퀘스트를 받을 수 있다.")
+    @Test
+    void updateTodayQuests() {
+        // given
+        final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
+
+        given(memberRepository.findById(anyLong()))
+                .willReturn(Optional.of(MEMBER));
+        given(selectedQuestRepository.findTodayDailyQuests(anyLong(), any()))
+                .willReturn(todayQuests);
+
+        // when
+        final TodayQuestListResponse actualResponse = questService.updateTodayQuests(MEMBER.getId());
+
+        // then
+        assertThat(actualResponse).usingRecursiveComparison()
+                .isEqualTo(TodayQuestListResponse.of(new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests));
     }
 }

@@ -19,6 +19,11 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected token"));
     }
 
+    public RefreshToken findByMemberId(Long memberId) {
+        return refreshTokenRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Unexpected token"));
+    }
+
     public RefreshToken save(RefreshToken refreshToken) {
         return refreshTokenRepository.save(refreshToken);
     }

@@ -1,6 +1,7 @@
 package dough.dashboard.controller;
 
 import dough.dashboard.dto.response.MonthlySummaryResponse;
+import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.dashboard.service.DashboardService;
 import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.CompletedQuestsTotalResponse;
@@ -26,17 +27,17 @@ public class DashboardController {
     public final DashboardService dashboardService;
 
     @GetMapping("/quests/{memberId}/{searchDate}")
-    public ResponseEntity<List<CompletedQuestDetailResponse>> getCompletedQuestsDetail(
+    public ResponseEntity<List<WeeklySummaryResponse>> getWeeklySummary(
             @PathVariable("memberId") final Long memberId,
             @PathVariable("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate date
     ) {
-        final List<CompletedQuestDetailResponse> detailResponse = questService.getCompletedQuestsDetail(memberId, date);
+        final List<WeeklySummaryResponse> detailResponse = questService.getWeeklySummary(memberId, date);
         return ResponseEntity.ok().body(detailResponse);
     }
 
     @GetMapping("/total/{memberId}")
-    public ResponseEntity<CompletedQuestsTotalResponse> getTotalCompletedQuests(@PathVariable("memberId") final Long memberId) {
-        final CompletedQuestsTotalResponse completedQuestsTotalResponse = dashboardService.getTotalCompletedQuests(memberId);
+    public ResponseEntity<CompletedQuestsTotalResponse> getCompletedQuestsTotal(@PathVariable("memberId") final Long memberId) {
+        final CompletedQuestsTotalResponse completedQuestsTotalResponse = dashboardService.getCompletedQuestsTotal(memberId);
         return ResponseEntity.ok().body(completedQuestsTotalResponse);
     }
 

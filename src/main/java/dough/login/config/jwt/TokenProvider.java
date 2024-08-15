@@ -27,7 +27,7 @@ public class TokenProvider {
         return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
     }
 
-    private String makeToken(Date expiry, Member user) {
+    private String makeToken(Date expiry, Member member) {
         Date now = new Date();
 
         return Jwts.builder()
@@ -35,9 +35,9 @@ public class TokenProvider {
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .setSubject(user.getEmail())
-                .claim("id", user.getSocialLoginId())
-                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret_key())
+                .setSubject(member.getEmail())
+                .claim("id", member.getId())
+                .signWith(SignatureAlgorithm.RS256, jwtProperties.getSecret_key())
                 .compact();
     }
 
@@ -62,9 +62,9 @@ public class TokenProvider {
                 (), "", authorities), token, authorities);
     }
   
-    public String getUserIdFromToken(String token) {
+    public Long getMemberIdFromToken(String token) {
         Claims claims = getClaims(token);
-        return claims.get("id", String.class);
+        return claims.get("id", Long.class);
     }
 
     private Claims getClaims(String token) {

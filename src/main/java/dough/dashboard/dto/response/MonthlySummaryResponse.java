@@ -12,7 +12,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class MonthlySummaryResponse {
 
-
     private final List<CompletedQuestsCountDetailResponse> countDetails;
     private final Long completedAllQuestsDateCount;
     private final Set<String> highestAverageCompletionDay;
@@ -24,12 +23,12 @@ public class MonthlySummaryResponse {
             final Set<String> highestAverageCompletionDay,
             final Long averageCompletion
     ) {
-        final List<CompletedQuestsCountDetailResponse> dateCompletedCountDateRespons = completedQuestsCountDateElements.stream()
+        final List<CompletedQuestsCountDetailResponse> dateCompletedCountDateResponses = completedQuestsCountDateElements.stream()
                 .map(element -> CompletedQuestsCountDetailResponse.of(element.getCompletedDate(), element.getDailyCount()))
                 .toList();
 
         return new MonthlySummaryResponse(
-                dateCompletedCountDateRespons,
+                dateCompletedCountDateResponses,
                 completedAllQuestsDateCount,
                 highestAverageCompletionDay,
                 averageCompletion

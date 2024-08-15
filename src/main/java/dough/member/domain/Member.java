@@ -5,6 +5,7 @@ import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
 import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
+import dough.notification.domain.Notification;
 import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
@@ -44,6 +45,9 @@ public class Member extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "member")
     private List<Feedback> Feedbacks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Notification> notifications = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "burnout_id", nullable = false)

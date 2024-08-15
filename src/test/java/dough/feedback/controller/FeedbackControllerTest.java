@@ -1,7 +1,6 @@
 package dough.feedback.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dough.feedback.domain.controller.FeedbackController;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.feedback.feedbackFixture.FeedbackFixture;

@@ -1,6 +1,5 @@
 package dough.login.controller;
 
-import dough.DoughApplication;
 import dough.global.AbstractControllerTest;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.dto.request.SignUpRequest;
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,7 +16,6 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -28,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SignUpController.class)
+@MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureMockMvc
 public class SignUpControllerTest extends AbstractControllerTest {
 
@@ -38,6 +35,7 @@ public class SignUpControllerTest extends AbstractControllerTest {
     private SignUpService signUpService;
 
     private MemberInfoResponse memberInfoResponse;
+
     private String validAccessToken;
 
     @BeforeEach
@@ -66,7 +64,7 @@ public class SignUpControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.nickname").value(memberInfoResponse.getNickname()));
     }
 
-    @DisplayName("유효하지 않으 토큰이 있을 경우 401에러를 반환합니다.")
+    @DisplayName("유효하지 않은 토큰이 있을 경우 401에러를 반환합니다.")
     @Test()
     @WithMockUser
     public void testSignupInfo_withInvalidToken() throws Exception {

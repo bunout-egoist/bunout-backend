@@ -2,6 +2,7 @@ package dough.quest.domain.repository;
 
 import dough.global.annotation.TimeTrace;
 import dough.quest.domain.SelectedQuest;
+import dough.quest.dto.CompletedQuestElement;
 import dough.quest.dto.CompletedQuestsCountElement;
 import dough.quest.dto.CompletedQuestsTotalElement;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,16 +16,13 @@ import java.util.Optional;
 public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Long> {
 
     @Query("""
-             SELECT sq 
+             SELECT new dough.quest.dto.CompletedQuestElement(q, f.imageUrl, sq.completedDate)
              FROM SelectedQuest sq
-             LEFT JOIN FETCH  sq.feedback f
-             LEFT JOIN FETCH sq.quest q
-             WHERE sq.member.id = :memberId AND FUNCTION('DATE', sq.createdAt) = :date AND sq.questStatus = 'COMPLETED'
+             LEFT JOIN sq.feedback f
+             LEFT JOIN sq.quest q
+             WHERE sq.member.id = :memberId AND sq.completedDate BETWEEN :startDate AND :endDate AND sq.questStatus = 'COMPLETED'
             """)
-    List<SelectedQuest> findCompletedQuestsByMemberIdAndDate(
-            @Param("memberId") final Long memberId,
-            @Param("date") final LocalDate date
-    );
+    List<CompletedQuestElement> findCompletedQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("startDate") final LocalDate startDate, @Param("endDate") final LocalDate endDate);
 
     @Query("""
              SELECT CASE WHEN COUNT(sq) > 0 THEN true ELSE false END 
@@ -32,6 +30,25 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              WHERE sq.quest.id = :questId
             """)
     Boolean existsByQuestId(final Long questId);
+
+    @Query("""
+             SELECT sq
+             FROM SelectedQuest sq
+             JOIN FETCH sq.quest q
+             JOIN FETCH sq.member m
+             JOIN FETCH q.keyword k
+             WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.quest.questType = 'DAILY' AND sq.dueDate = :date
+            """)
+    List<SelectedQuest> findIncompleteDailyQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
+
+    @Query("""
+             SELECT sq
+             FROM SelectedQuest sq
+             JOIN FETCH sq.quest q
+             JOIN FETCH q.keyword k
+             WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.dueDate = :date
+            """)
+    List<SelectedQuest> findTodayDailyQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
 
     Optional<SelectedQuest> findByQuestId(Long questId);
 
@@ -42,6 +59,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              )
              FROM SelectedQuest sq
              LEFT JOIN sq.quest q
+             LEFT JOIN q.keyword k
              WHERE sq.member.id = :memberId AND sq.questStatus = 'COMPLETED'
             """)
     CompletedQuestsTotalElement getCompletedQuestsTotalByMemberId(@Param("memberId") final Long memberId);

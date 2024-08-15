@@ -23,4 +23,15 @@ public class SelectedQuestFixture {
             DAILY_QUEST2,
             FEEDBACK2
     );
+
+    public static final SelectedQuest IN_PROGRESS_QUEST1 = new SelectedQuest(
+            MEMBER,
+            DAILY_QUEST1
+    );
+
+
+    public static final SelectedQuest IN_PROGRESS_QUEST2 = new SelectedQuest(
+            MEMBER,
+            DAILY_QUEST2
+    );
 }

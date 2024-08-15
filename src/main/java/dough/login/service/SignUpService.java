@@ -18,16 +18,16 @@ public class SignUpService {
 
     public MemberInfoResponse updateMemberInfo(SignUpRequest signUpRequest) {
         String accessToken = signUpRequest.getAccessToken();
-        String socialLoginId = tokenProvider.getUserIdFromToken(accessToken);
+        Long member_id = tokenProvider.getMemberIdFromToken(accessToken);
 
-        final Member member = memberRepository.findBySocialLoginId(socialLoginId)
+        final Member member = memberRepository.findById(member_id)
                 .orElseThrow(UserNotFoundException::new);
 
         member.updateMember(
-                member.getNickname(),
-                member.getGender(),
-                member.getBirthYear(),
-                member.getOccupation()
+                signUpRequest.getNickname(),
+                signUpRequest.getGender(),
+                signUpRequest.getBirth_year(),
+                signUpRequest.getOccupation()
         );
 
         return MemberInfoResponse.from(memberRepository.save(member));

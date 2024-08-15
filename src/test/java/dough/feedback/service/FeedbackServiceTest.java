@@ -4,6 +4,7 @@ import dough.feedback.domain.Feedback;
 import dough.feedback.domain.repository.FeedbackRepository;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
+import dough.login.domain.type.SocialLoginType;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
@@ -12,26 +13,19 @@ import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.domain.type.QuestStatus;
 import dough.quest.domain.type.QuestType;
 import dough.quest.service.QuestService;
-import dough.login.domain.type.SocialLoginType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.keyword.fixture.KeywordFixture.INSIDE_ALONE;
+import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -66,7 +60,7 @@ class FeedbackServiceTest {
         Member member = new Member(1L, "JohnDoe", "john123", SocialLoginType.KAKAO, "john@example.com",
                 "Developer", "Male", 1990, ENTHUSIAST);
         SelectedQuest selectedQuest = new SelectedQuest(member, new Quest(1L, "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기", QuestType.DAILY, 3, ENTHUSIAST));
+                "15분 운동하기", QuestType.DAILY, 3, ENTHUSIAST, OUTSIDE_ALONE));
         Feedback feedback = new Feedback(member, selectedQuest, feedbackRequest.getImageUrl(), feedbackRequest.getDifficulty());
 
         when(selectedQuestRepository.findByQuestId(questId)).thenReturn(Optional.of(selectedQuest));
@@ -115,7 +109,7 @@ class FeedbackServiceTest {
         Member member = new Member(1L, "JohnDoe", "john123", SocialLoginType.APPLE, "john@example.com",
                 "Developer", "Male", 1990, ENTHUSIAST);
         SelectedQuest selectedQuest = new SelectedQuest(member, new Quest(1L, "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기", QuestType.DAILY, 3, ENTHUSIAST));
+                "15분 운동하기", QuestType.DAILY, 3, ENTHUSIAST, INSIDE_ALONE));
 
         when(selectedQuestRepository.findByQuestId(questId)).thenReturn(Optional.of(selectedQuest));
         when(memberRepository.findById(member.getId())).thenReturn(Optional.empty());

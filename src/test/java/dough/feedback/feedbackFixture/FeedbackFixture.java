@@ -8,6 +8,8 @@ import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.type.QuestType;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.keyword.fixture.KeywordFixture.INSIDE_ALONE;
+import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
 
 public class FeedbackFixture {
 
@@ -70,7 +72,8 @@ public class FeedbackFixture {
                             "15분 운동하기",
                             QuestType.DAILY,
                             3,
-                            ENTHUSIAST
+                            ENTHUSIAST,
+                            OUTSIDE_ALONE
                     )
             ),
             "img1.png",
@@ -88,7 +91,8 @@ public class FeedbackFixture {
                             "집 주변 10분 산책하기",
                             QuestType.DAILY,
                             1,
-                            ENTHUSIAST
+                            ENTHUSIAST,
+                            OUTSIDE_ALONE
                     )
             ),
             "img2.png",
@@ -105,7 +109,8 @@ public class FeedbackFixture {
                             "양치하기",
                             QuestType.DAILY,
                             1,
-                            ENTHUSIAST
+                            ENTHUSIAST,
+                            INSIDE_ALONE
                     )
             ),
             "img3.png",
@@ -122,7 +127,8 @@ public class FeedbackFixture {
                             "5분간 명상하기",
                             QuestType.DAILY,
                             1,
-                            ENTHUSIAST
+                            ENTHUSIAST,
+                            INSIDE_ALONE
                     )
             ),
             "img4.png",

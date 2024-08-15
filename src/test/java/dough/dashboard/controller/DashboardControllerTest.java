@@ -1,11 +1,11 @@
 package dough.dashboard.controller;
 
 import dough.dashboard.dto.response.MonthlySummaryResponse;
+import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.dashboard.service.DashboardService;
 import dough.global.AbstractControllerTest;
-import dough.member.dto.request.MemberInfoRequest;
+import dough.quest.domain.QuestFeedback;
 import dough.quest.dto.CompletedQuestsCountElement;
-import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.CompletedQuestsTotalResponse;
 import dough.quest.service.QuestService;
 import org.junit.jupiter.api.DisplayName;
@@ -21,14 +21,12 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.Set;
 
-import static dough.feedback.fixture.CompletedQuestDetailFixture.COMPLETED_QUEST_DETAILS;
 import static dough.global.restdocs.RestDocsConfiguration.field;
+import static dough.quest.fixture.QuestFixture.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -52,23 +50,21 @@ public class DashboardControllerTest extends AbstractControllerTest {
                 memberId, YearMonth.of(2024, 8)));
     }
 
-    @DisplayName("달성한 퀘스트의 상세 정보를 조회할 수 있다.")
+    @DisplayName("주간 분석을 받을 수 있다.")
     @Test
-    void getCompletedQuestsDetail() throws Exception {
+    void getWeeklySummary() throws Exception {
         // given
-        final List<CompletedQuestDetailResponse> detailResponses = COMPLETED_QUEST_DETAILS.stream()
-                .map(completedQuestDetail ->
-                        CompletedQuestDetailResponse.of(
-                                completedQuestDetail.quest,
-                                completedQuestDetail.feedback
-                        )).toList();
+        final List<WeeklySummaryResponse> actualResponse = List.of(
+                WeeklySummaryResponse.of(LocalDate.of(2024, 8, 11), List.of(new QuestFeedback(DAILY_QUEST1, "https://~"), new QuestFeedback(DAILY_QUEST2, "https://~")), 2L),
+                WeeklySummaryResponse.of(LocalDate.of(2024, 8, 14), List.of(new QuestFeedback(FIXED_QUEST1, "https://~")), 1L)
+        );
 
-        when(questService.getCompletedQuestsDetail(anyLong(), any()))
-                .thenReturn(detailResponses);
+        when(questService.getWeeklySummary(anyLong(), any()))
+                .thenReturn(actualResponse);
 
         // when
         final ResultActions resultActions = mockMvc.perform(
-                get("/api/v1/dashboard/quests/{memberId}/{searchDate}", 1L, LocalDate.now()));
+                get("/api/v1/dashboard/quests/{memberId}/{searchDate}", 1L, LocalDate.of(2024, 8, 13)));
 
         // then
         resultActions.andExpect(status().isOk())
@@ -80,64 +76,88 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .description("조회 날짜")
                         ),
                         responseFields(
-                                fieldWithPath("[].id")
-                                        .type(NUMBER)
-                                        .description("피드백 아이디")
-                                        .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("[].imageUrl")
+                                fieldWithPath("[0].completedDate")
+                                        .type(STRING)
+                                        .description("완료 날짜 (yyyy-MM-dd)")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[0].questDetails[0].imageUrl")
                                         .type(STRING)
                                         .description("피드백 이미지 URL")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[].description")
+                                fieldWithPath("[0].questDetails[0].description")
                                         .type(STRING)
                                         .description("퀘스트 설명")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[].activity")
+                                fieldWithPath("[0].questDetails[0].activity")
                                         .type(STRING)
                                         .description("퀘스트 활동 내용")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[].questType")
+                                fieldWithPath("[0].questDetails[0].questType")
                                         .type(STRING)
                                         .description("퀘스트 타입 (데일리/스페셜)")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[].id")
-                                        .type(NUMBER)
-                                        .description("피드백 아이디")
-                                        .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("[].imageUrl")
+                                fieldWithPath("[0].questDetails[1].imageUrl")
                                         .type(STRING)
                                         .description("피드백 이미지 URL")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[].description")
+                                fieldWithPath("[0].questDetails[1].description")
                                         .type(STRING)
                                         .description("퀘스트 설명")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[].activity")
+                                fieldWithPath("[0].questDetails[1].activity")
                                         .type(STRING)
                                         .description("퀘스트 활동 내용")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[].questType")
+                                fieldWithPath("[0].questDetails[1].questType")
                                         .type(STRING)
                                         .description("퀘스트 타입 (데일리/스페셜)")
-                                        .attributes(field("constraint", "문자열"))
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[0].dailyCount")
+                                        .type(NUMBER)
+                                        .description("완료한 퀘스트 개수")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("[1].completedDate")
+                                        .type(STRING)
+                                        .description("완료 날짜 (yyyy-MM-dd)")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[1].questDetails[0].imageUrl")
+                                        .type(STRING)
+                                        .description("피드백 이미지 URL")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[1].questDetails[0].description")
+                                        .type(STRING)
+                                        .description("퀘스트 설명")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[1].questDetails[0].activity")
+                                        .type(STRING)
+                                        .description("퀘스트 활동 내용")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[1].questDetails[0].questType")
+                                        .type(STRING)
+                                        .description("퀘스트 타입 (데일리/스페셜)")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[1].dailyCount")
+                                        .type(NUMBER)
+                                        .description("완료한 퀘스트 개수")
+                                        .attributes(field("constraint", "양의 정수"))
                         )
                 ));
     }
 
     @DisplayName("조회 날짜 타입이 맞지 않을 경우 예외가 발생한다.")
     @Test
-    void getCompletedQuestsDetail_InvalidLocalDateType() throws Exception {
+    void getWeeklySummary_InvalidLocalDateType() throws Exception {
         mockMvc.perform(get("/api/v1/dashboard/quests/{memberId}/{searchDate}", 1, "2024-07"))
                 .andExpect(status().isBadRequest());
     }
 
     @DisplayName("스페셜 퀘스트와 데일리 퀘스트의 총합을 조회할 수 있다.")
     @Test
-    void getTotalCompletedQuests() throws Exception {
+    void getCompletedQuestsTotal() throws Exception {
         // given
         final CompletedQuestsTotalResponse totalResponse = CompletedQuestsTotalResponse.of(50L, 40L);
 
-        when(dashboardService.getTotalCompletedQuests(anyLong()))
+        when(dashboardService.getCompletedQuestsTotal(anyLong()))
                 .thenReturn(totalResponse);
 
         // when
@@ -243,7 +263,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                 parameterWithName("memberId")
                                         .description("멤버 아이디"),
                                 parameterWithName("yearMonth")
-                                        .description("연월")
+                                        .description("연월 (yyyy-MM)")
                         ),
                         responseFields(
                                 fieldWithPath("countDetails")
