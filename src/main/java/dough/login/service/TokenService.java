@@ -1,6 +1,7 @@
 package dough.login.service;
 
 
+import dough.global.exception.BadRequestException;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.domain.RefreshToken;
 import dough.login.dto.response.TokensResponse;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
+import static dough.global.exception.ExceptionCode.INTERNAL_SEVER_ERROR;
+
 @RequiredArgsConstructor
 @Service
 public class TokenService {
@@ -20,7 +23,7 @@ public class TokenService {
 
     public String createNewAccessToken(String refreshToken) {
         if(!tokenProvider.validToken(refreshToken)) {
-            throw new IllegalArgumentException("Unexpected token");
+            throw new BadRequestException(INTERNAL_SEVER_ERROR);
         }
         Long memberId = refreshTokenService.findByRefreshToken(refreshToken).getMember().getId();
         Member user = memberService.findById(memberId);
@@ -30,7 +33,7 @@ public class TokenService {
 
     public TokensResponse refreshTokens(String refreshToken) {
         if (!tokenProvider.validToken(refreshToken)) {
-            throw new IllegalArgumentException("Invalid token");
+            throw new BadRequestException(INTERNAL_SEVER_ERROR);
         }
 
         Long memberId = refreshTokenService.findByRefreshToken(refreshToken).getMember().getId();
