@@ -121,7 +121,7 @@ public class AppleLoginService {
                 .setExpiration(expirationDate)
                 .setAudience("https://appleid.apple.com")
                 .setSubject(clientId)
-                .signWith(SignatureAlgorithm.ES256, getPrivateKey())
+                .signWith(getPrivateKey(), SignatureAlgorithm.ES256)
                 .compact();
     }
 
