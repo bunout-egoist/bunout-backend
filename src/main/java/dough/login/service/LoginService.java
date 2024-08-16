@@ -49,8 +49,4 @@ public class LoginService {
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
 
-    public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
-    }
 }
