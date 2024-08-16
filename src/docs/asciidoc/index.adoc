@@ -165,23 +165,16 @@ include::{snippets}/notification-controller-test/get-all-notifications/http-requ
 include::{snippets}/notification-controller-test/get-all-notifications/response-fields.adoc[]
 include::{snippets}/notification-controller-test/get-all-notifications/response-body.adoc[]
 
-=== 알람 전체 업데이트
+=== 알람 업데이트
 
 ==== Request
-include::{snippets}/notification-controller-test/update-all-notifications/path-parameters.adoc[]
-include::{snippets}/notification-controller-test/update-all-notifications/http-request.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/path-parameters.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/request-fields.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/http-request.adoc[]
 
 ==== Response
-include::{snippets}/notification-controller-test/update-all-notifications/http-response.adoc[]
-
-=== 알람 단일 업데이트
-
-==== Request
-include::{snippets}/notification-controller-test/update-notification/path-parameters.adoc[]
-include::{snippets}/notification-controller-test/update-notification/http-request.adoc[]
-
-==== Response
-include::{snippets}/notification-controller-test/update-notification/http-response.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/response-fields.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/http-response.adoc[]
 
 == Exception Codes
 include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]
