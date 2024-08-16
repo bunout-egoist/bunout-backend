@@ -4,11 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.exception.ExceptionResponse;
 import dough.login.config.jwt.TokenProvider;
+import dough.login.domain.AppleToken;
 import dough.login.domain.RefreshToken;
 import dough.login.domain.repository.RefreshTokenRepository;
 import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
 import dough.login.dto.response.KakaoTokenResponseDto;
+import dough.login.dto.response.TokensResponse;
+import dough.login.service.AppleLoginService;
 import dough.login.service.LoginService;
 import dough.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,6 +54,7 @@ public class LoginController {
 
     private final WebClient webClient = WebClient.create();
     private final RefreshTokenRepository refreshTokenRepository;
+    private final AppleLoginService appleLoginService;
 
     @PostMapping("/login/kakao")
     public ResponseEntity<?> loginWithKakao(@RequestBody Map<String, String> request) {
@@ -116,5 +124,12 @@ public class LoginController {
         tokens.put("jwtRefreshToken", jwtRefreshToken);
 
         return ResponseEntity.ok(tokens);
+    }
+
+    @PostMapping("/login/apple")
+    public ResponseEntity<?> loginWithApple(@RequestBody Map<String, String> request) {
+        AppleToken.Response appleResponse = appleLoginService.appleLogin(request);
+
+        return ResponseEntity.ok(new TokensResponse(appleResponse.getAccessToken(), appleResponse.getRefreshToken()));
     }
 }
