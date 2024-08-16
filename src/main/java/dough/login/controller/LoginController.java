@@ -25,9 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,9 +45,6 @@ public class LoginController {
 
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
     private  String kakaoRedirectUri;
-
-    @Value("${spring.security.oauth2.client.provider.kakao.token-uri}")
-    private  String kakaoAccessTokenUri;
 
     private final WebClient webClient = WebClient.create();
     private final RefreshTokenRepository refreshTokenRepository;
