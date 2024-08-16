@@ -62,19 +62,26 @@ include::{snippets}/member-controller-test/update-fixed-quest_-fixed-quest-null/
 === 오늘 퀘스트 업데이트
 
 ==== Request
-
 include::{snippets}/quest-controller-test/update-today-quests/path-parameters.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/http-request.adoc[]
 
 === Response
-
 include::{snippets}/quest-controller-test/update-today-quests/response-fields.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/response-body.adoc[]
+
+=== 고정 퀘스트 조회
+
+==== Request
+include::{snippets}/quest-controller-test/get-fixed-quests/path-parameters.adoc[]
+include::{snippets}/quest-controller-test/get-fixed-quests/http-request.adoc[]
+
+==== Response
+include::{snippets}/quest-controller-test/get-fixed-quests/response-fields.adoc[]
+include::{snippets}/quest-controller-test/get-fixed-quests/response-body.adoc[]
 
 === 퀘스트 추가
 
 ==== Request
-
 include::{snippets}/quest-controller-test/create-quest/request-fields.adoc[]
 include::{snippets}/quest-controller-test/create-quest/http-request.adoc[]
 
@@ -165,23 +172,16 @@ include::{snippets}/notification-controller-test/get-all-notifications/http-requ
 include::{snippets}/notification-controller-test/get-all-notifications/response-fields.adoc[]
 include::{snippets}/notification-controller-test/get-all-notifications/response-body.adoc[]
 
-=== 알람 전체 업데이트
+=== 알람 업데이트
 
 ==== Request
-include::{snippets}/notification-controller-test/update-all-notifications/path-parameters.adoc[]
-include::{snippets}/notification-controller-test/update-all-notifications/http-request.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/path-parameters.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/request-fields.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/http-request.adoc[]
 
 ==== Response
-include::{snippets}/notification-controller-test/update-all-notifications/http-response.adoc[]
-
-=== 알람 단일 업데이트
-
-==== Request
-include::{snippets}/notification-controller-test/update-notification/path-parameters.adoc[]
-include::{snippets}/notification-controller-test/update-notification/http-request.adoc[]
-
-==== Response
-include::{snippets}/notification-controller-test/update-notification/http-response.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/response-fields.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/http-response.adoc[]
 
 == Exception Codes
 include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]

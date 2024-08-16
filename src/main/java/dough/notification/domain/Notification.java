@@ -56,7 +56,11 @@ public class Notification extends BaseEntity {
         this(null, member, notificationType);
     }
 
-    public void changeIsChecked() {
-        this.isChecked = !isChecked;
+    public void changeIsChecked(final Boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
+    public Boolean isSameIsChecked(final Boolean isChecked) {
+        return this.isChecked.equals(isChecked);
     }
 }

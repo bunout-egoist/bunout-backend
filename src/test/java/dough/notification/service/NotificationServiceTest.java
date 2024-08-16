@@ -3,6 +3,8 @@ package dough.notification.service;
 import dough.member.domain.repository.MemberRepository;
 import dough.notification.NotificationRepository;
 import dough.notification.domain.Notification;
+import dough.notification.dto.request.NotificationUpdateRequest;
+import dough.notification.dto.request.NotificationsUpdateRequest;
 import dough.notification.dto.response.NotificationResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -56,46 +58,30 @@ public class NotificationServiceTest {
                 .isEqualTo(List.of(NotificationResponse.of(DAILY_NOTIFICATION)));
     }
 
-    @DisplayName("단일 알람을 업데이트 할 수 있다.")
+    @DisplayName("알람을 업데이트 할 수 있다.")
     @Test
-    void update() {
+    void updateNotifications() {
         // given
         final Notification updatedNotification = new Notification(MEMBER, DAILY_QUEST);
-        updatedNotification.changeIsChecked();
+        updatedNotification.changeIsChecked(false);
 
-        given(notificationRepository.findById(anyLong()))
-                .willReturn(Optional.of(DAILY_NOTIFICATION));
-        given(notificationRepository.save(any()))
-                .willReturn(updatedNotification);
-
-        // when
-        notificationService.update(DAILY_NOTIFICATION.getId());
-
-        // then
-        verify(notificationRepository).findById(anyLong());
-        verify(notificationRepository).save(any());
-    }
-
-    @DisplayName("모든 알람을 업데이트 할 수 있다.")
-    @Test
-    void updateAllNotifications() {
-        // given
-        final Notification updatedNotification = new Notification(MEMBER, DAILY_QUEST);
-        updatedNotification.changeIsChecked();
+        final NotificationsUpdateRequest notificationsUpdateRequest = new NotificationsUpdateRequest(List.of(
+                new NotificationUpdateRequest(DAILY_NOTIFICATION.getId(), false)
+        ));
 
         given(memberRepository.findById(any()))
                 .willReturn(Optional.of(MEMBER));
-        given(notificationRepository.findAllByMemberId(anyLong()))
+        given(notificationRepository.findAllByMemberIdAndNotificationIds(anyLong(), any()))
                 .willReturn(List.of(DAILY_NOTIFICATION));
         given(notificationRepository.saveAll(any()))
                 .willReturn(List.of(updatedNotification));
 
         // when
-        notificationService.updateAllNotifications(MEMBER.getId());
+        notificationService.updateNotifications(DAILY_NOTIFICATION.getId(), notificationsUpdateRequest);
 
         // then
         verify(memberRepository).findById(anyLong());
-        verify(notificationRepository).findAllByMemberId(anyLong());
+        verify(notificationRepository).findAllByMemberIdAndNotificationIds(anyLong(), any());
         verify(notificationRepository).saveAll(any());
     }
 }

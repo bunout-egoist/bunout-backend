@@ -14,13 +14,13 @@ public class NotificationFixture {
     );
 
     public static final Notification SPECIAL_NOTIFICATION = new Notification(
-            1L,
+            2L,
             MEMBER,
             SPECIAL_QUEST
     );
 
     public static final Notification REMAINING_NOTIFICATION = new Notification(
-            1L,
+            3L,
             MEMBER,
             REMAINING_QUEST
     );
