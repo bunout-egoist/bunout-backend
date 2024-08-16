@@ -42,10 +42,10 @@ public class NotificationService {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        final List<Notification> notifications = notificationRepository.findAllByMemberId(member.getId());
-
         final Map<Long, Boolean> isCheckedOfId = notificationsUpdateRequest.getNotifications().stream()
                 .collect(Collectors.toMap(NotificationUpdateRequest::getId, NotificationUpdateRequest::getIsChecked));
+
+        final List<Notification> notifications = notificationRepository.findAllByMemberIdAndNotificationIds(member.getId(), isCheckedOfId.keySet());
 
         validateNotifications(isCheckedOfId.keySet(), notifications);
 
@@ -61,7 +61,11 @@ public class NotificationService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
-        final List<Notification> savedNotifications = notificationRepository.saveAll(updatedNotifications);
+        notificationRepository.saveAll(updatedNotifications);
+
+        // TODO 더 좋은 방법이 없을지
+        final List<Notification> savedNotifications = notificationRepository.findAllByMemberId(member.getId());
+
         return getNotificationsResponse(savedNotifications);
     }
 
@@ -71,11 +75,13 @@ public class NotificationService {
                 .collect(Collectors.toList());
     }
 
-    private void validateNotifications(final Set<Long> notificationIds, final List<Notification> notifications) {
-        notifications.forEach(notification -> {
-            if (!notificationIds.contains(notification.getId())) {
-                throw new BadRequestException(NOT_FOUND_NOTIFICATION_ID);
-            }
-        });
+    private void validateNotifications(final Set<Long> notificationIdsSet, final List<Notification> notifications) {
+        final Set<Long> notificationIds = notifications.stream()
+                .map(Notification::getId)
+                .collect(Collectors.toSet());
+
+        if (!notificationIds.containsAll(notificationIdsSet)) {
+            throw new BadRequestException(NOT_FOUND_NOTIFICATION_ID);
+        }
     }
 }
