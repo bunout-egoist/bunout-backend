@@ -62,19 +62,26 @@ include::{snippets}/member-controller-test/update-fixed-quest_-fixed-quest-null/
 === 오늘 퀘스트 업데이트
 
 ==== Request
-
 include::{snippets}/quest-controller-test/update-today-quests/path-parameters.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/http-request.adoc[]
 
 === Response
-
 include::{snippets}/quest-controller-test/update-today-quests/response-fields.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/response-body.adoc[]
+
+=== 고정 퀘스트 조회
+
+==== Request
+include::{snippets}/quest-controller-test/get-fixed-quests/path-parameters.adoc[]
+include::{snippets}/quest-controller-test/get-fixed-quests/http-request.adoc[]
+
+==== Response
+include::{snippets}/quest-controller-test/get-fixed-quests/response-fields.adoc[]
+include::{snippets}/quest-controller-test/get-fixed-quests/response-body.adoc[]
 
 === 퀘스트 추가
 
 ==== Request
-
 include::{snippets}/quest-controller-test/create-quest/request-fields.adoc[]
 include::{snippets}/quest-controller-test/create-quest/http-request.adoc[]
 
