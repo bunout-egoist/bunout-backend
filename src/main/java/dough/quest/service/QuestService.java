@@ -217,28 +217,27 @@ public class QuestService {
         questRepository.save(updateQuest);
     }
 
-    public void delete(Long questId) {
-        if (!questRepository.existsById(questId)) {
-            throw new BadRequestException(NOT_FOUND_QUEST_ID);
-        }
+    public void delete(final Long questId) {
+        final Quest quest = questRepository.findById(questId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
 
-        checkQuestInUse(questId);
+        checkQuestInUse(quest);
 
         questRepository.deleteByQuestId(questId);
     }
 
-    private void checkQuestInUse(final Long questId) {
-        if (selectedQuestRepository.existsByQuestId(questId)) {
+    private void checkQuestInUse(final Quest quest) {
+        if (selectedQuestRepository.existsByQuest(quest)) {
             throw new BadRequestException(ALREADY_USED_QUEST_ID);
         }
     }
-
-//    public void completeSelectedQuestWithFeedback(Long selectedQuestId, Feedback feedback) {
-//        selectedQuestRepository.updateFeedbackAndStatus(selectedQuestId, feedback);
-//    }
 
     public void completeSelectedQuestWithFeedback(final SelectedQuest selectedQuest, final Feedback feedback) {
         selectedQuest.AddFeedbackToSelectedQuest(feedback);
         selectedQuestRepository.save(selectedQuest);
     }
+
+    //    public void completeSelectedQuestWithFeedback(Long selectedQuestId, Feedback feedback) {
+//        selectedQuestRepository.updateFeedbackAndStatus(selectedQuestId, feedback);
+//    }
 }
