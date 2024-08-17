@@ -22,7 +22,6 @@ import dough.quest.dto.CompletedQuestElements;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestResponse;
-import dough.quest.dto.response.QuestResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -173,7 +172,7 @@ public class QuestService {
                 .collect(Collectors.toList());
     }
 
-    public QuestResponse save(final QuestRequest questRequest) {
+    public void save(final QuestRequest questRequest) {
         final Keyword keyword = keywordRepository.findByIsGroupAndIsOutside(questRequest.getIsGroup(), questRequest.getIsOutside())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_KEYWORD_ID));
 
@@ -190,8 +189,7 @@ public class QuestService {
                 keyword
         );
 
-        final Quest quest = questRepository.save(newQuest);
-        return QuestResponse.of(quest);
+        questRepository.save(newQuest);
     }
 
     public void update(final Long questId, final QuestUpdateRequest questUpdateRequest) {

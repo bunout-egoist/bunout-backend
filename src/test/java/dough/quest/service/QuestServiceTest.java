@@ -5,6 +5,7 @@ import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.keyword.KeywordCode;
+import dough.keyword.domain.repository.KeywordRepository;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
 import dough.quest.domain.QuestFeedback;
@@ -14,7 +15,6 @@ import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestResponse;
-import dough.quest.dto.response.QuestResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -31,16 +31,17 @@ import java.util.Optional;
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.global.exception.ExceptionCode.*;
 import static dough.keyword.domain.type.ParticipationType.ALONE;
-import static dough.keyword.domain.type.ParticipationType.ANYONE;
 import static dough.keyword.domain.type.PlaceType.ANYWHERE;
+import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
 import static dough.member.fixture.MemberFixture.MEMBER;
 import static dough.quest.fixture.CompletedQuestElementFixture.QUEST_ELEMENT1;
-import static dough.quest.fixture.QuestFixture.*;
-import static dough.quest.fixture.SelectedQuestFixture.*;
+import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
+import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
+import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST2;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -63,6 +64,9 @@ public class QuestServiceTest {
     @Mock
     private BurnoutRepository burnoutRepository;
 
+    @Mock
+    private KeywordRepository keywordRepository;
+
     @DisplayName("퀘스트를 추가할 수 있다.")
     @Test
     void save() {
@@ -71,18 +75,26 @@ public class QuestServiceTest {
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "15분 운동하기",
                 "데일리",
-                3
+                3,
+                true,
+                false,
+                "열광형"
         );
 
+        given(keywordRepository.findByIsGroupAndIsOutside(anyBoolean(), anyBoolean()))
+                .willReturn(Optional.of(OUTSIDE_ALONE));
+        given(burnoutRepository.findByName(anyString()))
+                .willReturn(Optional.of(ENTHUSIAST));
         given(questRepository.save(any(Quest.class)))
                 .willReturn(DAILY_QUEST1);
 
         // when
-        final QuestResponse questResponse = questService.save(questRequest);
+        questService.save(questRequest);
 
         // then
-        assertThat(questResponse).usingRecursiveComparison()
-                .isEqualTo(QuestResponse.of(DAILY_QUEST1));
+        verify(keywordRepository).findByIsGroupAndIsOutside(anyBoolean(), anyBoolean());
+        verify(burnoutRepository).findByName(anyString());
+        verify(questRepository).save(any());
     }
 
     @DisplayName("퀘스트 타입이 맞지 않을 경우 예외가 발생한다.")
@@ -93,8 +105,16 @@ public class QuestServiceTest {
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "15분 운동하기",
                 "퀘스트 타입 오류",
-                3
+                3,
+                true,
+                false,
+                "열광형"
         );
+
+        given(keywordRepository.findByIsGroupAndIsOutside(anyBoolean(), anyBoolean()))
+                .willReturn(Optional.of(OUTSIDE_ALONE));
+        given(burnoutRepository.findByName(anyString()))
+                .willReturn(Optional.of(ENTHUSIAST));
 
         // when & then
         assertThatThrownBy(() -> questService.save(questRequest))
@@ -147,11 +167,18 @@ public class QuestServiceTest {
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "20분 운동하기",
                 "스페셜",
-                4
+                4,
+                true,
+                false,
+                "열광형"
         );
 
         given(questRepository.existsById(any()))
                 .willReturn(true);
+        given(keywordRepository.findByIsGroupAndIsOutside(anyBoolean(), anyBoolean()))
+                .willReturn(Optional.of(OUTSIDE_ALONE));
+        given(burnoutRepository.findByName(anyString()))
+                .willReturn(Optional.of(ENTHUSIAST));
         given(questRepository.save(any()))
                 .willReturn(DAILY_QUEST1);
 
@@ -160,6 +187,8 @@ public class QuestServiceTest {
 
         // then
         verify(questRepository).existsById(any());
+        verify(keywordRepository).findByIsGroupAndIsOutside(anyBoolean(), anyBoolean());
+        verify(burnoutRepository).findByName(anyString());
         verify(questRepository).save(any());
     }
 
@@ -171,7 +200,10 @@ public class QuestServiceTest {
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "20분 운동하기",
                 "스페셜",
-                4
+                4,
+                true,
+                false,
+                "열광형"
         );
 
         given(questRepository.existsById(any()))
