@@ -7,6 +7,7 @@ import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
 import dough.keyword.KeywordCode;
 import dough.keyword.domain.Keyword;
+import dough.keyword.domain.repository.KeywordRepository;
 import dough.keyword.domain.type.ParticipationType;
 import dough.keyword.domain.type.PlaceType;
 import dough.member.domain.Member;
@@ -48,6 +49,7 @@ public class QuestService {
     private final SelectedQuestRepository selectedQuestRepository;
     private final BurnoutRepository burnoutRepository;
     private final MemberRepository memberRepository;
+    private final KeywordRepository keywordRepository;
 
     public TodayQuestListResponse updateTodayQuests(final Long memberId) {
         final Member member = memberRepository.findById(memberId)
@@ -172,15 +174,20 @@ public class QuestService {
     }
 
     public QuestResponse save(final QuestRequest questRequest) {
-        // TODO 수정 필요
+        final Keyword keyword = keywordRepository.findByIsGroupAndIsOutside(questRequest.getIsGroup(), questRequest.getIsOutside())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_KEYWORD_ID));
+
+        final Burnout burnout = burnoutRepository.findByName(questRequest.getBurnoutName())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
+
         final QuestType questType = QuestType.getMappedQuestType(questRequest.getQuestType());
         final Quest newQuest = new Quest(
                 questRequest.getDescription(),
                 questRequest.getActivity(),
                 questType,
                 questRequest.getDifficulty(),
-                new Burnout(1L, "호빵"),
-                null
+                burnout,
+                keyword
         );
 
         final Quest quest = questRepository.save(newQuest);
@@ -192,7 +199,12 @@ public class QuestService {
             throw new BadRequestException(NOT_FOUND_QUEST_ID);
         }
 
-        // TODO 수정 필요
+        final Keyword keyword = keywordRepository.findByIsGroupAndIsOutside(questUpdateRequest.getIsGroup(), questUpdateRequest.getIsOutside())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_KEYWORD_ID));
+
+        final Burnout burnout = burnoutRepository.findByName(questUpdateRequest.getBurnoutName())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
+
         final QuestType questType = QuestType.getMappedQuestType(questUpdateRequest.getQuestType());
         final Quest updateQuest = new Quest(
                 questId,
@@ -200,8 +212,8 @@ public class QuestService {
                 questUpdateRequest.getActivity(),
                 questType,
                 questUpdateRequest.getDifficulty(),
-                new Burnout(1L, "호빵"),
-                null
+                burnout,
+                keyword
         );
 
         questRepository.save(updateQuest);

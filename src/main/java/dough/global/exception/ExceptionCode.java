@@ -29,6 +29,9 @@ public enum ExceptionCode {
     // 6000 notification
     NOT_FOUND_NOTIFICATION_ID(6000, "요청하신 ID에 해당하는 알람을 찾을 수 없습니다."),
 
+    // 7000 keyword
+    NOT_FOUND_KEYWORD_ID(7000, "요청하신 키워드를 찾을 수 없습니다."),
+
     INTERNAL_SEVER_ERROR(9999,"서버에서 에러가 발생하였습니다.");
 
 

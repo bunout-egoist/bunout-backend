@@ -23,4 +23,13 @@ public class QuestUpdateRequest {
 
     @NotNull(message = "퀘스트 난이도를 입력해주세요.")
     private Integer difficulty;
+
+    @NotNull(message = "밖에서 하는 퀘스트인지 입력해주세요.")
+    private Boolean isOutside;
+
+    @NotNull(message = "함께하는 퀘스트인지 입력해주세요.")
+    private Boolean isGroup;
+
+    @NotNull(message = "번아웃 아이디를 입력해주세요.")
+    private String burnoutName;
 }
