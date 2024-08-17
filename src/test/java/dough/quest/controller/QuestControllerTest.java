@@ -102,11 +102,11 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("isOutside")
                                         .type(BOOLEAN)
-                                        .description("밖에서 하는 퀘스트인지")
+                                        .description("퀘스트가 밖에서 진행되는지 여부")
                                         .attributes(field("constraint", "불리언")),
                                 fieldWithPath("isGroup")
                                         .type(BOOLEAN)
-                                        .description("다른 사람과 함께하는 퀘스트인지")
+                                        .description("퀘스트가 다른 사람과 함께 수행되는지 여부")
                                         .attributes(field("constraint", "불리언")),
                                 fieldWithPath("burnoutName")
                                         .type(STRING)
@@ -161,11 +161,11 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("isOutside")
                                         .type(BOOLEAN)
-                                        .description("밖에서 하는 퀘스트인지")
+                                        .description("퀘스트가 밖에서 진행되는지 여부")
                                         .attributes(field("constraint", "불리언")),
                                 fieldWithPath("isGroup")
                                         .type(BOOLEAN)
-                                        .description("다른 사람과 함께하는 퀘스트인지")
+                                        .description("퀘스트가 다른 사람과 함께 수행되는지 여부")
                                         .attributes(field("constraint", "불리언")),
                                 fieldWithPath("burnoutName")
                                         .type(STRING)

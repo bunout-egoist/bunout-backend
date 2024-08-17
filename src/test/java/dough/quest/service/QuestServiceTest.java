@@ -220,9 +220,9 @@ public class QuestServiceTest {
     @Test
     void delete() {
         // given
-        given(questRepository.existsById(any()))
-                .willReturn(true);
-        given(selectedQuestRepository.existsByQuestId(any()))
+        given(questRepository.findById(any()))
+                .willReturn(Optional.of(DAILY_QUEST1));
+        given(selectedQuestRepository.existsByQuest(any()))
                 .willReturn(false);
 
         // when
@@ -230,7 +230,7 @@ public class QuestServiceTest {
 
         // then
         verify(questRepository).deleteByQuestId(any());
-        verify(selectedQuestRepository).existsByQuestId(any());
+        verify(selectedQuestRepository).existsByQuest(any());
     }
 
     @DisplayName("존재하지 않는 questId를 삭제할 시 예외가 발생한다.")
@@ -251,9 +251,9 @@ public class QuestServiceTest {
     @Test
     void delete_AlreadyUsedQuestId() {
         // given
-        given(questRepository.existsById(any()))
-                .willReturn(true);
-        given(selectedQuestRepository.existsByQuestId(any()))
+        given(questRepository.findById(any()))
+                .willReturn(Optional.of(DAILY_QUEST1));
+        given(selectedQuestRepository.existsByQuest(any()))
                 .willReturn(true);
 
         // when & then
