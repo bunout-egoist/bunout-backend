@@ -30,6 +30,6 @@ public class QuestUpdateRequest {
     @NotNull(message = "함께하는 퀘스트인지 입력해주세요.")
     private Boolean isGroup;
 
-    @NotNull(message = "번아웃 아이디를 입력해주세요.")
+    @NotNull(message = "번아웃 이름를 입력해주세요.")
     private String burnoutName;
 }
