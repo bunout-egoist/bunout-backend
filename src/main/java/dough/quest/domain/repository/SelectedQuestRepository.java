@@ -1,6 +1,7 @@
 package dough.quest.domain.repository;
 
 import dough.global.annotation.TimeTrace;
+import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.CompletedQuestElement;
 import dough.quest.dto.CompletedQuestsCountElement;
@@ -24,12 +25,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
             """)
     List<CompletedQuestElement> findCompletedQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("startDate") final LocalDate startDate, @Param("endDate") final LocalDate endDate);
 
-    @Query("""
-             SELECT CASE WHEN COUNT(sq) > 0 THEN true ELSE false END 
-             FROM SelectedQuest sq 
-             WHERE sq.quest.id = :questId
-            """)
-    Boolean existsByQuestId(final Long questId);
+    Boolean existsByQuest(final Quest quest);
 
     @Query("""
              SELECT sq

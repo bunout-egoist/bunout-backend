@@ -7,6 +7,7 @@ import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
 import dough.keyword.KeywordCode;
 import dough.keyword.domain.Keyword;
+import dough.keyword.domain.repository.KeywordRepository;
 import dough.keyword.domain.type.ParticipationType;
 import dough.keyword.domain.type.PlaceType;
 import dough.member.domain.Member;
@@ -21,7 +22,6 @@ import dough.quest.dto.CompletedQuestElements;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestResponse;
-import dough.quest.dto.response.QuestResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -48,6 +48,7 @@ public class QuestService {
     private final SelectedQuestRepository selectedQuestRepository;
     private final BurnoutRepository burnoutRepository;
     private final MemberRepository memberRepository;
+    private final KeywordRepository keywordRepository;
 
     public TodayQuestListResponse updateTodayQuests(final Long memberId) {
         final Member member = memberRepository.findById(memberId)
@@ -171,20 +172,24 @@ public class QuestService {
                 .collect(Collectors.toList());
     }
 
-    public QuestResponse save(final QuestRequest questRequest) {
-        // TODO 수정 필요
+    public void save(final QuestRequest questRequest) {
+        final Keyword keyword = keywordRepository.findByIsGroupAndIsOutside(questRequest.getIsGroup(), questRequest.getIsOutside())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_KEYWORD_ID));
+
+        final Burnout burnout = burnoutRepository.findByName(questRequest.getBurnoutName())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
+
         final QuestType questType = QuestType.getMappedQuestType(questRequest.getQuestType());
         final Quest newQuest = new Quest(
                 questRequest.getDescription(),
                 questRequest.getActivity(),
                 questType,
                 questRequest.getDifficulty(),
-                new Burnout(1L, "호빵"),
-                null
+                burnout,
+                keyword
         );
 
-        final Quest quest = questRepository.save(newQuest);
-        return QuestResponse.of(quest);
+        questRepository.save(newQuest);
     }
 
     public void update(final Long questId, final QuestUpdateRequest questUpdateRequest) {
@@ -192,7 +197,12 @@ public class QuestService {
             throw new BadRequestException(NOT_FOUND_QUEST_ID);
         }
 
-        // TODO 수정 필요
+        final Keyword keyword = keywordRepository.findByIsGroupAndIsOutside(questUpdateRequest.getIsGroup(), questUpdateRequest.getIsOutside())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_KEYWORD_ID));
+
+        final Burnout burnout = burnoutRepository.findByName(questUpdateRequest.getBurnoutName())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
+
         final QuestType questType = QuestType.getMappedQuestType(questUpdateRequest.getQuestType());
         final Quest updateQuest = new Quest(
                 questId,
@@ -200,35 +210,34 @@ public class QuestService {
                 questUpdateRequest.getActivity(),
                 questType,
                 questUpdateRequest.getDifficulty(),
-                new Burnout(1L, "호빵"),
-                null
+                burnout,
+                keyword
         );
 
         questRepository.save(updateQuest);
     }
 
-    public void delete(Long questId) {
-        if (!questRepository.existsById(questId)) {
-            throw new BadRequestException(NOT_FOUND_QUEST_ID);
-        }
+    public void delete(final Long questId) {
+        final Quest quest = questRepository.findById(questId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
 
-        checkQuestInUse(questId);
+        checkQuestInUse(quest);
 
         questRepository.deleteByQuestId(questId);
     }
 
-    private void checkQuestInUse(final Long questId) {
-        if (selectedQuestRepository.existsByQuestId(questId)) {
+    private void checkQuestInUse(final Quest quest) {
+        if (selectedQuestRepository.existsByQuest(quest)) {
             throw new BadRequestException(ALREADY_USED_QUEST_ID);
         }
     }
-
-//    public void completeSelectedQuestWithFeedback(Long selectedQuestId, Feedback feedback) {
-//        selectedQuestRepository.updateFeedbackAndStatus(selectedQuestId, feedback);
-//    }
 
     public void completeSelectedQuestWithFeedback(final SelectedQuest selectedQuest, final Feedback feedback) {
         selectedQuest.AddFeedbackToSelectedQuest(feedback);
         selectedQuestRepository.save(selectedQuest);
     }
+
+    //    public void completeSelectedQuestWithFeedback(Long selectedQuestId, Feedback feedback) {
+//        selectedQuestRepository.updateFeedbackAndStatus(selectedQuestId, feedback);
+//    }
 }

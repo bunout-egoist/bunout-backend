@@ -7,7 +7,6 @@ import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestResponse;
-import dough.quest.dto.response.QuestResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import dough.quest.service.QuestService;
 import org.junit.jupiter.api.DisplayName;
@@ -68,11 +67,13 @@ class QuestControllerTest extends AbstractControllerTest {
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "15분 운동하기",
                 "데일리",
-                3
+                3,
+                true,
+                false,
+                "열광형"
         );
 
-        when(questService.save(any()))
-                .thenReturn(QuestResponse.of(DAILY_QUEST1));
+        doNothing().when(questService).save(any());
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/v1/quests")
@@ -98,29 +99,19 @@ class QuestControllerTest extends AbstractControllerTest {
                                 fieldWithPath("difficulty")
                                         .type(NUMBER)
                                         .description("난이도")
-                                        .attributes(field("constraint", "양의 정수"))
-                        ),
-                        responseFields(
-                                fieldWithPath("id")
-                                        .type(NUMBER)
-                                        .description("퀘스트 아이디")
                                         .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("description")
+                                fieldWithPath("isOutside")
+                                        .type(BOOLEAN)
+                                        .description("퀘스트가 밖에서 진행되는지 여부")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("isGroup")
+                                        .type(BOOLEAN)
+                                        .description("퀘스트가 다른 사람과 함께 수행되는지 여부")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("burnoutName")
                                         .type(STRING)
-                                        .description("퀘스트 설명")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("activity")
-                                        .type(STRING)
-                                        .description("퀘스트 활동 내용")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("questType")
-                                        .type(STRING)
-                                        .description("퀘스트 타입 (데일리/스페셜)")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("difficulty")
-                                        .type(NUMBER)
-                                        .description("난이도")
-                                        .attributes(field("constraint", "양의 정수"))
+                                        .description("번아웃 이름")
+                                        .attributes(field("constraint", "문자열"))
                         )
                 ));
     }
@@ -133,7 +124,10 @@ class QuestControllerTest extends AbstractControllerTest {
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "20분 운동하기",
                 "스페셜",
-                4
+                4,
+                false,
+                false,
+                "열광형"
         );
 
         doNothing().when(questService).update(anyLong(), any());
@@ -142,7 +136,7 @@ class QuestControllerTest extends AbstractControllerTest {
         final ResultActions resultActions = performPutUpdateQuestRequest(DAILY_QUEST1.getId(), questUpdateRequest);
 
         // then
-        resultActions.andExpect(status().isOk())
+        resultActions.andExpect(status().isNoContent())
                 .andDo(restDocs.document(
                         pathParameters(
                                 parameterWithName("questId")
@@ -164,7 +158,19 @@ class QuestControllerTest extends AbstractControllerTest {
                                 fieldWithPath("difficulty")
                                         .type(NUMBER)
                                         .description("난이도")
-                                        .attributes(field("constraint", "양의 정수"))
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("isOutside")
+                                        .type(BOOLEAN)
+                                        .description("퀘스트가 밖에서 진행되는지 여부")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("isGroup")
+                                        .type(BOOLEAN)
+                                        .description("퀘스트가 다른 사람과 함께 수행되는지 여부")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("burnoutName")
+                                        .type(STRING)
+                                        .description("번아웃 이름")
+                                        .attributes(field("constraint", "문자열"))
                         )
                 ));
     }
@@ -179,7 +185,7 @@ class QuestControllerTest extends AbstractControllerTest {
         final ResultActions resultActions = mockMvc.perform(delete("/api/v1/quests/{questId}", 1L));
 
         // then
-        resultActions.andExpect(status().isOk())
+        resultActions.andExpect(status().isNoContent())
                 .andDo(restDocs.document(
                         pathParameters(
                                 parameterWithName("questId")
