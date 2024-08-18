@@ -21,7 +21,7 @@ import dough.quest.domain.type.QuestType;
 import dough.quest.dto.CompletedQuestElements;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
-import dough.quest.dto.response.FixedQuestResponse;
+import dough.quest.dto.response.FixedQuestListResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -134,15 +134,12 @@ public class QuestService {
     }
 
     @Transactional(readOnly = true)
-    public List<FixedQuestResponse> getFixedQuests(final Long burnoutId) {
-        if (!burnoutRepository.existsById(burnoutId)) {
-            throw new BadRequestException(NOT_FOUND_BURNOUT_ID);
-        }
+    public FixedQuestListResponse getFixedQuests(final Long burnoutId) {
+        final Burnout burnout = burnoutRepository.findById(burnoutId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
 
         final List<Quest> fixedQuests = questRepository.findFixedQuestsByBurnoutId(burnoutId);
-        return fixedQuests.stream()
-                .map(fixedQuest -> FixedQuestResponse.of(fixedQuest))
-                .toList();
+        return FixedQuestListResponse.of(burnout, fixedQuests);
     }
 
     @Transactional(readOnly = true)
