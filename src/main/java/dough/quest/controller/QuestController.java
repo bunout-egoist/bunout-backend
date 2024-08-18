@@ -2,6 +2,7 @@ package dough.quest.controller;
 
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
+import dough.quest.dto.response.FixedQuestListResponse;
 import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import dough.quest.service.QuestService;
@@ -20,9 +21,9 @@ public class QuestController {
     private final QuestService questService;
 
     @GetMapping("/fixed/{burnoutId}")
-    public ResponseEntity<List<FixedQuestResponse>> getFixedQuests(@PathVariable("burnoutId") final Long burnoutId) {
-        final List<FixedQuestResponse> fixedQuestResponses = questService.getFixedQuests(burnoutId);
-        return ResponseEntity.ok().body(fixedQuestResponses);
+    public ResponseEntity<FixedQuestListResponse> getFixedQuests(@PathVariable("burnoutId") final Long burnoutId) {
+        final FixedQuestListResponse fixedQuestListResponse = questService.getFixedQuests(burnoutId);
+        return ResponseEntity.ok().body(fixedQuestListResponse);
     }
 
     @PostMapping("/today/{memberId}")
