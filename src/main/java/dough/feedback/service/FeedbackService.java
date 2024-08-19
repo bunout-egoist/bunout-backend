@@ -6,6 +6,7 @@ import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.Level;
+import dough.level.domain.MemberLevel;
 import dough.level.domain.repository.LevelRepository;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
@@ -54,19 +55,21 @@ public class FeedbackService {
             member.updateExp(currentExp + 15);
         }
 
-        final Member updatedMember = updateLevel(member);
-        memberRepository.save(updatedMember);
-        return FeedbackResponse.from(member);
+        final MemberLevel memberLevel = updateLevel(member);
+        memberRepository.save(memberLevel.getMember());
+        return FeedbackResponse.from(memberLevel);
     }
 
-    private Member updateLevel(final Member member) {
+    private MemberLevel updateLevel(final Member member) {
         final Level currentLevel = member.getLevel();
 
         if (member.getExp() >= currentLevel.getRequiredExp()) {
             final Level level = levelRepository.findByLevel(currentLevel.getLevel() + 1)
                     .orElseThrow(() -> new BadRequestException(NOT_FOUND_LEVEL_ID));
             member.updateLevel(level);
+            return new MemberLevel(member, currentLevel.getLevel(), true);
         }
-        return member;
+
+        return new MemberLevel(member, currentLevel.getLevel(), false);
     }
 }
