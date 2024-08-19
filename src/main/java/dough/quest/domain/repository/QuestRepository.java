@@ -43,5 +43,5 @@ public interface QuestRepository extends JpaRepository<Quest, Long> {
             AND (sq.id IS NULL OR sq.member.id = :memberId)
             ORDER BY q.difficulty ASC
            """)
-    List<Quest> findTodayBY_TYPEQuestsByMemberId(@Param("memberId") final Long memberId, @Param("level") final Integer level, @Param("burnoutId") final Long burnoutId);
+    List<Quest> findTodayByTypeQuestsByMemberId(@Param("memberId") final Long memberId, @Param("level") final Integer level, @Param("burnoutId") final Long burnoutId);
 }

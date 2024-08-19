@@ -5,6 +5,7 @@ import dough.feedback.domain.repository.FeedbackRepository;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
+import dough.level.domain.MemberLevel;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -55,6 +56,8 @@ class FeedbackServiceTest {
                 5
         );
 
+        final MemberLevel memberLevel = new MemberLevel(GOEUN, 2, true);
+
         given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findById(anyLong()))
@@ -70,7 +73,7 @@ class FeedbackServiceTest {
         verify(selectedQuestRepository).findById(anyLong());
         verify(feedbackRepository).save(any());
         assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(FeedbackResponse.from(GOEUN));
+                .isEqualTo(FeedbackResponse.from(memberLevel));
     }
 
     @DisplayName("존재하지 않는 선택된 퀘스트 아이디로 피드백을 생성할 때 예외가 발생한다.")

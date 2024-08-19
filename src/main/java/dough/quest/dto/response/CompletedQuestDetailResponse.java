@@ -1,6 +1,5 @@
 package dough.quest.dto.response;
 
-import dough.feedback.domain.Feedback;
 import dough.quest.domain.Quest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

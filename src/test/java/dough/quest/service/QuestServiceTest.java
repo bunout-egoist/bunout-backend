@@ -161,8 +161,7 @@ public class QuestServiceTest {
     void update() {
         // given
         final QuestUpdateRequest questUpdateRequest = new QuestUpdateRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며",
-                "20분 운동하기",
+                "점심시간, 몸과 마음을 건강하게 유지하며 20분 운동하기",
                 "스페셜",
                 4,
                 true,
@@ -194,8 +193,7 @@ public class QuestServiceTest {
     void update_NotFoundQuestId() {
         // given
         final QuestUpdateRequest questUpdateRequest = new QuestUpdateRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며",
-                "20분 운동하기",
+                "점심시간, 몸과 마음을 건강하게 유지하며 20분 운동하기",
                 "스페셜",
                 4,
                 true,

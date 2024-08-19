@@ -15,13 +15,13 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static dough.global.restdocs.RestDocsConfiguration.field;
+import static dough.level.fixture.LevelFixture.LEVEL2;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -48,8 +48,10 @@ class FeedbackControllerTest extends AbstractControllerTest {
                 5
         );
 
-        final FeedbackResponse feedbackResponse = new FeedbackResponse(1, "열광형");
+        GOEUN.updateExp(40);
+        GOEUN.updateLevel(LEVEL2);
 
+        final FeedbackResponse feedbackResponse = new FeedbackResponse(55, 3, 2, true);
 
         when(feedbackService.createFeedback(any(), any(FeedbackRequest.class)))
                 .thenReturn(feedbackResponse);
@@ -81,14 +83,22 @@ class FeedbackControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "1-5 사이의 정수"))
                         ),
                         responseFields(
-                                fieldWithPath("level")
+                                fieldWithPath("exp")
                                         .type(NUMBER)
-                                        .description("레벨")
+                                        .description("경험치")
                                         .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("burnoutName")
-                                        .type(STRING)
-                                        .description("번아웃 유형 이름")
-                                        .attributes(field("constraint", "문자열"))
+                                fieldWithPath("previousLevel")
+                                        .type(NUMBER)
+                                        .description("이전 레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("currentLevel")
+                                        .type(NUMBER)
+                                        .description("현재 레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("isLevelUp")
+                                        .type(BOOLEAN)
+                                        .description("레벨업 유무")
+                                        .attributes(field("constraint", "불리언"))
                         )
                 ));
     }

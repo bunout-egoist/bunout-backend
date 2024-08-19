@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class QuestUpdateRequest {
 
     @NotBlank(message = "퀘스트 내용을 입력해주세요.")
-    private String description;
+    private String content;
 
     @NotBlank(message = "퀘스트 타입을 입력해주세요.")
     private String questType;
