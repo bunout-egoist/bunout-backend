@@ -8,6 +8,7 @@ import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.BurnoutRequest;
 import dough.member.dto.request.FixedQuestRequest;
 import dough.member.dto.request.MemberInfoRequest;
+import dough.member.dto.response.MemberAttendanceResponse;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Optional;
 
 import static dough.global.exception.ExceptionCode.*;
@@ -88,6 +91,31 @@ public class MemberService {
 
         member.updateFixedQuest(quest, currentDate);
         memberRepository.save(member);
+    }
+
+    public MemberAttendanceResponse checkAttendance(final Long memberId) {
+        final Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+
+        final LocalDateTime currentAt = LocalDateTime.now();
+        final LocalDate startOfWeek = currentAt.toLocalDate().with(TemporalAdjusters.previousOrSame(MONDAY));
+
+        final LocalDate lastAttendanceDate = member.getAttendanceAt().toLocalDate();
+
+        if (lastAttendanceDate.equals(currentAt.toLocalDate())) {
+            throw new BadRequestException(ALREADY_CHECK_ATTENDANCE);
+        }
+
+        final Integer attendanceCount = member.getAttendanceCount();
+
+        if (lastAttendanceDate.isBefore(startOfWeek)) {
+            member.updateAttendance(currentAt, 1);
+        } else {
+            member.updateAttendance(currentAt, attendanceCount + 1);
+        }
+
+        final Member updatedMember = memberRepository.save(member);
+        return MemberAttendanceResponse.of(updatedMember);
     }
 
     private void validFixedQuestUpdate(final LocalDate lastModified, final LocalDate currentDate) {

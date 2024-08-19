@@ -19,6 +19,7 @@ public enum ExceptionCode {
     NOT_FOUND_MEMBER_ID(3000, "요청하신 ID에 해당하는 유저를 찾을 수 없습니다."),
     ALREADY_UPDATED_BURNOUT_TYPE(3001, "번아웃 유형은 이번 달에 이미 수정되었습니다."),
     ALREADY_UPDATED_FIXED_QUEST(3002, "고정 퀘스트는 이번 주에 재설정되었습니다."),
+    ALREADY_CHECK_ATTENDANCE(3003, "출석체크를 이미 완료하였습니다."),
 
     // 4000 feedback
 
