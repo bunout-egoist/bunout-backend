@@ -1,6 +1,7 @@
 package dough.feedback.feedbackFixture;
 
 import dough.feedback.domain.Feedback;
+import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
 import dough.member.domain.Member;
 import dough.quest.domain.Quest;
@@ -10,6 +11,7 @@ import dough.quest.domain.type.QuestType;
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.keyword.fixture.KeywordFixture.INSIDE_ALONE;
 import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
+import static dough.login.domain.type.RoleType.MEMBER;
 
 public class FeedbackFixture {
 
@@ -22,7 +24,8 @@ public class FeedbackFixture {
             "student",
             "male",
             2002,
-            ENTHUSIAST
+            ENTHUSIAST,
+            MEMBER
     );
 
     public static final Member MEMBER2 = new Member(
@@ -34,7 +37,8 @@ public class FeedbackFixture {
             "student",
             "female",
             2000,
-            ENTHUSIAST
+            ENTHUSIAST,
+            MEMBER
     );
 
     public static final Member MEMBER3 = new Member(
@@ -46,7 +50,8 @@ public class FeedbackFixture {
             "student",
             "female",
             2002,
-            ENTHUSIAST
+            ENTHUSIAST,
+            MEMBER
     );
 
     public static final Member MEMBER4 = new Member(
@@ -58,7 +63,8 @@ public class FeedbackFixture {
             "student",
             "male",
             1988,
-            ENTHUSIAST
+            ENTHUSIAST,
+            MEMBER
     );
 
     public static final Feedback FEEDBACK1 = new Feedback(

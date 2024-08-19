@@ -2,10 +2,11 @@ package dough.member.controller;
 
 import dough.member.domain.Member;
 import dough.member.dto.request.BurnoutRequest;
+import dough.member.dto.request.FixedQuestRequest;
 import dough.member.dto.request.MemberInfoRequest;
+import dough.member.dto.response.MemberAttendanceResponse;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.member.service.MemberService;
-import dough.member.dto.request.FixedQuestRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -48,7 +49,7 @@ public class MemberController {
 
     @PutMapping("/{memberId}/burnout")
     public ResponseEntity<Void> updateBurnout(@PathVariable("memberId") final Long memberId,
-                                                  @RequestBody @Valid final BurnoutRequest burnoutRequest
+                                              @RequestBody @Valid final BurnoutRequest burnoutRequest
     ) {
         memberService.updateBurnout(memberId, burnoutRequest);
         return ResponseEntity.noContent().build();
@@ -60,5 +61,11 @@ public class MemberController {
     ) {
         memberService.updateFixedQuest(memberId, fixedQuestRequest);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{memberId}/attendance")
+    public ResponseEntity<MemberAttendanceResponse> checkAttendance(@PathVariable("memberId") final Long memberId) {
+        final MemberAttendanceResponse memberAttendanceResponse = memberService.checkAttendance(memberId);
+        return ResponseEntity.ok().body(memberAttendanceResponse);
     }
 }

@@ -9,18 +9,17 @@ import dough.notification.domain.Notification;
 import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static jakarta.persistence.EnumType.STRING;
@@ -77,50 +76,28 @@ public class Member extends BaseEntity {
 
     private Integer experience;
 
-    private Integer maxStreak;
-
     private String occupation;
 
     private String gender;
 
     private Integer birthYear;
 
+    @Column(nullable = false)
     private LocalDate burnoutLastModified;
 
+    @Column(nullable = false)
     private LocalDate fixedQuestLastModified;
 
+    @Column(nullable = false)
     private LocalDateTime lastLogin;
 
-    public Member(final Long id,
-                  final String nickname,
-                  final String socialLoginId,
-                  final SocialLoginType socialLoginType,
-                  final String email,
-                  final String occupation,
-                  final String gender,
-                  final Integer birthYear,
-                  final Burnout burnout
-    ) {
-        this.id = id;
-        this.nickname = nickname;
-        this.socialLoginId = socialLoginId;
-        this.socialLoginType = socialLoginType;
-        this.email = email;
-        this.level = 0;
-        this.experience = 0;
-        this.maxStreak = 0;
-        this.occupation = occupation;
-        this.gender = gender;
-        this.birthYear = birthYear;
-        this.burnout = burnout;
-        this.burnoutLastModified = LocalDate.now();
-        this.fixedQuestLastModified = LocalDate.now();
-        this.lastLogin = LocalDateTime.now();
-    }
+    @Column(nullable = false)
+    private LocalDateTime attendanceAt;
 
-    /**
-     *
-     */
+    @Max(7)
+    @Column(nullable = false)
+    private Integer attendanceCount;
+
     public Member(final Long id,
                   final String nickname,
                   final String socialLoginId,
@@ -134,22 +111,21 @@ public class Member extends BaseEntity {
     ) {
         this.id = id;
         this.nickname = nickname;
+        this.role = roleType;
         this.socialLoginId = socialLoginId;
         this.socialLoginType = socialLoginType;
         this.email = email;
         this.level = 0;
         this.experience = 0;
-        this.maxStreak = 0;
         this.occupation = occupation;
         this.gender = gender;
         this.birthYear = birthYear;
         this.burnout = burnout;
+        this.burnoutLastModified = LocalDate.now();
+        this.fixedQuestLastModified = LocalDate.now();
         this.lastLogin = LocalDateTime.now();
-        this.role = roleType;
-    }
-
-    public void updateMember(final String nickname) {
-        this.nickname = nickname;
+        this.attendanceAt = LocalDate.EPOCH.atStartOfDay();
+        this.attendanceCount = 0;
     }
 
     public void updateMember(
@@ -161,6 +137,10 @@ public class Member extends BaseEntity {
         this.gender = gender;
         this.birthYear = birthYear;
         this.occupation = occupation;
+    }
+
+    public void updateMember(final String nickname) {
+        this.nickname = nickname;
     }
 
     public void updateBurnout(
@@ -177,5 +157,13 @@ public class Member extends BaseEntity {
     ) {
         this.quest = quest;
         this.fixedQuestLastModified = fixedQuestLastModified;
+    }
+
+    public void updateAttendance(
+            final LocalDateTime attendanceAt,
+            final Integer attendanceCount
+    ) {
+        this.attendanceAt = attendanceAt;
+        this.attendanceCount = attendanceCount;
     }
 }

@@ -33,7 +33,7 @@ import static dough.global.exception.ExceptionCode.*;
 import static dough.keyword.domain.type.ParticipationType.ALONE;
 import static dough.keyword.domain.type.PlaceType.ANYWHERE;
 import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
-import static dough.member.fixture.MemberFixture.MEMBER;
+import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.CompletedQuestElementFixture.QUEST_ELEMENT1;
 import static dough.quest.fixture.QuestFixture.*;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
@@ -138,7 +138,7 @@ public class QuestServiceTest {
                 .willReturn(List.of(QUEST_ELEMENT1));
 
         // when
-        final List<WeeklySummaryResponse> actualResponse = questService.getWeeklySummary(MEMBER.getId(), LocalDate.now());
+        final List<WeeklySummaryResponse> actualResponse = questService.getWeeklySummary(GOEUN.getId(), LocalDate.now());
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
@@ -286,12 +286,12 @@ public class QuestServiceTest {
         final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
 
         given(memberRepository.findById(anyLong()))
-                .willReturn(Optional.of(MEMBER));
+                .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findTodayDailyQuests(anyLong(), any()))
                 .willReturn(todayQuests);
 
         // when
-        final TodayQuestListResponse actualResponse = questService.updateTodayQuests(MEMBER.getId());
+        final TodayQuestListResponse actualResponse = questService.updateTodayQuests(GOEUN.getId());
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
