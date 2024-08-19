@@ -39,4 +39,14 @@ public class QuestFixture {
             ENTHUSIAST,
             INSIDE_ALONE
     );
+
+    public static final Quest FIXED_QUEST2 = new Quest(
+            3L,
+            "아침시간, 거울을 보며",
+            "1분간 칭찬하기",
+            FIXED,
+            3,
+            ENTHUSIAST,
+            INSIDE_ALONE
+    );
 }

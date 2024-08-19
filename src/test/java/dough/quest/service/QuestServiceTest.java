@@ -14,7 +14,7 @@ import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
-import dough.quest.dto.response.FixedQuestResponse;
+import dough.quest.dto.response.FixedQuestListResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -35,8 +35,7 @@ import static dough.keyword.domain.type.PlaceType.ANYWHERE;
 import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.CompletedQuestElementFixture.QUEST_ELEMENT1;
-import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
-import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static dough.quest.fixture.QuestFixture.*;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST2;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -267,17 +266,17 @@ public class QuestServiceTest {
     @Test
     void getFixedQuests() {
         // given
-        given(burnoutRepository.existsById(any()))
-                .willReturn(true);
+        given(burnoutRepository.findById(any()))
+                .willReturn(Optional.of(ENTHUSIAST));
         given(questRepository.findFixedQuestsByBurnoutId(anyLong()))
-                .willReturn(List.of(FIXED_QUEST1));
+                .willReturn(List.of(FIXED_QUEST1, FIXED_QUEST2));
 
         // when
-        final List<FixedQuestResponse> actualResponses = questService.getFixedQuests(ENTHUSIAST.getId());
+        final FixedQuestListResponse actualResponses = questService.getFixedQuests(ENTHUSIAST.getId());
 
         // then
         assertThat(actualResponses).usingRecursiveComparison()
-                .isEqualTo(List.of(FixedQuestResponse.of(FIXED_QUEST1)));
+                .isEqualTo(FixedQuestListResponse.of(ENTHUSIAST, List.of(FIXED_QUEST1, FIXED_QUEST2)));
     }
 
     @DisplayName("오늘의 퀘스트를 받을 수 있다.")

@@ -1,19 +1,15 @@
 package dough.quest.dto.response;
 
 import dough.quest.domain.Quest;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 public class FixedQuestResponse {
 
-    private Long id;
-    private String description;
-    private String activity;
+    private final Long id;
+    private final String description;
+    private final String activity;
 
     public static FixedQuestResponse of(final Quest quest) {
         return new FixedQuestResponse(

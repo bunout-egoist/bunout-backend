@@ -6,6 +6,7 @@ import dough.keyword.KeywordCode;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
+import dough.quest.dto.response.FixedQuestListResponse;
 import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import dough.quest.service.QuestService;
@@ -20,11 +21,11 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.global.restdocs.RestDocsConfiguration.field;
 import static dough.keyword.domain.type.ParticipationType.ALONE;
 import static dough.keyword.domain.type.PlaceType.ANYWHERE;
-import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
-import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static dough.quest.fixture.QuestFixture.*;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST2;
 import static org.mockito.ArgumentMatchers.any;
@@ -198,10 +199,12 @@ class QuestControllerTest extends AbstractControllerTest {
     @Test
     void getFixedQuests() throws Exception {
         // given
-        final List<FixedQuestResponse> fixedQuestResponses = List.of(FixedQuestResponse.of(FIXED_QUEST1));
+        final FixedQuestListResponse fixedQuestListResponse = FixedQuestListResponse.of(
+                ENTHUSIAST, List.of(FIXED_QUEST1, FIXED_QUEST2)
+        );
 
         when(questService.getFixedQuests(anyLong()))
-                .thenReturn(fixedQuestResponses);
+                .thenReturn(fixedQuestListResponse);
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/v1/quests/fixed/{burnoutId}", 1L));
@@ -214,15 +217,31 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .description("번아웃 아이디")
                         ),
                         responseFields(
-                                fieldWithPath("[0].id")
+                                fieldWithPath("burnoutName")
+                                        .type(STRING)
+                                        .description("번아웃 이름")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("fixedQuests[0].id")
                                         .type(NUMBER)
                                         .description("고정 퀘스트 아이디")
                                         .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("[0].description")
+                                fieldWithPath("fixedQuests[0].description")
                                         .type(STRING)
                                         .description("고정 퀘스트 설명")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[0].activity")
+                                fieldWithPath("fixedQuests[0].activity")
+                                        .type(STRING)
+                                        .description("고정 퀘스트 활동 내용")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("fixedQuests[1].id")
+                                        .type(NUMBER)
+                                        .description("고정 퀘스트 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("fixedQuests[1].description")
+                                        .type(STRING)
+                                        .description("고정 퀘스트 설명")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("fixedQuests[1].activity")
                                         .type(STRING)
                                         .description("고정 퀘스트 활동 내용")
                                         .attributes(field("constraint", "문자열"))
