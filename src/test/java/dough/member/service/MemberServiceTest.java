@@ -2,13 +2,12 @@ package dough.member.service;
 
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
-import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.BurnoutRequest;
+import dough.member.dto.request.FixedQuestRequest;
 import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.quest.domain.repository.QuestRepository;
-import dough.member.dto.request.FixedQuestRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
