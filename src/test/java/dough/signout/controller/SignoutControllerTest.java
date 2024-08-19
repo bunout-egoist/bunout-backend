@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,8 +40,9 @@ class SignoutControllerTest {
         ResponseEntity<SignoutResponseDTO> responseEntity = signoutController.signout(signoutRequestDTO);
 
         // Then
-        assertEquals(200, responseEntity.getStatusCodeValue());
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(1L, responseEntity.getBody().getMemberId());
+
     }
 
 }

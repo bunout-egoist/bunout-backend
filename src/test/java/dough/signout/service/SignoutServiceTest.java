@@ -9,7 +9,6 @@ import dough.member.domain.repository.MemberRepository;
 import dough.notification.NotificationRepository;
 import dough.notification.domain.Notification;
 import dough.quest.domain.SelectedQuest;
-import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.signout.dto.request.SignoutRequestDTO;
 import dough.signout.dto.response.SignoutResponseDTO;
@@ -30,9 +29,6 @@ class SignoutServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
-
-    @Mock
-    private QuestRepository questRepository;
 
     @Mock
     private NotificationRepository notificationRepository;

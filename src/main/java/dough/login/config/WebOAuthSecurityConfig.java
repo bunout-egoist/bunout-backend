@@ -53,6 +53,7 @@ public class WebOAuthSecurityConfig {
                         .requestMatchers("/api/v1/auth/login/kakao").permitAll()
                         .requestMatchers("/api/v1/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/api/v1/token", "/api/v1/refreshToken").permitAll()
+                        .requestMatchers("/api/v1/signout").permitAll()
                         .requestMatchers("/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll())
