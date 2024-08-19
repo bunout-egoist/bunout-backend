@@ -149,12 +149,12 @@ include::{snippets}/dashboard-controller-test/get-monthly-summary_-no-summary/re
 === 퀘스트 총 개수
 
 ==== Request
-include::{snippets}/dashboard-controller-test/get-total-completed-quests/path-parameters.adoc[]
-include::{snippets}/dashboard-controller-test/get-total-completed-quests/http-request.adoc[]
+include::{snippets}/dashboard-controller-test/get-completed-quests-total/path-parameters.adoc[]
+include::{snippets}/dashboard-controller-test/get-completed-quests-total/http-request.adoc[]
 
 ==== Response
-include::{snippets}/dashboard-controller-test/get-total-completed-quests/response-fields.adoc[]
-include::{snippets}/dashboard-controller-test/get-total-completed-quests/http-response.adoc[]
+include::{snippets}/dashboard-controller-test/get-completed-quests-total/response-fields.adoc[]
+include::{snippets}/dashboard-controller-test/get-completed-quests-total/http-response.adoc[]
 
 == Feedback API
 

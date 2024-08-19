@@ -162,11 +162,11 @@ public class DashboardControllerTest extends AbstractControllerTest {
                         responseFields(
                                 fieldWithPath("dailyTotal")
                                         .type(NUMBER)
-                                        .description("데일리 퀘스트 총합")
+                                        .description("완료한 데일리 퀘스트 총합")
                                         .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("specialTotal")
                                         .type(NUMBER)
-                                        .description("스페셜 퀘스트 총합")
+                                        .description("완료한 스페셜 퀘스트 총합")
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
