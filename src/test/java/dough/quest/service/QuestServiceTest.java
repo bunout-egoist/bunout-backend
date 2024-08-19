@@ -72,7 +72,7 @@ public class QuestServiceTest {
         // given
         final QuestRequest questRequest = new QuestRequest(
                 "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
-                "유형별",
+                "유형별퀘스트",
                 3,
                 true,
                 false,
@@ -162,7 +162,7 @@ public class QuestServiceTest {
         // given
         final QuestUpdateRequest questUpdateRequest = new QuestUpdateRequest(
                 "점심시간, 몸과 마음을 건강하게 유지하며 20분 운동하기",
-                "스페셜",
+                "스페셜퀘스트",
                 4,
                 true,
                 false,
@@ -194,7 +194,7 @@ public class QuestServiceTest {
         // given
         final QuestUpdateRequest questUpdateRequest = new QuestUpdateRequest(
                 "점심시간, 몸과 마음을 건강하게 유지하며 20분 운동하기",
-                "스페셜",
+                "스페셜퀘스트",
                 4,
                 true,
                 false,

@@ -5,7 +5,6 @@ import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
-import dough.level.domain.repository.LevelRepository;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -47,9 +46,6 @@ class FeedbackServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
-    @Mock
-    private LevelRepository levelRepository;
-
     @DisplayName("피드백을 성공적으로 생성할 수 있다.")
     @Test
     void createFeedback() {
@@ -84,6 +80,7 @@ class FeedbackServiceTest {
         verify(feedbackRepository).save(any());
         verify(selectedQuestRepository).save(any());
         verify(memberRepository).save(any());
+
         assertThat(actualResponse).usingRecursiveComparison()
                 .isEqualTo(FeedbackResponse.of(memberLevel));
     }

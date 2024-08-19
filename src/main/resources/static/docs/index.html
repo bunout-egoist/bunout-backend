@@ -1130,10 +1130,10 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
   "participationKeyword" : "혼자서",
   "todayQuests" : [ {
     "content" : "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
-    "questType" : "유형별"
+    "questType" : "유형별퀘스트"
   }, {
     "content" : "아침시간, 표지가 예쁜 5분간 새로운 책 읽기",
-    "questType" : "유형별"
+    "questType" : "유형별퀘스트"
   } ]
 }</code></pre>
 </div>
@@ -1613,18 +1613,18 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 634
+Content-Length: 661
 
 [ {
   "completedDate" : "2024-08-11",
   "questDetails" : [ {
     "imageUrl" : "https://~",
     "content" : "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
-    "questType" : "유형별"
+    "questType" : "유형별퀘스트"
   }, {
     "imageUrl" : "https://~",
     "content" : "아침시간, 표지가 예쁜 5분간 새로운 책 읽기",
-    "questType" : "유형별"
+    "questType" : "유형별퀘스트"
   } ],
   "dailyCount" : 2
 }, {
@@ -1632,7 +1632,7 @@ Content-Length: 634
   "questDetails" : [ {
     "imageUrl" : "https://~",
     "content" : "아침시간, 조용한 방 안에서 5분간 명상하기",
-    "questType" : "고정"
+    "questType" : "고정퀘스트"
   } ],
   "dailyCount" : 1
 } ]</code></pre>

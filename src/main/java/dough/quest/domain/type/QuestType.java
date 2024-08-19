@@ -10,9 +10,9 @@ import static dough.global.exception.ExceptionCode.INVALID_QUEST_TYPE;
 @Getter
 public enum QuestType {
 
-    BY_TYPE("유형별", 15),
-    FIXED("고정", 15),
-    SPECIAL("스페셜", 50);
+    BY_TYPE("유형별퀘스트", 15),
+    FIXED("고정퀘스트", 15),
+    SPECIAL("스페셜퀘스트", 50);
 
     private final String code;
     private final Integer exp;
