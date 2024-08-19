@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static dough.member.fixture.MemberFixture.MEMBER;
+import static dough.member.fixture.MemberFixture.GOEUN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -51,16 +51,16 @@ class SignUpServiceTest {
     void updateMemberInfo_withSignUpRequest() {
         // given
         given(tokenProvider.getMemberIdFromToken(anyString())).willReturn(1L);
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(MEMBER));
-        given(memberRepository.save(any(Member.class))).willReturn(MEMBER);
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(GOEUN));
+        given(memberRepository.save(any(Member.class))).willReturn(GOEUN);
 
         // when
         MemberInfoResponse response = signUpService.updateMemberInfo(signUpRequest);
 
         // then
         assertThat(response).isNotNull();
-        assertThat(response.getId()).isEqualTo(MEMBER.getId());
-        assertThat(response.getNickname()).isEqualTo(MEMBER.getNickname());
+        assertThat(response.getId()).isEqualTo(GOEUN.getId());
+        assertThat(response.getNickname()).isEqualTo(GOEUN.getNickname());
 
         // save 메서드에 전달된 Member 객체 캡처
         ArgumentCaptor<Member> memberCaptor = ArgumentCaptor.forClass(Member.class);

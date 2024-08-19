@@ -17,7 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static dough.member.fixture.MemberFixture.MEMBER;
+import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.notification.domain.type.NotificationType.DAILY_QUEST;
 import static dough.notification.fixture.notificationFixture.NotificationFixture.DAILY_NOTIFICATION;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,12 +46,12 @@ public class NotificationServiceTest {
         final List<Notification> notifications = List.of(DAILY_NOTIFICATION);
 
         given(memberRepository.findById(any()))
-                .willReturn(Optional.of(MEMBER));
+                .willReturn(Optional.of(GOEUN));
         given(notificationRepository.findAllByMemberId(any()))
                 .willReturn(notifications);
 
         // when
-        final List<NotificationResponse> actualResponses = notificationService.getAllNotifications(MEMBER.getId());
+        final List<NotificationResponse> actualResponses = notificationService.getAllNotifications(GOEUN.getId());
 
         // then
         assertThat(actualResponses).usingRecursiveComparison()
@@ -62,7 +62,7 @@ public class NotificationServiceTest {
     @Test
     void updateNotifications() {
         // given
-        final Notification updatedNotification = new Notification(MEMBER, DAILY_QUEST);
+        final Notification updatedNotification = new Notification(GOEUN, DAILY_QUEST);
         updatedNotification.changeIsChecked(false);
 
         final NotificationsUpdateRequest notificationsUpdateRequest = new NotificationsUpdateRequest(List.of(
@@ -70,7 +70,7 @@ public class NotificationServiceTest {
         ));
 
         given(memberRepository.findById(any()))
-                .willReturn(Optional.of(MEMBER));
+                .willReturn(Optional.of(GOEUN));
         given(notificationRepository.findAllByMemberIdAndNotificationIds(anyLong(), any()))
                 .willReturn(List.of(DAILY_NOTIFICATION));
         given(notificationRepository.saveAll(any()))

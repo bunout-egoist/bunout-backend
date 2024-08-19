@@ -94,12 +94,12 @@ public class MemberService {
     }
 
     public MemberAttendanceResponse checkAttendance(final Long memberId) {
+        // TODO 레벨업 체크 필요
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDateTime currentAt = LocalDateTime.now();
         final LocalDate startOfWeek = currentAt.toLocalDate().with(TemporalAdjusters.previousOrSame(MONDAY));
-
         final LocalDate lastAttendanceDate = member.getAttendanceAt().toLocalDate();
 
         if (lastAttendanceDate.equals(currentAt.toLocalDate())) {

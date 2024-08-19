@@ -5,6 +5,7 @@ import dough.global.AbstractControllerTest;
 import dough.member.dto.request.BurnoutRequest;
 import dough.member.dto.request.FixedQuestRequest;
 import dough.member.dto.request.MemberInfoRequest;
+import dough.member.dto.response.MemberAttendanceResponse;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
@@ -74,7 +75,7 @@ class MemberControllerTest extends AbstractControllerTest {
     @Test
     void getMemberInfo() throws Exception {
         // given
-        Long id = 1L;
+        final Long id = 1L;
         final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(id, "goeun");
 
         when(memberService.getMemberInfo(anyLong()))
@@ -109,7 +110,7 @@ class MemberControllerTest extends AbstractControllerTest {
     @Test
     void updateMemberInfo() throws Exception {
         // given
-        Long id = 1L;
+        final Long id = 1L;
         final MemberInfoRequest memberInfoRequest = new MemberInfoRequest("minju");
         final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(id, "minju");
 
@@ -165,7 +166,7 @@ class MemberControllerTest extends AbstractControllerTest {
     @Test
     void updateBurnout() throws Exception {
         // given
-        Long id = 1L;
+        final Long id = 1L;
         final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
 
         doNothing().when(memberService).updateBurnout(anyLong(), any());
@@ -193,7 +194,7 @@ class MemberControllerTest extends AbstractControllerTest {
     @Test
     void updateBurnout_BurnoutNull() throws Exception {
         // given
-        Long id = 1L;
+        final Long id = 1L;
         final BurnoutRequest burnoutRequest = new BurnoutRequest(null);
 
         doNothing().when(memberService).updateBurnout(anyLong(), any());
@@ -210,7 +211,7 @@ class MemberControllerTest extends AbstractControllerTest {
     @Test
     void updateFixedQuest() throws Exception {
         // given
-        Long id = 1L;
+        final Long id = 1L;
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
 
         doNothing().when(memberService).updateFixedQuest(anyLong(), any());
@@ -238,7 +239,7 @@ class MemberControllerTest extends AbstractControllerTest {
     @Test
     void updateFixedQuest_FixedQuestNull() throws Exception {
         // given
-        Long id = 1L;
+        final Long id = 1L;
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(null);
 
         doNothing().when(memberService).updateFixedQuest(anyLong(), any());
@@ -249,5 +250,38 @@ class MemberControllerTest extends AbstractControllerTest {
         // then
         resultActions.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("고정 퀘스트 아이디를 입력해주세요."));
+    }
+
+    @DisplayName("멤버의 고정 퀘스트를 재설정할 수 있다.")
+    @Test
+    void checkAttendance() throws Exception {
+        // given
+        final Long id = 1L;
+        final MemberAttendanceResponse memberAttendanceResponse = new MemberAttendanceResponse(3, 4);
+
+        when(memberService.checkAttendance(anyLong()))
+                .thenReturn(memberAttendanceResponse);
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(put("/api/v1/members/{memberId}/attendance", id));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        pathParameters(
+                                parameterWithName("memberId")
+                                        .description("멤버 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("level")
+                                        .type(NUMBER)
+                                        .description("레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("attendanceCount")
+                                        .type(NUMBER)
+                                        .description("출석 일수")
+                                        .attributes(field("constraint", "양의 정수"))
+                        )
+                ));
     }
 }
