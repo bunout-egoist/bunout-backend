@@ -71,8 +71,7 @@ public class QuestServiceTest {
     void save() {
         // given
         final QuestRequest questRequest = new QuestRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기",
+                "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
                 "유형별",
                 3,
                 true,
@@ -101,8 +100,7 @@ public class QuestServiceTest {
     void save_QuestTypeInvalid() {
         // given
         final QuestRequest questRequest = new QuestRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기",
+                "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
                 "퀘스트 타입 오류",
                 3,
                 true,
@@ -287,7 +285,7 @@ public class QuestServiceTest {
 
         given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
-        given(selectedQuestRepository.findTodayBY_TYPEQuests(anyLong(), any()))
+        given(selectedQuestRepository.findTodayByTypeQuests(anyLong(), any()))
                 .willReturn(todayQuests);
 
         // when

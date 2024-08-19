@@ -91,7 +91,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
-        return selectedQuestRepository.findTodayBY_TYPEQuests(member.getId(), currentDate);
+        return selectedQuestRepository.findTodayByTypeQuests(member.getId(), currentDate);
     }
 
     private Quest getTodaySpecialQuest(final Burnout burnout) {
@@ -108,7 +108,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> updateTodayBY_TYPEQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteBY_TYPEQuests = getIncompleteBY_TYPEQuests(member, currentDate);
+        final List<SelectedQuest> incompleteBY_TYPEQuests = getIncompleteByTypeQuests(member, currentDate);
 
         int neededCount = 2 - incompleteBY_TYPEQuests.size();
 
@@ -123,9 +123,9 @@ public class QuestService {
         return incompleteBY_TYPEQuests;
     }
 
-    private List<SelectedQuest> getIncompleteBY_TYPEQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteBY_TYPEQuests = selectedQuestRepository.findIncompleteBY_TYPEQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
-        return incompleteBY_TYPEQuests.stream()
+    private List<SelectedQuest> getIncompleteByTypeQuests(final Member member, final LocalDate currentDate) {
+        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
+        return incompleteByTypeQuests.stream()
                 .map(incompleteBY_TYPEQuest -> {
                     incompleteBY_TYPEQuest.updateDueDate(currentDate);
                     return incompleteBY_TYPEQuest;
@@ -177,8 +177,7 @@ public class QuestService {
 
         final QuestType questType = QuestType.getMappedQuestType(questRequest.getQuestType());
         final Quest newQuest = new Quest(
-                questRequest.getDescription(),
-                questRequest.getActivity(),
+                questRequest.getContent(),
                 questType,
                 questRequest.getDifficulty(),
                 burnout,
@@ -203,7 +202,6 @@ public class QuestService {
         final Quest updateQuest = new Quest(
                 questId,
                 questUpdateRequest.getDescription(),
-                questUpdateRequest.getActivity(),
                 questType,
                 questUpdateRequest.getDifficulty(),
                 burnout,
