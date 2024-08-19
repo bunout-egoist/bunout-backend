@@ -1,11 +1,11 @@
 package dough.feedback.service;
 
-import dough.feedback.domain.Feedback;
 import dough.feedback.domain.repository.FeedbackRepository;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
+import dough.level.domain.repository.LevelRepository;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +23,7 @@ import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_SELECTED_QUEST_ID;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
+import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,6 +47,9 @@ class FeedbackServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
+    @Mock
+    private LevelRepository levelRepository;
+
     @DisplayName("피드백을 성공적으로 생성할 수 있다.")
     @Test
     void createFeedback() {
@@ -56,14 +60,20 @@ class FeedbackServiceTest {
                 5
         );
 
-        final MemberLevel memberLevel = new MemberLevel(GOEUN, 2, true);
+        final MemberLevel memberLevel = new MemberLevel(GOEUN, 1, false);
+
+        IN_PROGRESS_QUEST1.updateFeedback(FEEDBACK1);
 
         given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findById(anyLong()))
-                .willReturn(Optional.of(COMPLETED_QUEST1));
-        given(feedbackRepository.save(any(Feedback.class)))
+                .willReturn(Optional.of(IN_PROGRESS_QUEST1));
+        given(feedbackRepository.save(any()))
                 .willReturn(FEEDBACK1);
+        given(selectedQuestRepository.save(any()))
+                .willReturn(COMPLETED_QUEST1);
+        given(memberRepository.save(any()))
+                .willReturn(GOEUN);
 
         // when
         final FeedbackResponse actualResponse = feedbackService.createFeedback(GOEUN.getId(), feedbackRequest);
@@ -72,8 +82,10 @@ class FeedbackServiceTest {
         verify(memberRepository).findById(any());
         verify(selectedQuestRepository).findById(anyLong());
         verify(feedbackRepository).save(any());
+        verify(selectedQuestRepository).save(any());
+        verify(memberRepository).save(any());
         assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(FeedbackResponse.from(memberLevel));
+                .isEqualTo(FeedbackResponse.of(memberLevel));
     }
 
     @DisplayName("존재하지 않는 선택된 퀘스트 아이디로 피드백을 생성할 때 예외가 발생한다.")

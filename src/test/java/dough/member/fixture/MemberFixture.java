@@ -6,6 +6,7 @@ import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.level.fixture.LevelFixture.LEVEL1;
 import static dough.login.domain.type.RoleType.MEMBER;
 import static dough.login.domain.type.SocialLoginType.KAKAO;
+import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 
 public class MemberFixture {
 
@@ -20,6 +21,7 @@ public class MemberFixture {
             2002,
             ENTHUSIAST,
             MEMBER,
-            LEVEL1
+            LEVEL1,
+            FIXED_QUEST1
     );
 }

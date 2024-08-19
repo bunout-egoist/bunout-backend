@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.sql.Update;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -111,7 +110,8 @@ public class Member extends BaseEntity {
                   final Integer birthYear,
                   final Burnout burnout,
                   final RoleType roleType,
-                  final Level level
+                  final Level level,
+                  final Quest quest
     ) {
         this.id = id;
         this.nickname = nickname;
@@ -130,6 +130,7 @@ public class Member extends BaseEntity {
         this.attendanceAt = LocalDate.EPOCH.atStartOfDay();
         this.attendanceCount = 0;
         this.level = level;
+        this.quest = quest;
     }
 
     public void updateMember(

@@ -34,7 +34,8 @@ public class LoginService {
                 null,
                 null,
                 roleType,
-                level
+                level,
+                null
         );
 
         return memberRepository.save(member);

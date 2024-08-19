@@ -71,12 +71,12 @@ class MemberControllerTest extends AbstractControllerTest {
                 .content(objectMapper.writeValueAsString(fixedQuestRequest)));
     }
 
-    @DisplayName("멤버의 닉네임을 조회할 수 있다.")
+    @DisplayName("멤버의 정보을 조회할 수 있다.")
     @Test
     void getMemberInfo() throws Exception {
         // given
         final Long id = 1L;
-        final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(id, "goeun");
+        final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(id, "goeun", 1L, 1L, 2);
 
         when(memberService.getMemberInfo(anyLong()))
                 .thenReturn(memberInfoResponse);
@@ -98,7 +98,19 @@ class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("nickname")
                                         .type(STRING)
                                         .description("멤버 닉네임")
-                                        .attributes(field("constraint", "문자열"))
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("burnoutId")
+                                        .type(NUMBER)
+                                        .description("번아웃 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("fixedQuestId")
+                                        .type(NUMBER)
+                                        .description("고정 퀘스트 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("level")
+                                        .type(NUMBER)
+                                        .description("레벨")
+                                        .attributes(field("constraint", "양의 정수"))
                         )
                 ));
 
@@ -112,7 +124,7 @@ class MemberControllerTest extends AbstractControllerTest {
         // given
         final Long id = 1L;
         final MemberInfoRequest memberInfoRequest = new MemberInfoRequest("minju");
-        final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(id, "minju");
+        final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(id, "goeun", 1L, 1L, 2);
 
         when(memberService.updateMemberInfo(anyLong(), any()))
                 .thenReturn(memberInfoResponse);
@@ -140,7 +152,19 @@ class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("nickname")
                                         .type(STRING)
                                         .description("멤버 닉네임")
-                                        .attributes(field("constraint", "문자열"))
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("burnoutId")
+                                        .type(NUMBER)
+                                        .description("번아웃 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("fixedQuestId")
+                                        .type(NUMBER)
+                                        .description("고정 퀘스트 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("level")
+                                        .type(NUMBER)
+                                        .description("레벨")
+                                        .attributes(field("constraint", "양의 정수"))
                         )
                 ));
 

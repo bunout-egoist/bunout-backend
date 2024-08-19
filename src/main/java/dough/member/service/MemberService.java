@@ -41,7 +41,7 @@ public class MemberService {
     public MemberInfoResponse getMemberInfo(final Long memberId) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-        return MemberInfoResponse.from(member);
+        return MemberInfoResponse.of(member);
     }
 
     public MemberInfoResponse updateMemberInfo(final Long memberId, final MemberInfoRequest memberInfoRequest) {
@@ -51,7 +51,7 @@ public class MemberService {
         member.updateMember(memberInfoRequest.getNickname());
         memberRepository.save(member);
 
-        return MemberInfoResponse.from(member);
+        return MemberInfoResponse.of(member);
     }
 
     public Member findById(Long memberId) {

@@ -14,8 +14,9 @@ public class FeedbackResponse {
     private final Integer previousLevel;
     private final Boolean isLevelUp;
 
-    public static FeedbackResponse from(final MemberLevel memberLevel) {
+    public static FeedbackResponse of(final MemberLevel memberLevel) {
         final Member member = memberLevel.getMember();
+
         return new FeedbackResponse(
                 member.getExp(),
                 member.getLevel().getLevel(),

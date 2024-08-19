@@ -22,7 +22,6 @@ import java.util.Optional;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.global.exception.ExceptionCode.*;
-import static dough.level.fixture.LevelFixture.LEVEL1;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,7 +58,7 @@ class MemberServiceTest {
         final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(GOEUN.getId());
 
         // then
-        assertThat(memberInfoResponse).usingRecursiveComparison().isEqualTo(MemberInfoResponse.from(GOEUN));
+        assertThat(memberInfoResponse).usingRecursiveComparison().isEqualTo(MemberInfoResponse.of(GOEUN));
     }
 
     @DisplayName("멤버의 닉네임을 수정할 수 있다.")

@@ -57,7 +57,7 @@ public class FeedbackService {
 
         final MemberLevel memberLevel = updateLevel(member);
         memberRepository.save(memberLevel.getMember());
-        return FeedbackResponse.from(memberLevel);
+        return FeedbackResponse.of(memberLevel);
     }
 
     private MemberLevel updateLevel(final Member member) {
