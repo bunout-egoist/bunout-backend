@@ -12,6 +12,6 @@ public class MemberAttendanceResponse {
     private final Integer attendanceCount;
 
     public static MemberAttendanceResponse of(final Member member) {
-        return new MemberAttendanceResponse(member.getLevel(), member.getAttendanceCount());
+        return new MemberAttendanceResponse(member.getLevel().getLevel(), member.getAttendanceCount());
     }
 }

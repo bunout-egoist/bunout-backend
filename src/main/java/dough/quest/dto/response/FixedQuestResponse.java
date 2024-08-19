@@ -1,21 +1,20 @@
 package dough.quest.dto.response;
 
 import dough.quest.domain.Quest;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
 public class FixedQuestResponse {
 
-    private final Long id;
-    private final String description;
-    private final String activity;
+    private final Long questId;
+    private final String content;
 
     public static FixedQuestResponse of(final Quest quest) {
         return new FixedQuestResponse(
                 quest.getId(),
-                quest.getDescription(),
-                quest.getActivity()
+                quest.getContent()
         );
     }
 }

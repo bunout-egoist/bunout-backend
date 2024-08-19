@@ -13,6 +13,7 @@ public enum ExceptionCode {
     INVALID_QUEST_TYPE(2000, "유효하지 않은 퀘스트 타입입니다."),
     NOT_FOUND_QUEST_ID(2001, "요청하신 ID에 해당하는 퀘스트를 찾을 수 없습니다."),
     ALREADY_USED_QUEST_ID(2002, "요청하신 퀘스트 ID를 사용하고 있는 멤버가 있습니다."),
+    NOT_FOUND_SELECTED_QUEST_ID(2001, "요청하신 ID에 해당하는 선택된 퀘스트를 찾을 수 없습니다."),
 
     // 3000 member
 
@@ -32,6 +33,9 @@ public enum ExceptionCode {
 
     // 7000 keyword
     NOT_FOUND_KEYWORD_ID(7000, "요청하신 키워드를 찾을 수 없습니다."),
+
+    // 8000 level
+    NOT_FOUND_LEVEL_ID(8000, "요청하신 ID에 해당하는 레벨을 찾을 수 없습니다."),
 
     INTERNAL_SEVER_ERROR(9999,"서버에서 에러가 발생하였습니다.");
 

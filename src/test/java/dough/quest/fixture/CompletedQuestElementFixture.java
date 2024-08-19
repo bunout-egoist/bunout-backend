@@ -9,13 +9,13 @@ import static dough.quest.fixture.QuestFixture.*;
 public class CompletedQuestElementFixture {
 
     public static final CompletedQuestElement QUEST_ELEMENT1 = new CompletedQuestElement(
-            DAILY_QUEST1,
+            BY_TYPE_QUEST1,
             "https://~",
             LocalDate.of(2024, 8, 11)
     );
 
     public static final CompletedQuestElement QUEST_ELEMENT2 = new CompletedQuestElement(
-            DAILY_QUEST2,
+            BY_TYPE_QUEST2,
             "https://~",
             LocalDate.of(2024, 8, 11)
     );

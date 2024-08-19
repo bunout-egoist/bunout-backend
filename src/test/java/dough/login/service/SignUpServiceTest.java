@@ -23,8 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -43,7 +43,7 @@ class SignUpServiceTest {
 
     @BeforeEach
     void setup() {
-        signUpRequest = new SignUpRequest("validAccessToken", "kimjunhee", "남성", 1990, "직장인");
+        signUpRequest = new SignUpRequest("validAccessToken", "kimjunhee", "남성", 1990, "직장인", 1L, 1L);
     }
 
     @DisplayName("SignUpRequest를 통해 회원 정보를 업데이트할 수 있다.")

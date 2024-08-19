@@ -30,6 +30,6 @@ public class SignUpService {
                 signUpRequest.getOccupation()
         );
 
-        return MemberInfoResponse.from(memberRepository.save(member));
+        return MemberInfoResponse.of(memberRepository.save(member));
     }
 }

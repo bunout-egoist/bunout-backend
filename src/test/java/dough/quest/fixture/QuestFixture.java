@@ -5,26 +5,24 @@ import dough.quest.domain.Quest;
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.keyword.fixture.KeywordFixture.INSIDE_ALONE;
 import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
-import static dough.quest.domain.type.QuestType.DAILY;
+import static dough.quest.domain.type.QuestType.BY_TYPE;
 import static dough.quest.domain.type.QuestType.FIXED;
 
 public class QuestFixture {
 
-    public static final Quest DAILY_QUEST1 = new Quest(
+    public static final Quest BY_TYPE_QUEST1 = new Quest(
             1L,
-            "점심시간, 몸과 마음을 건강하게 유지하며",
-            "15분 운동하기",
-            DAILY,
+            "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
+            BY_TYPE,
             5,
             ENTHUSIAST,
             OUTSIDE_ALONE
     );
 
-    public static final Quest DAILY_QUEST2 = new Quest(
+    public static final Quest BY_TYPE_QUEST2 = new Quest(
             2L,
-            "아침시간, 표지가 예쁜",
-            "5분간 새로운 책 읽기",
-            DAILY,
+            "아침시간, 표지가 예쁜 5분간 새로운 책 읽기",
+            BY_TYPE,
             2,
             ENTHUSIAST,
             INSIDE_ALONE
@@ -32,8 +30,7 @@ public class QuestFixture {
 
     public static final Quest FIXED_QUEST1 = new Quest(
             3L,
-            "아침시간, 조용한 방 안에서",
-            "5분간 명상하기",
+            "아침시간, 조용한 방 안에서 5분간 명상하기",
             FIXED,
             2,
             ENTHUSIAST,
@@ -42,8 +39,7 @@ public class QuestFixture {
 
     public static final Quest FIXED_QUEST2 = new Quest(
             3L,
-            "아침시간, 거울을 보며",
-            "1분간 칭찬하기",
+            "아침시간, 거울을 보며 1분간 칭찬하기",
             FIXED,
             3,
             ENTHUSIAST,

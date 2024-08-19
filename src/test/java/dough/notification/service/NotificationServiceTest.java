@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static dough.member.fixture.MemberFixture.GOEUN;
-import static dough.notification.domain.type.NotificationType.DAILY_QUEST;
-import static dough.notification.fixture.notificationFixture.NotificationFixture.DAILY_NOTIFICATION;
+import static dough.notification.domain.type.NotificationType.BY_TYPE_QUEST;
+import static dough.notification.fixture.notificationFixture.NotificationFixture.BY_TYPE_NOTIFICATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -43,7 +43,7 @@ public class NotificationServiceTest {
     @Test
     void getAllNotifications() {
         // given
-        final List<Notification> notifications = List.of(DAILY_NOTIFICATION);
+        final List<Notification> notifications = List.of(BY_TYPE_NOTIFICATION);
 
         given(memberRepository.findById(any()))
                 .willReturn(Optional.of(GOEUN));
@@ -55,29 +55,29 @@ public class NotificationServiceTest {
 
         // then
         assertThat(actualResponses).usingRecursiveComparison()
-                .isEqualTo(List.of(NotificationResponse.of(DAILY_NOTIFICATION)));
+                .isEqualTo(List.of(NotificationResponse.of(BY_TYPE_NOTIFICATION)));
     }
 
     @DisplayName("알람을 업데이트 할 수 있다.")
     @Test
     void updateNotifications() {
         // given
-        final Notification updatedNotification = new Notification(GOEUN, DAILY_QUEST);
+        final Notification updatedNotification = new Notification(GOEUN, BY_TYPE_QUEST);
         updatedNotification.changeIsChecked(false);
 
         final NotificationsUpdateRequest notificationsUpdateRequest = new NotificationsUpdateRequest(List.of(
-                new NotificationUpdateRequest(DAILY_NOTIFICATION.getId(), false)
+                new NotificationUpdateRequest(BY_TYPE_NOTIFICATION.getId(), false)
         ));
 
         given(memberRepository.findById(any()))
                 .willReturn(Optional.of(GOEUN));
         given(notificationRepository.findAllByMemberIdAndNotificationIds(anyLong(), any()))
-                .willReturn(List.of(DAILY_NOTIFICATION));
+                .willReturn(List.of(BY_TYPE_NOTIFICATION));
         given(notificationRepository.saveAll(any()))
                 .willReturn(List.of(updatedNotification));
 
         // when
-        notificationService.updateNotifications(DAILY_NOTIFICATION.getId(), notificationsUpdateRequest);
+        notificationService.updateNotifications(BY_TYPE_NOTIFICATION.getId(), notificationsUpdateRequest);
 
         // then
         verify(memberRepository).findById(anyLong());

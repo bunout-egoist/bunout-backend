@@ -487,9 +487,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_오늘_퀘스트_업데이트">오늘 퀘스트 업데이트</a>
 <ul class="sectlevel3">
 <li><a href="#_request_6">Request</a></li>
+<li><a href="#_response_7">Response</a></li>
 </ul>
 </li>
-<li><a href="#_response_7">Response</a></li>
 <li><a href="#_고정_퀘스트_조회">고정 퀘스트 조회</a>
 <ul class="sectlevel3">
 <li><a href="#_request_7">Request</a></li>
@@ -630,13 +630,31 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">멤버 닉네임</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>burnoutId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">번아웃 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuestId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>level</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">레벨</p></td>
+</tr>
 </tbody>
 </table>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "id" : 1,
-  "nickname" : "goeun"
+  "nickname" : "goeun",
+  "burnoutId" : 1,
+  "fixedQuestId" : 1,
+  "level" : 2
 }</code></pre>
 </div>
 </div>
@@ -725,13 +743,31 @@ Host: localhost:8080
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">멤버 닉네임</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>burnoutId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">번아웃 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuestId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>level</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">레벨</p></td>
+</tr>
 </tbody>
 </table>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "id" : 1,
-  "nickname" : "minju"
+  "nickname" : "goeun",
+  "burnoutId" : 1,
+  "fixedQuestId" : 1,
+  "level" : 2
 }</code></pre>
 </div>
 </div>
@@ -1034,9 +1070,8 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 </div>
 </div>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_response_7"><a class="link" href="#_response_7">Response</a></h3>
+<div class="sect3">
+<h4 id="_response_7"><a class="link" href="#_response_7">Response</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1067,24 +1102,24 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">오늘 퀘스트</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>todayQuests[0].activity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>todayQuests[0].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 활동 내용</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 내용</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>todayQuests[0].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>todayQuests[0].questType</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 설명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>todayQuests[1].activity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>todayQuests[1].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 활동 내용</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 내용</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>todayQuests[1].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>todayQuests[1].questType</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 설명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입</p></td>
 </tr>
 </tbody>
 </table>
@@ -1094,13 +1129,14 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
   "placeKeyword" : "어디서든",
   "participationKeyword" : "혼자서",
   "todayQuests" : [ {
-    "activity" : "15분 운동하기",
-    "description" : "점심시간, 몸과 마음을 건강하게 유지하며"
+    "content" : "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
+    "questType" : "유형별퀘스트"
   }, {
-    "activity" : "5분간 새로운 책 읽기",
-    "description" : "아침시간, 표지가 예쁜"
+    "content" : "아침시간, 표지가 예쁜 5분간 새로운 책 읽기",
+    "questType" : "유형별퀘스트"
   } ]
 }</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1156,34 +1192,24 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">번아웃 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[0].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[0].questId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 아이디</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[0].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[0].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 설명</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 내용</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[0].activity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 활동 내용</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[1].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[1].questId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 아이디</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[1].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[1].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[1].activity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 활동 내용</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 내용</p></td>
 </tr>
 </tbody>
 </table>
@@ -1192,13 +1218,11 @@ Host: localhost:8080</code></pre>
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "burnoutName" : "열광형",
   "fixedQuests" : [ {
-    "id" : 3,
-    "description" : "아침시간, 조용한 방 안에서",
-    "activity" : "5분간 명상하기"
+    "questId" : 3,
+    "content" : "아침시간, 조용한 방 안에서 5분간 명상하기"
   }, {
-    "id" : 3,
-    "description" : "아침시간, 거울을 보며",
-    "activity" : "1분간 칭찬하기"
+    "questId" : 3,
+    "content" : "아침시간, 거울을 보며 1분간 칭찬하기"
   } ]
 }</code></pre>
 </div>
@@ -1224,19 +1248,14 @@ Host: localhost:8080</code></pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>activity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 활동 내용</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 내용</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>questType</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (데일리/스페셜)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (고정/유형별/스페셜)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>difficulty</code></p></td>
@@ -1264,13 +1283,12 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/quests HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 248
+Content-Length: 225
 Host: localhost:8080
 
 {
-  "description" : "점심시간, 몸과 마음을 건강하게 유지하며",
-  "activity" : "15분 운동하기",
-  "questType" : "데일리",
+  "content" : "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
+  "questType" : "유형별",
   "difficulty" : 3,
   "isOutside" : true,
   "isGroup" : false,
@@ -1296,19 +1314,14 @@ Host: localhost:8080
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>activity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 활동 내용</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 내용</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>questType</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (데일리/스페셜)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (고정/유형별/스페셜)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>difficulty</code></p></td>
@@ -1377,19 +1390,14 @@ Host: localhost:8080
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>activity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 활동 내용</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 내용</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>questType</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (데일리/스페셜)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (고정/유형별/스페셜)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>difficulty</code></p></td>
@@ -1417,12 +1425,11 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/quests/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 249
+Content-Length: 226
 Host: localhost:8080
 
 {
-  "description" : "점심시간, 몸과 마음을 건강하게 유지하며",
-  "activity" : "20분 운동하기",
+  "content" : "점심시간, 몸과 마음을 건강하게 유지하며 20분 운동하기",
   "questType" : "스페셜",
   "difficulty" : 4,
   "isOutside" : false,
@@ -1546,19 +1553,14 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">피드백 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[0].questDetails[0].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[0].questDetails[0].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[0].questDetails[0].activity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 활동 내용</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 내용</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[0].questDetails[0].questType</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (데일리/스페셜)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (고정/유형별/스페셜)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[0].questDetails[1].imageUrl</code></p></td>
@@ -1566,24 +1568,19 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">피드백 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[0].questDetails[1].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[0].questDetails[1].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[0].questDetails[1].activity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 활동 내용</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 내용</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[0].questDetails[1].questType</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (데일리/스페셜)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (고정/유형별/스페셜)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[0].dailyCount</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">완료한 퀘스트 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">완료한 데일리 퀘스트 개수</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[1].completedDate</code></p></td>
@@ -1596,24 +1593,19 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">피드백 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[1].questDetails[0].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[1].questDetails[0].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 설명</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[1].questDetails[0].activity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 활동 내용</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 내용</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[1].questDetails[0].questType</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (데일리/스페셜)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 타입 (고정/유형별/스페셜)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>[1].dailyCount</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">완료한 퀘스트 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">완료한 데일리 퀘스트 개수</p></td>
 </tr>
 </tbody>
 </table>
@@ -1621,29 +1613,26 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 709
+Content-Length: 661
 
 [ {
   "completedDate" : "2024-08-11",
   "questDetails" : [ {
     "imageUrl" : "https://~",
-    "description" : "점심시간, 몸과 마음을 건강하게 유지하며",
-    "activity" : "15분 운동하기",
-    "questType" : "데일리"
+    "content" : "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
+    "questType" : "유형별퀘스트"
   }, {
     "imageUrl" : "https://~",
-    "description" : "아침시간, 표지가 예쁜",
-    "activity" : "5분간 새로운 책 읽기",
-    "questType" : "데일리"
+    "content" : "아침시간, 표지가 예쁜 5분간 새로운 책 읽기",
+    "questType" : "유형별퀘스트"
   } ],
   "dailyCount" : 2
 }, {
   "completedDate" : "2024-08-14",
   "questDetails" : [ {
     "imageUrl" : "https://~",
-    "description" : "아침시간, 조용한 방 안에서",
-    "activity" : "5분간 명상하기",
-    "questType" : "고정"
+    "content" : "아침시간, 조용한 방 안에서 5분간 명상하기",
+    "questType" : "고정퀘스트"
   } ],
   "dailyCount" : 1
 } ]</code></pre>
@@ -1741,7 +1730,7 @@ Host: localhost:8080</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>countDetails[].dailyCount</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">완료한 퀘스트 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">완료한 데일리 퀘스트 개수</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>completedAllQuestsDateCount</code></p></td>
@@ -1764,7 +1753,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "countDetails" : [ {
-    "completedDate" : "2024-08-19",
+    "completedDate" : "2024-08-20",
     "dailyCount" : 10
   } ],
   "completedAllQuestsDateCount" : 0,
@@ -1832,14 +1821,14 @@ Host: localhost:8080</code></pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dailyCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dailyTotal</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">데일리/고정 퀘스트 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">완료한 데일리 퀘스트 총합</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>specialCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>specialTotal</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">스페셜 퀘스트 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">완료한 스페셜 퀘스트 총합</p></td>
 </tr>
 </tbody>
 </table>
@@ -1850,8 +1839,8 @@ Content-Type: application/json;charset=UTF-8
 Content-Length: 49
 
 {
-  "dailyCount" : 50,
-  "specialCount" : 40
+  "dailyTotal" : 50,
+  "specialTotal" : 40
 }</code></pre>
 </div>
 </div>
@@ -1867,7 +1856,7 @@ Content-Length: 49
 <div class="sect3">
 <h4 id="_request_14"><a class="link" href="#_request_14">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. /api/v1/feedbacks/{questId}</caption>
+<caption class="title">Table 13. /api/v1/feedbacks/{memberId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1880,8 +1869,8 @@ Content-Length: 49
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
 </tr>
 </tbody>
 </table>
@@ -1900,6 +1889,11 @@ Content-Length: 49
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>selectedQuestId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">선택된 퀘스트 아이디</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>imageUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이미지 URL</p></td>
@@ -1914,7 +1908,8 @@ Content-Length: 49
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "imageUrl" : "img1.png",
+  "imageUrl" : "png1",
+  "selectedQuestId" : 1,
   "difficulty" : 5
 }</code></pre>
 </div>
@@ -1937,40 +1932,34 @@ Content-Length: 49
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>exp</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">피드백 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경험치</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>imageUrl</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 URL</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>difficulty</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>previousLevel</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">난이도</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">이전 레벨</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentLevel</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 레벨</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>selectedQuestId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">선택된 퀘스트 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isLevelUp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">레벨업 유무</p></td>
 </tr>
 </tbody>
 </table>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "id" : 1,
-  "imageUrl" : "img1.png",
-  "difficulty" : 5,
-  "memberId" : 1,
-  "selectedQuestId" : null
+  "exp" : 55,
+  "currentLevel" : 3,
+  "previousLevel" : 2,
+  "isLevelUp" : true
 }</code></pre>
 </div>
 </div>
@@ -2078,7 +2067,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">[ {
   "id" : 1,
-  "notificationType" : "DAILY_QUEST",
+  "notificationType" : "BY_TYPE_QUEST",
   "isChecked" : true
 }, {
   "id" : 2,
@@ -2251,11 +2240,11 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 248
+Content-Length: 250
 
 [ {
   "id" : 1,
-  "notificationType" : "DAILY_QUEST",
+  "notificationType" : "BY_TYPE_QUEST",
   "isChecked" : true
 }, {
   "id" : 2,
@@ -2304,6 +2293,10 @@ Content-Length: 248
 <td class="tableblock halign-left valign-top"><p class="tableblock">요청하신 퀘스트 ID를 사용하고 있는 멤버가 있습니다.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">요청하신 ID에 해당하는 선택된 퀘스트를 찾을 수 없습니다.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3000</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">요청하신 ID에 해당하는 유저를 찾을 수 없습니다.</p></td>
 </tr>
@@ -2332,6 +2325,10 @@ Content-Length: 248
 <td class="tableblock halign-left valign-top"><p class="tableblock">요청하신 키워드를 찾을 수 없습니다.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">요청하신 ID에 해당하는 레벨을 찾을 수 없습니다.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">9999</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">서버에서 에러가 발생하였습니다.</p></td>
 </tr>
@@ -2343,7 +2340,7 @@ Content-Length: 248
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-08-19 11:19:31 +0900
+Last updated 2024-08-20 03:05:25 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

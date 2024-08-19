@@ -24,7 +24,7 @@ public class MonthlySummaryResponse {
             final Long averageCompletion
     ) {
         final List<CompletedQuestsCountDetailResponse> dateCompletedCountDateResponses = completedQuestsCountDateElements.stream()
-                .map(element -> CompletedQuestsCountDetailResponse.of(element.getCompletedDate(), element.getDailyCount()))
+                .map(element -> CompletedQuestsCountDetailResponse.of(element.getCompletedDate(), element.getBY_TYPECount()))
                 .toList();
 
         return new MonthlySummaryResponse(

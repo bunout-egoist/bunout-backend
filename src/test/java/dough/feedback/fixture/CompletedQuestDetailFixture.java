@@ -7,14 +7,14 @@ import java.util.List;
 
 import static dough.feedback.fixture.FeedbackFixture.FEEDBACK1;
 import static dough.feedback.fixture.FeedbackFixture.FEEDBACK2;
-import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
-import static dough.quest.fixture.QuestFixture.DAILY_QUEST2;
+import static dough.quest.fixture.QuestFixture.BY_TYPE_QUEST1;
+import static dough.quest.fixture.QuestFixture.BY_TYPE_QUEST2;
 
 public class CompletedQuestDetailFixture {
 
     public static final List<CompletedQuestDetail> COMPLETED_QUEST_DETAILS = List.of(
-            new CompletedQuestDetail(DAILY_QUEST1, FEEDBACK1),
-            new CompletedQuestDetail(DAILY_QUEST2, FEEDBACK2)
+            new CompletedQuestDetail(BY_TYPE_QUEST1, FEEDBACK1),
+            new CompletedQuestDetail(BY_TYPE_QUEST2, FEEDBACK2)
     );
 
     public static class CompletedQuestDetail {

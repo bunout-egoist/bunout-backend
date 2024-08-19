@@ -7,7 +7,6 @@ import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestListResponse;
-import dough.quest.dto.response.FixedQuestResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import dough.quest.service.QuestService;
 import org.junit.jupiter.api.DisplayName;
@@ -65,9 +64,8 @@ class QuestControllerTest extends AbstractControllerTest {
     void createQuest() throws Exception {
         // given
         final QuestRequest questRequest = new QuestRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기",
-                "데일리",
+                "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
+                "유형별",
                 3,
                 true,
                 false,
@@ -85,17 +83,13 @@ class QuestControllerTest extends AbstractControllerTest {
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
                         requestFields(
-                                fieldWithPath("description")
+                                fieldWithPath("content")
                                         .type(STRING)
-                                        .description("퀘스트 설명")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("activity")
-                                        .type(STRING)
-                                        .description("퀘스트 활동 내용")
+                                        .description("퀘스트 내용")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("questType")
                                         .type(STRING)
-                                        .description("퀘스트 타입 (데일리/스페셜)")
+                                        .description("퀘스트 타입 (고정/유형별/스페셜)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("difficulty")
                                         .type(NUMBER)
@@ -122,8 +116,7 @@ class QuestControllerTest extends AbstractControllerTest {
     void updateQuest() throws Exception {
         // given
         final QuestUpdateRequest questUpdateRequest = new QuestUpdateRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며",
-                "20분 운동하기",
+                "점심시간, 몸과 마음을 건강하게 유지하며 20분 운동하기",
                 "스페셜",
                 4,
                 false,
@@ -134,7 +127,7 @@ class QuestControllerTest extends AbstractControllerTest {
         doNothing().when(questService).update(anyLong(), any());
 
         // when
-        final ResultActions resultActions = performPutUpdateQuestRequest(DAILY_QUEST1.getId(), questUpdateRequest);
+        final ResultActions resultActions = performPutUpdateQuestRequest(BY_TYPE_QUEST1.getId(), questUpdateRequest);
 
         // then
         resultActions.andExpect(status().isNoContent())
@@ -144,17 +137,13 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .description("퀘스트 아이디")
                         ),
                         requestFields(
-                                fieldWithPath("description")
+                                fieldWithPath("content")
                                         .type(STRING)
-                                        .description("퀘스트 설명")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("activity")
-                                        .type(STRING)
-                                        .description("퀘스트 활동 내용")
+                                        .description("퀘스트 내용")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("questType")
                                         .type(STRING)
-                                        .description("퀘스트 타입 (데일리/스페셜)")
+                                        .description("퀘스트 타입 (고정/유형별/스페셜)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("difficulty")
                                         .type(NUMBER)
@@ -221,29 +210,21 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("번아웃 이름")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("fixedQuests[0].id")
+                                fieldWithPath("fixedQuests[0].questId")
                                         .type(NUMBER)
                                         .description("고정 퀘스트 아이디")
                                         .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("fixedQuests[0].description")
+                                fieldWithPath("fixedQuests[0].content")
                                         .type(STRING)
-                                        .description("고정 퀘스트 설명")
+                                        .description("고정 퀘스트 내용")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("fixedQuests[0].activity")
-                                        .type(STRING)
-                                        .description("고정 퀘스트 활동 내용")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("fixedQuests[1].id")
+                                fieldWithPath("fixedQuests[1].questId")
                                         .type(NUMBER)
                                         .description("고정 퀘스트 아이디")
                                         .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("fixedQuests[1].description")
+                                fieldWithPath("fixedQuests[1].content")
                                         .type(STRING)
-                                        .description("고정 퀘스트 설명")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("fixedQuests[1].activity")
-                                        .type(STRING)
-                                        .description("고정 퀘스트 활동 내용")
+                                        .description("고정 퀘스트 내용")
                                         .attributes(field("constraint", "문자열"))
                         )
                 ));
@@ -282,21 +263,21 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(ARRAY)
                                         .description("오늘 퀘스트")
                                         .attributes(field("constraint", "문자열 배열")),
-                                fieldWithPath("todayQuests[0].activity")
+                                fieldWithPath("todayQuests[0].content")
                                         .type(STRING)
-                                        .description("고정 퀘스트 활동 내용")
+                                        .description("퀘스트 내용")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("todayQuests[0].description")
+                                fieldWithPath("todayQuests[0].questType")
                                         .type(STRING)
-                                        .description("고정 퀘스트 설명")
+                                        .description("퀘스트 타입")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("todayQuests[1].activity")
+                                fieldWithPath("todayQuests[1].content")
                                         .type(STRING)
-                                        .description("고정 퀘스트 활동 내용")
+                                        .description("퀘스트 내용")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("todayQuests[1].description")
+                                fieldWithPath("todayQuests[1].questType")
                                         .type(STRING)
-                                        .description("고정 퀘스트 설명")
+                                        .description("퀘스트 타입")
                                         .attributes(field("constraint", "문자열"))
                         )
                 ));

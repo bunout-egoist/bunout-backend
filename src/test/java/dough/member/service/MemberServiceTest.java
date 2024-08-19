@@ -58,7 +58,7 @@ class MemberServiceTest {
         final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(GOEUN.getId());
 
         // then
-        assertThat(memberInfoResponse).usingRecursiveComparison().isEqualTo(MemberInfoResponse.from(GOEUN));
+        assertThat(memberInfoResponse).usingRecursiveComparison().isEqualTo(MemberInfoResponse.of(GOEUN));
     }
 
     @DisplayName("멤버의 닉네임을 수정할 수 있다.")
@@ -167,7 +167,7 @@ class MemberServiceTest {
     @Test
     void checkAttendance() {
         // given
-        GOEUN.updateAttendance(LocalDateTime.now().minusDays(7), 2);
+        GOEUN.updateAttendance(LocalDateTime.now().minusDays(7), 2, 5);
 
         given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));

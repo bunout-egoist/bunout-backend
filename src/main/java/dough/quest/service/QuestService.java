@@ -3,7 +3,6 @@ package dough.quest.service;
 import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.dashboard.dto.response.WeeklySummaryResponse;
-import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
 import dough.keyword.KeywordCode;
 import dough.keyword.domain.Keyword;
@@ -35,7 +34,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static dough.global.exception.ExceptionCode.*;
-import static dough.quest.domain.type.QuestType.DAILY;
+import static dough.quest.domain.type.QuestType.BY_TYPE;
 import static dough.quest.domain.type.QuestType.SPECIAL;
 import static java.time.DayOfWeek.*;
 
@@ -68,7 +67,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> createTodayQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> todayQuests = updateTodayDailyQuests(member, currentDate);
+        final List<SelectedQuest> todayQuests = updateTodayByTypeQuests(member, currentDate);
 
         if (isSpecialQuestDay(currentDate)) {
             final Quest specialQuest = getTodaySpecialQuest(member.getBurnout());
@@ -81,7 +80,7 @@ public class QuestService {
 
     private KeywordCode getKeywords(final List<SelectedQuest> todayQuests) {
         final List<Keyword> keywords = todayQuests.stream()
-                .filter(selectedQuest -> selectedQuest.getQuest().getQuestType().equals(DAILY))
+                .filter(selectedQuest -> selectedQuest.getQuest().getQuestType().equals(BY_TYPE))
                 .map(selectedQuest -> selectedQuest.getQuest().getKeyword())
                 .collect(Collectors.toList());
 
@@ -92,7 +91,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
-        return selectedQuestRepository.findTodayDailyQuests(member.getId(), currentDate);
+        return selectedQuestRepository.findTodayByTypeQuests(member.getId(), currentDate);
     }
 
     private Quest getTodaySpecialQuest(final Burnout burnout) {
@@ -108,28 +107,28 @@ public class QuestService {
                 dayOfWeek.equals(SUNDAY);
     }
 
-    private List<SelectedQuest> updateTodayDailyQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteDailyQuests = getIncompleteDailyQuests(member, currentDate);
+    private List<SelectedQuest> updateTodayByTypeQuests(final Member member, final LocalDate currentDate) {
+        final List<SelectedQuest> incompleteByTypeQuests = getIncompleteByTypeQuests(member, currentDate);
 
-        int neededCount = 2 - incompleteDailyQuests.size();
+        int neededCount = 2 - incompleteByTypeQuests.size();
 
         if (neededCount > 0) {
             // TODO keyword가 같은 퀘스트 위주로 반환
-            questRepository.findTodayDailyQuestsByMemberId(member.getId(), member.getLevel(), member.getBurnout().getId())
+            questRepository.findTodayByTypeQuestsByMemberId(member.getId(), member.getLevel().getLevel(), member.getBurnout().getId())
                     .stream()
                     .limit(neededCount)
                     .collect(Collectors.toList())
-                    .forEach(todayDailyQuest -> incompleteDailyQuests.add(new SelectedQuest(member, todayDailyQuest)));
+                    .forEach(todayByTypeQuest -> incompleteByTypeQuests.add(new SelectedQuest(member, todayByTypeQuest)));
         }
-        return incompleteDailyQuests;
+        return incompleteByTypeQuests;
     }
 
-    private List<SelectedQuest> getIncompleteDailyQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteDailyQuests = selectedQuestRepository.findIncompleteDailyQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
-        return incompleteDailyQuests.stream()
-                .map(incompleteDailyQuest -> {
-                    incompleteDailyQuest.updateDueDate(currentDate);
-                    return incompleteDailyQuest;
+    private List<SelectedQuest> getIncompleteByTypeQuests(final Member member, final LocalDate currentDate) {
+        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
+        return incompleteByTypeQuests.stream()
+                .map(incompleteBY_TYPEQuest -> {
+                    incompleteBY_TYPEQuest.updateDueDate(currentDate);
+                    return incompleteBY_TYPEQuest;
                 }).collect(Collectors.toList());
     }
 
@@ -178,8 +177,7 @@ public class QuestService {
 
         final QuestType questType = QuestType.getMappedQuestType(questRequest.getQuestType());
         final Quest newQuest = new Quest(
-                questRequest.getDescription(),
-                questRequest.getActivity(),
+                questRequest.getContent(),
                 questType,
                 questRequest.getDifficulty(),
                 burnout,
@@ -203,8 +201,7 @@ public class QuestService {
         final QuestType questType = QuestType.getMappedQuestType(questUpdateRequest.getQuestType());
         final Quest updateQuest = new Quest(
                 questId,
-                questUpdateRequest.getDescription(),
-                questUpdateRequest.getActivity(),
+                questUpdateRequest.getContent(),
                 questType,
                 questUpdateRequest.getDifficulty(),
                 burnout,
@@ -228,13 +225,4 @@ public class QuestService {
             throw new BadRequestException(ALREADY_USED_QUEST_ID);
         }
     }
-
-    public void completeSelectedQuestWithFeedback(final SelectedQuest selectedQuest, final Feedback feedback) {
-        selectedQuest.AddFeedbackToSelectedQuest(feedback);
-        selectedQuestRepository.save(selectedQuest);
-    }
-
-    //    public void completeSelectedQuestWithFeedback(Long selectedQuestId, Feedback feedback) {
-//        selectedQuestRepository.updateFeedbackAndStatus(selectedQuestId, feedback);
-//    }
 }
