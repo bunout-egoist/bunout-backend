@@ -3,7 +3,6 @@ package dough.quest.service;
 import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.dashboard.dto.response.WeeklySummaryResponse;
-import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
 import dough.keyword.KeywordCode;
 import dough.keyword.domain.Keyword;
@@ -228,13 +227,4 @@ public class QuestService {
             throw new BadRequestException(ALREADY_USED_QUEST_ID);
         }
     }
-
-    public void completeSelectedQuestWithFeedback(final SelectedQuest selectedQuest, final Feedback feedback) {
-        selectedQuest.AddFeedbackToSelectedQuest(feedback);
-        selectedQuestRepository.save(selectedQuest);
-    }
-
-    //    public void completeSelectedQuestWithFeedback(Long selectedQuestId, Feedback feedback) {
-//        selectedQuestRepository.updateFeedbackAndStatus(selectedQuestId, feedback);
-//    }
 }

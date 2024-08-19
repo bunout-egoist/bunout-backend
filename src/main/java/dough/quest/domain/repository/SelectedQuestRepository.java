@@ -46,8 +46,6 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
             """)
     List<SelectedQuest> findTodayBY_TYPEQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
 
-    Optional<SelectedQuest> findByQuestId(Long questId);
-
     @Query("""
              SELECT new dough.quest.dto.CompletedQuestsTotalElement(
                  SUM(CASE WHEN q.questType = 'BY_TYPE' OR q.questType = 'FIXED' THEN 1 ELSE 0 END),

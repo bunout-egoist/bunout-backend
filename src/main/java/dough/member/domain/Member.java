@@ -173,6 +173,12 @@ public class Member extends BaseEntity {
         this.exp = exp;
     }
 
+    public void updateExp(
+            final Integer exp
+    ) {
+        this.exp = exp;
+    }
+
     public void updateLevel(
             final Level level
     ) {
