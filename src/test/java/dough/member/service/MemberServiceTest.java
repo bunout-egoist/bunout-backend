@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.global.exception.ExceptionCode.*;
+import static dough.level.fixture.LevelFixture.LEVEL1;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -167,7 +168,7 @@ class MemberServiceTest {
     @Test
     void checkAttendance() {
         // given
-        GOEUN.updateAttendance(LocalDateTime.now().minusDays(7), 2);
+        GOEUN.updateAttendance(LocalDateTime.now().minusDays(7), 2, 5);
 
         given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));

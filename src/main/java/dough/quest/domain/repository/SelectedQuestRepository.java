@@ -33,9 +33,9 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              JOIN FETCH sq.quest q
              JOIN FETCH sq.member m
              JOIN FETCH q.keyword k
-             WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.quest.questType = 'DAILY' AND sq.dueDate = :date
+             WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.quest.questType = 'BY_TYPE' AND sq.dueDate = :date
             """)
-    List<SelectedQuest> findIncompleteDailyQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
+    List<SelectedQuest> findIncompleteBY_TYPEQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
 
     @Query("""
              SELECT sq
@@ -44,13 +44,13 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              JOIN FETCH q.keyword k
              WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.dueDate = :date
             """)
-    List<SelectedQuest> findTodayDailyQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
+    List<SelectedQuest> findTodayBY_TYPEQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
 
     Optional<SelectedQuest> findByQuestId(Long questId);
 
     @Query("""
              SELECT new dough.quest.dto.CompletedQuestsTotalElement(
-                 SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END),
+                 SUM(CASE WHEN q.questType = 'BY_TYPE' OR q.questType = 'FIXED' THEN 1 ELSE 0 END),
                  SUM(CASE WHEN q.questType = 'SPECIAL' THEN 1 ELSE 0 END)
              )
              FROM SelectedQuest sq
@@ -64,7 +64,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
     @Query("""
              SELECT new dough.quest.dto.CompletedQuestsCountElement(
                  sq.completedDate,
-                 SUM(CASE WHEN q.questType = 'DAILY' OR q.questType = 'FIXED' THEN 1 ELSE 0 END),
+                 SUM(CASE WHEN q.questType = 'BY_TYPE' OR q.questType = 'FIXED' THEN 1 ELSE 0 END),
                  SUM(CASE WHEN q.questType = 'SPECIAL' THEN 1 ELSE 0 END)
              )
              FROM SelectedQuest sq

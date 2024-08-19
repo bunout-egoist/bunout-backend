@@ -2,7 +2,7 @@ package dough.notification.domain.type;
 
 public enum NotificationType {
 
-    DAILY_QUEST,
+    BY_TYPE_QUEST,
     REMAINING_QUEST,
     SPECIAL_QUEST
 }

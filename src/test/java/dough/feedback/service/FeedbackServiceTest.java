@@ -26,6 +26,7 @@ import java.util.Optional;
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.keyword.fixture.KeywordFixture.INSIDE_ALONE;
 import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
+import static dough.level.fixture.LevelFixture.LEVEL1;
 import static dough.login.domain.type.RoleType.MEMBER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -59,9 +60,9 @@ class FeedbackServiceTest {
         FeedbackRequest feedbackRequest = new FeedbackRequest("png1", 3);
 
         Member member = new Member(1L, "JohnDoe", "john123", SocialLoginType.KAKAO, "john@example.com",
-                "Developer", "Male", 1990, ENTHUSIAST, MEMBER);
+                "Developer", "Male", 1990, ENTHUSIAST, MEMBER, LEVEL1);
         SelectedQuest selectedQuest = new SelectedQuest(member, new Quest(1L, "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기", QuestType.DAILY, 3, ENTHUSIAST, OUTSIDE_ALONE));
+                "15분 운동하기", QuestType.BY_TYPE, 3, ENTHUSIAST, OUTSIDE_ALONE));
         Feedback feedback = new Feedback(member, selectedQuest, feedbackRequest.getImageUrl(), feedbackRequest.getDifficulty());
 
         when(selectedQuestRepository.findByQuestId(questId)).thenReturn(Optional.of(selectedQuest));
@@ -108,9 +109,9 @@ class FeedbackServiceTest {
         FeedbackRequest feedbackRequest = new FeedbackRequest("png3", 3);
 
         Member member = new Member(1L, "JohnDoe", "john123", SocialLoginType.APPLE, "john@example.com",
-                "Developer", "Male", 1990, ENTHUSIAST, MEMBER);
+                "Developer", "Male", 1990, ENTHUSIAST, MEMBER, LEVEL1);
         SelectedQuest selectedQuest = new SelectedQuest(member, new Quest(1L, "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기", QuestType.DAILY, 3, ENTHUSIAST, INSIDE_ALONE));
+                "15분 운동하기", QuestType.BY_TYPE, 3, ENTHUSIAST, INSIDE_ALONE));
 
         when(selectedQuestRepository.findByQuestId(questId)).thenReturn(Optional.of(selectedQuest));
         when(memberRepository.findById(member.getId())).thenReturn(Optional.empty());

@@ -3,7 +3,6 @@ package dough.feedback.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
-import dough.feedback.feedbackFixture.FeedbackFixture;
 import dough.feedback.service.FeedbackService;
 import dough.global.AbstractControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static dough.feedback.fixture.FeedbackFixture.FEEDBACK1;
 import static dough.global.restdocs.RestDocsConfiguration.field;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -41,12 +41,12 @@ class FeedbackControllerTest extends AbstractControllerTest {
     @Test
     void createFeedback() throws Exception {
         // given
-        Long questId = FeedbackFixture.FEEDBACK1.getSelectedQuest().getQuest().getId();
+        Long questId = FEEDBACK1.getSelectedQuest().getQuest().getId();
         FeedbackRequest feedbackRequest = new FeedbackRequest(
-                FeedbackFixture.FEEDBACK1.getImageUrl(),
-                FeedbackFixture.FEEDBACK1.getDifficulty()
+                FEEDBACK1.getImageUrl(),
+                FEEDBACK1.getDifficulty()
         );
-        FeedbackResponse feedbackResponse = FeedbackResponse.from(FeedbackFixture.FEEDBACK1);
+        FeedbackResponse feedbackResponse = FeedbackResponse.from(FEEDBACK1);
 
 
         when(feedbackService.createFeedback(any(), any(FeedbackRequest.class)))
@@ -72,7 +72,7 @@ class FeedbackControllerTest extends AbstractControllerTest {
                                 fieldWithPath("imageUrl").type(STRING).description("이미지 URL").attributes(field("constraint", "문자열")),
                                 fieldWithPath("difficulty").type(NUMBER).description("난이도").attributes(field("constraint", "1-5 사이의 정수")),
                                 fieldWithPath("memberId").type(NUMBER).description("멤버 아이디").attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("selectedQuestId").type(NULL).description("선택된 퀘스트 아이디").attributes(field("constraint", "양의 정수"))
+                                fieldWithPath("selectedQuestId").type(NUMBER).description("선택된 퀘스트 아이디").attributes(field("constraint", "양의 정수"))
                         )
                 ));
     }

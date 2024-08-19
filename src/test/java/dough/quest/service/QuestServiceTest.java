@@ -73,7 +73,7 @@ public class QuestServiceTest {
         final QuestRequest questRequest = new QuestRequest(
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "15분 운동하기",
-                "데일리",
+                "유형별",
                 3,
                 true,
                 false,
@@ -85,7 +85,7 @@ public class QuestServiceTest {
         given(burnoutRepository.findByName(anyString()))
                 .willReturn(Optional.of(ENTHUSIAST));
         given(questRepository.save(any(Quest.class)))
-                .willReturn(DAILY_QUEST1);
+                .willReturn(BY_TYPE_QUEST1);
 
         // when
         questService.save(questRequest);
@@ -142,7 +142,7 @@ public class QuestServiceTest {
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(List.of(WeeklySummaryResponse.of(LocalDate.of(2024, 8, 11), List.of(new QuestFeedback(DAILY_QUEST1, "https://~")), 1L)));
+                .isEqualTo(List.of(WeeklySummaryResponse.of(LocalDate.of(2024, 8, 11), List.of(new QuestFeedback(BY_TYPE_QUEST1, "https://~")), 1L)));
     }
 
     @DisplayName("멤버 아이디가 존재하지 않을 경우 예외가 발생한다.")
@@ -179,10 +179,10 @@ public class QuestServiceTest {
         given(burnoutRepository.findByName(anyString()))
                 .willReturn(Optional.of(ENTHUSIAST));
         given(questRepository.save(any()))
-                .willReturn(DAILY_QUEST1);
+                .willReturn(BY_TYPE_QUEST1);
 
         // when
-        questService.update(DAILY_QUEST1.getId(), questUpdateRequest);
+        questService.update(BY_TYPE_QUEST1.getId(), questUpdateRequest);
 
         // then
         verify(questRepository).existsById(any());
@@ -220,12 +220,12 @@ public class QuestServiceTest {
     void delete() {
         // given
         given(questRepository.findById(any()))
-                .willReturn(Optional.of(DAILY_QUEST1));
+                .willReturn(Optional.of(BY_TYPE_QUEST1));
         given(selectedQuestRepository.existsByQuest(any()))
                 .willReturn(false);
 
         // when
-        questService.delete(DAILY_QUEST1.getId());
+        questService.delete(BY_TYPE_QUEST1.getId());
 
         // then
         verify(questRepository).deleteByQuestId(any());
@@ -251,7 +251,7 @@ public class QuestServiceTest {
     void delete_AlreadyUsedQuestId() {
         // given
         given(questRepository.findById(any()))
-                .willReturn(Optional.of(DAILY_QUEST1));
+                .willReturn(Optional.of(BY_TYPE_QUEST1));
         given(selectedQuestRepository.existsByQuest(any()))
                 .willReturn(true);
 
@@ -287,7 +287,7 @@ public class QuestServiceTest {
 
         given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
-        given(selectedQuestRepository.findTodayDailyQuests(anyLong(), any()))
+        given(selectedQuestRepository.findTodayBY_TYPEQuests(anyLong(), any()))
                 .willReturn(todayQuests);
 
         // when

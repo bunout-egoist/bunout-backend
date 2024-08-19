@@ -3,6 +3,7 @@ package dough.member.domain;
 import dough.burnout.domain.Burnout;
 import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
+import dough.level.domain.Level;
 import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
 import dough.notification.domain.Notification;
@@ -10,12 +11,12 @@ import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.sql.Update;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -56,6 +57,10 @@ public class Member extends BaseEntity {
     @JoinColumn(name = "quest_id", nullable = false)
     private Quest quest;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "level_id", nullable = false)
+    private Level level;
+
     @Column(length = 5)
     private String nickname;
 
@@ -72,9 +77,7 @@ public class Member extends BaseEntity {
 
     private String email;
 
-    private Integer level;
-
-    private Integer experience;
+    private Integer exp;
 
     private String occupation;
 
@@ -107,7 +110,8 @@ public class Member extends BaseEntity {
                   final String gender,
                   final Integer birthYear,
                   final Burnout burnout,
-                  final RoleType roleType
+                  final RoleType roleType,
+                  final Level level
     ) {
         this.id = id;
         this.nickname = nickname;
@@ -115,8 +119,7 @@ public class Member extends BaseEntity {
         this.socialLoginId = socialLoginId;
         this.socialLoginType = socialLoginType;
         this.email = email;
-        this.level = 0;
-        this.experience = 0;
+        this.exp = 0;
         this.occupation = occupation;
         this.gender = gender;
         this.birthYear = birthYear;
@@ -126,6 +129,7 @@ public class Member extends BaseEntity {
         this.lastLogin = LocalDateTime.now();
         this.attendanceAt = LocalDate.EPOCH.atStartOfDay();
         this.attendanceCount = 0;
+        this.level = level;
     }
 
     public void updateMember(
@@ -161,9 +165,17 @@ public class Member extends BaseEntity {
 
     public void updateAttendance(
             final LocalDateTime attendanceAt,
-            final Integer attendanceCount
+            final Integer attendanceCount,
+            final Integer exp
     ) {
         this.attendanceAt = attendanceAt;
         this.attendanceCount = attendanceCount;
+        this.exp = exp;
+    }
+
+    public void updateLevel(
+            final Level level
+    ) {
+        this.level = level;
     }
 }

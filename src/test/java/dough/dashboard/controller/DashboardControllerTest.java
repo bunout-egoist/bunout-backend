@@ -55,7 +55,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
     void getWeeklySummary() throws Exception {
         // given
         final List<WeeklySummaryResponse> actualResponse = List.of(
-                WeeklySummaryResponse.of(LocalDate.of(2024, 8, 11), List.of(new QuestFeedback(DAILY_QUEST1, "https://~"), new QuestFeedback(DAILY_QUEST2, "https://~")), 2L),
+                WeeklySummaryResponse.of(LocalDate.of(2024, 8, 11), List.of(new QuestFeedback(BY_TYPE_QUEST1, "https://~"), new QuestFeedback(BY_TYPE_QUEST2, "https://~")), 2L),
                 WeeklySummaryResponse.of(LocalDate.of(2024, 8, 14), List.of(new QuestFeedback(FIXED_QUEST1, "https://~")), 1L)
         );
 
@@ -94,7 +94,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[0].questDetails[0].questType")
                                         .type(STRING)
-                                        .description("퀘스트 타입 (데일리/스페셜)")
+                                        .description("퀘스트 타입 (고정/유형별/스페셜)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[0].questDetails[1].imageUrl")
                                         .type(STRING)
@@ -110,11 +110,11 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[0].questDetails[1].questType")
                                         .type(STRING)
-                                        .description("퀘스트 타입 (데일리/스페셜)")
+                                        .description("퀘스트 타입 (고정/유형별/스페셜)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[0].dailyCount")
                                         .type(NUMBER)
-                                        .description("완료한 퀘스트 개수")
+                                        .description("완료한 데일리 퀘스트 개수")
                                         .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("[1].completedDate")
                                         .type(STRING)
@@ -134,11 +134,11 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[1].questDetails[0].questType")
                                         .type(STRING)
-                                        .description("퀘스트 타입 (데일리/스페셜)")
+                                        .description("퀘스트 타입 (고정/유형별/스페셜)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[1].dailyCount")
                                         .type(NUMBER)
-                                        .description("완료한 퀘스트 개수")
+                                        .description("완료한 데일리 퀘스트 개수")
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
@@ -172,13 +172,13 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .description("멤버 아이디")
                         ),
                         responseFields(
-                                fieldWithPath("dailyCount")
+                                fieldWithPath("dailyTotal")
                                         .type(NUMBER)
-                                        .description("데일리/고정 퀘스트 개수")
+                                        .description("데일리 퀘스트 총합")
                                         .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("specialCount")
+                                fieldWithPath("specialTotal")
                                         .type(NUMBER)
-                                        .description("스페셜 퀘스트 개수")
+                                        .description("스페셜 퀘스트 총합")
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
@@ -221,7 +221,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("countDetails[].dailyCount")
                                         .type(NUMBER)
-                                        .description("완료한 퀘스트 개수")
+                                        .description("완료한 데일리 퀘스트 개수")
                                         .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("completedAllQuestsDateCount")
                                         .type(NUMBER)

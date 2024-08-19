@@ -10,14 +10,19 @@ import static dough.global.exception.ExceptionCode.INVALID_QUEST_TYPE;
 @Getter
 public enum QuestType {
 
-    DAILY("데일리"),
-    FIXED("고정"),
-    SPECIAL("스페셜");
+    BY_TYPE("유형별", 15),
+    FIXED("고정", 15),
+    SPECIAL("스페셜", 50);
 
     private final String code;
+    private final Integer exp;
 
-    QuestType(final String code) {
+    QuestType(
+            final String code,
+            final Integer exp
+    ) {
         this.code = code;
+        this.exp = exp;
     }
 
     public static QuestType getMappedQuestType(final String questCode) {
