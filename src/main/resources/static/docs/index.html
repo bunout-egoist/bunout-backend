@@ -1867,7 +1867,7 @@ Content-Length: 49
 <div class="sect3">
 <h4 id="_request_14"><a class="link" href="#_request_14">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. /api/v1/feedbacks/{questId}</caption>
+<caption class="title">Table 13. /api/v1/feedbacks/{memberId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1880,8 +1880,8 @@ Content-Length: 49
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
 </tr>
 </tbody>
 </table>
@@ -1900,6 +1900,11 @@ Content-Length: 49
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>selectedQuestId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">선택된 퀘스트 아이디</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>imageUrl</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">이미지 URL</p></td>
@@ -1914,7 +1919,8 @@ Content-Length: 49
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "imageUrl" : "https://~",
+  "imageUrl" : "png1",
+  "selectedQuestId" : 1,
   "difficulty" : 5
 }</code></pre>
 </div>
@@ -1937,40 +1943,22 @@ Content-Length: 49
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>level</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">피드백 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">레벨</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>imageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>burnoutName</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">이미지 URL</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>difficulty</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">난이도</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>selectedQuestId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">선택된 퀘스트 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">번아웃 유형 이름</p></td>
 </tr>
 </tbody>
 </table>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
-  "id" : 1,
-  "imageUrl" : "https://~",
-  "difficulty" : 5,
-  "memberId" : 1,
-  "selectedQuestId" : 1
+  "level" : 1,
+  "burnoutName" : "열광형"
 }</code></pre>
 </div>
 </div>
@@ -2302,6 +2290,10 @@ Content-Length: 250
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2002</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">요청하신 퀘스트 ID를 사용하고 있는 멤버가 있습니다.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">요청하신 ID에 해당하는 선택된 퀘스트를 찾을 수 없습니다.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3000</p></td>
