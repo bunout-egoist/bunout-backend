@@ -74,7 +74,7 @@ include::{snippets}/member-controller-test/check-attendance/response-body.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/path-parameters.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/http-request.adoc[]
 
-=== Response
+==== Response
 include::{snippets}/quest-controller-test/update-today-quests/response-fields.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/response-body.adoc[]
 
