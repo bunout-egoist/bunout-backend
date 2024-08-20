@@ -5,7 +5,7 @@ import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
-import dough.level.domain.repository.LevelRepository;
+import dough.level.service.LevelService;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +21,6 @@ import java.util.Optional;
 import static dough.feedback.fixture.FeedbackFixture.FEEDBACK1;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_SELECTED_QUEST_ID;
-import static dough.level.fixture.LevelFixture.LEVEL2;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
@@ -30,7 +29,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -40,6 +38,9 @@ class FeedbackServiceTest {
     private FeedbackService feedbackService;
 
     @Mock
+    private LevelService levelService;
+
+    @Mock
     private FeedbackRepository feedbackRepository;
 
     @Mock
@@ -47,9 +48,6 @@ class FeedbackServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
-
-    @Mock
-    private LevelRepository levelRepository;
 
     @DisplayName("피드백을 성공적으로 생성할 수 있다.")
     @Test
@@ -73,8 +71,10 @@ class FeedbackServiceTest {
                 .willReturn(FEEDBACK1);
         given(selectedQuestRepository.save(any()))
                 .willReturn(COMPLETED_QUEST1);
+        given(levelService.updateLevel(any()))
+                .willReturn(memberLevel);
         given(memberRepository.save(any()))
-                .willReturn(GOEUN);
+                .willReturn(memberLevel.getMember());
 
         // when
         final FeedbackResponse actualResponse = feedbackService.createFeedback(GOEUN.getId(), feedbackRequest);

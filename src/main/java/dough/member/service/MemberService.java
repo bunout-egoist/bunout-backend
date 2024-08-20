@@ -3,8 +3,8 @@ package dough.member.service;
 import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
-import dough.level.domain.Level;
-import dough.level.domain.repository.LevelRepository;
+import dough.level.domain.MemberLevel;
+import dough.level.service.LevelService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.BurnoutRequest;
@@ -35,7 +35,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final QuestRepository questRepository;
     private final BurnoutRepository burnoutRepository;
-    private final LevelRepository levelRepository;
+    private final LevelService levelService;
 
     @Transactional(readOnly = true)
     public MemberInfoResponse getMemberInfo(final Long memberId) {
@@ -117,21 +117,9 @@ public class MemberService {
             member.updateAttendance(currentAt, attendanceCount + 1, expAfterAttendance);
         }
 
-        final Member updatedMember = updateLevel(member);
-        final Member savedMember = memberRepository.save(updatedMember);
-
-        return MemberAttendanceResponse.of(savedMember);
-    }
-
-    private Member updateLevel(final Member member) {
-        final Level currentLevel = member.getLevel();
-
-        if (member.getExp() >= currentLevel.getRequiredExp()) {
-            final Level level = levelRepository.findByLevel(currentLevel.getLevel() + 1)
-                    .orElseThrow(() -> new BadRequestException(NOT_FOUND_LEVEL_ID));
-            member.updateLevel(level);
-        }
-        return member;
+        final MemberLevel memberLevel = levelService.updateLevel(member);
+        memberRepository.save(memberLevel.getMember());
+        return MemberAttendanceResponse.of(memberLevel);
     }
 
     private void validFixedQuestUpdate(final LocalDate lastModified, final LocalDate currentDate) {

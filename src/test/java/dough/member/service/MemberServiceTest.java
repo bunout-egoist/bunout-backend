@@ -2,6 +2,8 @@ package dough.member.service;
 
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
+import dough.level.domain.MemberLevel;
+import dough.level.service.LevelService;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.BurnoutRequest;
 import dough.member.dto.request.FixedQuestRequest;
@@ -37,6 +39,9 @@ class MemberServiceTest {
 
     @InjectMocks
     private MemberService memberService;
+
+    @Mock
+    private LevelService levelService;
 
     @Mock
     private MemberRepository memberRepository;
@@ -169,10 +174,14 @@ class MemberServiceTest {
         // given
         GOEUN.updateAttendance(LocalDateTime.now().minusDays(7), 2, 5);
 
+        final MemberLevel memberLevel = new MemberLevel(GOEUN, 2, true);
+
         given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(memberRepository.save(any()))
                 .willReturn(GOEUN);
+        given(levelService.updateLevel(any()))
+                .willReturn(memberLevel);
 
         // when
         memberService.checkAttendance(GOEUN.getId());

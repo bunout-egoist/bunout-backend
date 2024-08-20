@@ -23,8 +23,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
-import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
-import static org.springframework.restdocs.payload.JsonFieldType.STRING;
+import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
@@ -281,7 +280,7 @@ class MemberControllerTest extends AbstractControllerTest {
     void checkAttendance() throws Exception {
         // given
         final Long id = 1L;
-        final MemberAttendanceResponse memberAttendanceResponse = new MemberAttendanceResponse(3, 4);
+        final MemberAttendanceResponse memberAttendanceResponse = new MemberAttendanceResponse(50, 1, 2, true, 5);
 
         when(memberService.checkAttendance(anyLong()))
                 .thenReturn(memberAttendanceResponse);
@@ -297,10 +296,22 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .description("멤버 아이디")
                         ),
                         responseFields(
-                                fieldWithPath("level")
+                                fieldWithPath("exp")
                                         .type(NUMBER)
-                                        .description("레벨")
+                                        .description("경험치")
                                         .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("previousLevel")
+                                        .type(NUMBER)
+                                        .description("이전 레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("currentLevel")
+                                        .type(NUMBER)
+                                        .description("현재 레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("isLevelUp")
+                                        .type(BOOLEAN)
+                                        .description("레벨업 유무")
+                                        .attributes(field("constraint", "불리언")),
                                 fieldWithPath("attendanceCount")
                                         .type(NUMBER)
                                         .description("출석 일수")
