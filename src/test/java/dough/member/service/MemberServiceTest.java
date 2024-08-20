@@ -79,13 +79,15 @@ class MemberServiceTest {
         final MemberInfoRequest memberInfoRequest = new MemberInfoRequest("minju");
         GOEUN.updateMember("minju");
 
+        given(tokenService.getMemberId())
+                .willReturn(1L);
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(memberRepository.save(any()))
                 .willReturn(GOEUN);
 
         // when
-        memberService.updateMemberInfo(GOEUN.getId(), memberInfoRequest);
+        memberService.updateMemberInfo(memberInfoRequest);
 
         // then
         verify(memberRepository).findMemberById(anyLong());
@@ -99,6 +101,8 @@ class MemberServiceTest {
         final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
         GOEUN.updateBurnout(ENTHUSIAST, LocalDate.of(2024, 7, 11));
 
+        given(tokenService.getMemberId())
+                .willReturn(1L);
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(memberRepository.save(any()))
@@ -107,7 +111,7 @@ class MemberServiceTest {
                 .willReturn(Optional.of(ENTHUSIAST));
 
         // when
-        memberService.updateBurnout(GOEUN.getId(), burnoutRequest);
+        memberService.updateBurnout(burnoutRequest);
 
         // then
         verify(memberRepository).findMemberById(any());
@@ -120,13 +124,15 @@ class MemberServiceTest {
         // given
         final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
 
+        given(tokenService.getMemberId())
+                .willReturn(1L);
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
                 .willReturn(Optional.of(ENTHUSIAST));
 
         // when & then
-        assertThatThrownBy(() -> memberService.updateBurnout(GOEUN.getId(), burnoutRequest))
+        assertThatThrownBy(() -> memberService.updateBurnout(burnoutRequest))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(ALREADY_UPDATED_BURNOUT_TYPE.getCode());
@@ -139,6 +145,8 @@ class MemberServiceTest {
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
         GOEUN.updateFixedQuest(FIXED_QUEST1, LocalDate.of(2024, 8, 3));
 
+        given(tokenService.getMemberId())
+                .willReturn(1L);
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(questRepository.findById(anyLong()))
@@ -147,7 +155,7 @@ class MemberServiceTest {
                 .willReturn(GOEUN);
 
         // when
-        memberService.updateFixedQuest(GOEUN.getId(), fixedQuestRequest);
+        memberService.updateFixedQuest(fixedQuestRequest);
 
         // then
         verify(memberRepository).findMemberById(anyLong());
@@ -162,13 +170,15 @@ class MemberServiceTest {
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
         GOEUN.updateFixedQuest(FIXED_QUEST1, LocalDate.now());
 
+        given(tokenService.getMemberId())
+                .willReturn(1L);
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(questRepository.findById(anyLong()))
                 .willReturn(Optional.of(FIXED_QUEST1));
 
         // when & then
-        assertThatThrownBy(() -> memberService.updateFixedQuest(GOEUN.getId(), fixedQuestRequest))
+        assertThatThrownBy(() -> memberService.updateFixedQuest(fixedQuestRequest))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(ALREADY_UPDATED_FIXED_QUEST.getCode());
@@ -182,6 +192,8 @@ class MemberServiceTest {
 
         final MemberLevel memberLevel = new MemberLevel(GOEUN, 2, true);
 
+        given(tokenService.getMemberId())
+                .willReturn(1L);
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(memberRepository.save(any()))
@@ -190,7 +202,7 @@ class MemberServiceTest {
                 .willReturn(memberLevel);
 
         // when
-        memberService.checkAttendance(GOEUN.getId());
+        memberService.checkAttendance();
 
         // then
         verify(memberRepository).findMemberById(anyLong());
@@ -206,7 +218,7 @@ class MemberServiceTest {
                 .willReturn(Optional.of(GOEUN));
 
         // when & then
-        assertThatThrownBy(() -> memberService.checkAttendance(GOEUN.getId()))
+        assertThatThrownBy(() -> memberService.checkAttendance())
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(ALREADY_CHECK_ATTENDANCE.getCode());

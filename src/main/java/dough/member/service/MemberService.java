@@ -47,7 +47,8 @@ public class MemberService {
         return MemberInfoResponse.of(member);
     }
 
-    public MemberInfoResponse updateMemberInfo(final Long memberId, final MemberInfoRequest memberInfoRequest) {
+    public MemberInfoResponse updateMemberInfo(final MemberInfoRequest memberInfoRequest) {
+        final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -57,12 +58,8 @@ public class MemberService {
         return MemberInfoResponse.of(member);
     }
 
-    public Member findById(Long memberId) {
-        return memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
-    }
-
-    public void updateBurnout(final Long memberId, final BurnoutRequest burnoutRequest) {
+    public void updateBurnout(final BurnoutRequest burnoutRequest) {
+        final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -85,7 +82,8 @@ public class MemberService {
         }
     }
 
-    public void updateFixedQuest(final Long memberId, final FixedQuestRequest fixedQuestRequest) {
+    public void updateFixedQuest(final FixedQuestRequest fixedQuestRequest) {
+        final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -99,7 +97,8 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public MemberAttendanceResponse checkAttendance(final Long memberId) {
+    public MemberAttendanceResponse checkAttendance() {
+        final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
