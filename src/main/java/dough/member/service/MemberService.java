@@ -39,13 +39,13 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public MemberInfoResponse getMemberInfo(final Long memberId) {
-        final Member member = memberRepository.findById(memberId)
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
         return MemberInfoResponse.of(member);
     }
 
     public MemberInfoResponse updateMemberInfo(final Long memberId, final MemberInfoRequest memberInfoRequest) {
-        final Member member = memberRepository.findById(memberId)
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         member.updateMember(memberInfoRequest.getNickname());
@@ -55,12 +55,12 @@ public class MemberService {
     }
 
     public Member findById(Long memberId) {
-        return memberRepository.findById(memberId)
+        return memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
 
     public void updateBurnout(final Long memberId, final BurnoutRequest burnoutRequest) {
-        final Member member = memberRepository.findById(memberId)
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final Burnout burnout = burnoutRepository.findById(burnoutRequest.getBurnoutId())
@@ -83,7 +83,7 @@ public class MemberService {
     }
 
     public void updateFixedQuest(final Long memberId, final FixedQuestRequest fixedQuestRequest) {
-        final Member member = memberRepository.findById(memberId)
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final Quest quest = questRepository.findById(fixedQuestRequest.getFixedQuestId())
@@ -97,7 +97,7 @@ public class MemberService {
     }
 
     public MemberAttendanceResponse checkAttendance(final Long memberId) {
-        final Member member = memberRepository.findById(memberId)
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDateTime currentAt = LocalDateTime.now();

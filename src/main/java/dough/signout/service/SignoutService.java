@@ -43,7 +43,7 @@ public class SignoutService {
         memberId = tokenProvider.getMemberIdFromToken(token);
 
         // 멤버 객체 찾기
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         // 멤버 삭제하기

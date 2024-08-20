@@ -51,7 +51,7 @@ class SignUpServiceTest {
     void updateMemberInfo_withSignUpRequest() {
         // given
         given(tokenProvider.getMemberIdFromToken(anyString())).willReturn(1L);
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(GOEUN));
+        given(memberRepository.findMemberById(anyLong())).willReturn(Optional.of(GOEUN));
         given(memberRepository.save(any(Member.class))).willReturn(GOEUN);
 
         // when
@@ -74,7 +74,7 @@ class SignUpServiceTest {
         assertThat(capturedMember.getOccupation()).isEqualTo(signUpRequest.getOccupation());
 
         verify(tokenProvider, times(1)).getMemberIdFromToken(anyString());
-        verify(memberRepository, times(1)).findById(anyLong());
+        verify(memberRepository, times(1)).findMemberById(anyLong());
     }
 
     @DisplayName("SignUpRequest를 통해 회원 정보를 업데이트할 때 회원을 찾지 못하면 예외가 발생한다.")
@@ -82,14 +82,14 @@ class SignUpServiceTest {
     void updateMemberInfo_withSignUpRequest_UserNotFound() {
         // given
         given(tokenProvider.getMemberIdFromToken(anyString())).willReturn(1L);
-        given(memberRepository.findById(anyLong())).willReturn(Optional.empty());
+        given(memberRepository.findMemberById(anyLong())).willReturn(Optional.empty());
 
         // when & then
         assertThatThrownBy(() -> signUpService.updateMemberInfo(signUpRequest))
                 .isInstanceOf(UserNotFoundException.class);
 
         verify(tokenProvider, times(1)).getMemberIdFromToken(anyString());
-        verify(memberRepository, times(1)).findById(anyLong());
+        verify(memberRepository, times(1)).findMemberById(anyLong());
         verify(memberRepository, times(0)).save(any(Member.class));
     }
 }

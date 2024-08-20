@@ -36,17 +36,6 @@ public class MemberController {
         return ResponseEntity.ok().body(memberInfoResponse);
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
-        try {
-            Member member = memberService.findById(id);
-            return ResponseEntity.ok(member);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Collections.singletonMap("error", "User doesn't exist"));
-        }
-    }
-
     @PutMapping("/{memberId}/burnout")
     public ResponseEntity<Void> updateBurnout(@PathVariable("memberId") final Long memberId,
                                               @RequestBody @Valid final BurnoutRequest burnoutRequest

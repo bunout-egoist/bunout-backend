@@ -45,7 +45,7 @@ public class NotificationServiceTest {
         // given
         final List<Notification> notifications = List.of(BY_TYPE_NOTIFICATION);
 
-        given(memberRepository.findById(any()))
+        given(memberRepository.findMemberById(any()))
                 .willReturn(Optional.of(GOEUN));
         given(notificationRepository.findAllByMemberId(any()))
                 .willReturn(notifications);
@@ -69,7 +69,7 @@ public class NotificationServiceTest {
                 new NotificationUpdateRequest(BY_TYPE_NOTIFICATION.getId(), false)
         ));
 
-        given(memberRepository.findById(any()))
+        given(memberRepository.findMemberById(any()))
                 .willReturn(Optional.of(GOEUN));
         given(notificationRepository.findAllByMemberIdAndNotificationIds(anyLong(), any()))
                 .willReturn(List.of(BY_TYPE_NOTIFICATION));
@@ -80,7 +80,7 @@ public class NotificationServiceTest {
         notificationService.updateNotifications(BY_TYPE_NOTIFICATION.getId(), notificationsUpdateRequest);
 
         // then
-        verify(memberRepository).findById(anyLong());
+        verify(memberRepository).findMemberById(anyLong());
         verify(notificationRepository).findAllByMemberIdAndNotificationIds(anyLong(), any());
         verify(notificationRepository).saveAll(any());
     }

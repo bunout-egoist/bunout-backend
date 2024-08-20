@@ -56,7 +56,7 @@ class MemberServiceTest {
     @Test
     void getMemberInfo() {
         // given
-        given(memberRepository.findById(GOEUN.getId()))
+        given(memberRepository.findMemberById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
 
         // when
@@ -73,7 +73,7 @@ class MemberServiceTest {
         final MemberInfoRequest memberInfoRequest = new MemberInfoRequest("minju");
         GOEUN.updateMember("minju");
 
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(memberRepository.save(any()))
                 .willReturn(GOEUN);
@@ -82,7 +82,7 @@ class MemberServiceTest {
         memberService.updateMemberInfo(GOEUN.getId(), memberInfoRequest);
 
         // then
-        verify(memberRepository).findById(anyLong());
+        verify(memberRepository).findMemberById(anyLong());
         verify(memberRepository).save(any());
     }
 
@@ -93,7 +93,7 @@ class MemberServiceTest {
         final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
         GOEUN.updateBurnout(ENTHUSIAST, LocalDate.of(2024, 7, 11));
 
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(memberRepository.save(any()))
                 .willReturn(GOEUN);
@@ -104,7 +104,7 @@ class MemberServiceTest {
         memberService.updateBurnout(GOEUN.getId(), burnoutRequest);
 
         // then
-        verify(memberRepository).findById(any());
+        verify(memberRepository).findMemberById(any());
         verify(memberRepository).save(any());
     }
 
@@ -114,7 +114,7 @@ class MemberServiceTest {
         // given
         final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
 
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
                 .willReturn(Optional.of(ENTHUSIAST));
@@ -133,7 +133,7 @@ class MemberServiceTest {
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
         GOEUN.updateFixedQuest(FIXED_QUEST1, LocalDate.of(2024, 8, 3));
 
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(questRepository.findById(anyLong()))
                 .willReturn(Optional.of(FIXED_QUEST1));
@@ -144,7 +144,7 @@ class MemberServiceTest {
         memberService.updateFixedQuest(GOEUN.getId(), fixedQuestRequest);
 
         // then
-        verify(memberRepository).findById(anyLong());
+        verify(memberRepository).findMemberById(anyLong());
         verify(questRepository).findById(anyLong());
         verify(memberRepository).save(any());
     }
@@ -156,7 +156,7 @@ class MemberServiceTest {
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
         GOEUN.updateFixedQuest(FIXED_QUEST1, LocalDate.now());
 
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(questRepository.findById(anyLong()))
                 .willReturn(Optional.of(FIXED_QUEST1));
@@ -176,7 +176,7 @@ class MemberServiceTest {
 
         final MemberLevel memberLevel = new MemberLevel(GOEUN, 2, true);
 
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(memberRepository.save(any()))
                 .willReturn(GOEUN);
@@ -187,7 +187,7 @@ class MemberServiceTest {
         memberService.checkAttendance(GOEUN.getId());
 
         // then
-        verify(memberRepository).findById(anyLong());
+        verify(memberRepository).findMemberById(anyLong());
         verify(memberRepository).save(any());
     }
 
@@ -196,7 +196,7 @@ class MemberServiceTest {
     @Test
     void checkAttendance_AlreadyCheckAttendance() {
         // given
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
 
         // when & then
