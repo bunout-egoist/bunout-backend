@@ -30,7 +30,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     public List<NotificationResponse> getAllNotifications(final Long memberId) {
-        final Member member = memberRepository.findById(memberId)
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final List<Notification> notifications = notificationRepository.findAllByMemberId(member.getId());
@@ -39,7 +39,7 @@ public class NotificationService {
     }
 
     public List<NotificationResponse> updateNotifications(final Long memberId, final NotificationsUpdateRequest notificationsUpdateRequest) {
-        final Member member = memberRepository.findById(memberId)
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final Map<Long, Boolean> isCheckedOfId = notificationsUpdateRequest.getNotifications().stream()

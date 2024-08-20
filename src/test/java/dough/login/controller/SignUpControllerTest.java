@@ -29,9 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SignUpControllerTest extends AbstractControllerTest {
 
     @MockBean
-    private TokenProvider tokenProvider;
-
-    @MockBean
     private SignUpService signUpService;
 
     private MemberInfoResponse memberInfoResponse;

@@ -3,8 +3,9 @@ package dough.member.service;
 import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
-import dough.level.domain.Level;
-import dough.level.domain.repository.LevelRepository;
+import dough.level.domain.MemberLevel;
+import dough.level.service.LevelService;
+import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.BurnoutRequest;
@@ -35,17 +36,20 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final QuestRepository questRepository;
     private final BurnoutRepository burnoutRepository;
-    private final LevelRepository levelRepository;
+    private final LevelService levelService;
+    private final TokenService tokenService;
 
     @Transactional(readOnly = true)
-    public MemberInfoResponse getMemberInfo(final Long memberId) {
-        final Member member = memberRepository.findById(memberId)
+    public MemberInfoResponse getMemberInfo() {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
         return MemberInfoResponse.of(member);
     }
 
-    public MemberInfoResponse updateMemberInfo(final Long memberId, final MemberInfoRequest memberInfoRequest) {
-        final Member member = memberRepository.findById(memberId)
+    public MemberInfoResponse updateMemberInfo(final MemberInfoRequest memberInfoRequest) {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         member.updateMember(memberInfoRequest.getNickname());
@@ -54,13 +58,9 @@ public class MemberService {
         return MemberInfoResponse.of(member);
     }
 
-    public Member findById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
-    }
-
-    public void updateBurnout(final Long memberId, final BurnoutRequest burnoutRequest) {
-        final Member member = memberRepository.findById(memberId)
+    public void updateBurnout(final BurnoutRequest burnoutRequest) {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final Burnout burnout = burnoutRepository.findById(burnoutRequest.getBurnoutId())
@@ -82,8 +82,9 @@ public class MemberService {
         }
     }
 
-    public void updateFixedQuest(final Long memberId, final FixedQuestRequest fixedQuestRequest) {
-        final Member member = memberRepository.findById(memberId)
+    public void updateFixedQuest(final FixedQuestRequest fixedQuestRequest) {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final Quest quest = questRepository.findById(fixedQuestRequest.getFixedQuestId())
@@ -96,8 +97,9 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public MemberAttendanceResponse checkAttendance(final Long memberId) {
-        final Member member = memberRepository.findById(memberId)
+    public MemberAttendanceResponse checkAttendance() {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDateTime currentAt = LocalDateTime.now();
@@ -117,21 +119,9 @@ public class MemberService {
             member.updateAttendance(currentAt, attendanceCount + 1, expAfterAttendance);
         }
 
-        final Member updatedMember = updateLevel(member);
-        final Member savedMember = memberRepository.save(updatedMember);
-
-        return MemberAttendanceResponse.of(savedMember);
-    }
-
-    private Member updateLevel(final Member member) {
-        final Level currentLevel = member.getLevel();
-
-        if (member.getExp() >= currentLevel.getRequiredExp()) {
-            final Level level = levelRepository.findByLevel(currentLevel.getLevel() + 1)
-                    .orElseThrow(() -> new BadRequestException(NOT_FOUND_LEVEL_ID));
-            member.updateLevel(level);
-        }
-        return member;
+        final MemberLevel memberLevel = levelService.updateLevel(member);
+        memberRepository.save(memberLevel.getMember());
+        return MemberAttendanceResponse.of(memberLevel);
     }
 
     private void validFixedQuestUpdate(final LocalDate lastModified, final LocalDate currentDate) {

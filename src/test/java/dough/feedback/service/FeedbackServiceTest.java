@@ -5,7 +5,8 @@ import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
-import dough.level.domain.repository.LevelRepository;
+import dough.level.service.LevelService;
+import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -18,11 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.feedback.fixture.FeedbackFixture.FEEDBACK1;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_SELECTED_QUEST_ID;
-import static dough.level.fixture.LevelFixture.LEVEL2;
+import static dough.level.fixture.LevelFixture.LEVEL1;
+import static dough.login.domain.type.RoleType.MEMBER;
+import static dough.login.domain.type.SocialLoginType.KAKAO;
 import static dough.member.fixture.MemberFixture.GOEUN;
+import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +35,6 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @Transactional
@@ -40,6 +44,9 @@ class FeedbackServiceTest {
     private FeedbackService feedbackService;
 
     @Mock
+    private LevelService levelService;
+
+    @Mock
     private FeedbackRepository feedbackRepository;
 
     @Mock
@@ -47,9 +54,6 @@ class FeedbackServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
-
-    @Mock
-    private LevelRepository levelRepository;
 
     @DisplayName("피드백을 성공적으로 생성할 수 있다.")
     @Test
@@ -61,11 +65,11 @@ class FeedbackServiceTest {
                 5
         );
 
-        final MemberLevel memberLevel = new MemberLevel(GOEUN, 1, false);
+        final MemberLevel memberLevel = new MemberLevel(GOEUN, 2, true);
 
         IN_PROGRESS_QUEST1.updateFeedback(FEEDBACK1);
 
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findById(anyLong()))
                 .willReturn(Optional.of(IN_PROGRESS_QUEST1));
@@ -73,8 +77,10 @@ class FeedbackServiceTest {
                 .willReturn(FEEDBACK1);
         given(selectedQuestRepository.save(any()))
                 .willReturn(COMPLETED_QUEST1);
+        given(levelService.updateLevel(any()))
+                .willReturn(memberLevel);
         given(memberRepository.save(any()))
-                .willReturn(GOEUN);
+                .willReturn(memberLevel.getMember());
 
         // when
         final FeedbackResponse actualResponse = feedbackService.createFeedback(GOEUN.getId(), feedbackRequest);
@@ -94,7 +100,7 @@ class FeedbackServiceTest {
                 5
         );
 
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
 
         // when & then

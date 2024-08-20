@@ -281,7 +281,7 @@ public class QuestServiceTest {
         // given
         final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
 
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findTodayByTypeQuests(anyLong(), any()))
                 .willReturn(todayQuests);

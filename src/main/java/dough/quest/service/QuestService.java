@@ -50,7 +50,7 @@ public class QuestService {
     private final KeywordRepository keywordRepository;
 
     public TodayQuestListResponse updateTodayQuests(final Long memberId) {
-        final Member member = memberRepository.findById(memberId)
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate currentDate = LocalDate.now();
