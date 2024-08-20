@@ -10,7 +10,7 @@ public class NotificationFixture {
     public static final Notification BY_TYPE_NOTIFICATION = new Notification(
             1L,
             GOEUN,
-            BY_TYPE_QUEST
+            DAILY_QUEST
     );
 
     public static final Notification SPECIAL_NOTIFICATION = new Notification(
