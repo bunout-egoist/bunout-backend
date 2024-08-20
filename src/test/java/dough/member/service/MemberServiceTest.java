@@ -4,6 +4,7 @@ import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
 import dough.level.service.LevelService;
+import dough.login.service.TokenService;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.BurnoutRequest;
 import dough.member.dto.request.FixedQuestRequest;
@@ -44,6 +45,9 @@ class MemberServiceTest {
     private LevelService levelService;
 
     @Mock
+    private TokenService tokenService;
+
+    @Mock
     private MemberRepository memberRepository;
 
     @Mock
@@ -56,11 +60,13 @@ class MemberServiceTest {
     @Test
     void getMemberInfo() {
         // given
+        given(tokenService.getMemberId())
+                .willReturn(1L);
         given(memberRepository.findMemberById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
 
         // when
-        final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(GOEUN.getId());
+        final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo();
 
         // then
         assertThat(memberInfoResponse).usingRecursiveComparison().isEqualTo(MemberInfoResponse.of(GOEUN));

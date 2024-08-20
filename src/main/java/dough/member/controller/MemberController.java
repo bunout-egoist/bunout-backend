@@ -22,9 +22,9 @@ public class MemberController {
 
     public final MemberService memberService;
 
-    @GetMapping("/{memberId}")
-    public ResponseEntity<MemberInfoResponse> getMemberInfo(@PathVariable("memberId") final Long memberId) {
-        final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo(memberId);
+    @GetMapping
+    public ResponseEntity<MemberInfoResponse> getMemberInfo() {
+        final MemberInfoResponse memberInfoResponse = memberService.getMemberInfo();
         return ResponseEntity.ok().body(memberInfoResponse);
     }
 

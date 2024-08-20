@@ -7,10 +7,10 @@
 
 == Member API
 
-=== 멤버 조회
+=== 멤버 조회 (GET /api/v1/members)
 
 ==== Request
-include::{snippets}/member-controller-test/get-member-info/path-parameters.adoc[]
+include::{snippets}/member-controller-test/get-member-info/request-headers.adoc[]
 include::{snippets}/member-controller-test/get-member-info/http-request.adoc[]
 
 ==== Response

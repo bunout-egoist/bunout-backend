@@ -8,6 +8,7 @@ import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberAttendanceResponse;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.member.service.MemberService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,12 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static dough.global.restdocs.RestDocsConfiguration.field;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
@@ -35,13 +40,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 class MemberControllerTest extends AbstractControllerTest {
 
-    // TODO 추후에 token 추가
-
+    private static final String MEMBER_TOKENS = "accessToken";
     @Autowired
     private ObjectMapper objectMapper;
-
     @MockBean
     private MemberService memberService;
+
+    @BeforeEach
+    void setUp() {
+        when(tokenProvider.validToken(any()))
+                .thenReturn(true);
+        given(tokenProvider.getMemberIdFromToken(any()))
+                .willReturn(1L);
+    }
 
     private ResultActions performPutUpdateMemberInfoRequest(
             final Long memberId,
@@ -74,20 +85,20 @@ class MemberControllerTest extends AbstractControllerTest {
     @Test
     void getMemberInfo() throws Exception {
         // given
-        final Long id = 1L;
-        final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(id, "goeun", 1L, 1L, 2);
+        final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(1L, "goeun", 1L, 1L, 2);
 
-        when(memberService.getMemberInfo(anyLong()))
+        when(memberService.getMemberInfo())
                 .thenReturn(memberInfoResponse);
 
-        final ResultActions resultActions = mockMvc.perform(get("/api/v1/members/{memberId}", id));
+        final ResultActions resultActions = mockMvc.perform(get("/api/v1/members")
+                .header(AUTHORIZATION, MEMBER_TOKENS));
 
         // when
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        pathParameters(
-                                parameterWithName("memberId")
-                                        .description("멤버 아이디")
+                        requestHeaders(
+                                headerWithName("Authorization")
+                                        .description("엑세스 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("id")
@@ -114,7 +125,7 @@ class MemberControllerTest extends AbstractControllerTest {
                 ));
 
         // then
-        verify(memberService).getMemberInfo(anyLong());
+        verify(memberService).getMemberInfo();
     }
 
     @DisplayName("멤버 닉네임을 수정할 수 있다.")

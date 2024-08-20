@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface LevelRepository extends JpaRepository<Level, Long> {
 
-    Optional<Level> findByLevel(final Integer requiredExp);
+    Optional<Level> findByLevel(final Integer level);
 }

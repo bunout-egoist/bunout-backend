@@ -3,6 +3,7 @@ package dough.level.service;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
 import dough.level.domain.repository.LevelRepository;
+import dough.member.domain.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,9 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_LEVEL_ID;
 import static dough.level.fixture.LevelFixture.LEVEL1;
+import static dough.level.fixture.LevelFixture.LEVEL2;
+import static dough.login.domain.type.RoleType.MEMBER;
+import static dough.login.domain.type.SocialLoginType.KAKAO;
 import static dough.member.fixture.MemberFixture.GOEUN;
+import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -38,7 +44,7 @@ public class LevelServiceTest {
         GOEUN.updateExp(45);
 
         given(levelRepository.findByLevel(anyInt()))
-                .willReturn(Optional.of(LEVEL1));
+                .willReturn(Optional.of(LEVEL2));
 
         // when
         final MemberLevel actualMemberLevel = levelService.updateLevel(GOEUN);
@@ -52,7 +58,9 @@ public class LevelServiceTest {
     @Test
     void updateLevel_NotFoundLevelId() {
         // given
-        given(levelRepository.findByLevel(anyInt()))
+        GOEUN.updateExp(50);
+
+        given(levelRepository.findByLevel(2))
                 .willThrow(new BadRequestException(NOT_FOUND_LEVEL_ID));
 
         // when & then

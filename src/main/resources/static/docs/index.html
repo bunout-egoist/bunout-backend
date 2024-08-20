@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_member_api">Member API</a>
 <ul class="sectlevel2">
-<li><a href="#_멤버_조회">멤버 조회</a>
+<li><a href="#_멤버_조회_get_apiv1members">멤버 조회 (GET /api/v1/members)</a>
 <ul class="sectlevel3">
 <li><a href="#_request">Request</a></li>
 <li><a href="#_response">Response</a></li>
@@ -575,31 +575,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_member_api"><a class="link" href="#_member_api">Member API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_멤버_조회"><a class="link" href="#_멤버_조회">멤버 조회</a></h3>
+<h3 id="_멤버_조회_get_apiv1members"><a class="link" href="#_멤버_조회_get_apiv1members">멤버 조회 (GET /api/v1/members)</a></h3>
 <div class="sect3">
 <h4 id="_request"><a class="link" href="#_request">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. /api/v1/members/{memberId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Name</th>
 <th class="tableblock halign-left valign-top">Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 아이디</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">엑세스 토큰</p></td>
 </tr>
 </tbody>
 </table>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/members/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/members HTTP/1.1
+Authorization: accessToken
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -665,7 +665,7 @@ Host: localhost:8080</code></pre>
 <div class="sect3">
 <h4 id="_request_2"><a class="link" href="#_request_2">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. /api/v1/members/{memberId}</caption>
+<caption class="title">Table 1. /api/v1/members/{memberId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -790,7 +790,7 @@ Content-Length: 88
 <div class="sect3">
 <h4 id="_request_3"><a class="link" href="#_request_3">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. /api/v1/members/{memberId}/burnout</caption>
+<caption class="title">Table 2. /api/v1/members/{memberId}/burnout</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -886,7 +886,7 @@ Content-Length: 82
 <div class="sect3">
 <h4 id="_request_4"><a class="link" href="#_request_4">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. /api/v1/members/{memberId}/fixed</caption>
+<caption class="title">Table 3. /api/v1/members/{memberId}/fixed</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -978,7 +978,7 @@ Content-Length: 89
 <div class="sect2">
 <h3 id="_request_5"><a class="link" href="#_request_5">Request</a></h3>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. /api/v1/members/{memberId}/attendance</caption>
+<caption class="title">Table 4. /api/v1/members/{memberId}/attendance</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1062,7 +1062,7 @@ Content-Length: 89
 <div class="sect3">
 <h4 id="_request_6"><a class="link" href="#_request_6">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. /api/v1/quests/today/{memberId}</caption>
+<caption class="title">Table 5. /api/v1/quests/today/{memberId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1163,7 +1163,7 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 <div class="sect3">
 <h4 id="_request_7"><a class="link" href="#_request_7">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. /api/v1/quests/fixed/{burnoutId}</caption>
+<caption class="title">Table 6. /api/v1/quests/fixed/{burnoutId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1375,7 +1375,7 @@ Host: localhost:8080
 <div class="sect3">
 <h4 id="_request_9"><a class="link" href="#_request_9">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. /api/v1/quests/{questId}</caption>
+<caption class="title">Table 7. /api/v1/quests/{questId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1471,7 +1471,7 @@ Host: localhost:8080
 <div class="sect3">
 <h4 id="_request_10"><a class="link" href="#_request_10">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. /api/v1/quests/{questId}</caption>
+<caption class="title">Table 8. /api/v1/quests/{questId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1515,7 +1515,7 @@ Host: localhost:8080</code></pre>
 <div class="sect3">
 <h4 id="_request_11"><a class="link" href="#_request_11">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. /api/v1/dashboard/quests/{memberId}/{searchDate}</caption>
+<caption class="title">Table 9. /api/v1/dashboard/quests/{memberId}/{searchDate}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1690,7 +1690,7 @@ Content-Length: 201
 <div class="sect3">
 <h4 id="_request_12"><a class="link" href="#_request_12">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. /api/v1/dashboard/{memberId}/{yearMonth}</caption>
+<caption class="title">Table 10. /api/v1/dashboard/{memberId}/{yearMonth}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1797,7 +1797,7 @@ Host: localhost:8080</code></pre>
 <div class="sect3">
 <h4 id="_request_13"><a class="link" href="#_request_13">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. /api/v1/dashboard/total/{memberId}</caption>
+<caption class="title">Table 11. /api/v1/dashboard/total/{memberId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1874,7 +1874,7 @@ Content-Length: 49
 <div class="sect3">
 <h4 id="_request_14"><a class="link" href="#_request_14">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. /api/v1/feedbacks/{memberId}</caption>
+<caption class="title">Table 12. /api/v1/feedbacks/{memberId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1993,7 +1993,7 @@ Content-Length: 49
 <div class="sect3">
 <h4 id="_request_15"><a class="link" href="#_request_15">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. /api/v1/notifications/{memberId}</caption>
+<caption class="title">Table 13. /api/v1/notifications/{memberId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2085,7 +2085,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">[ {
   "id" : 1,
-  "notificationType" : "BY_TYPE_QUEST",
+  "notificationType" : "DAILY_QUEST",
   "isChecked" : true
 }, {
   "id" : 2,
@@ -2105,7 +2105,7 @@ Host: localhost:8080</code></pre>
 <div class="sect3">
 <h4 id="_request_16"><a class="link" href="#_request_16">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. /api/v1/notifications/{memberId}</caption>
+<caption class="title">Table 14. /api/v1/notifications/{memberId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2258,11 +2258,11 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 250
+Content-Length: 248
 
 [ {
   "id" : 1,
-  "notificationType" : "BY_TYPE_QUEST",
+  "notificationType" : "DAILY_QUEST",
   "isChecked" : true
 }, {
   "id" : 2,
@@ -2358,7 +2358,7 @@ Content-Length: 250
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-08-20 03:05:25 +0900
+Last updated 2024-08-20 15:37:27 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

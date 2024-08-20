@@ -5,6 +5,7 @@ import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
 import dough.level.service.LevelService;
+import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.BurnoutRequest;
@@ -36,9 +37,11 @@ public class MemberService {
     private final QuestRepository questRepository;
     private final BurnoutRepository burnoutRepository;
     private final LevelService levelService;
+    private final TokenService tokenService;
 
     @Transactional(readOnly = true)
-    public MemberInfoResponse getMemberInfo(final Long memberId) {
+    public MemberInfoResponse getMemberInfo() {
+        final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
         return MemberInfoResponse.of(member);
