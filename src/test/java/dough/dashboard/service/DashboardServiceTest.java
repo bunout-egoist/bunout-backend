@@ -19,7 +19,7 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.Set;
 
-import static dough.member.fixture.MemberFixture.MEMBER;
+import static dough.member.fixture.MemberFixture.GOEUN;
 import static java.time.format.TextStyle.SHORT;
 import static java.util.Locale.KOREAN;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -51,7 +51,7 @@ class DashboardServiceTest {
                 .willReturn(completedQuestsTotalElement);
 
         // when
-        final CompletedQuestsTotalResponse actualResponse = dashboardService.getCompletedQuestsTotal(MEMBER.getId());
+        final CompletedQuestsTotalResponse actualResponse = dashboardService.getCompletedQuestsTotal(GOEUN.getId());
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
@@ -68,7 +68,7 @@ class DashboardServiceTest {
                 .willReturn(List.of(new CompletedQuestsCountElement(LocalDate.now(), 10L, 10L)));
 
         // when
-        final MonthlySummaryResponse actualResponse = dashboardService.getMonthlySummary(MEMBER.getId(), YearMonth.of(2024, 8));
+        final MonthlySummaryResponse actualResponse = dashboardService.getMonthlySummary(GOEUN.getId(), YearMonth.of(2024, 8));
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()

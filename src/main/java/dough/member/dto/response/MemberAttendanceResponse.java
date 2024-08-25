@@ -1,4 +1,4 @@
-package dough.feedback.dto.response;
+package dough.member.dto.response;
 
 import dough.level.domain.MemberLevel;
 import dough.member.domain.Member;
@@ -7,21 +7,23 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class FeedbackResponse {
+public class MemberAttendanceResponse {
 
     private final Integer exp;
-    private final Integer currentLevel;
     private final Integer previousLevel;
+    private final Integer currentLevel;
     private final Boolean isLevelUp;
+    private final Integer attendanceCount;
 
-    public static FeedbackResponse of(final MemberLevel memberLevel) {
+    public static MemberAttendanceResponse of(final MemberLevel memberLevel) {
         final Member member = memberLevel.getMember();
 
-        return new FeedbackResponse(
+        return new MemberAttendanceResponse(
                 member.getExp(),
-                member.getLevel().getLevel(),
                 memberLevel.getPreviousLevel(),
-                memberLevel.getIsLevelUp()
+                member.getLevel().getLevel(),
+                memberLevel.getIsLevelUp(),
+                member.getAttendanceCount()
         );
     }
 }

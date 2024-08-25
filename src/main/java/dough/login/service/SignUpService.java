@@ -20,7 +20,7 @@ public class SignUpService {
         String accessToken = signUpRequest.getAccessToken();
         Long member_id = tokenProvider.getMemberIdFromToken(accessToken);
 
-        final Member member = memberRepository.findById(member_id)
+        final Member member = memberRepository.findMemberById(member_id)
                 .orElseThrow(UserNotFoundException::new);
 
         member.updateMember(
@@ -30,6 +30,6 @@ public class SignUpService {
                 signUpRequest.getOccupation()
         );
 
-        return MemberInfoResponse.from(memberRepository.save(member));
+        return MemberInfoResponse.of(memberRepository.save(member));
     }
 }

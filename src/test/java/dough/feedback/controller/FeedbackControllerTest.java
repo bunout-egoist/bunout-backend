@@ -3,7 +3,6 @@ package dough.feedback.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
-import dough.feedback.feedbackFixture.FeedbackFixture;
 import dough.feedback.service.FeedbackService;
 import dough.global.AbstractControllerTest;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +15,8 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static dough.global.restdocs.RestDocsConfiguration.field;
+import static dough.level.fixture.LevelFixture.LEVEL2;
+import static dough.member.fixture.MemberFixture.GOEUN;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -41,19 +42,22 @@ class FeedbackControllerTest extends AbstractControllerTest {
     @Test
     void createFeedback() throws Exception {
         // given
-        Long questId = FeedbackFixture.FEEDBACK1.getSelectedQuest().getQuest().getId();
-        FeedbackRequest feedbackRequest = new FeedbackRequest(
-                FeedbackFixture.FEEDBACK1.getImageUrl(),
-                FeedbackFixture.FEEDBACK1.getDifficulty()
+        final FeedbackRequest feedbackRequest = new FeedbackRequest(
+                "png1",
+                1L,
+                5
         );
-        FeedbackResponse feedbackResponse = FeedbackResponse.from(FeedbackFixture.FEEDBACK1);
 
+        GOEUN.updateExp(40);
+        GOEUN.updateLevel(LEVEL2);
+
+        final FeedbackResponse feedbackResponse = new FeedbackResponse(55, 3, 2, true);
 
         when(feedbackService.createFeedback(any(), any(FeedbackRequest.class)))
                 .thenReturn(feedbackResponse);
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/api/v1/feedbacks/{questId}", questId)
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/feedbacks/{memberId}", GOEUN.getId())
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(feedbackRequest)));
 
@@ -61,18 +65,40 @@ class FeedbackControllerTest extends AbstractControllerTest {
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
                         pathParameters(
-                                parameterWithName("questId").description("퀘스트 아이디")
+                                parameterWithName("memberId")
+                                        .description("멤버 아이디")
                         ),
                         requestFields(
-                                fieldWithPath("imageUrl").type(STRING).description("이미지 URL").attributes(field("constraint", "문자열")),
-                                fieldWithPath("difficulty").type(NUMBER).description("난이도").attributes(field("constraint", "1-5 사이의 정수"))
+                                fieldWithPath("selectedQuestId")
+                                        .type(NUMBER)
+                                        .description("선택된 퀘스트 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("imageUrl")
+                                        .type(STRING)
+                                        .description("이미지 URL")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("difficulty")
+                                        .type(NUMBER)
+                                        .description("난이도")
+                                        .attributes(field("constraint", "1-5 사이의 정수"))
                         ),
                         responseFields(
-                                fieldWithPath("id").type(NUMBER).description("피드백 아이디").attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("imageUrl").type(STRING).description("이미지 URL").attributes(field("constraint", "문자열")),
-                                fieldWithPath("difficulty").type(NUMBER).description("난이도").attributes(field("constraint", "1-5 사이의 정수")),
-                                fieldWithPath("memberId").type(NUMBER).description("멤버 아이디").attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("selectedQuestId").type(NULL).description("선택된 퀘스트 아이디").attributes(field("constraint", "양의 정수"))
+                                fieldWithPath("exp")
+                                        .type(NUMBER)
+                                        .description("경험치")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("previousLevel")
+                                        .type(NUMBER)
+                                        .description("이전 레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("currentLevel")
+                                        .type(NUMBER)
+                                        .description("현재 레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("isLevelUp")
+                                        .type(BOOLEAN)
+                                        .description("레벨업 유무")
+                                        .attributes(field("constraint", "불리언"))
                         )
                 ));
     }

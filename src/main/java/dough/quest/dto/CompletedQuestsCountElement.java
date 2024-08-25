@@ -13,6 +13,6 @@ import java.time.LocalDate;
 public class CompletedQuestsCountElement {
 
     private LocalDate completedDate;
-    private Long dailyCount;
+    private Long BY_TYPECount;
     private Long specialCount;
 }

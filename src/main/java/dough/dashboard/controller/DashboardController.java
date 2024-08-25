@@ -3,7 +3,6 @@ package dough.dashboard.controller;
 import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.dashboard.service.DashboardService;
-import dough.quest.dto.response.CompletedQuestDetailResponse;
 import dough.quest.dto.response.CompletedQuestsTotalResponse;
 import dough.quest.service.QuestService;
 import lombok.RequiredArgsConstructor;

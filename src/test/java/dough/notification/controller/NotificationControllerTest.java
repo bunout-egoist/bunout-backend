@@ -21,7 +21,6 @@ import static dough.global.restdocs.RestDocsConfiguration.field;
 import static dough.notification.fixture.notificationFixture.NotificationFixture.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
@@ -49,7 +48,7 @@ public class NotificationControllerTest extends AbstractControllerTest {
         // given
         final Long memberId = 1L;
         final List<NotificationResponse> notificationResponses = List.of(
-                NotificationResponse.of(DAILY_NOTIFICATION),
+                NotificationResponse.of(BY_TYPE_NOTIFICATION),
                 NotificationResponse.of(SPECIAL_NOTIFICATION),
                 NotificationResponse.of(REMAINING_NOTIFICATION)
         );
@@ -114,13 +113,13 @@ public class NotificationControllerTest extends AbstractControllerTest {
         // given
         final Long memberId = 1L;
         final NotificationsUpdateRequest notificationsUpdateRequest = new NotificationsUpdateRequest(List.of(
-                new NotificationUpdateRequest(DAILY_NOTIFICATION.getId(), true),
+                new NotificationUpdateRequest(BY_TYPE_NOTIFICATION.getId(), true),
                 new NotificationUpdateRequest(SPECIAL_NOTIFICATION.getId(), true),
                 new NotificationUpdateRequest(REMAINING_NOTIFICATION.getId(), true)
         ));
 
         final List<NotificationResponse> notificationResponses = List.of(
-                NotificationResponse.of(DAILY_NOTIFICATION),
+                NotificationResponse.of(BY_TYPE_NOTIFICATION),
                 NotificationResponse.of(SPECIAL_NOTIFICATION),
                 NotificationResponse.of(REMAINING_NOTIFICATION)
         );

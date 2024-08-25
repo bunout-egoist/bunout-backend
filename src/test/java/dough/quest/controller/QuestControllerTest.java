@@ -6,8 +6,7 @@ import dough.keyword.KeywordCode;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
-import dough.quest.dto.response.FixedQuestResponse;
-import dough.quest.dto.response.QuestResponse;
+import dough.quest.dto.response.FixedQuestListResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import dough.quest.service.QuestService;
 import org.junit.jupiter.api.DisplayName;
@@ -21,11 +20,11 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.global.restdocs.RestDocsConfiguration.field;
 import static dough.keyword.domain.type.ParticipationType.ALONE;
 import static dough.keyword.domain.type.PlaceType.ANYWHERE;
-import static dough.quest.fixture.QuestFixture.DAILY_QUEST1;
-import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static dough.quest.fixture.QuestFixture.*;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST2;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,14 +64,15 @@ class QuestControllerTest extends AbstractControllerTest {
     void createQuest() throws Exception {
         // given
         final QuestRequest questRequest = new QuestRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며",
-                "15분 운동하기",
-                "데일리",
-                3
+                "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
+                "유형별",
+                3,
+                true,
+                false,
+                "열광형"
         );
 
-        when(questService.save(any()))
-                .thenReturn(QuestResponse.of(DAILY_QUEST1));
+        doNothing().when(questService).save(any());
 
         // when
         final ResultActions resultActions = mockMvc.perform(post("/api/v1/quests")
@@ -83,44 +83,30 @@ class QuestControllerTest extends AbstractControllerTest {
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
                         requestFields(
-                                fieldWithPath("description")
+                                fieldWithPath("content")
                                         .type(STRING)
-                                        .description("퀘스트 설명")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("activity")
-                                        .type(STRING)
-                                        .description("퀘스트 활동 내용")
+                                        .description("퀘스트 내용")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("questType")
                                         .type(STRING)
-                                        .description("퀘스트 타입 (데일리/스페셜)")
+                                        .description("퀘스트 타입 (고정/유형별/스페셜)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("difficulty")
                                         .type(NUMBER)
                                         .description("난이도")
-                                        .attributes(field("constraint", "양의 정수"))
-                        ),
-                        responseFields(
-                                fieldWithPath("id")
-                                        .type(NUMBER)
-                                        .description("퀘스트 아이디")
                                         .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("description")
+                                fieldWithPath("isOutside")
+                                        .type(BOOLEAN)
+                                        .description("퀘스트가 밖에서 진행되는지 여부")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("isGroup")
+                                        .type(BOOLEAN)
+                                        .description("퀘스트가 다른 사람과 함께 수행되는지 여부")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("burnoutName")
                                         .type(STRING)
-                                        .description("퀘스트 설명")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("activity")
-                                        .type(STRING)
-                                        .description("퀘스트 활동 내용")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("questType")
-                                        .type(STRING)
-                                        .description("퀘스트 타입 (데일리/스페셜)")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("difficulty")
-                                        .type(NUMBER)
-                                        .description("난이도")
-                                        .attributes(field("constraint", "양의 정수"))
+                                        .description("번아웃 이름")
+                                        .attributes(field("constraint", "문자열"))
                         )
                 ));
     }
@@ -130,41 +116,51 @@ class QuestControllerTest extends AbstractControllerTest {
     void updateQuest() throws Exception {
         // given
         final QuestUpdateRequest questUpdateRequest = new QuestUpdateRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며",
-                "20분 운동하기",
+                "점심시간, 몸과 마음을 건강하게 유지하며 20분 운동하기",
                 "스페셜",
-                4
+                4,
+                false,
+                false,
+                "열광형"
         );
 
         doNothing().when(questService).update(anyLong(), any());
 
         // when
-        final ResultActions resultActions = performPutUpdateQuestRequest(DAILY_QUEST1.getId(), questUpdateRequest);
+        final ResultActions resultActions = performPutUpdateQuestRequest(BY_TYPE_QUEST1.getId(), questUpdateRequest);
 
         // then
-        resultActions.andExpect(status().isOk())
+        resultActions.andExpect(status().isNoContent())
                 .andDo(restDocs.document(
                         pathParameters(
                                 parameterWithName("questId")
                                         .description("퀘스트 아이디")
                         ),
                         requestFields(
-                                fieldWithPath("description")
+                                fieldWithPath("content")
                                         .type(STRING)
-                                        .description("퀘스트 설명")
-                                        .attributes(field("constraint", "문자열")),
-                                fieldWithPath("activity")
-                                        .type(STRING)
-                                        .description("퀘스트 활동 내용")
+                                        .description("퀘스트 내용")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("questType")
                                         .type(STRING)
-                                        .description("퀘스트 타입 (데일리/스페셜)")
+                                        .description("퀘스트 타입 (고정/유형별/스페셜)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("difficulty")
                                         .type(NUMBER)
                                         .description("난이도")
-                                        .attributes(field("constraint", "양의 정수"))
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("isOutside")
+                                        .type(BOOLEAN)
+                                        .description("퀘스트가 밖에서 진행되는지 여부")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("isGroup")
+                                        .type(BOOLEAN)
+                                        .description("퀘스트가 다른 사람과 함께 수행되는지 여부")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("burnoutName")
+                                        .type(STRING)
+                                        .description("번아웃 이름")
+                                        .attributes(field("constraint", "문자열"))
                         )
                 ));
     }
@@ -179,7 +175,7 @@ class QuestControllerTest extends AbstractControllerTest {
         final ResultActions resultActions = mockMvc.perform(delete("/api/v1/quests/{questId}", 1L));
 
         // then
-        resultActions.andExpect(status().isOk())
+        resultActions.andExpect(status().isNoContent())
                 .andDo(restDocs.document(
                         pathParameters(
                                 parameterWithName("questId")
@@ -192,10 +188,12 @@ class QuestControllerTest extends AbstractControllerTest {
     @Test
     void getFixedQuests() throws Exception {
         // given
-        final List<FixedQuestResponse> fixedQuestResponses = List.of(FixedQuestResponse.of(FIXED_QUEST1));
+        final FixedQuestListResponse fixedQuestListResponse = FixedQuestListResponse.of(
+                ENTHUSIAST, List.of(FIXED_QUEST1, FIXED_QUEST2)
+        );
 
         when(questService.getFixedQuests(anyLong()))
-                .thenReturn(fixedQuestResponses);
+                .thenReturn(fixedQuestListResponse);
 
         // when
         final ResultActions resultActions = mockMvc.perform(get("/api/v1/quests/fixed/{burnoutId}", 1L));
@@ -208,17 +206,25 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .description("번아웃 아이디")
                         ),
                         responseFields(
-                                fieldWithPath("[0].id")
+                                fieldWithPath("burnoutName")
+                                        .type(STRING)
+                                        .description("번아웃 이름")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("fixedQuests[0].questId")
                                         .type(NUMBER)
                                         .description("고정 퀘스트 아이디")
                                         .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("[0].description")
+                                fieldWithPath("fixedQuests[0].content")
                                         .type(STRING)
-                                        .description("고정 퀘스트 설명")
+                                        .description("고정 퀘스트 내용")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[0].activity")
+                                fieldWithPath("fixedQuests[1].questId")
+                                        .type(NUMBER)
+                                        .description("고정 퀘스트 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("fixedQuests[1].content")
                                         .type(STRING)
-                                        .description("고정 퀘스트 활동 내용")
+                                        .description("고정 퀘스트 내용")
                                         .attributes(field("constraint", "문자열"))
                         )
                 ));
@@ -257,21 +263,21 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(ARRAY)
                                         .description("오늘 퀘스트")
                                         .attributes(field("constraint", "문자열 배열")),
-                                fieldWithPath("todayQuests[0].activity")
+                                fieldWithPath("todayQuests[0].content")
                                         .type(STRING)
-                                        .description("고정 퀘스트 활동 내용")
+                                        .description("퀘스트 내용")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("todayQuests[0].description")
+                                fieldWithPath("todayQuests[0].questType")
                                         .type(STRING)
-                                        .description("고정 퀘스트 설명")
+                                        .description("퀘스트 타입")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("todayQuests[1].activity")
+                                fieldWithPath("todayQuests[1].content")
                                         .type(STRING)
-                                        .description("고정 퀘스트 활동 내용")
+                                        .description("퀘스트 내용")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("todayQuests[1].description")
+                                fieldWithPath("todayQuests[1].questType")
                                         .type(STRING)
-                                        .description("고정 퀘스트 설명")
+                                        .description("퀘스트 타입")
                                         .attributes(field("constraint", "문자열"))
                         )
                 ));

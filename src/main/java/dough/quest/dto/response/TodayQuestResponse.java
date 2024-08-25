@@ -8,13 +8,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TodayQuestResponse {
 
-    private final String activity;
-    private final String description;
+    private final String content;
+    private final String questType;
 
     public static TodayQuestResponse of(final Quest quest) {
         return new TodayQuestResponse(
-                quest.getActivity(),
-                quest.getDescription()
+                quest.getContent(),
+                quest.getQuestType().getCode()
         );
     }
 }
