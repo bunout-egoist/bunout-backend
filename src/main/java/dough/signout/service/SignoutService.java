@@ -9,7 +9,6 @@ import dough.member.domain.repository.MemberRepository;
 import dough.notification.NotificationRepository;
 import dough.notification.domain.Notification;
 import dough.quest.domain.SelectedQuest;
-import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.signout.dto.request.SignoutRequestDTO;
 import dough.signout.dto.response.SignoutResponseDTO;
@@ -25,7 +24,6 @@ import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 public class SignoutService {
 
     private final MemberRepository memberRepository;
-    private final QuestRepository questRepository;
     private final NotificationRepository notificationRepository;
     private final TokenProvider tokenProvider;
     private final SelectedQuestRepository selectedQuestRepository;
