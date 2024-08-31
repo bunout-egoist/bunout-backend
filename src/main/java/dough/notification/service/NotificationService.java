@@ -1,6 +1,7 @@
 package dough.notification.service;
 
 import dough.global.exception.BadRequestException;
+import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.notification.NotificationRepository;
@@ -28,19 +29,24 @@ public class NotificationService {
 
     private final MemberRepository memberRepository;
     private final NotificationRepository notificationRepository;
+    private final TokenService tokenService;
 
-    public List<NotificationResponse> getAllNotifications(final Long memberId) {
+    public List<NotificationResponse> getAllNotifications() {
+        final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+
 
         final List<Notification> notifications = notificationRepository.findAllByMemberId(member.getId());
 
         return getNotificationsResponse(notifications);
     }
 
-    public List<NotificationResponse> updateNotifications(final Long memberId, final NotificationsUpdateRequest notificationsUpdateRequest) {
+    public List<NotificationResponse> updateNotifications(final NotificationsUpdateRequest notificationsUpdateRequest) {
+        final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+
 
         final Map<Long, Boolean> isCheckedOfId = notificationsUpdateRequest.getNotifications().stream()
                 .collect(Collectors.toMap(NotificationUpdateRequest::getId, NotificationUpdateRequest::getIsChecked));

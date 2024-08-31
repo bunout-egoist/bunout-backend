@@ -31,7 +31,6 @@ public class DashboardService {
 
     private final SelectedQuestRepository selectedQuestRepository;
     private final MemberRepository memberRepository;
-
     private final TokenService tokenService;
 
     private static Long getCompletedAllQuestsDateCount(final List<CompletedQuestsCountElement> completedQuestsCountElements) {
