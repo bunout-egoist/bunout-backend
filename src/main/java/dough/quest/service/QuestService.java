@@ -9,6 +9,7 @@ import dough.keyword.domain.Keyword;
 import dough.keyword.domain.repository.KeywordRepository;
 import dough.keyword.domain.type.ParticipationType;
 import dough.keyword.domain.type.PlaceType;
+import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
@@ -48,8 +49,10 @@ public class QuestService {
     private final BurnoutRepository burnoutRepository;
     private final MemberRepository memberRepository;
     private final KeywordRepository keywordRepository;
+    private final TokenService tokenService;
 
-    public TodayQuestListResponse updateTodayQuests(final Long memberId) {
+    public TodayQuestListResponse updateTodayQuests() {
+        final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
