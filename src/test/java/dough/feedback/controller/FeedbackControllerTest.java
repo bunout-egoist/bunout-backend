@@ -51,7 +51,7 @@ class FeedbackControllerTest extends AbstractControllerTest {
         GOEUN.updateExp(40);
         GOEUN.updateLevel(LEVEL2);
 
-        final FeedbackResponse feedbackResponse = new FeedbackResponse(55, 3, 2, true);
+        final FeedbackResponse feedbackResponse = new FeedbackResponse(5, true);
 
         when(feedbackService.createFeedback(any(), any(FeedbackRequest.class)))
                 .thenReturn(feedbackResponse);
@@ -83,14 +83,6 @@ class FeedbackControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "1-5 사이의 정수"))
                         ),
                         responseFields(
-                                fieldWithPath("exp")
-                                        .type(NUMBER)
-                                        .description("경험치")
-                                        .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("previousLevel")
-                                        .type(NUMBER)
-                                        .description("이전 레벨")
-                                        .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("currentLevel")
                                         .type(NUMBER)
                                         .description("현재 레벨")

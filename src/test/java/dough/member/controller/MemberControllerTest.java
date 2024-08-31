@@ -30,8 +30,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -82,7 +80,7 @@ class MemberControllerTest extends AbstractControllerTest {
         final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(
                 1L,
                 "goeun",
-                1L,
+                "소보로",
                 1L,
                 2
         );
@@ -109,10 +107,10 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("멤버 닉네임")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("burnoutId")
-                                        .type(NUMBER)
-                                        .description("번아웃 아이디")
-                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("burnoutName")
+                                        .type(STRING)
+                                        .description("번아웃 유형 이름")
+                                        .attributes(field("constraint", "문자열")),
                                 fieldWithPath("fixedQuestId")
                                         .type(NUMBER)
                                         .description("고정 퀘스트 아이디")
@@ -136,7 +134,7 @@ class MemberControllerTest extends AbstractControllerTest {
         final MemberInfoResponse memberInfoResponse = new MemberInfoResponse(
                 1L,
                 "goeun",
-                1L,
+                "소보로",
                 1L,
                 2
         );
@@ -168,10 +166,10 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("멤버 닉네임")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("burnoutId")
-                                        .type(NUMBER)
-                                        .description("번아웃 아이디")
-                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("burnoutName")
+                                        .type(STRING)
+                                        .description("번아웃 유형 이름")
+                                        .attributes(field("constraint", "문자열")),
                                 fieldWithPath("fixedQuestId")
                                         .type(NUMBER)
                                         .description("고정 퀘스트 아이디")
@@ -292,10 +290,11 @@ class MemberControllerTest extends AbstractControllerTest {
     void checkAttendance() throws Exception {
         // given
         final MemberAttendanceResponse memberAttendanceResponse = new MemberAttendanceResponse(
-                50,
                 1,
                 2,
-                true,
+                45,
+                50,
+                false,
                 5
         );
 
@@ -314,17 +313,21 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .description("엑세스 토큰")
                         ),
                         responseFields(
-                                fieldWithPath("exp")
-                                        .type(NUMBER)
-                                        .description("경험치")
-                                        .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("previousLevel")
-                                        .type(NUMBER)
-                                        .description("이전 레벨")
-                                        .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("currentLevel")
                                         .type(NUMBER)
                                         .description("현재 레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("nextLevel")
+                                        .type(NUMBER)
+                                        .description("다음 레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("currentExp")
+                                        .type(NUMBER)
+                                        .description("현재 경험치")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("requiredExp")
+                                        .type(NUMBER)
+                                        .description("다음 레벨까지 필요한 경험치")
                                         .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("isLevelUp")
                                         .type(BOOLEAN)
@@ -332,7 +335,7 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "불리언")),
                                 fieldWithPath("attendanceCount")
                                         .type(NUMBER)
-                                        .description("출석 일수")
+                                        .description("현재 출석 점수")
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));

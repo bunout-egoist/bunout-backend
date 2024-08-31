@@ -21,10 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.global.exception.ExceptionCode.*;
+import static dough.level.fixture.LevelFixture.LEVEL1;
+import static dough.level.fixture.LevelFixture.LEVEL2;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -190,7 +193,7 @@ class MemberServiceTest {
         // given
         GOEUN.updateAttendance(LocalDateTime.now().minusDays(7), 2, 5);
 
-        final MemberLevel memberLevel = new MemberLevel(GOEUN, 2, true);
+        final MemberLevel memberLevel = new MemberLevel(GOEUN, List.of(LEVEL1, LEVEL2), true);
 
         given(tokenService.getMemberId())
                 .willReturn(1L);

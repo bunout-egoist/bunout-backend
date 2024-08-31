@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
 
 import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_LEVEL_ID;
@@ -57,15 +57,15 @@ public class LevelServiceTest {
 
         member.updateExp(25);
 
-        given(levelRepository.findByLevel(anyInt()))
-                .willReturn(Optional.of(LEVEL2));
+        given(levelRepository.findCurrentAndNextLevel(anyInt()))
+                .willReturn(List.of(LEVEL1, LEVEL2));
 
         // when
         final MemberLevel actualMemberLevel = levelService.updateLevel(member);
 
         // then
         assertThat(actualMemberLevel).usingRecursiveComparison()
-                .isEqualTo(new MemberLevel(member, 1, true));
+                .isEqualTo(new MemberLevel(member, List.of(LEVEL1, LEVEL2), true));
     }
 
     @DisplayName("레벨이 존재하지 않을 경우 예외가 발생한다.")
@@ -89,8 +89,8 @@ public class LevelServiceTest {
 
         member.updateExp(25);
 
-        given(levelRepository.findByLevel(2))
-                .willThrow(new BadRequestException(NOT_FOUND_LEVEL_ID));
+        given(levelRepository.findCurrentAndNextLevel(2))
+                .willReturn(List.of());
 
         // when & then
         assertThatThrownBy(() -> levelService.updateLevel(member))

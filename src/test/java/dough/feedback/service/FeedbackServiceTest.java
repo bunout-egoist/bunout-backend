@@ -6,7 +6,6 @@ import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
 import dough.level.service.LevelService;
-import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -17,17 +16,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
-import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.feedback.fixture.FeedbackFixture.FEEDBACK1;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_SELECTED_QUEST_ID;
 import static dough.level.fixture.LevelFixture.LEVEL1;
-import static dough.login.domain.type.RoleType.MEMBER;
-import static dough.login.domain.type.SocialLoginType.KAKAO;
+import static dough.level.fixture.LevelFixture.LEVEL2;
 import static dough.member.fixture.MemberFixture.GOEUN;
-import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,7 +62,7 @@ class FeedbackServiceTest {
                 5
         );
 
-        final MemberLevel memberLevel = new MemberLevel(GOEUN, 2, true);
+        final MemberLevel memberLevel = new MemberLevel(GOEUN, List.of(LEVEL1, LEVEL2), true);
 
         IN_PROGRESS_QUEST1.updateFeedback(FEEDBACK1);
 
