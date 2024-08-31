@@ -63,27 +63,30 @@ include::{snippets}/member-controller-test/update-fixed-quest_-fixed-quest-null/
 
 === 출석 체크
 
-=== Request (PUT /api/v1/members/attendanc)
+=== Request (PUT /api/v1/members/attendance)
 include::{snippets}/member-controller-test/check-attendance/request-headers.adoc[]
 include::{snippets}/member-controller-test/check-attendance/http-request.adoc[]
 
-==== Response
+==== Response (다음 레벨이 존재할 경우)
 include::{snippets}/member-controller-test/check-attendance/response-fields.adoc[]
 include::{snippets}/member-controller-test/check-attendance/response-body.adoc[]
 
+==== Response (현재 레벨이 마지막일 경우)
+include::{snippets}/member-controller-test/check-attendance_-next-level-is-null/response-body.adoc[]
+
 == Quest API
 
-=== 오늘 퀘스트 업데이트
+=== 오늘 퀘스트 업데이트 (POST /api/v1/quests/today)
 
 ==== Request
-include::{snippets}/quest-controller-test/update-today-quests/path-parameters.adoc[]
+include::{snippets}/quest-controller-test/update-today-quests/request-headers.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/http-request.adoc[]
 
 ==== Response
 include::{snippets}/quest-controller-test/update-today-quests/response-fields.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/response-body.adoc[]
 
-=== 고정 퀘스트 조회
+=== 고정 퀘스트 조회 (GET /api/v1/quests/fixed/{burnoutId})
 
 ==== Request
 include::{snippets}/quest-controller-test/get-fixed-quests/path-parameters.adoc[]
@@ -93,7 +96,7 @@ include::{snippets}/quest-controller-test/get-fixed-quests/http-request.adoc[]
 include::{snippets}/quest-controller-test/get-fixed-quests/response-fields.adoc[]
 include::{snippets}/quest-controller-test/get-fixed-quests/response-body.adoc[]
 
-=== 퀘스트 추가
+=== 퀘스트 추가 (POST /api/v1/quests)
 
 ==== Request
 include::{snippets}/quest-controller-test/create-quest/request-fields.adoc[]
@@ -103,7 +106,7 @@ include::{snippets}/quest-controller-test/create-quest/http-request.adoc[]
 include::{snippets}/quest-controller-test/create-quest/request-fields.adoc[]
 include::{snippets}/quest-controller-test/create-quest/http-response.adoc[]
 
-=== 퀘스트 수정
+=== 퀘스트 수정 (PUT /api/v1/quests/{questId})
 
 ==== Request
 include::{snippets}/quest-controller-test/update-quest/path-parameters.adoc[]
@@ -113,7 +116,7 @@ include::{snippets}/quest-controller-test/update-quest/http-request.adoc[]
 ==== Response
 include::{snippets}/quest-controller-test/update-quest/http-response.adoc[]
 
-=== 퀘스트 삭제
+=== 퀘스트 삭제 (DELETE /api/v1/quests/{questId})
 
 ==== Request
 include::{snippets}/quest-controller-test/delete-quest/path-parameters.adoc[]
@@ -124,10 +127,11 @@ include::{snippets}/quest-controller-test/delete-quest/http-response.adoc[]
 
 == Dashboard API
 
-=== 주간 분석
+=== 주간 분석 (GET /api/v1/dashboard/quests/{searchDate})
 
 ==== Request
 include::{snippets}/dashboard-controller-test/get-weekly-summary/path-parameters.adoc[]
+include::{snippets}/dashboard-controller-test/get-weekly-summary/request-headers.adoc[]
 include::{snippets}/dashboard-controller-test/get-weekly-summary/http-request.adoc[]
 
 ==== Response
@@ -140,10 +144,11 @@ include::{snippets}/dashboard-controller-test/get-weekly-summary_-invalid-local-
 ==== Response
 include::{snippets}/dashboard-controller-test/get-weekly-summary_-invalid-local-date-type/http-response.adoc[]
 
-=== 월간 분석
+=== 월간 분석 (GET /api/v1/dashboard/{yearMonth})
 
 ==== Request
 include::{snippets}/dashboard-controller-test/get-monthly-summary/path-parameters.adoc[]
+include::{snippets}/dashboard-controller-test/get-monthly-summary/request-headers.adoc[]
 include::{snippets}/dashboard-controller-test/get-monthly-summary/http-request.adoc[]
 
 ==== Response
@@ -151,10 +156,9 @@ include::{snippets}/dashboard-controller-test/get-monthly-summary/response-field
 include::{snippets}/dashboard-controller-test/get-monthly-summary/response-body.adoc[]
 include::{snippets}/dashboard-controller-test/get-monthly-summary_-no-summary/response-body.adoc[]
 
-=== 퀘스트 총 개수
+=== 퀘스트 총 개수 (GET /api/v1/dashboard/total)
 
 ==== Request
-include::{snippets}/dashboard-controller-test/get-completed-quests-total/path-parameters.adoc[]
 include::{snippets}/dashboard-controller-test/get-completed-quests-total/http-request.adoc[]
 
 ==== Response
@@ -163,12 +167,12 @@ include::{snippets}/dashboard-controller-test/get-completed-quests-total/http-re
 
 == Feedback API
 
-=== 피드백 추가
+=== 피드백 추가 (POST /api/v1/feedbacks)
 
 ==== Request
-include::{snippets}/feedback-controller-test/create-feedback/path-parameters.adoc[]
+include::{snippets}/feedback-controller-test/create-feedback/request-headers.adoc[]
 include::{snippets}/feedback-controller-test/create-feedback/request-fields.adoc[]
-include::{snippets}/feedback-controller-test/create-feedback/request-body.adoc[]
+include::{snippets}/feedback-controller-test/create-feedback/http-request.adoc[]
 
 ==== Response
 include::{snippets}/feedback-controller-test/create-feedback/response-fields.adoc[]
@@ -176,20 +180,20 @@ include::{snippets}/feedback-controller-test/create-feedback/response-body.adoc[
 
 == Notification API
 
-=== 알람 전체 조회
+=== 알람 전체 조회 (GET /api/v1/notifications)
 
 ==== Request
-include::{snippets}/notification-controller-test/get-all-notifications/path-parameters.adoc[]
+include::{snippets}/notification-controller-test/get-all-notifications/request-headers.adoc[]
 include::{snippets}/notification-controller-test/get-all-notifications/http-request.adoc[]
 
 ==== Response
 include::{snippets}/notification-controller-test/get-all-notifications/response-fields.adoc[]
 include::{snippets}/notification-controller-test/get-all-notifications/response-body.adoc[]
 
-=== 알람 업데이트
+=== 알람 업데이트 (PUT /api/v1/notifications)
 
 ==== Request
-include::{snippets}/notification-controller-test/update-notifications/path-parameters.adoc[]
+include::{snippets}/notification-controller-test/update-notifications/request-headers.adoc[]
 include::{snippets}/notification-controller-test/update-notifications/request-fields.adoc[]
 include::{snippets}/notification-controller-test/update-notifications/http-request.adoc[]
 
