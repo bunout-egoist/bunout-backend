@@ -134,13 +134,15 @@ public class QuestServiceTest {
         final LocalDate startDate = date.minusDays(3);
         final LocalDate endDate = date.plusDays(3);
 
-        given(memberRepository.existsById(any()))
-                .willReturn(true);
+        given(tokenService.getMemberId())
+                .willReturn(1L);
+        given(memberRepository.findMemberById(GOEUN.getId()))
+                .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate))
                 .willReturn(List.of(QUEST_ELEMENT1));
 
         // when
-        final List<WeeklySummaryResponse> actualResponse = questService.getWeeklySummary(GOEUN.getId(), LocalDate.now());
+        final List<WeeklySummaryResponse> actualResponse = questService.getWeeklySummary(LocalDate.now());
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
@@ -151,10 +153,13 @@ public class QuestServiceTest {
     @Test
     void getWeeklySummary_NotFoundMemberId() {
         // given
-        Long id = 1L;
+        given(tokenService.getMemberId())
+                .willReturn(1L);
+        given(memberRepository.findMemberById(anyLong()))
+                .willReturn(Optional.empty());
 
-        // given & when & then
-        assertThatThrownBy(() -> questService.getWeeklySummary(id, any()))
+        // when & then
+        assertThatThrownBy(() -> questService.getWeeklySummary(LocalDate.now()))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_MEMBER_ID.getCode());
@@ -173,7 +178,7 @@ public class QuestServiceTest {
                 "소보로"
         );
 
-        given(questRepository.existsById(any()))
+        given(questRepository.existsById(anyLong()))
                 .willReturn(true);
         given(keywordRepository.findByIsGroupAndIsOutside(anyBoolean(), anyBoolean()))
                 .willReturn(Optional.of(OUTSIDE_ALONE));
@@ -186,7 +191,7 @@ public class QuestServiceTest {
         questService.update(BY_TYPE_QUEST1.getId(), questUpdateRequest);
 
         // then
-        verify(questRepository).existsById(any());
+        verify(questRepository).existsById(anyLong());
         verify(keywordRepository).findByIsGroupAndIsOutside(anyBoolean(), anyBoolean());
         verify(burnoutRepository).findByName(anyString());
         verify(questRepository).save(any());
@@ -285,7 +290,9 @@ public class QuestServiceTest {
         // given
         final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
 
-        given(memberRepository.findMemberById(anyLong()))
+        given(tokenService.getMemberId())
+                .willReturn(1L);
+        given(memberRepository.findMemberById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findTodayByTypeQuests(anyLong(), any()))
                 .willReturn(todayQuests);

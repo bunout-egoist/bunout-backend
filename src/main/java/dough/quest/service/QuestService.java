@@ -145,14 +145,14 @@ public class QuestService {
     }
 
     @Transactional(readOnly = true)
-    public List<WeeklySummaryResponse> getWeeklySummary(final Long memberId, final LocalDate date) {
-        if (!memberRepository.existsById(memberId)) {
-            throw new BadRequestException(NOT_FOUND_MEMBER_ID);
-        }
+    public List<WeeklySummaryResponse> getWeeklySummary(final LocalDate date) {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate startDate = date.minusDays(3);
         final LocalDate endDate = date.plusDays(3);
-        final CompletedQuestElements completedQuestElements = new CompletedQuestElements(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate));
+        final CompletedQuestElements completedQuestElements = new CompletedQuestElements(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(member.getId(), startDate, endDate));
         final Map<LocalDate, List<QuestFeedback>> questFeedbackMap = completedQuestElements.toQuestFeedbackMap();
 
         return getWeeklySummaryResponses(questFeedbackMap);
