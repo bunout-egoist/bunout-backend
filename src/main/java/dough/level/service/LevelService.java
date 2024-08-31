@@ -9,6 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static dough.global.exception.ExceptionCode.NOT_FOUND_LEVEL_ID;
 
 @Service
@@ -22,12 +26,25 @@ public class LevelService {
         final Level currentLevel = member.getLevel();
 
         if (member.getExp() >= currentLevel.getRequiredExp()) {
-            final Level level = levelRepository.findByLevel(currentLevel.getLevel() + 1)
-                    .orElseThrow(() -> new BadRequestException(NOT_FOUND_LEVEL_ID));
-            member.updateLevel(level);
-            return new MemberLevel(member, currentLevel.getLevel(), true);
+            final List<Level> levels = findCurrentAndNextLevel(currentLevel.getLevel() + 1);
+            member.updateLevel(levels.get(0));
+            return new MemberLevel(member, levels, true);
         }
 
-        return new MemberLevel(member, currentLevel.getLevel(), false);
+        final List<Level> levels = findCurrentAndNextLevel(currentLevel.getLevel());
+        return new MemberLevel(member, levels, false);
+    }
+
+    private List<Level> findCurrentAndNextLevel(final Integer level) {
+        final List<Level> levels = levelRepository.findCurrentAndNextLevel(level)
+                .stream()
+                .sorted(Comparator.comparing(Level::getLevel))
+                .collect(Collectors.toList());
+
+        if (levels.isEmpty()) {
+            throw new BadRequestException(NOT_FOUND_LEVEL_ID);
+        }
+
+        return levels;
     }
 }
