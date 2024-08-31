@@ -39,6 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MemberControllerTest extends AbstractControllerTest {
 
     private static final String MEMBER_TOKENS = "accessToken";
+
     @Autowired
     private ObjectMapper objectMapper;
 

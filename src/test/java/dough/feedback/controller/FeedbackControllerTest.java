@@ -5,6 +5,7 @@ import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.feedback.service.FeedbackService;
 import dough.global.AbstractControllerTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,15 @@ import static dough.global.restdocs.RestDocsConfiguration.field;
 import static dough.level.fixture.LevelFixture.LEVEL2;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(FeedbackController.class)
@@ -32,11 +35,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 class FeedbackControllerTest extends AbstractControllerTest {
 
+    private static final String MEMBER_TOKENS = "accessToken";
+
     @Autowired
     private ObjectMapper objectMapper;
 
     @MockBean
     private FeedbackService feedbackService;
+
+    @BeforeEach
+    void setUp() {
+        when(tokenProvider.validToken(any()))
+                .thenReturn(true);
+        given(tokenProvider.getMemberIdFromToken(any()))
+                .willReturn(1L);
+    }
 
     @DisplayName("피드백을 생성할 수 있다.")
     @Test
@@ -53,20 +66,21 @@ class FeedbackControllerTest extends AbstractControllerTest {
 
         final FeedbackResponse feedbackResponse = new FeedbackResponse(5, true);
 
-        when(feedbackService.createFeedback(any(), any(FeedbackRequest.class)))
+        when(feedbackService.createFeedback(any(FeedbackRequest.class)))
                 .thenReturn(feedbackResponse);
 
         // when
-        ResultActions resultActions = mockMvc.perform(post("/api/v1/feedbacks/{memberId}", GOEUN.getId())
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/feedbacks")
                 .contentType(APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(feedbackRequest)));
+                .content(objectMapper.writeValueAsString(feedbackRequest))
+                .header(AUTHORIZATION, MEMBER_TOKENS));
 
         // then
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        pathParameters(
-                                parameterWithName("memberId")
-                                        .description("멤버 아이디")
+                        requestHeaders(
+                                headerWithName("Authorization")
+                                        .description("엑세스 토큰")
                         ),
                         requestFields(
                                 fieldWithPath("selectedQuestId")

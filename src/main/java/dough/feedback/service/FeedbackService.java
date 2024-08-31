@@ -9,6 +9,7 @@ import dough.level.domain.Level;
 import dough.level.domain.MemberLevel;
 import dough.level.domain.repository.LevelRepository;
 import dough.level.service.LevelService;
+import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.SelectedQuest;
@@ -28,8 +29,10 @@ public class FeedbackService {
     private final SelectedQuestRepository selectedQuestRepository;
     private final MemberRepository memberRepository;
     private final LevelService levelService;
+    private final TokenService tokenService;
 
-    public FeedbackResponse createFeedback(final Long memberId, final FeedbackRequest feedbackRequest) {
+    public FeedbackResponse createFeedback(final FeedbackRequest feedbackRequest) {
+        final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 

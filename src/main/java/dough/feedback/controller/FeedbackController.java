@@ -15,12 +15,9 @@ public class FeedbackController {
 
     private final FeedbackService feedbackService;
 
-    @PostMapping("/{memberId}")
-    public ResponseEntity<FeedbackResponse> createFeedback(
-            @PathVariable("memberId") final Long memberId,
-            @Valid @RequestBody final FeedbackRequest feedbackRequest
-    ) {
-        final FeedbackResponse feedbackResponse = feedbackService.createFeedback(memberId, feedbackRequest);
+    @PostMapping
+    public ResponseEntity<FeedbackResponse> createFeedback(@Valid @RequestBody final FeedbackRequest feedbackRequest) {
+        final FeedbackResponse feedbackResponse = feedbackService.createFeedback(feedbackRequest);
         return ResponseEntity.ok().body(feedbackResponse);
     }
 }
