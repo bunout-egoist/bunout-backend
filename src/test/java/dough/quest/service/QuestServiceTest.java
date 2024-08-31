@@ -6,6 +6,7 @@ import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.keyword.KeywordCode;
 import dough.keyword.domain.repository.KeywordRepository;
+import dough.login.service.TokenService;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
 import dough.quest.domain.QuestFeedback;
@@ -28,7 +29,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.burnout.fixture.BurnoutFixture.SOBORO;
 import static dough.global.exception.ExceptionCode.*;
 import static dough.keyword.domain.type.ParticipationType.ALONE;
 import static dough.keyword.domain.type.PlaceType.ANYWHERE;
@@ -50,6 +51,9 @@ public class QuestServiceTest {
 
     @InjectMocks
     private QuestService questService;
+
+    @Mock
+    private TokenService tokenService;
 
     @Mock
     private MemberRepository memberRepository;
@@ -76,13 +80,13 @@ public class QuestServiceTest {
                 3,
                 true,
                 false,
-                "열광형"
+                "소보로"
         );
 
         given(keywordRepository.findByIsGroupAndIsOutside(anyBoolean(), anyBoolean()))
                 .willReturn(Optional.of(OUTSIDE_ALONE));
         given(burnoutRepository.findByName(anyString()))
-                .willReturn(Optional.of(ENTHUSIAST));
+                .willReturn(Optional.of(SOBORO));
         given(questRepository.save(any(Quest.class)))
                 .willReturn(BY_TYPE_QUEST1);
 
@@ -105,13 +109,13 @@ public class QuestServiceTest {
                 3,
                 true,
                 false,
-                "열광형"
+                "소보로"
         );
 
         given(keywordRepository.findByIsGroupAndIsOutside(anyBoolean(), anyBoolean()))
                 .willReturn(Optional.of(OUTSIDE_ALONE));
         given(burnoutRepository.findByName(anyString()))
-                .willReturn(Optional.of(ENTHUSIAST));
+                .willReturn(Optional.of(SOBORO));
 
         // when & then
         assertThatThrownBy(() -> questService.save(questRequest))
@@ -166,7 +170,7 @@ public class QuestServiceTest {
                 4,
                 true,
                 false,
-                "열광형"
+                "소보로"
         );
 
         given(questRepository.existsById(any()))
@@ -174,7 +178,7 @@ public class QuestServiceTest {
         given(keywordRepository.findByIsGroupAndIsOutside(anyBoolean(), anyBoolean()))
                 .willReturn(Optional.of(OUTSIDE_ALONE));
         given(burnoutRepository.findByName(anyString()))
-                .willReturn(Optional.of(ENTHUSIAST));
+                .willReturn(Optional.of(SOBORO));
         given(questRepository.save(any()))
                 .willReturn(BY_TYPE_QUEST1);
 
@@ -198,7 +202,7 @@ public class QuestServiceTest {
                 4,
                 true,
                 false,
-                "열광형"
+                "소보로"
         );
 
         given(questRepository.existsById(any()))
@@ -263,16 +267,16 @@ public class QuestServiceTest {
     void getFixedQuests() {
         // given
         given(burnoutRepository.findById(any()))
-                .willReturn(Optional.of(ENTHUSIAST));
+                .willReturn(Optional.of(SOBORO));
         given(questRepository.findFixedQuestsByBurnoutId(anyLong()))
                 .willReturn(List.of(FIXED_QUEST1, FIXED_QUEST2));
 
         // when
-        final FixedQuestListResponse actualResponses = questService.getFixedQuests(ENTHUSIAST.getId());
+        final FixedQuestListResponse actualResponses = questService.getFixedQuests(SOBORO.getId());
 
         // then
         assertThat(actualResponses).usingRecursiveComparison()
-                .isEqualTo(FixedQuestListResponse.of(ENTHUSIAST, List.of(FIXED_QUEST1, FIXED_QUEST2)));
+                .isEqualTo(FixedQuestListResponse.of(SOBORO, List.of(FIXED_QUEST1, FIXED_QUEST2)));
     }
 
     @DisplayName("오늘의 퀘스트를 받을 수 있다.")
@@ -287,7 +291,7 @@ public class QuestServiceTest {
                 .willReturn(todayQuests);
 
         // when
-        final TodayQuestListResponse actualResponse = questService.updateTodayQuests(GOEUN.getId());
+        final TodayQuestListResponse actualResponse = questService.updateTodayQuests();
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()

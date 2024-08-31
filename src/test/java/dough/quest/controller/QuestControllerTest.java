@@ -3,14 +3,18 @@ package dough.quest.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.AbstractControllerTest;
 import dough.keyword.KeywordCode;
+import dough.login.service.TokenService;
+import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestListResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import dough.quest.service.QuestService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,19 +23,25 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
+import java.util.Optional;
 
-import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.burnout.fixture.BurnoutFixture.SOBORO;
 import static dough.global.restdocs.RestDocsConfiguration.field;
 import static dough.keyword.domain.type.ParticipationType.ALONE;
 import static dough.keyword.domain.type.PlaceType.ANYWHERE;
+import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.*;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST2;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -44,11 +54,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 class QuestControllerTest extends AbstractControllerTest {
 
+    private static final String MEMBER_TOKENS = "accessToken";
+
     @Autowired
     ObjectMapper objectMapper;
 
     @MockBean
     private QuestService questService;
+
+    @Mock
+    private TokenService tokenService;
+
+    @Mock
+    private MemberRepository memberRepository;
+
+    @BeforeEach
+    void setUp() {
+        when(tokenProvider.validToken(any()))
+                .thenReturn(true);
+        given(tokenProvider.getMemberIdFromToken(any()))
+                .willReturn(1L);
+    }
 
     private ResultActions performPutUpdateQuestRequest(
             final Long questId,
@@ -69,7 +95,7 @@ class QuestControllerTest extends AbstractControllerTest {
                 3,
                 true,
                 false,
-                "열광형"
+                "소보로"
         );
 
         doNothing().when(questService).save(any());
@@ -121,7 +147,7 @@ class QuestControllerTest extends AbstractControllerTest {
                 4,
                 false,
                 false,
-                "열광형"
+                "소보로"
         );
 
         doNothing().when(questService).update(anyLong(), any());
@@ -189,7 +215,7 @@ class QuestControllerTest extends AbstractControllerTest {
     void getFixedQuests() throws Exception {
         // given
         final FixedQuestListResponse fixedQuestListResponse = FixedQuestListResponse.of(
-                ENTHUSIAST, List.of(FIXED_QUEST1, FIXED_QUEST2)
+                SOBORO, List.of(FIXED_QUEST1, FIXED_QUEST2)
         );
 
         when(questService.getFixedQuests(anyLong()))
@@ -237,18 +263,24 @@ class QuestControllerTest extends AbstractControllerTest {
         final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
         final TodayQuestListResponse todayQuestListResponse = TodayQuestListResponse.of(new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests);
 
-        when(questService.updateTodayQuests(anyLong()))
+        // given
+        given(tokenService.getMemberId())
+                .willReturn(1L);
+        given(memberRepository.findMemberById(GOEUN.getId()))
+                .willReturn(Optional.of(GOEUN));
+        when(questService.updateTodayQuests())
                 .thenReturn(todayQuestListResponse);
 
         // when
-        final ResultActions resultActions = mockMvc.perform(post("/api/v1/quests/today/{memberId}", 1L));
+        final ResultActions resultActions = mockMvc.perform(post("/api/v1/quests/today")
+                .header(AUTHORIZATION, MEMBER_TOKENS));
 
         // then
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        pathParameters(
-                                parameterWithName("memberId")
-                                        .description("멤버 아이디")
+                        requestHeaders(
+                                headerWithName("Authorization")
+                                        .description("엑세스 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("placeKeyword")

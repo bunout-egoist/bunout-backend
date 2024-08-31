@@ -2,7 +2,7 @@ package dough.member.fixture;
 
 import dough.member.domain.Member;
 
-import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.burnout.fixture.BurnoutFixture.SOBORO;
 import static dough.level.fixture.LevelFixture.LEVEL1;
 import static dough.login.domain.type.RoleType.MEMBER;
 import static dough.login.domain.type.SocialLoginType.KAKAO;
@@ -19,7 +19,7 @@ public class MemberFixture {
             "기타",
             "여성",
             2002,
-            ENTHUSIAST,
+            SOBORO,
             MEMBER,
             LEVEL1,
             FIXED_QUEST1

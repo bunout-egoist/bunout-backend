@@ -41,6 +41,7 @@ class MemberControllerTest extends AbstractControllerTest {
     private static final String MEMBER_TOKENS = "accessToken";
     @Autowired
     private ObjectMapper objectMapper;
+
     @MockBean
     private MemberService memberService;
 
@@ -73,7 +74,7 @@ class MemberControllerTest extends AbstractControllerTest {
                 .content(objectMapper.writeValueAsString(fixedQuestRequest)));
     }
 
-    @DisplayName("멤버의 정보을 조회할 수 있다.")
+    @DisplayName("멤버의 정보를 조회할 수 있다.")
     @Test
     void getMemberInfo() throws Exception {
         // given
@@ -285,7 +286,7 @@ class MemberControllerTest extends AbstractControllerTest {
                 .andExpect(jsonPath("$.message").value("고정 퀘스트 아이디를 입력해주세요."));
     }
 
-    @DisplayName("멤버의 고정 퀘스트를 재설정할 수 있다.")
+    @DisplayName("멤버는 출석 체크를 할 수 있다.")
     @Test
     void checkAttendance() throws Exception {
         // given
@@ -327,6 +328,62 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("requiredExp")
                                         .type(NUMBER)
+                                        .description("다음 레벨까지 필요한 경험치")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("isLevelUp")
+                                        .type(BOOLEAN)
+                                        .description("레벨업 유무")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("attendanceCount")
+                                        .type(NUMBER)
+                                        .description("현재 출석 점수")
+                                        .attributes(field("constraint", "양의 정수"))
+                        )
+                ));
+    }
+
+    @DisplayName("다음 레벨이 없을 경우 null을 반환한다.")
+    @Test
+    void checkAttendance_NextLevelIsNull() throws Exception {
+        // given
+        final MemberAttendanceResponse memberAttendanceResponse = new MemberAttendanceResponse(
+                1,
+                null,
+                null,
+                null,
+                false,
+                5
+        );
+
+        when(memberService.checkAttendance())
+                .thenReturn(memberAttendanceResponse);
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(put("/api/v1/members/attendance")
+                .header(AUTHORIZATION, MEMBER_TOKENS));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization")
+                                        .description("엑세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("currentLevel")
+                                        .type(NUMBER)
+                                        .description("현재 레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("nextLevel")
+                                        .type(NULL)
+                                        .description("다음 레벨")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("currentExp")
+                                        .type(NULL)
+                                        .description("현재 경험치")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("requiredExp")
+                                        .type(NULL)
                                         .description("다음 레벨까지 필요한 경험치")
                                         .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("isLevelUp")

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.burnout.fixture.BurnoutFixture.SOBORO;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_LEVEL_ID;
 import static dough.level.fixture.LevelFixture.LEVEL1;
 import static dough.level.fixture.LevelFixture.LEVEL2;
@@ -49,7 +49,7 @@ public class LevelServiceTest {
                 "기타",
                 "여성",
                 2002,
-                ENTHUSIAST,
+                SOBORO,
                 MEMBER,
                 LEVEL1,
                 FIXED_QUEST1
@@ -81,7 +81,7 @@ public class LevelServiceTest {
                 "기타",
                 "여성",
                 2002,
-                ENTHUSIAST,
+                SOBORO,
                 MEMBER,
                 LEVEL1,
                 FIXED_QUEST1

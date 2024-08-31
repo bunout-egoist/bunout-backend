@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.burnout.fixture.BurnoutFixture.SOBORO;
 import static dough.global.exception.ExceptionCode.*;
 import static dough.level.fixture.LevelFixture.LEVEL1;
 import static dough.level.fixture.LevelFixture.LEVEL2;
@@ -102,7 +102,7 @@ class MemberServiceTest {
     void changeBurnoutType() {
         // given
         final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
-        GOEUN.updateBurnout(ENTHUSIAST, LocalDate.of(2024, 7, 11));
+        GOEUN.updateBurnout(SOBORO, LocalDate.of(2024, 7, 11));
 
         given(tokenService.getMemberId())
                 .willReturn(1L);
@@ -111,7 +111,7 @@ class MemberServiceTest {
         given(memberRepository.save(any()))
                 .willReturn(GOEUN);
         given(burnoutRepository.findById(anyLong()))
-                .willReturn(Optional.of(ENTHUSIAST));
+                .willReturn(Optional.of(SOBORO));
 
         // when
         memberService.updateBurnout(burnoutRequest);
@@ -132,7 +132,7 @@ class MemberServiceTest {
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
-                .willReturn(Optional.of(ENTHUSIAST));
+                .willReturn(Optional.of(SOBORO));
 
         // when & then
         assertThatThrownBy(() -> memberService.updateBurnout(burnoutRequest))
