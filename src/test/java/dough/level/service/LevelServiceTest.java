@@ -23,6 +23,7 @@ import static dough.login.domain.type.SocialLoginType.KAKAO;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
@@ -57,15 +58,15 @@ public class LevelServiceTest {
 
         member.updateExp(25);
 
-        given(levelRepository.findCurrentAndNextLevel(anyInt()))
-                .willReturn(List.of(LEVEL1, LEVEL2));
+        given(levelRepository.findTopByExp(anyInt(), any()))
+                .willReturn(List.of(LEVEL2));
 
         // when
         final MemberLevel actualMemberLevel = levelService.updateLevel(member);
 
         // then
         assertThat(actualMemberLevel).usingRecursiveComparison()
-                .isEqualTo(new MemberLevel(member, List.of(LEVEL1, LEVEL2), true));
+                .isEqualTo(new MemberLevel(member, LEVEL2, true));
     }
 
     @DisplayName("레벨이 존재하지 않을 경우 예외가 발생한다.")
@@ -89,7 +90,7 @@ public class LevelServiceTest {
 
         member.updateExp(25);
 
-        given(levelRepository.findCurrentAndNextLevel(2))
+        given(levelRepository.findTopByExp(anyInt(), any()))
                 .willReturn(List.of());
 
         // when & then

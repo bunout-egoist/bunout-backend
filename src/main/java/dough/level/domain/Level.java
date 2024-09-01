@@ -33,16 +33,22 @@ public class Level extends BaseEntity {
     private Integer level;
 
     @Column(nullable = false)
+    private Integer accumulatedExp;
+
+    @Column(nullable = false)
     private Integer requiredExp;
+
 
     @OneToMany(mappedBy = "level")
     private List<Member> members = new ArrayList<>();
 
     public Level(
             final Integer level,
+            final Integer accumulatedExp,
             final Integer requiredExp
-    ) {
+            ) {
         this.level = level;
+        this.accumulatedExp = accumulatedExp;
         this.requiredExp = requiredExp;
     }
 }

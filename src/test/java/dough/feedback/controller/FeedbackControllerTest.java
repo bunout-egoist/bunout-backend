@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 class FeedbackControllerTest extends AbstractControllerTest {
 
-    private static final String MEMBER_TOKENS = "accessToken";
+    private static final String MEMBER_TOKENS = "Bearer accessToken";
 
     @Autowired
     private ObjectMapper objectMapper;

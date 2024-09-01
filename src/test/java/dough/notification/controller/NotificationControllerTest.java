@@ -41,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 public class NotificationControllerTest extends AbstractControllerTest {
 
-    private static final String MEMBER_TOKENS = "accessToken";
+    private static final String MEMBER_TOKENS = "Bearer accessToken";
 
     @Autowired
     ObjectMapper objectMapper;

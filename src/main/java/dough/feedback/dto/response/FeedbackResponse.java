@@ -13,7 +13,7 @@ public class FeedbackResponse {
 
     public static FeedbackResponse of(final MemberLevel memberLevel) {
         return new FeedbackResponse(
-                memberLevel.getLevels().get(0).getLevel(),
+                memberLevel.getLevel().getLevel(),
                 memberLevel.getIsLevelUp()
         );
     }

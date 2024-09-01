@@ -31,8 +31,7 @@ public class MemberController {
     }
 
     @PutMapping("/burnout")
-    public ResponseEntity<Void> updateBurnout(@RequestBody @Valid final BurnoutRequest burnoutRequest
-    ) {
+    public ResponseEntity<Void> updateBurnout(@RequestBody @Valid final BurnoutRequest burnoutRequest) {
         memberService.updateBurnout(burnoutRequest);
         return ResponseEntity.noContent().build();
     }

@@ -3,7 +3,6 @@ package dough.member.service;
 import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
-import dough.level.domain.Level;
 import dough.level.domain.MemberLevel;
 import dough.level.service.LevelService;
 import dough.login.service.TokenService;

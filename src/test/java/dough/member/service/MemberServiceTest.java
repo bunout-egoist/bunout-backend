@@ -21,12 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import static dough.burnout.fixture.BurnoutFixture.SOBORO;
 import static dough.global.exception.ExceptionCode.*;
-import static dough.level.fixture.LevelFixture.LEVEL1;
 import static dough.level.fixture.LevelFixture.LEVEL2;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
@@ -119,6 +117,7 @@ class MemberServiceTest {
         // then
         verify(memberRepository).findMemberById(any());
         verify(memberRepository).save(any());
+        verify(burnoutRepository).findById(anyLong());
     }
 
     @DisplayName("번아웃 유형이 이번 달에 수정된 기록이 있을 경우 예외가 발생한다.")
@@ -193,7 +192,7 @@ class MemberServiceTest {
         // given
         GOEUN.updateAttendance(LocalDateTime.now().minusDays(7), 2, 5);
 
-        final MemberLevel memberLevel = new MemberLevel(GOEUN, List.of(LEVEL1, LEVEL2), true);
+        final MemberLevel memberLevel = new MemberLevel(GOEUN, LEVEL2, true);
 
         given(tokenService.getMemberId())
                 .willReturn(1L);

@@ -1,6 +1,7 @@
 package dough.level.domain.repository;
 
 import dough.level.domain.Level;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,9 +14,10 @@ public interface LevelRepository extends JpaRepository<Level, Long> {
     @Query("""
             SELECT level
             FROM Level level
-            WHERE level.level = :level AND level.level = :level + 1
-           """)
-    List<Level> findCurrentAndNextLevel(@Param("level") final Integer level);
+            WHERE level.accumulatedExp <= :exp
+            ORDER BY level.accumulatedExp DESC
+            """)
+    List<Level> findTopByExp(@Param("exp") final Integer exp, final Pageable pageable);
 
     Optional<Level> findByLevel(final Integer level);
 }

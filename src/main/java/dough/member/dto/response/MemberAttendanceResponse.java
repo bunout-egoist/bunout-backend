@@ -17,40 +17,12 @@ public class MemberAttendanceResponse {
     private final Integer attendanceCount;
 
     public static MemberAttendanceResponse of(final MemberLevel memberLevel) {
-        final Level currentLevel = memberLevel.getLevels().get(0);
-
-        if (memberLevel.getLevels().size() > 1) {
-            final Level nextLevel = memberLevel.getLevels().get(1);
-            return createResponseWithNextLevel(memberLevel, currentLevel, nextLevel);
-        } else {
-            return createResponseWithoutNextLevel(memberLevel, currentLevel);
-        }
-    }
-
-    private static MemberAttendanceResponse createResponseWithNextLevel(
-            final MemberLevel memberLevel,
-            final Level currentLevel,
-            final Level nextLevel) {
-
+        final Level currentLevel = memberLevel.getLevel();
         return new MemberAttendanceResponse(
                 currentLevel.getLevel(),
-                nextLevel.getLevel(),
-                nextLevel.getRequiredExp() - memberLevel.getMember().getExp(),
-                nextLevel.getRequiredExp() - currentLevel.getRequiredExp(),
-                memberLevel.getIsLevelUp(),
-                memberLevel.getMember().getAttendanceCount()
-        );
-    }
-
-    private static MemberAttendanceResponse createResponseWithoutNextLevel(
-            final MemberLevel memberLevel,
-            final Level currentLevel) {
-
-        return new MemberAttendanceResponse(
-                currentLevel.getLevel(),
-                null,
-                null,
-                null,
+                currentLevel.getLevel() + 1,
+                currentLevel.getAccumulatedExp() - memberLevel.getMember().getExp(),
+                currentLevel.getRequiredExp(),
                 memberLevel.getIsLevelUp(),
                 memberLevel.getMember().getAttendanceCount()
         );
