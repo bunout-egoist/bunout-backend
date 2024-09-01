@@ -60,7 +60,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
     }
 
     private ResultActions performGetMonthlySummaryRequest() throws Exception {
-        return mockMvc.perform(get("/api/v1/dashboard/{yearMonth}",
+        return mockMvc.perform(get("/api/v1/dashboard/monthly/{yearMonth}",
                 YearMonth.of(2024, 8))
                 .header(AUTHORIZATION, MEMBER_TOKENS));
     }
@@ -79,7 +79,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
 
         // when
         final ResultActions resultActions = mockMvc.perform(
-                get("/api/v1/dashboard/quests/{searchDate}", LocalDate.of(2024, 8, 13))
+                get("/api/v1/dashboard/weekly/{searchDate}", LocalDate.of(2024, 8, 13))
                         .header(AUTHORIZATION, MEMBER_TOKENS));
 
         // then
@@ -153,7 +153,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
     @DisplayName("조회 날짜 타입이 맞지 않을 경우 예외가 발생한다.")
     @Test
     void getWeeklySummary_InvalidLocalDateType() throws Exception {
-        mockMvc.perform(get("/api/v1/dashboard/quests/{searchDate}", "2024-07")
+        mockMvc.perform(get("/api/v1/dashboard/weekly/{searchDate}", "2024-07")
                         .header(AUTHORIZATION, MEMBER_TOKENS))
                 .andExpect(status().isBadRequest());
     }

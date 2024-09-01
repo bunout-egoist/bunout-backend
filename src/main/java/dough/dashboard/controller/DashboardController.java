@@ -25,7 +25,7 @@ public class DashboardController {
     public final QuestService questService;
     public final DashboardService dashboardService;
 
-    @GetMapping("/quests/{searchDate}")
+    @GetMapping("/weekly/{searchDate}")
     public ResponseEntity<List<WeeklySummaryResponse>> getWeeklySummary(@PathVariable("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate date) {
         final List<WeeklySummaryResponse> detailResponse = questService.getWeeklySummary(date);
         return ResponseEntity.ok().body(detailResponse);
@@ -37,7 +37,7 @@ public class DashboardController {
         return ResponseEntity.ok().body(completedQuestsTotalResponse);
     }
 
-    @GetMapping("/{yearMonth}")
+    @GetMapping("/monthly/{yearMonth}")
     public ResponseEntity<MonthlySummaryResponse> getMonthlySummary(@PathVariable("yearMonth") final YearMonth yearMonth) {
         final MonthlySummaryResponse monthlySummaryResponse = dashboardService.getMonthlySummary(yearMonth);
         return ResponseEntity.ok().body(monthlySummaryResponse);
