@@ -10,7 +10,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.time.Duration;
 import java.util.Collections;
@@ -43,7 +42,7 @@ public class TokenProvider {
                 .setExpiration(expiry)
                 .setSubject(member.getEmail())
                 .claim("id", member.getId())
-                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret_key())
                 .compact();
     }
 
@@ -68,7 +67,7 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(new org.springframework.security.core.userdetails.User(claims.getSubject
                 (), "", authorities), token, authorities);
     }
-  
+
     public Long getMemberIdFromToken(String token) {
         Claims claims = getClaims(token);
         return claims.get("id", Long.class);

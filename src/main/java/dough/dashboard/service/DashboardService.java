@@ -66,13 +66,13 @@ public class DashboardService {
 
     private static Long getCompletedAllQuestsDateCount(final List<CompletedQuestsCountElement> completedQuestsCountElements) {
         return completedQuestsCountElements.stream()
-                .filter(element -> element.getDailyCount() == 3)
+                .filter(element -> element.getBY_TYPECount() == 3)
                 .count();
     }
 
     private static Long getAverageCompletion(final List<CompletedQuestsCountElement> completedQuestsCountDateElements, final YearMonth yearMonth) {
         final Long totalCount = completedQuestsCountDateElements.stream()
-                .mapToLong(element -> element.getDailyCount())
+                .mapToLong(element -> element.getBY_TYPECount())
                 .sum();
 
         final int month = yearMonth.lengthOfMonth();
@@ -87,7 +87,7 @@ public class DashboardService {
         final Map<String, Double> completionCounts = completedQuestsCountDateElements.stream()
                 .collect(Collectors.groupingBy(
                         element -> element.getCompletedDate().getDayOfWeek().getDisplayName(SHORT, KOREAN),
-                        Collectors.summingDouble(element -> element.getDailyCount() / 3.0) // double 사용
+                        Collectors.summingDouble(element -> element.getBY_TYPECount() / 3.0) // double 사용
                 ));
 
         final Double maxCount = Collections.max(completionCounts.values());

@@ -1,9 +1,11 @@
 package dough.global;
 
 import dough.global.restdocs.RestDocsConfiguration;
+import dough.login.config.jwt.TokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -24,6 +26,9 @@ public abstract class AbstractControllerTest {
 
     @Autowired
     protected MockMvc mockMvc;
+
+    @MockBean
+    protected TokenProvider tokenProvider;
 
     @BeforeEach
     void setUp(

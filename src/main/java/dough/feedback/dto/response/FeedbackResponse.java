@@ -1,7 +1,7 @@
 package dough.feedback.dto.response;
 
-
-import dough.feedback.domain.Feedback;
+import dough.level.domain.MemberLevel;
+import dough.member.domain.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,19 +9,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FeedbackResponse {
 
-    private final Long id;
-    private final String imageUrl;
-    private final Integer difficulty;
-    private final Long memberId;
-    private final Long selectedQuestId;
+    private final Integer exp;
+    private final Integer currentLevel;
+    private final Integer previousLevel;
+    private final Boolean isLevelUp;
 
-    public static FeedbackResponse from(Feedback feedback) {
+    public static FeedbackResponse of(final MemberLevel memberLevel) {
+        final Member member = memberLevel.getMember();
+
         return new FeedbackResponse(
-                feedback.getId(),
-                feedback.getImageUrl(),
-                feedback.getDifficulty(),
-                feedback.getMember().getId(),
-                feedback.getSelectedQuest().getId()
+                member.getExp(),
+                member.getLevel().getLevel(),
+                memberLevel.getPreviousLevel(),
+                memberLevel.getIsLevelUp()
         );
     }
 }

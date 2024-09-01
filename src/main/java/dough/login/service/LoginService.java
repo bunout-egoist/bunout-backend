@@ -4,6 +4,9 @@ import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.keyword.domain.Keyword;
 import dough.keyword.domain.repository.KeywordRepository;
+import dough.global.exception.BadRequestException;
+import dough.level.domain.Level;
+import dough.level.domain.repository.LevelRepository;
 import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
 import dough.member.domain.Member;
@@ -15,23 +18,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import static dough.global.exception.ExceptionCode.NOT_FOUND_LEVEL_ID;
+import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
+
 @RequiredArgsConstructor
 @Service
 public class LoginService {
     private final MemberRepository memberRepository;
-    private final QuestRepository questRepository;
-    private final KeywordRepository keywordRepository;
-    private final BurnoutRepository burnoutRepository;
+    private final LevelRepository levelRepository;
 
     public Member createMember(String socialLoginId, SocialLoginType socialLoginType, String nickname, RoleType roleType) {
-        Burnout burnout = new Burnout(1L, "호빵");
-        burnoutRepository.save(burnout);
-        Keyword keyword = new Keyword(true, false);
-        keywordRepository.save(keyword);
-        Quest quest = new Quest("quest", "do it", QuestType.DAILY, 1, burnout, keyword);
-        questRepository.save(quest);
-
-        Member member = new Member(
+        final Level level = levelRepository.findByLevel(1)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_LEVEL_ID));
+        final Member member = new Member(
                 null,
                 nickname,
                 socialLoginId,
@@ -40,10 +39,12 @@ public class LoginService {
                 null,
                 null,
                 null,
-                burnout,
-                quest,
-                roleType
+                null,
+                roleType,
+                level,
+                null
         );
+
         return memberRepository.save(member);
     }
 
@@ -64,7 +65,6 @@ public class LoginService {
 
     public Member findBySocialLoginId(String socialLoginId) {
         return memberRepository.findBySocialLoginId(socialLoginId)
-                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
     }
-
 }
