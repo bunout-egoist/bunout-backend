@@ -1,23 +1,32 @@
 package dough.keyword.domain.type;
 
+import dough.global.exception.InvalidDomainException;
 import dough.keyword.domain.Keyword;
 import lombok.Getter;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static dough.global.exception.ExceptionCode.INVALID_PARTICIPATION_TYPE;
+
 @Getter
 public enum ParticipationType {
 
-    TOGETHER("함께"),
-    ALONE("혼자서"),
-    ANYONE("누구와도");
+    TOGETHER("함께", true),
+    ALONE("혼자서", false),
+    ANYONE("누구와도", null);
 
     private final String code;
+    private final Boolean isGroup;
 
-    ParticipationType(final String code) {
+    ParticipationType(
+            final String code,
+            final Boolean isGroup
+    ) {
         this.code = code;
+        this.isGroup = isGroup;
     }
 
     public static String getParticipationCode(final List<Keyword> keywords) {
@@ -31,5 +40,12 @@ public enum ParticipationType {
         return groupedKeyword.containsKey(true)
                 ? TOGETHER.getCode()
                 : ALONE.getCode();
+    }
+
+    public static ParticipationType getMappedParticipationType(final Boolean participationIsGroup) {
+        return Arrays.stream(values())
+                .filter(value -> value.isGroup.equals(participationIsGroup))
+                .findAny()
+                .orElseThrow(() -> new InvalidDomainException(INVALID_PARTICIPATION_TYPE));
     }
 }
