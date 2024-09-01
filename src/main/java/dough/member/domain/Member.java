@@ -49,11 +49,11 @@ public class Member extends BaseEntity {
     private List<Notification> notifications = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "burnout_id", nullable = false)
+    @JoinColumn(name = "burnout_id")
     private Burnout burnout;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "quest_id", nullable = false)
+    @JoinColumn(name = "quest_id")
     private Quest quest;
 
     @ManyToOne(fetch = LAZY)
