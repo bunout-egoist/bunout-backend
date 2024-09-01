@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @AllArgsConstructor
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class FeedbackRequest {
 
 
+    private MultipartFile multipartFile;
     private String imageUrl;
 
     @Min(1)

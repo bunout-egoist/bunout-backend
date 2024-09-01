@@ -48,6 +48,7 @@ public class WebOAuthSecurityConfig {
                         .requestMatchers("/api/v1/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/api/v1/token", "/api/v1/refreshToken").permitAll()
                         .requestMatchers("/api/v1/logout").permitAll()
+                        .requestMatchers("/api/v1/quests").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll())
                 .oauth2Login(oauth2 -> oauth2

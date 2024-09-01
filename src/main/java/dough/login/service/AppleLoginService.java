@@ -10,6 +10,7 @@ import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
 import dough.login.util.AppleJwtUtils;
 import dough.member.domain.Member;
+import dough.member.domain.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -60,6 +61,7 @@ public class AppleLoginService {
     private final TokenProvider tokenProvider;
     private final LoginService loginService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final MemberRepository memberRepository;
 
     public AppleToken.Response appleLogin(Map<String, String> request) {
         try {
@@ -69,11 +71,14 @@ public class AppleLoginService {
             String socialLoginId = claims.getSubject();
 
             Member member;
-            try {
+
+            if(memberRepository.existsBySocialLoginId(socialLoginId)) {
                 member = loginService.findBySocialLoginId(socialLoginId);
-            } catch (IllegalArgumentException e) {
+            }
+            else {
                 member = loginService.createMember(socialLoginId, SocialLoginType.APPLE, null, RoleType.MEMBER);
             }
+
             String clientSecret = makeClientSecret();
 
             AppleToken.Request tokenRequest = AppleToken.Request.of(

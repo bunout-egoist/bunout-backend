@@ -3,11 +3,13 @@ package dough.member.domain;
 import dough.burnout.domain.Burnout;
 import dough.feedback.domain.Feedback;
 import dough.global.BaseEntity;
+import dough.keyword.domain.Keyword;
 import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
 import dough.notification.domain.Notification;
 import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
+import dough.quest.domain.type.QuestType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -130,6 +132,7 @@ public class Member extends BaseEntity implements UserDetails {
                   final String gender,
                   final Integer birthYear,
                   final Burnout burnout,
+                  final Quest quest,
                   final RoleType roleType
     ) {
         this.id = id;
@@ -144,6 +147,7 @@ public class Member extends BaseEntity implements UserDetails {
         this.gender = gender;
         this.birthYear = birthYear;
         this.burnout = burnout;
+        this.quest = quest;
         this.lastLogin = LocalDateTime.now();
         this.role = roleType;
     }
