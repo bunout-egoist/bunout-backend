@@ -315,6 +315,10 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("누구와 키워드")
                                         .attributes(field("constraint", "문자열")),
+                                fieldWithPath("todayQuests[0].questStatus")
+                                        .type(STRING)
+                                        .description("선택된 퀘스트 상태")
+                                        .attributes(field("constraint", "문자열")),
                                 fieldWithPath("todayQuests[1].selectedQuestId")
                                         .type(NUMBER)
                                         .description("선택된 퀘스트 아이디")
@@ -334,6 +338,10 @@ class QuestControllerTest extends AbstractControllerTest {
                                 fieldWithPath("todayQuests[1].participationKeyword")
                                         .type(STRING)
                                         .description("누구와 키워드")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("todayQuests[1].questStatus")
+                                        .type(STRING)
+                                        .description("선택된 퀘스트 상태")
                                         .attributes(field("constraint", "문자열"))
                         )
                 ));

@@ -127,11 +127,11 @@ public class QuestService {
     }
 
     private List<SelectedQuest> getIncompleteByTypeQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
+        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberId(member.getId());
         return incompleteByTypeQuests.stream()
-                .map(incompleteBY_TYPEQuest -> {
-                    incompleteBY_TYPEQuest.updateDueDate(currentDate);
-                    return incompleteBY_TYPEQuest;
+                .map(incompleteByTypeQuest -> {
+                    incompleteByTypeQuest.updateDueDate(currentDate);
+                    return incompleteByTypeQuest;
                 }).collect(Collectors.toList());
     }
 

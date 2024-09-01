@@ -18,6 +18,7 @@ public class TodayQuestResponse {
     private final String questType;
     private final String placeKeyword;
     private final String participationKeyword;
+    private final String questStatus;
 
     public static TodayQuestResponse of(final SelectedQuest selectedQuest) {
         final Quest quest = selectedQuest.getQuest();
@@ -34,7 +35,8 @@ public class TodayQuestResponse {
                 quest.getContent(),
                 quest.getQuestType().getCode(),
                 PlaceType.getMappedPlaceType(quest.getKeyword().getIsOutside()).getCode(),
-                ParticipationType.getMappedParticipationType(quest.getKeyword().getIsGroup()).getCode()
+                ParticipationType.getMappedParticipationType(quest.getKeyword().getIsGroup()).getCode(),
+                selectedQuest.getQuestStatus().toString()
         );
     }
 
@@ -44,7 +46,8 @@ public class TodayQuestResponse {
                 quest.getContent(),
                 quest.getQuestType().getCode(),
                 null,
-                null
+                null,
+                selectedQuest.getQuestStatus().toString()
         );
     }
 }
