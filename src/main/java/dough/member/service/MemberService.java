@@ -121,6 +121,7 @@ public class MemberService {
 
         final MemberLevel memberLevel = levelService.updateLevel(member);
         memberRepository.save(memberLevel.getMember());
+
         return MemberAttendanceResponse.of(memberLevel);
     }
 

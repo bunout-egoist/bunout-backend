@@ -12,7 +12,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Long> {
 
@@ -33,16 +32,16 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              JOIN FETCH sq.quest q
              JOIN FETCH sq.member m
              JOIN FETCH q.keyword k
-             WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.quest.questType = 'BY_TYPE' AND sq.dueDate = :date
+             WHERE sq.questStatus = 'IN_PROGRESS' AND sq.member.id = :memberId AND sq.quest.questType = 'BY_TYPE' AND q.difficulty = m.level.level
             """)
-    List<SelectedQuest> findIncompleteByTypeQuestsByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
+    List<SelectedQuest> findIncompleteByTypeQuestsByMemberId(@Param("memberId") final Long memberId);
 
     @Query("""
              SELECT sq
              FROM SelectedQuest sq
              JOIN FETCH sq.quest q
              JOIN FETCH q.keyword k
-             WHERE sq.status <> 'COMPLETED' AND sq.member.id = :memberId AND sq.dueDate = :date
+             WHERE sq.member.id = :memberId AND sq.dueDate = :date
             """)
     List<SelectedQuest> findTodayByTypeQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
 

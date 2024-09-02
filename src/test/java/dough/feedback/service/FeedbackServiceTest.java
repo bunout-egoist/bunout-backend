@@ -6,7 +6,7 @@ import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
 import dough.level.service.LevelService;
-import dough.member.domain.Member;
+import dough.login.service.TokenService;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -19,15 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
 import static dough.feedback.fixture.FeedbackFixture.FEEDBACK1;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_SELECTED_QUEST_ID;
-import static dough.level.fixture.LevelFixture.LEVEL1;
-import static dough.login.domain.type.RoleType.MEMBER;
-import static dough.login.domain.type.SocialLoginType.KAKAO;
+import static dough.level.fixture.LevelFixture.LEVEL2;
 import static dough.member.fixture.MemberFixture.GOEUN;
-import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -42,6 +38,9 @@ class FeedbackServiceTest {
 
     @InjectMocks
     private FeedbackService feedbackService;
+
+    @Mock
+    private TokenService tokenService;
 
     @Mock
     private LevelService levelService;
@@ -65,10 +64,12 @@ class FeedbackServiceTest {
                 5
         );
 
-        final MemberLevel memberLevel = new MemberLevel(GOEUN, 2, true);
+        final MemberLevel memberLevel = new MemberLevel(GOEUN, LEVEL2, true);
 
         IN_PROGRESS_QUEST1.updateFeedback(FEEDBACK1);
 
+        given(tokenService.getMemberId())
+                .willReturn(1L);
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findById(anyLong()))
@@ -83,7 +84,7 @@ class FeedbackServiceTest {
                 .willReturn(memberLevel.getMember());
 
         // when
-        final FeedbackResponse actualResponse = feedbackService.createFeedback(GOEUN.getId(), feedbackRequest);
+        final FeedbackResponse actualResponse = feedbackService.createFeedback(feedbackRequest);
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
@@ -104,7 +105,7 @@ class FeedbackServiceTest {
                 .willReturn(Optional.of(GOEUN));
 
         // when & then
-        assertThatThrownBy(() -> feedbackService.createFeedback(GOEUN.getId(), feedbackRequest))
+        assertThatThrownBy(() -> feedbackService.createFeedback(feedbackRequest))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_SELECTED_QUEST_ID.getCode());
@@ -121,7 +122,7 @@ class FeedbackServiceTest {
         );
 
         // when & then
-        assertThatThrownBy(() -> feedbackService.createFeedback(GOEUN.getId(), feedbackRequest))
+        assertThatThrownBy(() -> feedbackService.createFeedback(feedbackRequest))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_MEMBER_ID.getCode());

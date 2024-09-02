@@ -2,7 +2,7 @@ package dough.quest.fixture;
 
 import dough.quest.domain.Quest;
 
-import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.burnout.fixture.BurnoutFixture.SOBORO;
 import static dough.keyword.fixture.KeywordFixture.INSIDE_ALONE;
 import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
 import static dough.quest.domain.type.QuestType.BY_TYPE;
@@ -15,7 +15,7 @@ public class QuestFixture {
             "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
             BY_TYPE,
             5,
-            ENTHUSIAST,
+            SOBORO,
             OUTSIDE_ALONE
     );
 
@@ -24,7 +24,7 @@ public class QuestFixture {
             "아침시간, 표지가 예쁜 5분간 새로운 책 읽기",
             BY_TYPE,
             2,
-            ENTHUSIAST,
+            SOBORO,
             INSIDE_ALONE
     );
 
@@ -33,7 +33,7 @@ public class QuestFixture {
             "아침시간, 조용한 방 안에서 5분간 명상하기",
             FIXED,
             2,
-            ENTHUSIAST,
+            SOBORO,
             INSIDE_ALONE
     );
 
@@ -42,7 +42,7 @@ public class QuestFixture {
             "아침시간, 거울을 보며 1분간 칭찬하기",
             FIXED,
             3,
-            ENTHUSIAST,
+            SOBORO,
             INSIDE_ALONE
     );
 }

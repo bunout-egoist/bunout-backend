@@ -7,16 +7,16 @@ import lombok.Getter;
 public class MemberLevel {
 
     private final Member member;
-    private final Integer previousLevel;
+    private final Level level;
     private final Boolean isLevelUp;
 
     public MemberLevel(
             final Member member,
-            final Integer previousLevel,
+            final Level level,
             final Boolean isLevelUp
     ) {
         this.member = member;
-        this.previousLevel = previousLevel;
+        this.level = level;
         this.isLevelUp = isLevelUp;
     }
 }

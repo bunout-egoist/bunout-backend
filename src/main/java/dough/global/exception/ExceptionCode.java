@@ -33,6 +33,8 @@ public enum ExceptionCode {
 
     // 7000 keyword
     NOT_FOUND_KEYWORD_ID(7000, "요청하신 키워드를 찾을 수 없습니다."),
+    INVALID_PARTICIPATION_TYPE(7001, "유효하지 않은 타입입니다."),
+    INVALID_PLACE_TYPE(7001, "유효하지 않은 누구와 타입입니다."),
 
     // 8000 level
     NOT_FOUND_LEVEL_ID(8000, "요청하신 ID에 해당하는 레벨을 찾을 수 없습니다."),

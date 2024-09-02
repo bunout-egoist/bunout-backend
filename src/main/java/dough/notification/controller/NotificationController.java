@@ -17,17 +17,15 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping("/{memberId}")
-    public ResponseEntity<List<NotificationResponse>> getAllNotifications(@PathVariable("memberId") final Long memberId) {
-        final List<NotificationResponse> notificationResponses = notificationService.getAllNotifications(memberId);
+    @GetMapping
+    public ResponseEntity<List<NotificationResponse>> getAllNotifications() {
+        final List<NotificationResponse> notificationResponses = notificationService.getAllNotifications();
         return ResponseEntity.ok().body(notificationResponses);
     }
 
-    @PutMapping("/{memberId}")
-    public ResponseEntity<List<NotificationResponse>> updateNotifications(
-            @PathVariable("memberId") final Long memberId,
-            @RequestBody @Valid final NotificationsUpdateRequest notificationsUpdateRequest) {
-        final List<NotificationResponse> notificationResponses = notificationService.updateNotifications(memberId, notificationsUpdateRequest);
+    @PutMapping
+    public ResponseEntity<List<NotificationResponse>> updateNotifications(@RequestBody @Valid final NotificationsUpdateRequest notificationsUpdateRequest) {
+        final List<NotificationResponse> notificationResponses = notificationService.updateNotifications(notificationsUpdateRequest);
         return ResponseEntity.ok().body(notificationResponses);
     }
 }
