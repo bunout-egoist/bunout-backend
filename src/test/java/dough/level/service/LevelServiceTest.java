@@ -12,9 +12,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
 
-import static dough.burnout.fixture.BurnoutFixture.ENTHUSIAST;
+import static dough.burnout.fixture.BurnoutFixture.SOBORO;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_LEVEL_ID;
 import static dough.level.fixture.LevelFixture.LEVEL1;
 import static dough.level.fixture.LevelFixture.LEVEL2;
@@ -23,6 +23,7 @@ import static dough.login.domain.type.SocialLoginType.KAKAO;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 
@@ -49,7 +50,7 @@ public class LevelServiceTest {
                 "기타",
                 "여성",
                 2002,
-                ENTHUSIAST,
+                SOBORO,
                 MEMBER,
                 LEVEL1,
                 FIXED_QUEST1
@@ -57,15 +58,15 @@ public class LevelServiceTest {
 
         member.updateExp(25);
 
-        given(levelRepository.findByLevel(anyInt()))
-                .willReturn(Optional.of(LEVEL2));
+        given(levelRepository.findTopByExp(anyInt(), any()))
+                .willReturn(List.of(LEVEL2));
 
         // when
         final MemberLevel actualMemberLevel = levelService.updateLevel(member);
 
         // then
         assertThat(actualMemberLevel).usingRecursiveComparison()
-                .isEqualTo(new MemberLevel(member, 1, true));
+                .isEqualTo(new MemberLevel(member, LEVEL2, true));
     }
 
     @DisplayName("레벨이 존재하지 않을 경우 예외가 발생한다.")
@@ -81,7 +82,7 @@ public class LevelServiceTest {
                 "기타",
                 "여성",
                 2002,
-                ENTHUSIAST,
+                SOBORO,
                 MEMBER,
                 LEVEL1,
                 FIXED_QUEST1
@@ -89,8 +90,8 @@ public class LevelServiceTest {
 
         member.updateExp(25);
 
-        given(levelRepository.findByLevel(2))
-                .willThrow(new BadRequestException(NOT_FOUND_LEVEL_ID));
+        given(levelRepository.findTopByExp(anyInt(), any()))
+                .willReturn(List.of());
 
         // when & then
         assertThatThrownBy(() -> levelService.updateLevel(member))

@@ -58,11 +58,6 @@ public class MemberService {
         return MemberInfoResponse.of(member);
     }
 
-    public Member findById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-    }
-    
     public void updateBurnout(final BurnoutRequest burnoutRequest) {
         final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
@@ -86,12 +81,7 @@ public class MemberService {
             }
         }
     }
-    
-    public Member findBySocialLoginId(String socialLoginId) {
-        return memberRepository.findBySocialLoginId(socialLoginId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-    }
-    
+
     public void updateFixedQuest(final FixedQuestRequest fixedQuestRequest) {
         final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
@@ -131,6 +121,7 @@ public class MemberService {
 
         final MemberLevel memberLevel = levelService.updateLevel(member);
         memberRepository.save(memberLevel.getMember());
+
         return MemberAttendanceResponse.of(memberLevel);
     }
 

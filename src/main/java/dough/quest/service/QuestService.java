@@ -9,6 +9,7 @@ import dough.keyword.domain.Keyword;
 import dough.keyword.domain.repository.KeywordRepository;
 import dough.keyword.domain.type.ParticipationType;
 import dough.keyword.domain.type.PlaceType;
+import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
@@ -48,8 +49,10 @@ public class QuestService {
     private final BurnoutRepository burnoutRepository;
     private final MemberRepository memberRepository;
     private final KeywordRepository keywordRepository;
+    private final TokenService tokenService;
 
-    public TodayQuestListResponse updateTodayQuests(final Long memberId) {
+    public TodayQuestListResponse updateTodayQuests() {
+        final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -124,11 +127,11 @@ public class QuestService {
     }
 
     private List<SelectedQuest> getIncompleteByTypeQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
+        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberId(member.getId());
         return incompleteByTypeQuests.stream()
-                .map(incompleteBY_TYPEQuest -> {
-                    incompleteBY_TYPEQuest.updateDueDate(currentDate);
-                    return incompleteBY_TYPEQuest;
+                .map(incompleteByTypeQuest -> {
+                    incompleteByTypeQuest.updateDueDate(currentDate);
+                    return incompleteByTypeQuest;
                 }).collect(Collectors.toList());
     }
 
@@ -142,14 +145,14 @@ public class QuestService {
     }
 
     @Transactional(readOnly = true)
-    public List<WeeklySummaryResponse> getWeeklySummary(final Long memberId, final LocalDate date) {
-        if (!memberRepository.existsById(memberId)) {
-            throw new BadRequestException(NOT_FOUND_MEMBER_ID);
-        }
+    public List<WeeklySummaryResponse> getWeeklySummary(final LocalDate date) {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate startDate = date.minusDays(3);
         final LocalDate endDate = date.plusDays(3);
-        final CompletedQuestElements completedQuestElements = new CompletedQuestElements(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate));
+        final CompletedQuestElements completedQuestElements = new CompletedQuestElements(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(member.getId(), startDate, endDate));
         final Map<LocalDate, List<QuestFeedback>> questFeedbackMap = completedQuestElements.toQuestFeedbackMap();
 
         return getWeeklySummaryResponses(questFeedbackMap);

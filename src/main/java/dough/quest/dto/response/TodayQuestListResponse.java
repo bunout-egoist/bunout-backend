@@ -20,7 +20,7 @@ public class TodayQuestListResponse {
             final List<SelectedQuest> todayQuests
     ) {
         final List<TodayQuestResponse> todayQuestResponses = todayQuests.stream()
-                .map(todayQuest -> TodayQuestResponse.of(todayQuest.getQuest()))
+                .map(todayQuest -> TodayQuestResponse.of(todayQuest))
                 .toList();
 
         return new TodayQuestListResponse(

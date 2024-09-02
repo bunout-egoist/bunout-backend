@@ -25,13 +25,17 @@ public class SelectedQuestFixture {
     );
 
     public static final SelectedQuest IN_PROGRESS_QUEST1 = new SelectedQuest(
+            3L,
             GOEUN,
-            BY_TYPE_QUEST1
+            BY_TYPE_QUEST1,
+            null
     );
 
 
     public static final SelectedQuest IN_PROGRESS_QUEST2 = new SelectedQuest(
+            4L,
             GOEUN,
-            BY_TYPE_QUEST2
+            BY_TYPE_QUEST2,
+            null
     );
 }
