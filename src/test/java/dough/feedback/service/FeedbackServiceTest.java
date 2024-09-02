@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -58,10 +59,17 @@ class FeedbackServiceTest {
     @Test
     void createFeedback() {
         // given
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file",                      // 필드 이름
+                "test.txt",                  // 파일 이름
+                "text/plain",                // 파일 타입
+                "Hello, World!".getBytes()   // 파일 내용
+        );
         final FeedbackRequest feedbackRequest = new FeedbackRequest(
-                "png1",
-                1L,
-                5
+                multipartFile,
+                "imageUrl",
+                5L,
+                1
         );
 
         final MemberLevel memberLevel = new MemberLevel(GOEUN, LEVEL2, true);
@@ -95,10 +103,17 @@ class FeedbackServiceTest {
     @Test
     void createFeedbackQuestNotFound() {
         // given
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file",                      // 필드 이름
+                "test.txt",                  // 파일 이름
+                "text/plain",                // 파일 타입
+                "Hello, World!".getBytes()   // 파일 내용
+        );
         final FeedbackRequest feedbackRequest = new FeedbackRequest(
-                "png1",
-                1L,
-                5
+                multipartFile,
+                "imageUrl",
+                5L,
+                1
         );
 
         given(memberRepository.findMemberById(anyLong()))
@@ -115,10 +130,17 @@ class FeedbackServiceTest {
     @Test
     void createFeedbackMemberNotFound() {
         // given
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "file",                      // 필드 이름
+                "test.txt",                  // 파일 이름
+                "text/plain",                // 파일 타입
+                "Hello, World!".getBytes()   // 파일 내용
+        );
         final FeedbackRequest feedbackRequest = new FeedbackRequest(
-                "png1",
-                1L,
-                5
+                multipartFile,
+                "imageUrl",
+                5L,
+                1
         );
 
         // when & then

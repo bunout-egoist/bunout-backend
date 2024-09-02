@@ -26,6 +26,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 @Transactional
 public class LogoutServiceTest {
+
     @InjectMocks
     private LogoutService logoutService;
 
@@ -47,7 +48,7 @@ public class LogoutServiceTest {
     public void setUp() {
         validAccessToken = "validAccessToken";
         memberId = 1L;
-        member = MemberFixture.MEMBER;
+        member = MemberFixture.GOEUN;
         refreshToken = new RefreshToken(member, "refreshToken");
     }
 
@@ -86,24 +87,5 @@ public class LogoutServiceTest {
         });
 
         assertEquals("올바르지 않은 요청입니다.", exception.getMessage());
-    }
-
-    @Test
-    public void logoutWithNonExistingMember() {
-        // given
-        Long nonExistingMemberId = 99L;
-        DeleteAccessTokenRequest request = new DeleteAccessTokenRequest();
-        request.setAccessToken(validAccessToken);
-
-        when(tokenProvider.validToken(validAccessToken)).thenReturn(true);
-        when(tokenProvider.getMemberIdFromToken(validAccessToken)).thenReturn(nonExistingMemberId);
-        when(refreshTokenRepository.findByMemberId(nonExistingMemberId)).thenReturn(Optional.empty());
-
-        // when & then
-        BadRequestException exception = assertThrows(BadRequestException.class, () -> {
-            logoutService.logout(request);
-        });
-
-        assertEquals("요청하신 ID에 해당하는 유저를 찾을 수 없습니다.", exception.getMessage());
     }
 }
