@@ -56,6 +56,20 @@ class SignoutServiceTest {
     }
 
     @Test
+    void testSignout_InvalidToken() {
+        // Given
+        String invalidToken = "invalidToken";
+        when(tokenProvider.validToken(invalidToken)).thenReturn(false);
+
+        // When
+        SignoutRequestDTO signoutRequestDTO = new SignoutRequestDTO(invalidToken);
+
+        // Then
+        assertThrows(BadRequestException.class, () -> signoutService.signout(signoutRequestDTO));
+        verify(memberRepository, never()).findById(anyLong());
+    }
+
+    @Test
     void testSignout_Successful() {
         // Given
         String testToken = "validToken123";
@@ -69,7 +83,7 @@ class SignoutServiceTest {
 
         when(tokenProvider.validToken(testToken)).thenReturn(true);
         when(tokenProvider.getMemberIdFromToken(testToken)).thenReturn(memberId);
-        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member)); // 수정된 부분
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         // When
         SignoutRequestDTO signoutRequestDTO = new SignoutRequestDTO(testToken);
@@ -85,20 +99,6 @@ class SignoutServiceTest {
     }
 
     @Test
-    void testSignout_InvalidToken() {
-        // Given
-        String invalidToken = "invalidToken";
-        when(tokenProvider.validToken(invalidToken)).thenReturn(false);
-
-        // When
-        SignoutRequestDTO signoutRequestDTO = new SignoutRequestDTO(invalidToken);
-
-        // Then
-        assertThrows(BadRequestException.class, () -> signoutService.signout(signoutRequestDTO));
-        verify(memberRepository, never()).findById(anyLong());
-    }
-
-    @Test
     void testSignout_MemberNotFound() {
         // Given
         String testToken = "validToken123";
@@ -106,14 +106,13 @@ class SignoutServiceTest {
 
         when(tokenProvider.validToken(testToken)).thenReturn(true);
         when(tokenProvider.getMemberIdFromToken(testToken)).thenReturn(memberId);
-        when(memberRepository.findById(memberId)).thenReturn(Optional.empty()); // 수정된 부분
+        when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
         // When
         SignoutRequestDTO signoutRequestDTO = new SignoutRequestDTO(testToken);
 
         // Then
         assertThrows(BadRequestException.class, () -> signoutService.signout(signoutRequestDTO));
-        verify(memberRepository).findById(memberId); // 수정된 부분
+        verify(memberRepository).findById(memberId);
     }
-
 }
