@@ -3,12 +3,13 @@ package dough.quest.service;
 import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.dashboard.dto.response.WeeklySummaryResponse;
-import dough.feedback.domain.Feedback;
 import dough.global.exception.BadRequestException;
 import dough.keyword.KeywordCode;
 import dough.keyword.domain.Keyword;
+import dough.keyword.domain.repository.KeywordRepository;
 import dough.keyword.domain.type.ParticipationType;
 import dough.keyword.domain.type.PlaceType;
+import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
@@ -20,8 +21,7 @@ import dough.quest.domain.type.QuestType;
 import dough.quest.dto.CompletedQuestElements;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
-import dough.quest.dto.response.FixedQuestResponse;
-import dough.quest.dto.response.QuestResponse;
+import dough.quest.dto.response.FixedQuestListResponse;
 import dough.quest.dto.response.TodayQuestListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static dough.global.exception.ExceptionCode.*;
-import static dough.quest.domain.type.QuestType.DAILY;
+import static dough.quest.domain.type.QuestType.BY_TYPE;
 import static dough.quest.domain.type.QuestType.SPECIAL;
 import static java.time.DayOfWeek.*;
 
@@ -48,9 +48,12 @@ public class QuestService {
     private final SelectedQuestRepository selectedQuestRepository;
     private final BurnoutRepository burnoutRepository;
     private final MemberRepository memberRepository;
+    private final KeywordRepository keywordRepository;
+    private final TokenService tokenService;
 
-    public TodayQuestListResponse updateTodayQuests(final Long memberId) {
-        final Member member = memberRepository.findById(memberId)
+    public TodayQuestListResponse updateTodayQuests() {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate currentDate = LocalDate.now();
@@ -67,7 +70,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> createTodayQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> todayQuests = updateTodayDailyQuests(member, currentDate);
+        final List<SelectedQuest> todayQuests = updateTodayByTypeQuests(member, currentDate);
 
         if (isSpecialQuestDay(currentDate)) {
             final Quest specialQuest = getTodaySpecialQuest(member.getBurnout());
@@ -80,7 +83,7 @@ public class QuestService {
 
     private KeywordCode getKeywords(final List<SelectedQuest> todayQuests) {
         final List<Keyword> keywords = todayQuests.stream()
-                .filter(selectedQuest -> selectedQuest.getQuest().getQuestType().equals(DAILY))
+                .filter(selectedQuest -> selectedQuest.getQuest().getQuestType().equals(BY_TYPE))
                 .map(selectedQuest -> selectedQuest.getQuest().getKeyword())
                 .collect(Collectors.toList());
 
@@ -91,7 +94,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
-        return selectedQuestRepository.findTodayDailyQuests(member.getId(), currentDate);
+        return selectedQuestRepository.findTodayByTypeQuests(member.getId(), currentDate);
     }
 
     private Quest getTodaySpecialQuest(final Burnout burnout) {
@@ -107,52 +110,49 @@ public class QuestService {
                 dayOfWeek.equals(SUNDAY);
     }
 
-    private List<SelectedQuest> updateTodayDailyQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteDailyQuests = getIncompleteDailyQuests(member, currentDate);
+    private List<SelectedQuest> updateTodayByTypeQuests(final Member member, final LocalDate currentDate) {
+        final List<SelectedQuest> incompleteByTypeQuests = getIncompleteByTypeQuests(member, currentDate);
 
-        int neededCount = 2 - incompleteDailyQuests.size();
+        int neededCount = 2 - incompleteByTypeQuests.size();
 
         if (neededCount > 0) {
             // TODO keyword가 같은 퀘스트 위주로 반환
-            questRepository.findTodayDailyQuestsByMemberId(member.getId(), member.getLevel(), member.getBurnout().getId())
+            questRepository.findTodayByTypeQuestsByMemberId(member.getId(), member.getLevel().getLevel(), member.getBurnout().getId())
                     .stream()
                     .limit(neededCount)
                     .collect(Collectors.toList())
-                    .forEach(todayDailyQuest -> incompleteDailyQuests.add(new SelectedQuest(member, todayDailyQuest)));
+                    .forEach(todayByTypeQuest -> incompleteByTypeQuests.add(new SelectedQuest(member, todayByTypeQuest)));
         }
-        return incompleteDailyQuests;
+        return incompleteByTypeQuests;
     }
 
-    private List<SelectedQuest> getIncompleteDailyQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteDailyQuests = selectedQuestRepository.findIncompleteDailyQuestsByMemberIdAndDate(member.getId(), currentDate.minusDays(1));
-        return incompleteDailyQuests.stream()
-                .map(incompleteDailyQuest -> {
-                    incompleteDailyQuest.updateDueDate(currentDate);
-                    return incompleteDailyQuest;
+    private List<SelectedQuest> getIncompleteByTypeQuests(final Member member, final LocalDate currentDate) {
+        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberId(member.getId());
+        return incompleteByTypeQuests.stream()
+                .map(incompleteByTypeQuest -> {
+                    incompleteByTypeQuest.updateDueDate(currentDate);
+                    return incompleteByTypeQuest;
                 }).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<FixedQuestResponse> getFixedQuests(final Long burnoutId) {
-        if (!burnoutRepository.existsById(burnoutId)) {
-            throw new BadRequestException(NOT_FOUND_BURNOUT_ID);
-        }
+    public FixedQuestListResponse getFixedQuests(final Long burnoutId) {
+        final Burnout burnout = burnoutRepository.findById(burnoutId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
 
         final List<Quest> fixedQuests = questRepository.findFixedQuestsByBurnoutId(burnoutId);
-        return fixedQuests.stream()
-                .map(fixedQuest -> FixedQuestResponse.of(fixedQuest))
-                .toList();
+        return FixedQuestListResponse.of(burnout, fixedQuests);
     }
 
     @Transactional(readOnly = true)
-    public List<WeeklySummaryResponse> getWeeklySummary(final Long memberId, final LocalDate date) {
-        if (!memberRepository.existsById(memberId)) {
-            throw new BadRequestException(NOT_FOUND_MEMBER_ID);
-        }
+    public List<WeeklySummaryResponse> getWeeklySummary(final LocalDate date) {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate startDate = date.minusDays(3);
         final LocalDate endDate = date.plusDays(3);
-        final CompletedQuestElements completedQuestElements = new CompletedQuestElements(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate));
+        final CompletedQuestElements completedQuestElements = new CompletedQuestElements(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(member.getId(), startDate, endDate));
         final Map<LocalDate, List<QuestFeedback>> questFeedbackMap = completedQuestElements.toQuestFeedbackMap();
 
         return getWeeklySummaryResponses(questFeedbackMap);
@@ -171,20 +171,23 @@ public class QuestService {
                 .collect(Collectors.toList());
     }
 
-    public QuestResponse save(final QuestRequest questRequest) {
-        // TODO 수정 필요
+    public void save(final QuestRequest questRequest) {
+        final Keyword keyword = keywordRepository.findByIsGroupAndIsOutside(questRequest.getIsGroup(), questRequest.getIsOutside())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_KEYWORD_ID));
+
+        final Burnout burnout = burnoutRepository.findByName(questRequest.getBurnoutName())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
+
         final QuestType questType = QuestType.getMappedQuestType(questRequest.getQuestType());
         final Quest newQuest = new Quest(
-                questRequest.getDescription(),
-                questRequest.getActivity(),
+                questRequest.getContent(),
                 questType,
                 questRequest.getDifficulty(),
-                new Burnout(1L, "호빵"),
-                null
+                burnout,
+                keyword
         );
 
-        final Quest quest = questRepository.save(newQuest);
-        return QuestResponse.of(quest);
+        questRepository.save(newQuest);
     }
 
     public void update(final Long questId, final QuestUpdateRequest questUpdateRequest) {
@@ -192,43 +195,37 @@ public class QuestService {
             throw new BadRequestException(NOT_FOUND_QUEST_ID);
         }
 
-        // TODO 수정 필요
+        final Keyword keyword = keywordRepository.findByIsGroupAndIsOutside(questUpdateRequest.getIsGroup(), questUpdateRequest.getIsOutside())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_KEYWORD_ID));
+
+        final Burnout burnout = burnoutRepository.findByName(questUpdateRequest.getBurnoutName())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
+
         final QuestType questType = QuestType.getMappedQuestType(questUpdateRequest.getQuestType());
         final Quest updateQuest = new Quest(
                 questId,
-                questUpdateRequest.getDescription(),
-                questUpdateRequest.getActivity(),
+                questUpdateRequest.getContent(),
                 questType,
                 questUpdateRequest.getDifficulty(),
-                new Burnout(1L, "호빵"),
-                null
+                burnout,
+                keyword
         );
 
         questRepository.save(updateQuest);
     }
 
-    public void delete(Long questId) {
-        if (!questRepository.existsById(questId)) {
-            throw new BadRequestException(NOT_FOUND_QUEST_ID);
-        }
+    public void delete(final Long questId) {
+        final Quest quest = questRepository.findById(questId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
 
-        checkQuestInUse(questId);
+        checkQuestInUse(quest);
 
         questRepository.deleteByQuestId(questId);
     }
 
-    private void checkQuestInUse(final Long questId) {
-        if (selectedQuestRepository.existsByQuestId(questId)) {
+    private void checkQuestInUse(final Quest quest) {
+        if (selectedQuestRepository.existsByQuest(quest)) {
             throw new BadRequestException(ALREADY_USED_QUEST_ID);
         }
-    }
-
-//    public void completeSelectedQuestWithFeedback(Long selectedQuestId, Feedback feedback) {
-//        selectedQuestRepository.updateFeedbackAndStatus(selectedQuestId, feedback);
-//    }
-
-    public void completeSelectedQuestWithFeedback(final SelectedQuest selectedQuest, final Feedback feedback) {
-        selectedQuest.AddFeedbackToSelectedQuest(feedback);
-        selectedQuestRepository.save(selectedQuest);
     }
 }

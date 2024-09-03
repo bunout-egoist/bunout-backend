@@ -9,10 +9,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationResponse {
 
+    private final Long id;
     private final NotificationType notificationType;
     private final Boolean isChecked;
 
     public static NotificationResponse of(final Notification notification) {
-        return new NotificationResponse(notification.getNotificationType(), notification.getIsChecked());
+        return new NotificationResponse(
+                notification.getId(),
+                notification.getNotificationType(),
+                notification.getIsChecked()
+        );
     }
 }

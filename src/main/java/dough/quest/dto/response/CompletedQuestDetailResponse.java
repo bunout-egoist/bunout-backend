@@ -1,6 +1,5 @@
 package dough.quest.dto.response;
 
-import dough.feedback.domain.Feedback;
 import dough.quest.domain.Quest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,15 +12,13 @@ import lombok.NoArgsConstructor;
 public class CompletedQuestDetailResponse {
 
     private String imageUrl;
-    private String description;
-    private String activity;
+    private String content;
     private String questType;
 
     public static CompletedQuestDetailResponse of(final Quest quest, final String imageUrl) {
         return new CompletedQuestDetailResponse(
                 imageUrl,
-                quest.getDescription(),
-                quest.getActivity(),
+                quest.getContent(),
                 quest.getQuestType().getCode());
     }
 }

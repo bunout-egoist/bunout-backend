@@ -1,7 +1,6 @@
 package dough.login.controller;
 
 import dough.global.AbstractControllerTest;
-import dough.login.config.jwt.TokenProvider;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.service.SignUpService;
 import dough.member.dto.response.MemberInfoResponse;
@@ -29,9 +28,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class SignUpControllerTest extends AbstractControllerTest {
 
     @MockBean
-    private TokenProvider tokenProvider;
-
-    @MockBean
     private SignUpService signUpService;
 
     private MemberInfoResponse memberInfoResponse;
@@ -41,7 +37,7 @@ public class SignUpControllerTest extends AbstractControllerTest {
     @BeforeEach
     public void setup() {
         validAccessToken = "validAccessToken";
-        memberInfoResponse = new MemberInfoResponse(1L, "nick");
+        memberInfoResponse = new MemberInfoResponse(1L, "goeun", "소보로", 1L, 2);
     }
 
     @DisplayName("유효한 토큰이 있을경우 회원 정보를 업데이트할 수 있습니다.")

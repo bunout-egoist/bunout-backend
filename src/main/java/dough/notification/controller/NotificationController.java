@@ -1,7 +1,9 @@
 package dough.notification.controller;
 
+import dough.notification.dto.request.NotificationsUpdateRequest;
 import dough.notification.dto.response.NotificationResponse;
 import dough.notification.service.NotificationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,21 +17,15 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping("/{memberId}")
-    public ResponseEntity<List<NotificationResponse>> getAllNotifications(@PathVariable("memberId") final Long memberId) {
-        final List<NotificationResponse> notificationResponses = notificationService.getAllNotifications(memberId);
+    @GetMapping
+    public ResponseEntity<List<NotificationResponse>> getAllNotifications() {
+        final List<NotificationResponse> notificationResponses = notificationService.getAllNotifications();
         return ResponseEntity.ok().body(notificationResponses);
     }
 
-    @PutMapping("/notification/{memberId}")
-    public ResponseEntity<Void> updateAllNotifications(@PathVariable("memberId") final Long memberId) {
-        notificationService.updateAllNotifications(memberId);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/{notificationId}")
-    public ResponseEntity<Void> updateNotification(@PathVariable("notificationId") final Long notificationId) {
-        notificationService.update(notificationId);
-        return ResponseEntity.noContent().build();
+    @PutMapping
+    public ResponseEntity<List<NotificationResponse>> updateNotifications(@RequestBody @Valid final NotificationsUpdateRequest notificationsUpdateRequest) {
+        final List<NotificationResponse> notificationResponses = notificationService.updateNotifications(notificationsUpdateRequest);
+        return ResponseEntity.ok().body(notificationResponses);
     }
 }

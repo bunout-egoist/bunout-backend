@@ -27,4 +27,11 @@ public class SignUpRequest {
     @NotBlank(message = "직업을 입력해주세요.")
     @Pattern(regexp = "학생|직장인|자영업|주부|무직|기타", message = "직업은 학생, 직장인, 자영업, 주부, 무직, 기타 중 하나여야 합니다.")
     private String occupation;
+
+    @NotNull(message = "고정 퀘스트 아이디를 입력해주세요.")
+    private Long fixedQuestId;
+
+    @NotNull(message = "번아웃 아이디를 입력해주세요.")
+    private Long bunoutId;
+
 }

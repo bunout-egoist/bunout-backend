@@ -74,8 +74,9 @@ public class SelectedQuest extends BaseEntity {
         this.dueDate = dueDate;
     }
 
-    public void AddFeedbackToSelectedQuest(final Feedback feedback) {
+    public void updateFeedback(final Feedback feedback) {
         this.feedback = feedback;
         this.questStatus = QuestStatus.COMPLETED;
+        this.completedDate = LocalDate.now();
     }
 }

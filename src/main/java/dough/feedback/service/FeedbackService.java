@@ -4,14 +4,22 @@ import dough.feedback.domain.Feedback;
 import dough.feedback.domain.repository.FeedbackRepository;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
+import dough.global.exception.BadRequestException;
+import dough.level.domain.Level;
+import dough.level.domain.MemberLevel;
+import dough.level.domain.repository.LevelRepository;
+import dough.level.service.LevelService;
+import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.SelectedQuestRepository;
-import dough.quest.service.QuestService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import static dough.global.exception.ExceptionCode.*;
+import static dough.quest.domain.type.QuestType.SPECIAL;
 
 @Service
 @Transactional
@@ -20,21 +28,17 @@ public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
     private final SelectedQuestRepository selectedQuestRepository;
     private final MemberRepository memberRepository;
-    private final QuestService questService;
+    private final LevelService levelService;
+    private final TokenService tokenService;
 
-    public FeedbackResponse createFeedback(Long questId, FeedbackRequest feedbackRequest) {
-        // questId로 SelectedQuest 조회
-        SelectedQuest selectedQuest = selectedQuestRepository.findByQuestId(questId)
-                .orElseThrow(() -> new IllegalArgumentException("quest ID: " + questId + " is not exist"));
+    public FeedbackResponse createFeedback(final FeedbackRequest feedbackRequest) {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        // Member 찾기
-        Long memberId = selectedQuest.getMember().getId();
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("member ID: " + memberId + "is not exist"));
+        final SelectedQuest selectedQuest = selectedQuestRepository.findById(feedbackRequest.getSelectedQuestId())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_SELECTED_QUEST_ID));
 
-        /////////////////////////
-
-        // Feedback 객체 생성
         final Feedback feedback = new Feedback(
                 member,
                 selectedQuest,
@@ -42,13 +46,21 @@ public class FeedbackService {
                 feedbackRequest.getDifficulty()
         );
 
-        // 저장
         final Feedback savedFeedback = feedbackRepository.save(feedback);
 
-        // SelectedQuest 객체에 Feedback 설정, 상태 COMPLETED로 변경후 저장
-        questService.completeSelectedQuestWithFeedback(selectedQuest, savedFeedback);
+        selectedQuest.updateFeedback(savedFeedback);
+        selectedQuestRepository.save(selectedQuest);
 
+        final Integer currentExp = member.getExp();
 
-        return FeedbackResponse.from(savedFeedback);
+        if (selectedQuest.getQuest().getQuestType().equals(SPECIAL)) {
+            member.updateExp(currentExp + SPECIAL.getExp());
+        } else {
+            member.updateExp(currentExp + 15);
+        }
+
+        final MemberLevel memberLevel = levelService.updateLevel(member);
+        memberRepository.save(memberLevel.getMember());
+        return FeedbackResponse.of(memberLevel);
     }
 }

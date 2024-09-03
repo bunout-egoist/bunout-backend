@@ -1,5 +1,8 @@
 package dough.login.service;
 
+import dough.global.exception.BadRequestException;
+import dough.level.domain.Level;
+import dough.level.domain.repository.LevelRepository;
 import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
 import dough.member.domain.Member;
@@ -8,13 +11,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import static dough.global.exception.ExceptionCode.NOT_FOUND_LEVEL_ID;
+import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
+
 @RequiredArgsConstructor
 @Service
 public class LoginService {
     private final MemberRepository memberRepository;
+    private final LevelRepository levelRepository;
 
     public Member createMember(String socialLoginId, SocialLoginType socialLoginType, String nickname, RoleType roleType) {
-        Member member = new Member(
+        final Level level = levelRepository.findByLevel(1)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_LEVEL_ID));
+        final Member member = new Member(
                 null,
                 nickname,
                 socialLoginId,
@@ -24,8 +33,11 @@ public class LoginService {
                 null,
                 null,
                 null,
-                roleType
+                roleType,
+                level,
+                null
         );
+
         return memberRepository.save(member);
     }
 
@@ -46,11 +58,11 @@ public class LoginService {
 
     public Member findBySocialLoginId(String socialLoginId) {
         return memberRepository.findBySocialLoginId(socialLoginId)
-                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
     }
 
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
     }
 }

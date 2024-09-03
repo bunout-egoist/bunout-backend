@@ -7,13 +7,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CompletedQuestsTotalResponse {
 
-    private final Long dailyCount;
-    private final Long specialCount;
+    private final Long dailyTotal;
+    private final Long specialTotal;
 
-    public static CompletedQuestsTotalResponse of(final Long dailyCount, final Long specialCount) {
+    public static CompletedQuestsTotalResponse of(final Long dailyTotal, final Long specialTotal) {
         return new CompletedQuestsTotalResponse(
-                dailyCount,
-                specialCount
+                dailyTotal,
+                specialTotal
         );
     }
 }
