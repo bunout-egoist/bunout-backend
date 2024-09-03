@@ -12,6 +12,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByEmail(String email);
 
+    boolean existsBySocialLoginId(String socialLoginId);
+
     @Query("""
             SELECT m
             FROM Member m
