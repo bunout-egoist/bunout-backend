@@ -22,7 +22,9 @@ public class FileService {
 
     public String upload(MultipartFile file) {
         File uploadFile = convert(file);
-        return uploadToS3(uploadFile);
+        String imageUrl = uploadToS3(uploadFile);
+        removeNewFile(uploadFile);
+        return imageUrl;
     }
 
     public File convert(MultipartFile multipartFile) {
@@ -40,5 +42,9 @@ public class FileService {
     private String uploadToS3(File uploadFile) {
         amazonS3.putObject(bucket, uploadFile.getName(), uploadFile);
         return amazonS3.getUrl(bucket, uploadFile.getName()).toString();
+    }
+
+    private void removeNewFile(File uploadFile) {
+        uploadFile.delete();
     }
 }
