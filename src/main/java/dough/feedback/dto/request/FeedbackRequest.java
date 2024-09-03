@@ -7,13 +7,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeedbackRequest {
 
-    private String imageUrl;
+    private MultipartFile multipartFile;
 
     @NotNull(message = "선택된 케스트 아이디를 입력해주세요.")
     private Long selectedQuestId;
