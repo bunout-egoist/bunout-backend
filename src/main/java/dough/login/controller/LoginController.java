@@ -22,5 +22,4 @@ public class LoginController {
 
         return ResponseEntity.ok(new TokensResponse(kakaoTokenResponse.getAccess_token(), kakaoTokenResponse.getRefresh_token()));
     }
-
 }
