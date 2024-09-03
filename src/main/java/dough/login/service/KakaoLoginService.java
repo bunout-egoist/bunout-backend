@@ -15,6 +15,7 @@ import dough.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +28,8 @@ import java.util.Map;
 
 import static dough.global.exception.ExceptionCode.INVALID_REQUEST;
 
-@RestController
+@Service
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth")
 public class KakaoLoginService {
 
     private final MemberRepository memberRepository;
