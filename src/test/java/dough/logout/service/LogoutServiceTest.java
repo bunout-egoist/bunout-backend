@@ -39,15 +39,19 @@ public class LogoutServiceTest {
     private TokenProvider tokenProvider;
 
     private String validAccessToken;
+    private String invalidAccessToken;
     private Long memberId;
+    private Long nonExistingMemberId;
     private Member member;
     private RefreshToken refreshToken;
 
     @BeforeEach
     public void setUp() {
         validAccessToken = "validAccessToken";
+        invalidAccessToken = "invalidAccessToken";
         memberId = 1L;
-        member = MemberFixture.MEMBER;
+        nonExistingMemberId = 99L;
+        member = MemberFixture.GOEUN;
         refreshToken = new RefreshToken(member, "refreshToken");
     }
 
@@ -59,8 +63,8 @@ public class LogoutServiceTest {
 
         when(tokenProvider.validToken(validAccessToken)).thenReturn(true);
         when(tokenProvider.getMemberIdFromToken(validAccessToken)).thenReturn(memberId);
-        when(refreshTokenRepository.findByMemberId(memberId)).thenReturn(Optional.of(refreshToken));
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+        when(refreshTokenRepository.findByMemberId(memberId)).thenReturn(Optional.of(refreshToken));
 
         // when
         DeleteAccessTokenResponse response = logoutService.logout(request);
@@ -74,7 +78,6 @@ public class LogoutServiceTest {
     @Test
     public void logoutWithInvalidToken() {
         // given
-        String invalidAccessToken = "invalidAccessToken";
         DeleteAccessTokenRequest request = new DeleteAccessTokenRequest();
         request.setAccessToken(invalidAccessToken);
 
@@ -87,17 +90,16 @@ public class LogoutServiceTest {
 
         assertEquals("올바르지 않은 요청입니다.", exception.getMessage());
     }
-
     @Test
     public void logoutWithNonExistingMember() {
         // given
-        Long nonExistingMemberId = 99L;
         DeleteAccessTokenRequest request = new DeleteAccessTokenRequest();
         request.setAccessToken(validAccessToken);
 
+        // Mocking the token provider to return nonExistingMemberId for the validAccessToken
         when(tokenProvider.validToken(validAccessToken)).thenReturn(true);
         when(tokenProvider.getMemberIdFromToken(validAccessToken)).thenReturn(nonExistingMemberId);
-        when(refreshTokenRepository.findByMemberId(nonExistingMemberId)).thenReturn(Optional.empty());
+        when(memberRepository.findById(nonExistingMemberId)).thenReturn(Optional.empty());
 
         // when & then
         BadRequestException exception = assertThrows(BadRequestException.class, () -> {
@@ -106,4 +108,5 @@ public class LogoutServiceTest {
 
         assertEquals("요청하신 ID에 해당하는 유저를 찾을 수 없습니다.", exception.getMessage());
     }
+
 }

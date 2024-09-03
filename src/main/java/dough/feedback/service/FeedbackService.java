@@ -5,9 +5,7 @@ import dough.feedback.domain.repository.FeedbackRepository;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
-import dough.level.domain.Level;
 import dough.level.domain.MemberLevel;
-import dough.level.domain.repository.LevelRepository;
 import dough.level.service.LevelService;
 import dough.login.service.TokenService;
 import dough.member.domain.Member;
@@ -17,6 +15,7 @@ import dough.quest.domain.repository.SelectedQuestRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import static dough.global.exception.ExceptionCode.*;
 import static dough.quest.domain.type.QuestType.SPECIAL;
@@ -30,8 +29,9 @@ public class FeedbackService {
     private final MemberRepository memberRepository;
     private final LevelService levelService;
     private final TokenService tokenService;
+    private final FileService fileService;
 
-    public FeedbackResponse createFeedback(final FeedbackRequest feedbackRequest) {
+    public FeedbackResponse createFeedback(final FeedbackRequest feedbackRequest, MultipartFile file) {
         final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
@@ -39,10 +39,12 @@ public class FeedbackService {
         final SelectedQuest selectedQuest = selectedQuestRepository.findById(feedbackRequest.getSelectedQuestId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_SELECTED_QUEST_ID));
 
+        String imageUrl = fileService.upload(file);
+
         final Feedback feedback = new Feedback(
                 member,
                 selectedQuest,
-                feedbackRequest.getImageUrl(),
+                imageUrl,
                 feedbackRequest.getDifficulty()
         );
 
@@ -61,6 +63,7 @@ public class FeedbackService {
 
         final MemberLevel memberLevel = levelService.updateLevel(member);
         memberRepository.save(memberLevel.getMember());
-        return FeedbackResponse.of(memberLevel);
+
+        return FeedbackResponse.of(memberLevel, imageUrl);
     }
 }

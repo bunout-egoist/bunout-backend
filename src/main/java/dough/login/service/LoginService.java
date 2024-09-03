@@ -1,9 +1,5 @@
 package dough.login.service;
 
-import dough.burnout.domain.Burnout;
-import dough.burnout.domain.repository.BurnoutRepository;
-import dough.keyword.domain.Keyword;
-import dough.keyword.domain.repository.KeywordRepository;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.Level;
 import dough.level.domain.repository.LevelRepository;
@@ -11,9 +7,6 @@ import dough.login.domain.type.RoleType;
 import dough.login.domain.type.SocialLoginType;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
-import dough.quest.domain.Quest;
-import dough.quest.domain.repository.QuestRepository;
-import dough.quest.domain.type.QuestType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -30,6 +23,7 @@ public class LoginService {
     public Member createMember(String socialLoginId, SocialLoginType socialLoginType, String nickname, RoleType roleType) {
         final Level level = levelRepository.findByLevel(1)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_LEVEL_ID));
+
         final Member member = new Member(
                 null,
                 nickname,
