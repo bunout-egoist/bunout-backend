@@ -20,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @RequiredArgsConstructor
 @Configuration
@@ -43,6 +45,7 @@ public class WebOAuthSecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/img/**", "/css/**", "/static/js/**", "/docs/**").permitAll()
                         .requestMatchers("/api/v1/auth/login/kakao").permitAll()
+                        .requestMatchers("/api/v1/auth/login/apple").permitAll()
                         .requestMatchers("/api/v1/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/api/v1/token", "/api/v1/refreshToken").permitAll()
                         .requestMatchers("/api/v1/logout").permitAll()
@@ -89,5 +92,19 @@ public class WebOAuthSecurityConfig {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebMvcConfigurer webMvcConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("https://appleid.apple.com/appleauth/auth/oauth/authorize", "https://0a97-210-110-128-18.ngrok-free.app") // Explicitly specify allowed origins
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
     }
 }
