@@ -83,7 +83,7 @@ class SignoutServiceTest {
 
         when(tokenProvider.validToken(testToken)).thenReturn(true);
         when(tokenProvider.getMemberIdFromToken(testToken)).thenReturn(memberId);
-        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member)); // 여기 수정
+        when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
 
         // When
         SignoutRequestDTO signoutRequestDTO = new SignoutRequestDTO(testToken);
@@ -106,13 +106,13 @@ class SignoutServiceTest {
 
         when(tokenProvider.validToken(testToken)).thenReturn(true);
         when(tokenProvider.getMemberIdFromToken(testToken)).thenReturn(memberId);
-        when(memberRepository.findById(memberId)).thenReturn(Optional.empty()); // 여기 수정
+        when(memberRepository.findById(memberId)).thenReturn(Optional.empty());
 
         // When
         SignoutRequestDTO signoutRequestDTO = new SignoutRequestDTO(testToken);
 
         // Then
         assertThrows(BadRequestException.class, () -> signoutService.signout(signoutRequestDTO));
-        verify(memberRepository).findById(memberId); // 여기 수정
+        verify(memberRepository).findById(memberId);
     }
 }
