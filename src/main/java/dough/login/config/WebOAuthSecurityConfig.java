@@ -104,8 +104,8 @@ public class WebOAuthSecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://appleid.apple.com/appleauth/auth/oauth/authorize", "https://3a28-210-110-128-18.ngrok-free.app") // Explicitly specify allowed origins
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedOrigins("https://appleid.apple.com/appleauth/auth/oauth/authorize", "https://3a28-210-110-128-18.ngrok-free.app", "http://13.124.151.164:8080")
+                        .allowedMethods("GET","POST","PUT","DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }

@@ -95,7 +95,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                         ),
                         responseFields(
                                 fieldWithPath("[0].completedDate")
-                                        .type(ARRAY)
+                                        .type(STRING)
                                         .description("완료 날짜 (yyyy-MM-dd)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[0].questDetails[0].imageUrl")
@@ -127,7 +127,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .description("완료한 데일리 퀘스트 개수")
                                         .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("[1].completedDate")
-                                        .type(ARRAY)
+                                        .type(STRING)
                                         .description("완료 날짜 (yyyy-MM-dd)")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[1].questDetails[0].imageUrl")
@@ -226,7 +226,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .description("완료 퀘스트 개수 & 완료 날짜 리스트")
                                         .attributes(field("constraint", "배열")),
                                 fieldWithPath("countDetails[].completedDate")
-                                        .type(ARRAY)
+                                        .type(STRING)
                                         .description("퀘스트 완료 날짜")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("countDetails[].dailyCount")
