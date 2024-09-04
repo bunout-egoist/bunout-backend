@@ -457,7 +457,10 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
-Content-Type: text/plain;charset=UTF-8
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: text/plain;charset=ISO-8859-1
 Content-Length: 10
 
 rest docs!</code></pre>
@@ -470,7 +473,7 @@ rest docs!</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-09-03 23:26:55 +0900
+Last updated 2024-07-16 10:48:14 +0900
 </div>
 </div>
 </body>
