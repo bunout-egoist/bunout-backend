@@ -69,7 +69,14 @@ dependencies {
 	// webClient
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-	// aws
+	// Spring Cloud OpenFeign
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.3'
+
+	// Bouncy Castle for cryptographic functions
+	implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.70'
+	implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.70' // PEMParser가 이 패키지에 포함됩니다
+
+	// AWS
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 

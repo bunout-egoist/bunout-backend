@@ -13,21 +13,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
-import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
-import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @RequiredArgsConstructor
 @Configuration
@@ -51,8 +45,15 @@ public class WebOAuthSecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/img/**", "/css/**", "/static/js/**", "/docs/**").permitAll()
                         .requestMatchers("/api/v1/auth/login/kakao").permitAll()
+                        .requestMatchers("/api/v1/auth/login/apple").permitAll()
                         .requestMatchers("/api/v1/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/api/v1/token", "/api/v1/refreshToken").permitAll()
+                        .requestMatchers("https://3a28-210-110-128-18.ngrok-free.app/api/v1/auth/login/apple").permitAll()
+                        .requestMatchers("https://3a28-210-110-128-18.ngrok-free.app/api/v1/auth/login/apple/callback").permitAll()
+                        .requestMatchers("/api/v1/auth/login/apple").permitAll()
+                        .requestMatchers("/api/v1/auth/login/apple/callback").permitAll()
+                        .requestMatchers("/api/v1/logout").permitAll()
+                        .requestMatchers("/api/v1/quests").permitAll()
                         .requestMatchers("/api/v1/signout").permitAll()
                         .requestMatchers("/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
@@ -95,5 +96,19 @@ public class WebOAuthSecurityConfig {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public WebMvcConfigurer webMvcConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("https://appleid.apple.com/appleauth/auth/oauth/authorize", "https://3a28-210-110-128-18.ngrok-free.app") // Explicitly specify allowed origins
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
+            }
+        };
     }
 }

@@ -13,9 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FeedbackRequest {
 
-    private String imageUrl;
-
-    @NotNull(message = "선택된 케스트 아이디를 입력해주세요.")
+    @NotNull(message = "선택된 퀘스트 아이디를 입력해주세요.")
     private Long selectedQuestId;
 
     @Min(1)

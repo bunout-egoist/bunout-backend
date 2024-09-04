@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,8 +17,8 @@ public class FeedbackController {
     private final FeedbackService feedbackService;
 
     @PostMapping
-    public ResponseEntity<FeedbackResponse> createFeedback(@Valid @RequestBody final FeedbackRequest feedbackRequest) {
-        final FeedbackResponse feedbackResponse = feedbackService.createFeedback(feedbackRequest);
+    public ResponseEntity<FeedbackResponse> createFeedback(@Valid @RequestPart(value = "feedback") final FeedbackRequest feedbackRequest, @RequestPart(value = "file") MultipartFile file) {
+        final FeedbackResponse feedbackResponse = feedbackService.createFeedback(feedbackRequest, file);
         return ResponseEntity.ok().body(feedbackResponse);
     }
 }

@@ -10,11 +10,13 @@ public class FeedbackResponse {
 
     private final Integer currentLevel;
     private final Boolean isLevelUp;
+    private final String imageUrl;
 
-    public static FeedbackResponse of(final MemberLevel memberLevel) {
+    public static FeedbackResponse of(final MemberLevel memberLevel, final String imageUrl) {
         return new FeedbackResponse(
                 memberLevel.getLevel().getLevel(),
-                memberLevel.getIsLevelUp()
+                memberLevel.getIsLevelUp(),
+                imageUrl
         );
     }
 }

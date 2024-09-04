@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -54,15 +55,15 @@ class FeedbackServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
+    @Mock
+    private FileService fileService;
+
     @DisplayName("피드백을 성공적으로 생성할 수 있다.")
     @Test
     void createFeedback() {
         // given
-        final FeedbackRequest feedbackRequest = new FeedbackRequest(
-                "png1",
-                1L,
-                5
-        );
+        FeedbackRequest feedbackRequest = new FeedbackRequest(1L, 5);
+        MockMultipartFile mockFile = new MockMultipartFile("file", "test.txt", "text/plain", "Test content".getBytes());
 
         final MemberLevel memberLevel = new MemberLevel(GOEUN, LEVEL2, true);
 
@@ -84,28 +85,26 @@ class FeedbackServiceTest {
                 .willReturn(memberLevel.getMember());
 
         // when
-        final FeedbackResponse actualResponse = feedbackService.createFeedback(feedbackRequest);
+        final FeedbackResponse actualResponse = feedbackService.createFeedback(feedbackRequest, mockFile);
 
         // then
+        FeedbackResponse expectedResponse = FeedbackResponse.of(memberLevel, null);
         assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(FeedbackResponse.of(memberLevel));
+                .isEqualTo(expectedResponse);
     }
 
     @DisplayName("존재하지 않는 선택된 퀘스트 아이디로 피드백을 생성할 때 예외가 발생한다.")
     @Test
     void createFeedbackQuestNotFound() {
         // given
-        final FeedbackRequest feedbackRequest = new FeedbackRequest(
-                "png1",
-                1L,
-                5
-        );
+        FeedbackRequest feedbackRequest = new FeedbackRequest(1L, 5);
+        MockMultipartFile mockFile = new MockMultipartFile("file", "test.txt", "text/plain", "Test content".getBytes());
 
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
 
         // when & then
-        assertThatThrownBy(() -> feedbackService.createFeedback(feedbackRequest))
+        assertThatThrownBy(() -> feedbackService.createFeedback(feedbackRequest, mockFile))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_SELECTED_QUEST_ID.getCode());
@@ -115,14 +114,11 @@ class FeedbackServiceTest {
     @Test
     void createFeedbackMemberNotFound() {
         // given
-        final FeedbackRequest feedbackRequest = new FeedbackRequest(
-                "png1",
-                1L,
-                5
-        );
+        FeedbackRequest feedbackRequest = new FeedbackRequest(1L, 5);
+        MockMultipartFile mockFile = new MockMultipartFile("file", "test.txt", "text/plain", "Test content".getBytes());
 
         // when & then
-        assertThatThrownBy(() -> feedbackService.createFeedback(feedbackRequest))
+        assertThatThrownBy(() -> feedbackService.createFeedback(feedbackRequest, mockFile))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_MEMBER_ID.getCode());
