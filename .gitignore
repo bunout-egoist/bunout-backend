@@ -38,4 +38,6 @@ out/
 
 ### application*.properties ###
 src/main/resources/*.yml
+
+### apple key.p8 ###
 src/main/resources/keys/*.p8
