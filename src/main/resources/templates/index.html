@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>애플 로그인 예제</title>
+    <script type="text/javascript" src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+    <style>
+        /* 버튼 스타일 */
+        #appleid-signin {
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>애플 로그인</h1>
+<button id="appleid-signin">애플로 로그인</button>
+
+<script>
+    // AppleID.auth 초기화
+    AppleID.auth.init({
+        clientId: 'com.bunout.services', // 제공된 client-id
+        scope: 'name email',
+        redirectURI: 'https://3a28-210-110-128-18.ngrok-free.app/api/v1/auth/login/apple/callback', // 제공된 redirect-uri
+        state: 'xyz123', // 선택적으로 설정
+        nonce: 'random-nonce', // 선택적으로 설정
+        usePopup: true // 팝업 창을 사용하도록 설정, 기본값은 false입니다.
+    });
+
+    // 애플 로그인 버튼 클릭 이벤트
+    document.getElementById('appleid-signin').addEventListener('click', function() {
+        AppleID.auth.signIn().then(function(data) {
+            const identityToken = data.authorization.id_token;
+            const authorizationCode = data.authorization.code;
+
+            // 서버로 POST 요청
+            fetch('https://3a28-210-110-128-18.ngrok-free.app/api/v1/auth/login/apple', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    identity_token: identityToken,
+                    authorization_code: authorizationCode
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => console.log(data))
+                .catch(error => console.error('dsafadsfas:', error));
+        }).catch(function(error) {
+            console.error(error);
+        });
+    });
+</script>
+
+</body>
+</html>
