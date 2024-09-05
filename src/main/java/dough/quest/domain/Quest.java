@@ -33,7 +33,10 @@ public class Quest extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String content;
+    private String activity;
+
+    @Column(nullable = false)
+    private String description;
 
     @Column(nullable = false)
     @Enumerated(value = STRING)
@@ -58,14 +61,16 @@ public class Quest extends BaseEntity {
 
     public Quest(
             final Long id,
-            final String content,
+            final String activity,
+            final String description,
             final QuestType questType,
             final Integer difficulty,
             final Burnout burnout,
             final Keyword keyword
     ) {
         this.id = id;
-        this.content = content;
+        this.activity = activity;
+        this.description = description;
         this.questType = questType;
         this.difficulty = difficulty;
         this.burnout = burnout;
@@ -73,12 +78,13 @@ public class Quest extends BaseEntity {
     }
 
     public Quest(
-            final String content,
+            final String activity,
+            final String description,
             final QuestType questType,
             final Integer difficulty,
             final Burnout burnout,
             final Keyword keyword
     ) {
-        this(null, content, questType, difficulty, burnout, keyword);
+        this(null, activity, description, questType, difficulty, burnout, keyword);
     }
 }

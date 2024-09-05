@@ -12,8 +12,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuestRequest {
 
-    @NotBlank(message = "퀘스트 내용을 입력해주세요.")
-    private String content;
+    @NotBlank(message = "퀘스트 활동을 입력해주세요.")
+    private String activity;
+
+    @NotBlank(message = "퀘스트 상세 내용을 입력해주세요.")
+    private String description;
 
     @NotBlank(message = "퀘스트 타입을 입력해주세요.")
     private String questType;

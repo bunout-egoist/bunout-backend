@@ -102,9 +102,13 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("피드백 이미지 URL")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[0].questDetails[0].content")
+                                fieldWithPath("[0].questDetails[0].activity")
                                         .type(STRING)
-                                        .description("퀘스트 내용")
+                                        .description("퀘스트 활동")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[0].questDetails[0].description")
+                                        .type(STRING)
+                                        .description("퀘스트 상세 내용")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[0].questDetails[0].questType")
                                         .type(STRING)
@@ -114,9 +118,13 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("피드백 이미지 URL")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[0].questDetails[1].content")
+                                fieldWithPath("[1].questDetails[1].activity")
                                         .type(STRING)
-                                        .description("퀘스트 내용")
+                                        .description("퀘스트 활동")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[1].questDetails[1].description")
+                                        .type(STRING)
+                                        .description("퀘스트 상세 내용")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[0].questDetails[1].questType")
                                         .type(STRING)
@@ -134,9 +142,13 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("피드백 이미지 URL")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("[1].questDetails[0].content")
+                                fieldWithPath("[1].questDetails[0].activity")
                                         .type(STRING)
-                                        .description("퀘스트 내용")
+                                        .description("퀘스트 활동")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("[1].questDetails[0].description")
+                                        .type(STRING)
+                                        .description("퀘스트 상세 내용")
                                         .attributes(field("constraint", "문자열")),
                                 fieldWithPath("[1].questDetails[0].questType")
                                         .type(STRING)

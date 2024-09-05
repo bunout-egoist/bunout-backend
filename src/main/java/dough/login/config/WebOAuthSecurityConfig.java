@@ -8,6 +8,7 @@ import dough.login.domain.repository.RefreshTokenRepository;
 import dough.login.service.CustomOAuth2UserService;
 import dough.login.service.LoginService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -21,13 +22,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
 public class WebOAuthSecurityConfig {
+
+    @Value("${cors.allowed.origins}")
+    private String allowedOrigins;
 
     private final CustomOAuth2UserService oAuth2UserCustomService;
     private final TokenProvider tokenProvider;
@@ -37,7 +41,7 @@ public class WebOAuthSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -103,17 +107,18 @@ public class WebOAuthSecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        return request -> {
-            final CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedHeaders(Collections.singletonList("*"));
-            config.setAllowedMethods(Collections.singletonList("*"));
-            config.setAllowedOriginPatterns(List.of(
-                    "https://appleid.apple.com/appleauth/auth/oauth/authorize",
-                    "https://3a28-210-110-128-18.ngrok-free.app",
-                    "http://13.124.151.164:8080"
-            ));
-            config.setAllowCredentials(true);
-            return config;
-        };
+        final CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedOriginPatterns(List.of(
+                "https://appleid.apple.com/appleauth/auth/oauth/authorize",
+                allowedOrigins
+        ));
+        config.setExposedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
