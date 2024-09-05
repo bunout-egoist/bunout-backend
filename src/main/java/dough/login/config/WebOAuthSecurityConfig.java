@@ -48,8 +48,8 @@ public class WebOAuthSecurityConfig {
                         .requestMatchers("/api/v1/auth/login/apple").permitAll()
                         .requestMatchers("/api/v1/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/api/v1/token", "/api/v1/refreshToken").permitAll()
-                        .requestMatchers("https://3a28-210-110-128-18.ngrok-free.app/api/v1/auth/login/apple").permitAll()
-                        .requestMatchers("https://3a28-210-110-128-18.ngrok-free.app/api/v1/auth/login/apple/callback").permitAll()
+                        .requestMatchers("https://1280-210-110-128-16.ngrok-free.app/api/v1/auth/login/apple").permitAll()
+                        .requestMatchers("https://1280-210-110-128-16.ngrok-free.app/api/v1/auth/login/apple/callback").permitAll()
                         .requestMatchers("/api/v1/auth/login/apple").permitAll()
                         .requestMatchers("/api/v1/auth/login/apple/callback").permitAll()
                         .requestMatchers("/api/v1/logout").permitAll()
@@ -104,7 +104,7 @@ public class WebOAuthSecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://appleid.apple.com/appleauth/auth/oauth/authorize", "https://3a28-210-110-128-18.ngrok-free.app", "http://13.124.151.164:8080")
+                        .allowedOrigins("https://appleid.apple.com/appleauth/auth/oauth/authorize", "https://1280-210-110-128-16.ngrok-free.app", "http://13.124.151.164:8080")
                         .allowedMethods("GET","POST","PUT","DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
