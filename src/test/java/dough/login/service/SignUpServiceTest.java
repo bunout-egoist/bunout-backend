@@ -13,6 +13,7 @@ import dough.notification.NotificationRepository;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -72,7 +73,7 @@ class SignUpServiceTest {
     }
 
     @Test
-    @Description("멤버 성공적으로 업데이트")
+    @DisplayName("SignUpRequest를 통해 회원 정보를 업데이트할 수 있다.")
     void updateMemberInfo_SuccessfulUpdate() {
         when(tokenProvider.getMemberIdFromToken(signUpRequest.getAccessToken())).thenReturn(1L);
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
@@ -93,6 +94,7 @@ class SignUpServiceTest {
 
 
     @Test
+    @DisplayName("SignUpRequest를 통해 회원 정보를 업데이트할 때 회원을 찾지 못하면 예외가 발생한다.")
     void updateMemberInfo_UserNotFound() {
         when(tokenProvider.getMemberIdFromToken(signUpRequest.getAccessToken())).thenReturn(1L);
         when(memberRepository.findById(1L)).thenReturn(Optional.empty());
@@ -104,6 +106,7 @@ class SignUpServiceTest {
     }
 
     @Test
+    @DisplayName("SignUpRequest를 통해 회원 정보를 업데이트할 때 번아웃 정보를 찾지 못하면 예외가 발생한다.")
     void updateMemberInfo_BurnoutNotFound() {
         when(tokenProvider.getMemberIdFromToken(signUpRequest.getAccessToken())).thenReturn(1L);
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
@@ -115,6 +118,7 @@ class SignUpServiceTest {
     }
 
     @Test
+    @DisplayName("SignUpRequest를 통해 회원 정보를 업데이트할 때 고정 퀘스트 정보를 찾지 못하면 예외가 발생한다.")
     void updateMemberInfo_QuestNotFound() {
         when(tokenProvider.getMemberIdFromToken(signUpRequest.getAccessToken())).thenReturn(1L);
         when(memberRepository.findById(1L)).thenReturn(Optional.of(member));
