@@ -30,13 +30,12 @@ import java.util.List;
 @Configuration
 public class WebOAuthSecurityConfig {
 
-    @Value("${cors.allowed.origins}")
-    private String allowedOrigins;
-
     private final CustomOAuth2UserService oAuth2UserCustomService;
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final LoginService loginService;
+    @Value("${cors.allowed.origins}")
+    private String allowedOrigins;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -112,6 +111,7 @@ public class WebOAuthSecurityConfig {
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedOriginPatterns(List.of(
                 "https://appleid.apple.com/appleauth/auth/oauth/authorize",
+                "http://localhost:3000",
                 allowedOrigins
         ));
         config.setExposedHeaders(List.of("*"));
