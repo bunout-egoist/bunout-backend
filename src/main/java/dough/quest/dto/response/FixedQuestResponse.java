@@ -9,12 +9,14 @@ import lombok.RequiredArgsConstructor;
 public class FixedQuestResponse {
 
     private final Long questId;
-    private final String content;
+    private final String activity;
+    private final String description;
 
     public static FixedQuestResponse of(final Quest quest) {
         return new FixedQuestResponse(
                 quest.getId(),
-                quest.getContent()
+                quest.getActivity(),
+                quest.getDescription()
         );
     }
 }

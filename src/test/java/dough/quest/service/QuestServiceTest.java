@@ -75,7 +75,8 @@ public class QuestServiceTest {
     void save() {
         // given
         final QuestRequest questRequest = new QuestRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
+                "15분 운동하기",
+                "점심시간, 몸과 마음을 건강하게 유지하며",
                 "유형별퀘스트",
                 3,
                 true,
@@ -104,7 +105,8 @@ public class QuestServiceTest {
     void save_QuestTypeInvalid() {
         // given
         final QuestRequest questRequest = new QuestRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며 15분 운동하기",
+                "15분 운동하기",
+                "점심시간, 몸과 마음을 건강하게 유지하며",
                 "퀘스트 타입 오류",
                 3,
                 true,
@@ -170,7 +172,8 @@ public class QuestServiceTest {
     void update() {
         // given
         final QuestUpdateRequest questUpdateRequest = new QuestUpdateRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며 20분 운동하기",
+                "20분 운동하기",
+                "점심시간, 몸과 마음을 건강하게 유지하며",
                 "스페셜퀘스트",
                 4,
                 true,
@@ -202,7 +205,8 @@ public class QuestServiceTest {
     void update_NotFoundQuestId() {
         // given
         final QuestUpdateRequest questUpdateRequest = new QuestUpdateRequest(
-                "점심시간, 몸과 마음을 건강하게 유지하며 20분 운동하기",
+                "20분 운동하기",
+                "점심시간, 몸과 마음을 건강하게 유지하며",
                 "스페셜퀘스트",
                 4,
                 true,

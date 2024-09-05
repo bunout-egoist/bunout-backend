@@ -61,7 +61,7 @@ class SignUpServiceTest {
     void setup() {
         signUpRequest = new SignUpRequest("validAccessToken", "kimjunhee", "남성", 1990, "직장인", 1L, 1L);
         burnout = new Burnout(1L, "Burnout Type");
-        quest = new Quest(1L, "Quest Content", QuestType.FIXED, 3, burnout, null);
+        quest = new Quest(1L, "Activity", "Description", QuestType.FIXED, 3, burnout, null);
     }
 
     @DisplayName("SignUpRequest를 통해 회원 정보를 업데이트할 수 있다.")

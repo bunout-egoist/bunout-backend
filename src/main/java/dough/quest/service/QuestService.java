@@ -100,7 +100,10 @@ public class QuestService {
     private Quest getTodaySpecialQuest(final Burnout burnout) {
         final List<Quest> specialQuests = questRepository.findSpecialQuestByBurnoutId(burnout.getId());
         Collections.shuffle(specialQuests);
-        return specialQuests.get(0);
+        if (!specialQuests.isEmpty()) {
+            return specialQuests.get(0);
+        }
+        return null;
     }
 
     private Boolean isSpecialQuestDay(final LocalDate currentDate) {
@@ -180,7 +183,8 @@ public class QuestService {
 
         final QuestType questType = QuestType.getMappedQuestType(questRequest.getQuestType());
         final Quest newQuest = new Quest(
-                questRequest.getContent(),
+                questRequest.getActivity(),
+                questRequest.getDescription(),
                 questType,
                 questRequest.getDifficulty(),
                 burnout,
@@ -204,7 +208,8 @@ public class QuestService {
         final QuestType questType = QuestType.getMappedQuestType(questUpdateRequest.getQuestType());
         final Quest updateQuest = new Quest(
                 questId,
-                questUpdateRequest.getContent(),
+                questUpdateRequest.getActivity(),
+                questUpdateRequest.getDescription(),
                 questType,
                 questUpdateRequest.getDifficulty(),
                 burnout,

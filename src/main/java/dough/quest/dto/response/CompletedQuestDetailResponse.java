@@ -12,13 +12,15 @@ import lombok.NoArgsConstructor;
 public class CompletedQuestDetailResponse {
 
     private String imageUrl;
-    private String content;
+    private String activity;
+    private String description;
     private String questType;
 
     public static CompletedQuestDetailResponse of(final Quest quest, final String imageUrl) {
         return new CompletedQuestDetailResponse(
                 imageUrl,
-                quest.getContent(),
+                quest.getActivity(),
+                quest.getDescription(),
                 quest.getQuestType().getCode());
     }
 }

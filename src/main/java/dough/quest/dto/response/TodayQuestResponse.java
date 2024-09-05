@@ -14,7 +14,8 @@ import static dough.quest.domain.type.QuestType.BY_TYPE;
 public class TodayQuestResponse {
 
     private final Long selectedQuestId;
-    private final String content;
+    private final String activity;
+    private final String description;
     private final String questType;
     private final String placeKeyword;
     private final String participationKeyword;
@@ -32,7 +33,8 @@ public class TodayQuestResponse {
     public static TodayQuestResponse byTypeResponse(final SelectedQuest selectedQuest, final Quest quest) {
         return new TodayQuestResponse(
                 selectedQuest.getId(),
-                quest.getContent(),
+                quest.getActivity(),
+                quest.getDescription(),
                 quest.getQuestType().getCode(),
                 PlaceType.getMappedPlaceType(quest.getKeyword().getIsOutside()).getCode(),
                 ParticipationType.getMappedParticipationType(quest.getKeyword().getIsGroup()).getCode(),
@@ -43,7 +45,8 @@ public class TodayQuestResponse {
     public static TodayQuestResponse fixedAndSpecialResponse(final SelectedQuest selectedQuest, final Quest quest) {
         return new TodayQuestResponse(
                 selectedQuest.getId(),
-                quest.getContent(),
+                quest.getActivity(),
+                quest.getDescription(),
                 quest.getQuestType().getCode(),
                 null,
                 null,
