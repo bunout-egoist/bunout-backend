@@ -1,6 +1,5 @@
 package dough.login.config;
 
-
 import dough.login.config.jwt.TokenAuthenticationFilter;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
