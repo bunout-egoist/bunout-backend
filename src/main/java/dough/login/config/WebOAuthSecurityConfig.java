@@ -1,27 +1,29 @@
 package dough.login.config;
 
-
 import dough.login.config.jwt.TokenAuthenticationFilter;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import dough.login.config.oauth.OAuth2SuccessHandler;
-import dough.login.service.CustomOAuth2UserService;
 import dough.login.domain.repository.RefreshTokenRepository;
+import dough.login.service.CustomOAuth2UserService;
 import dough.login.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -35,6 +37,7 @@ public class WebOAuthSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -99,16 +102,18 @@ public class WebOAuthSecurityConfig {
     }
 
     @Bean
-    public WebMvcConfigurer webMvcConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("https://appleid.apple.com/appleauth/auth/oauth/authorize", "https://3a28-210-110-128-18.ngrok-free.app", "http://13.124.151.164:8080")
-                        .allowedMethods("GET","POST","PUT","DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
-            }
+    public CorsConfigurationSource corsConfigurationSource() {
+        return request -> {
+            final CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedHeaders(Collections.singletonList("*"));
+            config.setAllowedMethods(Collections.singletonList("*"));
+            config.setAllowedOriginPatterns(List.of(
+                    "https://appleid.apple.com/appleauth/auth/oauth/authorize",
+                    "https://3a28-210-110-128-18.ngrok-free.app",
+                    "http://13.124.151.164:8080"
+            ));
+            config.setAllowCredentials(true);
+            return config;
         };
     }
 }
