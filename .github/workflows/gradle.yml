@@ -78,9 +78,8 @@ jobs:
         if: |
           contains(github.ref, 'main')
         run: |
-          cd ./src/main/resources 
-          touch ./keys/AuthKey_D69RVU73XV.p8
-          echo "${{ secrets.APPLE_KEY }}" > ./AuthKey_D69RVU73XV.p8
+          mkdir -p ./src/main/resources/keys
+          echo "${{ secrets.APPLE_KEY }}" > ./src/main/resources/keys/AuthKey_D69RVU73XV.p8
         shell: bash
 
       - name: Grant execute permission for gradlew
