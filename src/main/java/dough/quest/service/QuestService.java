@@ -116,12 +116,15 @@ public class QuestService {
     private List<SelectedQuest> updateTodayByTypeQuests(final Member member, final LocalDate currentDate) {
         final List<SelectedQuest> incompleteByTypeQuests = getIncompleteByTypeQuests(member, currentDate);
 
-        int neededCount = 2 - incompleteByTypeQuests.size();
+        final int neededCount = 2 - incompleteByTypeQuests.size();
 
         if (neededCount > 0) {
-            // TODO keyword가 같은 퀘스트 위주로 반환
-            questRepository.findTodayByTypeQuestsByMemberId(member.getId(), member.getLevel().getLevel(), member.getBurnout().getId())
-                    .stream()
+            final List<Quest> todayByTypeQuests = questRepository.findTodayByTypeQuestsByMemberId(member.getId(), member.getLevel().getLevel(), member.getBurnout().getId());
+            final Map<Long, List<Quest>> groupedByKeyword = todayByTypeQuests.stream()
+                    .collect(Collectors.groupingBy(quest -> quest.getKeyword().getId()));
+
+            groupedByKeyword.values().stream()
+                    .flatMap(List::stream)
                     .limit(neededCount)
                     .collect(Collectors.toList())
                     .forEach(todayByTypeQuest -> incompleteByTypeQuests.add(new SelectedQuest(member, todayByTypeQuest)));

@@ -37,10 +37,9 @@ public interface QuestRepository extends JpaRepository<Quest, Long> {
     @Query("""
             SELECT q
             FROM Quest q
-            LEFT JOIN FETCH q.selectedQuests sq
+            LEFT JOIN q.selectedQuests sq ON q.id = sq.quest.id AND sq.member.id = :memberId
             LEFT JOIN FETCH q.keyword k
-            WHERE q.questType = 'BY_TYPE' AND q.difficulty = :level AND q.burnout.id = :burnoutId
-            AND (sq.id IS NULL OR sq.member.id <> :memberId)
+            WHERE q.questType = 'BY_TYPE' AND q.difficulty = :level AND q.burnout.id = :burnoutId AND sq.quest.id IS NULL
             ORDER BY q.difficulty ASC
            """)
     List<Quest> findTodayByTypeQuestsByMemberId(@Param("memberId") final Long memberId, @Param("level") final Integer level, @Param("burnoutId") final Long burnoutId);
