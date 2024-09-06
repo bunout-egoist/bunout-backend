@@ -76,7 +76,7 @@ dependencies {
 	implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.70'
 	implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.70' // PEMParser가 이 패키지에 포함됩니다
 
-	// aws
+	// AWS
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 

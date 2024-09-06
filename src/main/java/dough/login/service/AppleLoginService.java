@@ -123,7 +123,7 @@ public class AppleLoginService {
     }
 
     private PrivateKey getPrivateKey() throws IOException {
-        ClassPathResource resource = new ClassPathResource("keys/AuthKey_WNYU6YAVJM.p8");
+        ClassPathResource resource = new ClassPathResource("keys/AuthKey_D69RVU73XV.p8");
         String privateKey = new String(Files.readAllBytes(Paths.get(resource.getURI())));
         Reader pemReader = new StringReader(privateKey);
         PEMParser pemParser = new PEMParser(pemReader);

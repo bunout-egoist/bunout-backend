@@ -12,6 +12,7 @@ import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.signout.dto.request.SignoutRequestDTO;
 import dough.signout.dto.response.SignoutResponseDTO;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class SignoutService {
     private final SelectedQuestRepository selectedQuestRepository;
     private final FeedbackRepository feedbackRepository;
 
+    @Transactional
     public SignoutResponseDTO signout(SignoutRequestDTO signoutRequestDTO) {
         String token =  signoutRequestDTO.getToken();
         Long memberId = null;
