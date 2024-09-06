@@ -14,6 +14,8 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -46,7 +48,7 @@ class SignoutControllerTest {
 
         // Then
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(1L, responseEntity.getBody().getMemberId());
+        assertEquals(1L, Objects.requireNonNull(responseEntity.getBody()).getMemberId());
 
     }
 

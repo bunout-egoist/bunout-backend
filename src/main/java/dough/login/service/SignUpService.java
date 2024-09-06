@@ -15,17 +15,20 @@ import dough.notification.domain.type.NotificationType;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static dough.global.exception.ExceptionCode.NOT_FOUND_BURNOUT_ID;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_QUEST_ID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SignUpService {
 
     private final TokenProvider tokenProvider;
@@ -38,16 +41,16 @@ public class SignUpService {
     public MemberInfoResponse updateMemberInfo(SignUpRequest signUpRequest) {
         String accessToken = signUpRequest.getAccessToken();
         Long member_id = tokenProvider.getMemberIdFromToken(accessToken);
-
-        final Member member = memberRepository.findMemberById(member_id)
+        final Member member = memberRepository.findById(member_id)
                 .orElseThrow(UserNotFoundException::new);
-
         member.updateMember(
                 signUpRequest.getNickname(),
                 signUpRequest.getGender(),
                 signUpRequest.getBirth_year(),
                 signUpRequest.getOccupation()
         );
+
+        createAllNotifications(member);
 
         Burnout burnout = burnoutRepository.findById(signUpRequest.getBunoutId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
