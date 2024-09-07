@@ -3,7 +3,7 @@ package dough.dashboard.controller;
 import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.dashboard.service.DashboardService;
-import dough.quest.dto.response.CompletedQuestsTotalResponse;
+import dough.quest.dto.response.TotalAndStatisticsResponse;
 import dough.quest.service.QuestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -32,9 +32,9 @@ public class DashboardController {
     }
 
     @GetMapping("/total")
-    public ResponseEntity<CompletedQuestsTotalResponse> getCompletedQuestsTotal() {
-        final CompletedQuestsTotalResponse completedQuestsTotalResponse = dashboardService.getCompletedQuestsTotal();
-        return ResponseEntity.ok().body(completedQuestsTotalResponse);
+    public ResponseEntity<TotalAndStatisticsResponse> getCompletedQuestsTotal() {
+        final TotalAndStatisticsResponse TotalAndStatisticsResponse = dashboardService.getCompletedQuestsTotalAndStatistics();
+        return ResponseEntity.ok().body(TotalAndStatisticsResponse);
     }
 
     @GetMapping("/monthly/{yearMonth}")

@@ -6,7 +6,7 @@ import dough.dashboard.service.DashboardService;
 import dough.global.AbstractControllerTest;
 import dough.quest.domain.QuestFeedback;
 import dough.quest.dto.CompletedQuestsCountElement;
-import dough.quest.dto.response.CompletedQuestsTotalResponse;
+import dough.quest.dto.response.TotalAndStatisticsResponse;
 import dough.quest.service.QuestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -170,13 +170,17 @@ public class DashboardControllerTest extends AbstractControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    @DisplayName("스페셜 퀘스트와 데일리 퀘스트의 총합을 조회할 수 있다.")
+    @DisplayName("스페셜 퀘스트와 데일리 퀘스트의 총합과 통계를 조회할 수 있다.")
     @Test
-    void getCompletedQuestsTotal() throws Exception {
+    void getCompletedQuestsTotalAndStatistics() throws Exception {
         // given
-        final CompletedQuestsTotalResponse totalResponse = CompletedQuestsTotalResponse.of(50L, 40L);
+        final TotalAndStatisticsResponse totalResponse = TotalAndStatisticsResponse.of(
+                50L,
+                40L,
+                Set.of("화"),
+                19L);
 
-        when(dashboardService.getCompletedQuestsTotal())
+        when(dashboardService.getCompletedQuestsTotalAndStatistics())
                 .thenReturn(totalResponse);
 
         // when
@@ -199,6 +203,14 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("specialTotal")
                                         .type(NUMBER)
                                         .description("완료한 스페셜 퀘스트 총합")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("highestAverageCompletionDay")
+                                        .type(ARRAY)
+                                        .description("평균 달성률이 가장 높은 요일 배열")
+                                        .attributes(field("constraint", "문자열 배열")),
+                                fieldWithPath("averageCompletion")
+                                        .type(NUMBER)
+                                        .description("이번 달 평균 달성률")
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
@@ -210,9 +222,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
         // given
         final MonthlySummaryResponse monthlySummaryResponse = MonthlySummaryResponse.of(
                 List.of(new CompletedQuestsCountElement(LocalDate.now(), 10L, 10L)),
-                0L,
-                Set.of("화"),
-                19L
+                0L
         );
 
         when(dashboardService.getMonthlySummary(any()))
@@ -248,14 +258,6 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("completedAllQuestsDateCount")
                                         .type(NUMBER)
                                         .description("하루에 제공되는 모든 퀘스트 완료 일수")
-                                        .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("highestAverageCompletionDay")
-                                        .type(ARRAY)
-                                        .description("평균 달성률이 가장 높은 요일 배열")
-                                        .attributes(field("constraint", "문자열 배열")),
-                                fieldWithPath("averageCompletion")
-                                        .type(NUMBER)
-                                        .description("이번 달 평균 달성률")
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
@@ -267,8 +269,6 @@ public class DashboardControllerTest extends AbstractControllerTest {
         // given
         final MonthlySummaryResponse monthlySummaryResponse = MonthlySummaryResponse.of(
                 List.of(),
-                0L,
-                Set.of(),
                 0L
         );
 
@@ -297,15 +297,8 @@ public class DashboardControllerTest extends AbstractControllerTest {
                                 fieldWithPath("completedAllQuestsDateCount")
                                         .type(NUMBER)
                                         .description("하루에 제공되는 모든 퀘스트 완료 일수")
-                                        .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("highestAverageCompletionDay")
-                                        .type(ARRAY)
-                                        .description("평균 달성률이 가장 높은 요일 배열")
-                                        .attributes(field("constraint", "문자열 배열")),
-                                fieldWithPath("averageCompletion")
-                                        .type(NUMBER)
-                                        .description("이번 달 평균 달성률")
                                         .attributes(field("constraint", "양의 정수"))
+
                         )
                 ));
     }

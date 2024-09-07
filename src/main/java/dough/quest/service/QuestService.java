@@ -142,12 +142,13 @@ public class QuestService {
     }
 
     @Transactional(readOnly = true)
-    public FixedQuestListResponse getFixedQuests(final Long burnoutId) {
-        final Burnout burnout = burnoutRepository.findById(burnoutId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
+    public FixedQuestListResponse getFixedQuests() {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        final List<Quest> fixedQuests = questRepository.findFixedQuestsByBurnoutId(burnoutId);
-        return FixedQuestListResponse.of(burnout, fixedQuests);
+        final List<Quest> fixedQuests = questRepository.findFixedQuestsByBurnoutId(member.getBurnout().getId());
+        return FixedQuestListResponse.of(member.getBurnout(), fixedQuests);
     }
 
     @Transactional(readOnly = true)

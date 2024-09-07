@@ -14,14 +14,10 @@ public class MonthlySummaryResponse {
 
     private final List<CompletedQuestsCountDetailResponse> countDetails;
     private final Long completedAllQuestsDateCount;
-    private final Set<String> highestAverageCompletionDay;
-    private final Long averageCompletion;
 
     public static MonthlySummaryResponse of(
             final List<CompletedQuestsCountElement> completedQuestsCountDateElements,
-            final Long completedAllQuestsDateCount,
-            final Set<String> highestAverageCompletionDay,
-            final Long averageCompletion
+            final Long completedAllQuestsDateCount
     ) {
         final List<CompletedQuestsCountDetailResponse> dateCompletedCountDateResponses = completedQuestsCountDateElements.stream()
                 .map(element -> CompletedQuestsCountDetailResponse.of(element.getCompletedDate(), element.getByTypeCount()))
@@ -29,9 +25,7 @@ public class MonthlySummaryResponse {
 
         return new MonthlySummaryResponse(
                 dateCompletedCountDateResponses,
-                completedAllQuestsDateCount,
-                highestAverageCompletionDay,
-                averageCompletion
+                completedAllQuestsDateCount
         );
     }
 }
