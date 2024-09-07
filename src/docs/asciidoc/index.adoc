@@ -79,10 +79,10 @@ include::{snippets}/quest-controller-test/update-today-quests/http-request.adoc[
 include::{snippets}/quest-controller-test/update-today-quests/response-fields.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/response-body.adoc[]
 
-=== 고정 퀘스트 조회 (GET /api/v1/quests/fixed/{burnoutId})
+=== 고정 퀘스트 조회 (GET /api/v1/quests/fixed)
 
 ==== Request
-include::{snippets}/quest-controller-test/get-fixed-quests/path-parameters.adoc[]
+include::{snippets}/member-controller-test/get-member-info/request-headers.adoc[]
 include::{snippets}/quest-controller-test/get-fixed-quests/http-request.adoc[]
 
 ==== Response (200 Success)
@@ -123,8 +123,8 @@ include::{snippets}/quest-controller-test/delete-quest/http-response.adoc[]
 === 주간 분석 (GET /api/v1/dashboard/weekly/{searchDate})
 
 ==== Request
-include::{snippets}/dashboard-controller-test/get-weekly-summary/path-parameters.adoc[]
 include::{snippets}/dashboard-controller-test/get-weekly-summary/request-headers.adoc[]
+include::{snippets}/dashboard-controller-test/get-weekly-summary/path-parameters.adoc[]
 include::{snippets}/dashboard-controller-test/get-weekly-summary/http-request.adoc[]
 
 ==== Response (200 Success)
@@ -140,8 +140,8 @@ include::{snippets}/dashboard-controller-test/get-weekly-summary_-invalid-local-
 === 월간 분석 (GET /api/v1/dashboard/monthly/{yearMonth})
 
 ==== Request
-include::{snippets}/dashboard-controller-test/get-monthly-summary/path-parameters.adoc[]
 include::{snippets}/dashboard-controller-test/get-monthly-summary/request-headers.adoc[]
+include::{snippets}/dashboard-controller-test/get-monthly-summary/path-parameters.adoc[]
 include::{snippets}/dashboard-controller-test/get-monthly-summary/http-request.adoc[]
 
 ==== Response (200 Success / 기록이 있을 경우)
@@ -151,14 +151,15 @@ include::{snippets}/dashboard-controller-test/get-monthly-summary/response-body.
 ==== Response (200 Success / 기록이 없을 경우)
 include::{snippets}/dashboard-controller-test/get-monthly-summary_-no-summary/response-body.adoc[]
 
-=== 퀘스트 총 개수 (GET /api/v1/dashboard/total)
+=== 퀘스트 총 개수 & 통계 (GET /api/v1/dashboard/total)
 
 ==== Request
-include::{snippets}/dashboard-controller-test/get-completed-quests-total/http-request.adoc[]
+include::{snippets}/dashboard-controller-test/get-completed-quests-total-and-statistics/request-headers.adoc[]
+include::{snippets}/dashboard-controller-test/get-completed-quests-total-and-statistics/http-request.adoc[]
 
 ==== Response (200 Success)
-include::{snippets}/dashboard-controller-test/get-completed-quests-total/response-fields.adoc[]
-include::{snippets}/dashboard-controller-test/get-completed-quests-total/http-response.adoc[]
+include::{snippets}/dashboard-controller-test/get-completed-quests-total-and-statistics/response-fields.adoc[]
+include::{snippets}/dashboard-controller-test/get-completed-quests-total-and-statistics/http-response.adoc[]
 
 == Feedback API
 
