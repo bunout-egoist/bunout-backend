@@ -228,18 +228,19 @@ class QuestControllerTest extends AbstractControllerTest {
                 SOBORO, List.of(FIXED_QUEST1, FIXED_QUEST2)
         );
 
-        when(questService.getFixedQuests(anyLong()))
+        when(questService.getFixedQuests())
                 .thenReturn(fixedQuestListResponse);
 
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/api/v1/quests/fixed/{burnoutId}", 1L));
+        final ResultActions resultActions = mockMvc.perform(get("/api/v1/quests/fixed", 1L)
+                .header(AUTHORIZATION, MEMBER_TOKENS));
 
         // then
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
-                        pathParameters(
-                                parameterWithName("burnoutId")
-                                        .description("번아웃 아이디")
+                        requestHeaders(
+                                headerWithName("Authorization")
+                                        .description("엑세스 토큰")
                         ),
                         responseFields(
                                 fieldWithPath("burnoutName")
@@ -270,7 +271,7 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("퀘스트 상세 내용")
                                         .attributes(field("constraint", "문자열"))
-                                )
+                        )
                 ));
     }
 

@@ -8,7 +8,7 @@ import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.CompletedQuestsCountElement;
 import dough.quest.dto.CompletedQuestsTotalElement;
-import dough.quest.dto.response.CompletedQuestsTotalResponse;
+import dough.quest.dto.response.TotalAndStatisticsResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -77,27 +77,31 @@ public class DashboardService {
         final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(member.getId(), year, month);
 
         final Long completedAllQuestsDateCount = getCompletedAllQuestsDateCount(completedQuestsCountElements);
-        final Set<String> highestAverageCompletionDays = getHighestAverageCompletionDays(completedQuestsCountElements);
-        final Long averageCompletion = getAverageCompletion(completedQuestsCountElements, yearMonth);
 
         return MonthlySummaryResponse.of(
                 completedQuestsCountElements,
-                completedAllQuestsDateCount,
-                highestAverageCompletionDays,
-                averageCompletion
+                completedAllQuestsDateCount
         );
     }
 
-    public CompletedQuestsTotalResponse getCompletedQuestsTotal() {
+    public TotalAndStatisticsResponse getCompletedQuestsTotalAndStatistics() {
         final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        final CompletedQuestsTotalElement completedQuestsTotalElement = selectedQuestRepository.getCompletedQuestsTotalByMemberId(member.getId());
+        final YearMonth currentYearMonth = YearMonth.now();
 
-        return CompletedQuestsTotalResponse.of(
+        final CompletedQuestsTotalElement completedQuestsTotalElement = selectedQuestRepository.getCompletedQuestsTotalByMemberId(member.getId());
+        final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(member.getId(), currentYearMonth.getYear(), currentYearMonth.getMonthValue());
+
+        final Set<String> highestAverageCompletionDays = getHighestAverageCompletionDays(completedQuestsCountElements);
+        final Long averageCompletion = getAverageCompletion(completedQuestsCountElements, currentYearMonth);
+
+        return TotalAndStatisticsResponse.of(
                 completedQuestsTotalElement.getDailyTotal(),
-                completedQuestsTotalElement.getSpecialTotal()
+                completedQuestsTotalElement.getSpecialTotal(),
+                highestAverageCompletionDays,
+                averageCompletion
         );
     }
 }

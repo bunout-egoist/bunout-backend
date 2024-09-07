@@ -275,13 +275,15 @@ public class QuestServiceTest {
     @Test
     void getFixedQuests() {
         // given
-        given(burnoutRepository.findById(any()))
-                .willReturn(Optional.of(SOBORO));
+        given(tokenService.getMemberId())
+                .willReturn(1L);
+        given(memberRepository.findMemberById(GOEUN.getId()))
+                .willReturn(Optional.of(GOEUN));
         given(questRepository.findFixedQuestsByBurnoutId(anyLong()))
                 .willReturn(List.of(FIXED_QUEST1, FIXED_QUEST2));
 
         // when
-        final FixedQuestListResponse actualResponses = questService.getFixedQuests(SOBORO.getId());
+        final FixedQuestListResponse actualResponses = questService.getFixedQuests();
 
         // then
         assertThat(actualResponses).usingRecursiveComparison()
