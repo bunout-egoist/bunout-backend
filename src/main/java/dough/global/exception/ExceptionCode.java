@@ -39,7 +39,14 @@ public enum ExceptionCode {
     // 8000 level
     NOT_FOUND_LEVEL_ID(8000, "요청하신 ID에 해당하는 레벨을 찾을 수 없습니다."),
 
-    INTERNAL_SEVER_ERROR(9999,"서버에서 에러가 발생하였습니다.");
+    INVALID_TOKEN(9000, "잘못된 엑세스 토큰입니다."),
+    UNSUPPORTED_TOKEN(9001, "지원하지 않는 형식의 토큰입니다."),
+    MALFORMED_TOKEN(9002, "유효하지 않은 구성의 토큰입니다."),
+    EXPIRED_TOKEN(9003, "만료된 토큰입니다."),
+    FAIL_TO_GET_PUBLIC_KEY(9004, "공개키 얻기를 실패했습니다."),
+    FAIL_TO_APPLE_LOGIN(9005, "애플 로그인에 실패했습니다."),
+
+    INTERNAL_SEVER_ERROR(9999, "서버에서 에러가 발생하였습니다.");
 
     private final int code;
     private final String message;

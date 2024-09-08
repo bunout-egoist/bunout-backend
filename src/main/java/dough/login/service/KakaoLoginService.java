@@ -5,7 +5,7 @@ import dough.level.domain.Level;
 import dough.level.domain.repository.LevelRepository;
 import dough.login.LoginApiClient;
 import dough.login.config.jwt.TokenProvider;
-import dough.login.dto.response.KakaoLoginResponse;
+import dough.login.dto.response.LoginResponse;
 import dough.login.dto.response.KakaoMemberResponse;
 import dough.login.dto.response.KakaoTokenResponse;
 import dough.member.domain.Member;
@@ -42,7 +42,7 @@ public class KakaoLoginService {
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
     private String redirectUri;
 
-    public KakaoLoginResponse kakaoLogin(final String code) {
+    public LoginResponse kakaoLogin(final String code) {
 
         final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
@@ -53,11 +53,11 @@ public class KakaoLoginService {
 
         final KakaoTokenResponse kakaoTokenResponse = loginApiClient.getKakaoToken(params);
 
-        final KakaoLoginResponse kakaoLoginResponse = getKakaoMember(kakaoTokenResponse.getAccessToken());
-        return kakaoLoginResponse;
+        final LoginResponse loginResponse = getKakaoMember(kakaoTokenResponse.getAccessToken());
+        return loginResponse;
     }
 
-    public KakaoLoginResponse getKakaoMember(final String accessToken) {
+    public LoginResponse getKakaoMember(final String accessToken) {
         final KakaoMemberResponse kakaoMemberResponse = loginApiClient.getKakaoMemberInfo("Bearer " + accessToken);
 
         final Level level = levelRepository.findByLevel(1)
@@ -81,6 +81,6 @@ public class KakaoLoginService {
         member.updateRefreshToken(refreshToken);
         memberRepository.save(member);
 
-        return KakaoLoginResponse.of(memberAccessToken, member, false);
+        return LoginResponse.of(memberAccessToken, member, false);
     }
 }

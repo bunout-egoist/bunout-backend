@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static dough.global.exception.ExceptionCode.NOT_FOUND_BURNOUT_ID;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_QUEST_ID;

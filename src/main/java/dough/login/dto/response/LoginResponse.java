@@ -6,18 +6,18 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class KakaoLoginResponse {
+public class LoginResponse {
 
     private final String accessToken;
     private final String refreshToken;
     private final Boolean isNewMember;
 
-    public static KakaoLoginResponse of(
+    public static LoginResponse of(
             final String accessToken,
             final Member member,
             final Boolean isNewMember
     ) {
-        return new KakaoLoginResponse(
+        return new LoginResponse(
                 accessToken,
                 member.getRefreshToken(),
                 isNewMember
