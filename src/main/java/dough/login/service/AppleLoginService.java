@@ -107,7 +107,7 @@ public class AppleLoginService {
         }
     }
 
-    private String makeClientSecret() throws IOException {
+    public String makeClientSecret() throws IOException {
         final Date expirationDate = Date.from(LocalDateTime.now().plusDays(30).atZone(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
                 .setHeaderParam("kid", keyId)
