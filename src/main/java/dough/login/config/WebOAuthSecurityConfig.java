@@ -4,9 +4,9 @@ import dough.login.config.jwt.TokenAuthenticationFilter;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import dough.login.config.oauth.OAuth2SuccessHandler;
-import dough.login.domain.repository.RefreshTokenRepository;
 import dough.login.service.CustomOAuth2UserService;
 import dough.login.service.LoginService;
+import dough.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,11 +31,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @RequiredArgsConstructor
 @Configuration
 public class WebOAuthSecurityConfig {
-
-    private final CustomOAuth2UserService oAuth2UserCustomService;
+    private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final LoginService loginService;
+    private final CustomOAuth2UserService oAuth2UserCustomService;
     @Value("${cors.allowed.origins}")
     private String allowedOrigins;
 
@@ -81,19 +79,17 @@ public class WebOAuthSecurityConfig {
 
     @Bean
     public OAuth2SuccessHandler oAuth2SuccessHandler() {
-        return new OAuth2SuccessHandler(tokenProvider,
-                refreshTokenRepository,
-                oAuth2AuthorizationRequestBasedOnCookieRepository(),
-                loginService
+        return new OAuth2SuccessHandler(
+                tokenProvider,
+                memberRepository,
+                oAuth2AuthorizationRequestBasedOnCookieRepository()
         );
     }
-
 
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
         return new TokenAuthenticationFilter(tokenProvider);
     }
-
 
     @Bean
     public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
@@ -101,19 +97,14 @@ public class WebOAuthSecurityConfig {
     }
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedOriginPatterns(List.of(
-                "https://appleid.apple.com/appleauth/auth/oauth/authorize",
                 "http://localhost:3000",
                 allowedOrigins
         ));
+
         config.setExposedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
