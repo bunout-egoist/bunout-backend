@@ -1,12 +1,10 @@
 package dough.login.config.oauth;
 
-
+import dough.global.exception.BadRequestException;
 import dough.login.config.jwt.TokenProvider;
-import dough.login.domain.RefreshToken;
-import dough.login.domain.repository.RefreshTokenRepository;
-import dough.login.service.LoginService;
 import dough.login.util.CookieUtil;
 import dough.member.domain.Member;
+import dough.member.domain.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +17,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.time.Duration;
 
+import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
+
 @RequiredArgsConstructor
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -29,17 +29,19 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public static final String REDIRECT_PATH = "/articles";
 
     private final TokenProvider tokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final MemberRepository memberRepository;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
-    private final LoginService memberService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        Member member = memberService.findBySocialLoginId((String) oAuth2User.getAttributes().get("id"));
+        final Member member = memberRepository.findMemberById((Long) oAuth2User.getAttributes().get("id"))
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        String refreshToken = tokenProvider.generateToken(member, REFRESH_TOKEN_DURATION);
-        saveRefreshToken(member, refreshToken);
+        final String refreshToken = tokenProvider.generateToken(member, REFRESH_TOKEN_DURATION);
+        member.updateRefreshToken(refreshToken);
+        memberRepository.save(member);
+
         addRefreshTokenToCookie(request, response, refreshToken);
 
         String accessToken = tokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
@@ -48,14 +50,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         clearAuthenticationAttributes(request, response);
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
-    }
-
-    private void saveRefreshToken(Member member, String newRefreshToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByMemberId(member.getId())
-                .map(entity -> entity.update(newRefreshToken))
-                .orElse(new RefreshToken(member, newRefreshToken));
-
-        refreshTokenRepository.save(refreshToken);
     }
 
     private void addRefreshTokenToCookie(HttpServletRequest request, HttpServletResponse response, String refreshToken) {
