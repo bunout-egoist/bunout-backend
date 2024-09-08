@@ -45,6 +45,7 @@ public enum ExceptionCode {
     EXPIRED_TOKEN(9003, "만료된 토큰입니다."),
     FAIL_TO_GET_PUBLIC_KEY(9004, "공개키 얻기를 실패했습니다."),
     FAIL_TO_APPLE_LOGIN(9005, "애플 로그인에 실패했습니다."),
+    FAIL_SOCIAL_LOGIN(9006, "소셜 로그인에 실패했습니다."),
 
     INTERNAL_SEVER_ERROR(9999, "서버에서 에러가 발생하였습니다.");
 
