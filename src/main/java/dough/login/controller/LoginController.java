@@ -1,32 +1,23 @@
 package dough.login.controller;
 
 import dough.login.dto.response.LoginResponse;
-import dough.login.service.AppleLoginService;
-import dough.login.service.KakaoLoginService;
+import dough.login.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class LoginController {
 
-    private final KakaoLoginService kakaoLoginService;
-    private final AppleLoginService appleLoginService;
+    private final LoginService loginService;
 
-    @PostMapping("/login/kakao")
-    public ResponseEntity<LoginResponse> loginWithKakao(@RequestParam("code") final String code) {
-        final LoginResponse loginResponse = kakaoLoginService.kakaoLogin(code);
-        return ResponseEntity.ok().body(loginResponse);
-    }
-
-    @PostMapping("/login/apple")
-    public ResponseEntity<?> loginWithApple(@RequestParam("code") final String code) {
-        final LoginResponse loginResponse = appleLoginService.appleLogin(code);
+    @PostMapping("/login/{provider}")
+    public ResponseEntity<LoginResponse> login(
+            @PathVariable("provider") final String provider,
+            @RequestParam("code") final String code) {
+        final LoginResponse loginResponse = loginService.login(provider, code);
         return ResponseEntity.ok().body(loginResponse);
     }
 }
