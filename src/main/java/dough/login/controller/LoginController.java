@@ -28,4 +28,10 @@ public class LoginController {
         loginService.logout();
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("/signout")
+    public ResponseEntity<Void> signout() {
+        loginService.signout();
+        return ResponseEntity.noContent().build();
+    }
 }

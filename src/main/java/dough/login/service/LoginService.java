@@ -1,5 +1,7 @@
 package dough.login.service;
 
+import dough.feedback.domain.Feedback;
+import dough.feedback.domain.repository.FeedbackRepository;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.Level;
 import dough.level.domain.repository.LevelRepository;
@@ -10,12 +12,17 @@ import dough.login.domain.MemberInfo;
 import dough.login.dto.response.LoginResponse;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
+import dough.notification.NotificationRepository;
+import dough.notification.domain.Notification;
+import dough.quest.domain.SelectedQuest;
+import dough.quest.domain.repository.SelectedQuestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 
 import static dough.global.exception.ExceptionCode.*;
 import static dough.login.domain.type.RoleType.MEMBER;
@@ -34,6 +41,13 @@ public class LoginService {
     private final LevelRepository levelRepository;
     private final TokenService tokenService;
     private final TokenProvider tokenProvider;
+
+    // TODO 수정 필요
+    private final NotificationRepository notificationRepository;
+    private final SelectedQuestRepository selectedQuestRepository;
+    private final FeedbackRepository feedbackRepository;
+
+    // 여기까지
 
     public LoginResponse login(final String provider, final String code) {
         if (provider.equals(KAKAO.getCode())) {
@@ -93,5 +107,31 @@ public class LoginService {
         );
 
         return new MemberInfo(member, true);
+    }
+
+    public void signout() {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+
+        memberRepository.delete(member);
+
+        List<SelectedQuest> selectedQuestList = member.getSelectedQuests();
+        if (!selectedQuestList.isEmpty()) {
+            selectedQuestList
+                    .forEach(sq -> selectedQuestRepository.delete(sq));
+        }
+
+        List<Feedback> feedbackList = member.getFeedbacks();
+        if (!feedbackList.isEmpty()) {
+            feedbackList
+                    .forEach(fd -> feedbackRepository.delete(fd));
+        }
+
+        List<Notification> notificationList = member.getNotifications();
+        if(!notificationList.isEmpty()) {
+            notificationList
+                    .forEach(nl -> notificationRepository.delete(nl));
+        }
     }
 }

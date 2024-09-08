@@ -10,8 +10,6 @@ import dough.notification.NotificationRepository;
 import dough.notification.domain.Notification;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.SelectedQuestRepository;
-import dough.signout.dto.request.SignoutRequestDTO;
-import dough.signout.dto.response.SignoutResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,7 +22,6 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import java.util.Collections;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 

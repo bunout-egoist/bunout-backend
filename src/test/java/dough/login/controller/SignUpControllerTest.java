@@ -15,9 +15,16 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @MockBean(JpaMetamodelMappingContext.class)
 @AutoConfigureMockMvc
 public class SignUpControllerTest extends AbstractControllerTest {
+
+    private static final String MEMBER_TOKENS = "Bearer accessToken";
 
     @MockBean
     private SignUpService signUpService;
@@ -36,6 +45,10 @@ public class SignUpControllerTest extends AbstractControllerTest {
 
     @BeforeEach
     public void setup() {
+        when(tokenProvider.validToken(any()))
+                .thenReturn(true);
+        given(tokenProvider.getMemberIdFromToken(any()))
+                .willReturn(1L);
         validAccessToken = "validAccessToken";
         memberInfoResponse = new MemberInfoResponse(1L, "goeun", "소보로", 1L, 2);
     }
@@ -77,5 +90,22 @@ public class SignUpControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value("Invalid Token"));
+    }
+
+    @DisplayName("멤버는 탈퇴를 할 수 있다.")
+    @Test
+    void signout() throws Exception {
+        // given & when
+        final ResultActions resultActions = mockMvc.perform(delete("/api/v1/signout")
+                .header(AUTHORIZATION, MEMBER_TOKENS));
+
+        // then
+        resultActions.andExpect(status().isNoContent())
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization")
+                                        .description("엑세스 토큰")
+                        )
+                ));
     }
 }
