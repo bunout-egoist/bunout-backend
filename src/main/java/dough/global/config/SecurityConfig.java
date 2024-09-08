@@ -1,4 +1,4 @@
-package dough.login.config;
+package dough.global.config;
 
 import dough.login.config.jwt.TokenAuthenticationFilter;
 import dough.login.config.jwt.TokenProvider;
@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,16 +23,18 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @RequiredArgsConstructor
 @Configuration
-public class WebOAuthSecurityConfig {
+public class SecurityConfig {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
     private final CustomOAuth2UserService oAuth2UserCustomService;
+
     @Value("${cors.allowed.origins}")
-    private String allowedOrigins;
+    private List<String> allowedOrigins;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -46,22 +47,13 @@ public class WebOAuthSecurityConfig {
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/img/**", "/css/**", "/static/js/**", "/docs/**").permitAll()
-                        .requestMatchers("/api/v1/auth/login/kakao").permitAll()
-                        .requestMatchers("/api/v1/auth/login/apple").permitAll()
-                        .requestMatchers("/api/v1/auth/**", "/oauth2/**").permitAll()
+                        .requestMatchers("/h2-console/**", "/img/**", "/css/**", "/static/js/**", "/docs/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/token", "/api/v1/refreshToken").permitAll()
-                        .requestMatchers("https://1280-210-110-128-16.ngrok-free.app/api/v1/auth/login/apple").permitAll()
-                        .requestMatchers("https://1280-210-110-128-16.ngrok-free.app/api/v1/auth/login/apple/callback").permitAll()
-                        .requestMatchers("/api/v1/auth/login/apple").permitAll()
-                        .requestMatchers("/api/v1/auth/login/apple/callback").permitAll()
-                        .requestMatchers("/api/v1/logout").permitAll()
                         .requestMatchers("/api/v1/quests").permitAll()
-                        .requestMatchers("/api/v1/signout").permitAll()
-                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
-                        .anyRequest().permitAll())
+                        .anyRequest().permitAll()
+                )
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint.authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(oAuth2UserCustomService))
@@ -69,7 +61,7 @@ public class WebOAuthSecurityConfig {
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .defaultAuthenticationEntryPointFor(
-                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                                new HttpStatusEntryPoint(UNAUTHORIZED),
                                 new AntPathRequestMatcher("/api/**")
                         ))
                 .build();
@@ -98,11 +90,7 @@ public class WebOAuthSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedOriginPatterns(List.of(
-                "http://localhost:3000",
-                allowedOrigins
-        ));
-
+        config.setAllowedOriginPatterns(allowedOrigins);
         config.setExposedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 
