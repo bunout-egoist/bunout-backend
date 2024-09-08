@@ -39,15 +39,6 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "member")
-    private List<SelectedQuest> selectedQuests = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Feedback> Feedbacks = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Notification> notifications = new ArrayList<>();
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "burnout_id")
     private Burnout burnout;
@@ -76,13 +67,17 @@ public class Member extends BaseEntity {
 
     private String email;
 
-    private Integer exp;
-
     private String occupation;
 
     private String gender;
 
     private Integer birthYear;
+
+    @Column(name = "refresh_token", nullable = false)
+    private String refreshToken;
+
+    @Column(nullable = false)
+    private Integer exp;
 
     @Column(nullable = false)
     private LocalDate burnoutLastModified;
@@ -100,18 +95,28 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Integer attendanceCount;
 
-    public Member(final Long id,
-                  final String nickname,
-                  final String socialLoginId,
-                  final SocialLoginType socialLoginType,
-                  final String email,
-                  final String occupation,
-                  final String gender,
-                  final Integer birthYear,
-                  final Burnout burnout,
-                  final RoleType roleType,
-                  final Level level,
-                  final Quest quest
+    @OneToMany(mappedBy = "member")
+    private List<SelectedQuest> selectedQuests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Feedback> Feedbacks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<Notification> notifications = new ArrayList<>();
+
+    public Member(
+            final Long id,
+            final String nickname,
+            final String socialLoginId,
+            final SocialLoginType socialLoginType,
+            final String email,
+            final String occupation,
+            final String gender,
+            final Integer birthYear,
+            final Burnout burnout,
+            final RoleType roleType,
+            final Level level,
+            final Quest quest
     ) {
         this.id = id;
         this.nickname = nickname;
@@ -131,6 +136,22 @@ public class Member extends BaseEntity {
         this.attendanceCount = 0;
         this.level = level;
         this.quest = quest;
+    }
+
+    public Member(
+            final String socialLoginId,
+            final SocialLoginType socialLoginType,
+            final RoleType roleType,
+            final Level level
+    ) {
+        this.socialLoginId = socialLoginId;
+        this.socialLoginType = socialLoginType;
+        this.role = roleType;
+        this.level = level;
+    }
+
+    public void updateRefreshToken(final String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public void updateMember(
