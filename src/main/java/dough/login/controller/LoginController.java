@@ -1,13 +1,14 @@
 package dough.login.controller;
 
 import dough.login.domain.AppleToken;
-import dough.login.dto.response.KakaoTokenResponse;
+import dough.login.dto.response.KakaoLoginResponse;
 import dough.login.dto.response.TokensResponse;
 import dough.login.service.AppleLoginService;
 import dough.login.service.KakaoLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Map;
 
 @RestController
@@ -19,17 +20,14 @@ public class LoginController {
     private final AppleLoginService appleLoginService;
 
     @PostMapping("/login/kakao")
-    public ResponseEntity<?> loginWithKakao(@RequestBody Map<String, String> request) {
-
-        KakaoTokenResponse kakaoTokenResponse = kakaoLoginService.kakaoLogin(request);
-
-        return ResponseEntity.ok(new TokensResponse(kakaoTokenResponse.getAccess_token(), kakaoTokenResponse.getRefresh_token()));
+    public ResponseEntity<KakaoLoginResponse> loginWithKakao(@RequestParam("code") final String code) {
+        final KakaoLoginResponse kakaoLoginResponse = kakaoLoginService.kakaoLogin(code);
+        return ResponseEntity.ok().body(kakaoLoginResponse);
     }
 
     @PostMapping("/login/apple")
     public ResponseEntity<?> loginWithApple(@RequestBody Map<String, String> request) {
         AppleToken.Response appleResponse = appleLoginService.appleLogin(request);
-
         return ResponseEntity.ok(new TokensResponse(appleResponse.getAccessToken(), appleResponse.getRefreshToken()));
     }
 }

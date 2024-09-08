@@ -1,114 +1,86 @@
 package dough.login.service;
 
-import dough.member.domain.repository.MemberRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.exception.BadRequestException;
+import dough.level.domain.Level;
+import dough.level.domain.repository.LevelRepository;
+import dough.login.LoginApiClient;
 import dough.login.config.jwt.TokenProvider;
-import dough.login.domain.RefreshToken;
-import dough.login.domain.repository.RefreshTokenRepository;
-import dough.login.domain.type.RoleType;
-import dough.login.domain.type.SocialLoginType;
+import dough.login.dto.response.KakaoLoginResponse;
+import dough.login.dto.response.KakaoMemberResponse;
 import dough.login.dto.response.KakaoTokenResponse;
-import dough.login.dto.response.KakaoTokenResponseDto;
 import dough.member.domain.Member;
+import dough.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Duration;
-import java.util.Map;
 
-import static dough.global.exception.ExceptionCode.INVALID_REQUEST;
+import static dough.global.exception.ExceptionCode.NOT_FOUND_LEVEL_ID;
+import static dough.login.domain.type.RoleType.MEMBER;
+import static dough.login.domain.type.SocialLoginType.KAKAO;
 
-@RestController
+@Service
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth")
+@Transactional
 public class KakaoLoginService {
 
     private final MemberRepository memberRepository;
-    private final LoginService loginService;
     private final TokenProvider tokenProvider;
-    private final WebClient webClient = WebClient.create();
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final LoginApiClient loginApiClient;
+    private final LevelRepository levelRepository;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-    private  String kakaoClientId;
+    private String clientId;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
-    private  String kakaoClientSecret;
+    private String clientSecret;
 
     @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    private  String kakaoRedirectUri;
+    private String redirectUri;
 
-    public KakaoTokenResponse kakaoLogin(Map<String, String> request) {
-        String code = request.get("code");
+    public KakaoLoginResponse kakaoLogin(final String code) {
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", kakaoClientId);
-        params.add("redirect_uri", kakaoRedirectUri);
+        params.add("redirect_uri", redirectUri);
+        params.add("client_id", clientId);
         params.add("code", code);
-        params.add("client_secret", kakaoClientSecret);
+        params.add("client_secret", clientSecret);
 
-        WebClient wc = WebClient.create("https://kauth.kakao.com");
-        String response = wc.post()
-                .uri("/oauth/token")
-                .body(BodyInserters.fromFormData(params))
-                .header("Content-type","application/x-www-form-urlencoded;charset=utf-8" ) //요청 헤더
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        final KakaoTokenResponse kakaoTokenResponse = loginApiClient.getKakaoToken(params);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        KakaoTokenResponseDto kakaoToken = null;
+        final KakaoLoginResponse kakaoLoginResponse = getKakaoMember(kakaoTokenResponse.getAccessToken());
+        return kakaoLoginResponse;
+    }
 
-        try {
-            kakaoToken = objectMapper.readValue(response, KakaoTokenResponseDto.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    public KakaoLoginResponse getKakaoMember(final String accessToken) {
+        final KakaoMemberResponse kakaoMemberResponse = loginApiClient.getKakaoMemberInfo("Bearer " + accessToken);
 
-        String accessToken = kakaoToken.getAccessToken();
-        String refreshToken = kakaoToken.getRefreshToken();
+        final Level level = levelRepository.findByLevel(1)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_LEVEL_ID));
 
-        Map<String, Object> userInfoResponse = webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .scheme("https")
-                        .host("kapi.kakao.com")
-                        .path("/v2/user/me")
-                        .build())
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block();
+        // TODO 해당 로직 수정, 기존 코드에 합치기
+        final Member member = memberRepository.findBySocialLoginId(clientId)
+                .orElseGet(() -> {
+                    final Member newMember = new Member(
+                            kakaoMemberResponse.getId().toString(),
+                            KAKAO,
+                            MEMBER,
+                            level
+                    );
+                    return newMember;
+                });
 
-        if (userInfoResponse == null) {
-            throw new BadRequestException(INVALID_REQUEST);
-        }
+        final String memberAccessToken = tokenProvider.generateToken(member, Duration.ofHours(1));
+        final String refreshToken = tokenProvider.generateToken(member, Duration.ofDays(14));
 
-        String socialLoginId = String.valueOf(userInfoResponse.get("id"));
+        member.updateRefreshToken(refreshToken);
+        memberRepository.save(member);
 
-        Member member;
-        if(memberRepository.existsBySocialLoginId(socialLoginId)) {
-            member = loginService.findBySocialLoginId(socialLoginId);
-        }
-        else {
-            member = loginService.createMember(socialLoginId, SocialLoginType.KAKAO, null, RoleType.MEMBER);
-        }
-
-        RefreshToken newRefreshToken = new RefreshToken(member, refreshToken);
-        refreshTokenRepository.save(newRefreshToken);
-
-        String jwtToken = tokenProvider.generateToken(member, Duration.ofHours(1));
-        String jwtRefreshToken = tokenProvider.generateToken(member, Duration.ofDays(14));
-
-        return new KakaoTokenResponse(jwtToken, jwtRefreshToken);
+        return KakaoLoginResponse.of(memberAccessToken, member, false);
     }
 }
