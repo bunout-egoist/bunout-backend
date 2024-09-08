@@ -24,10 +24,10 @@ public interface LoginApiClient {
     @GetExchange(value = "https://appleid.apple.com/auth/keys")
     ApplePublicKeyResponse getAppleAuthPublicKey();
 
-    @PostMapping(value = "https://appleid.apple.com/auth/token")
+    @PostExchange(value = "https://appleid.apple.com/auth/token")
     AppleTokenResponse getAppleToken(@RequestParam final MultiValueMap<String, String> params);
 
-    @PostMapping(value = "https://appleid.apple.com/auth/revoke")
+    @PostExchange(value = "https://appleid.apple.com/auth/revoke")
     void revokeToken(@RequestParam("client_secret") String clientSecret,
                      @RequestParam("token") String refreshToken,
                      @RequestParam("client_id") String clientId);
