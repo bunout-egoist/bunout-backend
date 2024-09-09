@@ -15,8 +15,6 @@ public class JwtHeaderUtil {
         final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         final String headerValue = request.getHeader(HEADER_AUTHORIZATION);
 
-        log.info(headerValue);
-
         if (headerValue == null) {
             return null;
         }
