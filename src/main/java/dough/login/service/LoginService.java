@@ -7,6 +7,7 @@ import dough.global.exception.BadRequestException;
 import dough.level.domain.Level;
 import dough.level.domain.repository.LevelRepository;
 import dough.login.LoginApiClient;
+import dough.login.config.jwt.TokenExtractor;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.domain.LoginInfo;
 import dough.login.domain.MemberInfo;
@@ -45,6 +46,7 @@ public class LoginService {
     private final MemberRepository memberRepository;
     private final LevelRepository levelRepository;
     private final TokenProvider tokenProvider;
+    private final TokenExtractor tokenExtractor;
     private final BurnoutRepository burnoutRepository;
     private final QuestRepository questRepository;
     private final NotificationRepository notificationRepository;
@@ -151,11 +153,13 @@ public class LoginService {
         notificationRepository.saveAll(notifications);
     }
 
-    public AccessTokenResponse renewAccessToken(final Long memberId, final String refreshToken) {
+    public AccessTokenResponse renewAccessToken(final Long memberId) {
+        final String refreshToken = tokenExtractor.getRefreshToken();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         if (!member.getRefreshToken().equals(refreshToken)) {
+            tokenProvider.validToken(refreshToken);
             throw new AuthException(INVALID_REFRESH_TOKEN);
         }
 
