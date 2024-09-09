@@ -14,7 +14,7 @@ public interface LevelRepository extends JpaRepository<Level, Long> {
     @Query("""
             SELECT level
             FROM Level level
-            WHERE level.accumulatedExp >= :exp
+            WHERE level.accumulatedExp > :exp
             ORDER BY level.accumulatedExp ASC
             """)
     List<Level> findTopByExp(@Param("exp") final Integer exp, final Pageable pageable);

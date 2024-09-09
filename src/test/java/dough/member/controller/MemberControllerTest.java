@@ -108,7 +108,7 @@ class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("nickname")
                                         .type(STRING)
                                         .description("멤버 닉네임")
-                                        .attributes(field("constraint", "문자열")),
+                                        .attributes(field("constraint", "5자 이내의 문자열")),
                                 fieldWithPath("burnoutName")
                                         .type(STRING)
                                         .description("번아웃 유형 이름")
@@ -167,7 +167,7 @@ class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("nickname")
                                         .type(STRING)
                                         .description("멤버 닉네임")
-                                        .attributes(field("constraint", "문자열")),
+                                        .attributes(field("constraint", "5자 이내의 문자열")),
                                 fieldWithPath("burnoutName")
                                         .type(STRING)
                                         .description("번아웃 유형 이름")
@@ -292,6 +292,7 @@ class MemberControllerTest extends AbstractControllerTest {
     void checkAttendance() throws Exception {
         // given
         final MemberAttendanceResponse memberAttendanceResponse = new MemberAttendanceResponse(
+                "goeun",
                 1,
                 2,
                 45,
@@ -315,6 +316,10 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .description("엑세스 토큰")
                         ),
                         responseFields(
+                                fieldWithPath("nickname")
+                                        .type(STRING)
+                                        .description("멤버 닉네임")
+                                        .attributes(field("constraint", "5자 이내의 문자열")),
                                 fieldWithPath("currentLevel")
                                         .type(NUMBER)
                                         .description("현재 레벨")
