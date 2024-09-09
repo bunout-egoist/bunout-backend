@@ -45,20 +45,13 @@ public class LoginService {
         }
     }
 
-    public void logout() throws IOException {
+    public void logout() {
         final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        final String refreshToken = member.getRefreshToken();
+        member.updateRefreshToken(null);
 
-        if (!refreshToken.isEmpty()) {
-            if (member.getSocialLoginType().equals(APPLE)) {
-                final String clientSecret = appleLoginService.makeClientSecret();
-                loginApiClient.revokeToken(clientSecret, refreshToken, "com.bunout.services");
-            }
-            member.updateRefreshToken(null);
-        }
         memberRepository.save(member);
     }
 
@@ -95,10 +88,20 @@ public class LoginService {
         return new MemberInfo(member, true);
     }
 
-    public void signout() {
+    public void signout() throws IOException {
         final Long memberId = tokenService.getMemberId();
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+
+        final String refreshToken = member.getRefreshToken();
+
+        if (!refreshToken.isEmpty()) {
+            if (member.getSocialLoginType().equals(APPLE)) {
+                final String clientSecret = appleLoginService.makeClientSecret();
+                loginApiClient.revokeToken(clientSecret, refreshToken, "com.bunout.services");
+            }
+            member.updateRefreshToken(null);
+        }
 
         memberRepository.delete(member);
     }

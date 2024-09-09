@@ -74,7 +74,6 @@ public class Member extends BaseEntity {
 
     private Integer birthYear;
 
-    @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
 
     @Column(nullable = false)

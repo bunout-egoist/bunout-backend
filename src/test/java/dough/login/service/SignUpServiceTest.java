@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static dough.member.fixture.MemberFixture.GOEUN;
@@ -139,7 +140,7 @@ class SignUpServiceTest {
 
     @Test
     @DisplayName("멤버는 탈퇴를 할 수 있다.")
-    void signout() {
+    void signout() throws IOException {
         // given
         given(tokenService.getMemberId())
                 .willReturn(1L);

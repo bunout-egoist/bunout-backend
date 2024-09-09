@@ -24,13 +24,13 @@ public class LoginController {
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<Void> logout() throws IOException {
+    public ResponseEntity<Void> logout() {
         loginService.logout();
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/signout")
-    public ResponseEntity<Void> signout() {
+    public ResponseEntity<Void> signout() throws IOException {
         loginService.signout();
         return ResponseEntity.noContent().build();
     }
