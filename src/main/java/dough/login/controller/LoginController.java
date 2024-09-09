@@ -1,5 +1,7 @@
 package dough.login.controller;
 
+import dough.auth.Auth;
+import dough.login.domain.Accessor;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.dto.response.AccessTokenResponse;
 import dough.login.dto.response.LoginResponse;
@@ -28,26 +30,30 @@ public class LoginController {
     }
 
     @PutMapping("/signup/complete")
-    public ResponseEntity<MemberInfoResponse> completeSignup(@RequestBody @Valid final SignUpRequest signUpRequest) {
-        final MemberInfoResponse memberInfoResponse = loginService.completeSignup(signUpRequest);
+    public ResponseEntity<MemberInfoResponse> completeSignup(
+            @Auth final Accessor accessor,
+            @RequestBody @Valid final SignUpRequest signUpRequest) {
+        final MemberInfoResponse memberInfoResponse = loginService.completeSignup(accessor.getMemberId(), signUpRequest);
         return ResponseEntity.ok().body(memberInfoResponse);
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<Void> logout() {
-        loginService.logout();
+    public ResponseEntity<Void> logout(@Auth final Accessor accessor) {
+        loginService.logout(accessor.getMemberId());
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/signout")
-    public ResponseEntity<Void> signout() throws IOException {
-        loginService.signout();
+    public ResponseEntity<Void> signout(@Auth final Accessor accessor) throws IOException {
+        loginService.signout(accessor.getMemberId());
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/token")
-    public ResponseEntity<AccessTokenResponse> createNewAccessToken(@RequestHeader("RefreshToken") final String refreshToken) {
-        final AccessTokenResponse accessTokenResponse = loginService.renewAccessToken(refreshToken);
+    public ResponseEntity<AccessTokenResponse> createNewAccessToken(
+            @Auth final Accessor accessor,
+            @RequestHeader("RefreshToken") final String refreshToken) {
+        final AccessTokenResponse accessTokenResponse = loginService.renewAccessToken(accessor.getMemberId(), refreshToken);
         return ResponseEntity.ok().body(accessTokenResponse);
     }
 }

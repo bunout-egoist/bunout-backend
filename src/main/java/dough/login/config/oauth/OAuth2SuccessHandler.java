@@ -38,13 +38,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         final Member member = memberRepository.findMemberById((Long) oAuth2User.getAttributes().get("id"))
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        final String refreshToken = tokenProvider.generateToken(member, REFRESH_TOKEN_DURATION);
+        final String refreshToken = tokenProvider.generateRefreshToken();
         member.updateRefreshToken(refreshToken);
         memberRepository.save(member);
 
         addRefreshTokenToCookie(request, response, refreshToken);
 
-        String accessToken = tokenProvider.generateToken(member, ACCESS_TOKEN_DURATION);
+        String accessToken = tokenProvider.generateAccessToken(member.getId().toString());
         String targetUrl = getTargetUrl(accessToken);
 
         clearAuthenticationAttributes(request, response);

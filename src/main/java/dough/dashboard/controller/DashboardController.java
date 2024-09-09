@@ -1,8 +1,10 @@
 package dough.dashboard.controller;
 
+import dough.auth.Auth;
 import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.dashboard.service.DashboardService;
+import dough.login.domain.Accessor;
 import dough.quest.dto.response.TotalAndStatisticsResponse;
 import dough.quest.service.QuestService;
 import lombok.RequiredArgsConstructor;
@@ -26,20 +28,26 @@ public class DashboardController {
     public final DashboardService dashboardService;
 
     @GetMapping("/weekly/{searchDate}")
-    public ResponseEntity<List<WeeklySummaryResponse>> getWeeklySummary(@PathVariable("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate date) {
-        final List<WeeklySummaryResponse> detailResponse = questService.getWeeklySummary(date);
+    public ResponseEntity<List<WeeklySummaryResponse>> getWeeklySummary(
+            @Auth final Accessor accessor,
+            @PathVariable("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate date
+    ) {
+        final List<WeeklySummaryResponse> detailResponse = questService.getWeeklySummary(accessor.getMemberId(), date);
         return ResponseEntity.ok().body(detailResponse);
     }
 
     @GetMapping("/total")
-    public ResponseEntity<TotalAndStatisticsResponse> getCompletedQuestsTotal() {
-        final TotalAndStatisticsResponse TotalAndStatisticsResponse = dashboardService.getCompletedQuestsTotalAndStatistics();
+    public ResponseEntity<TotalAndStatisticsResponse> getCompletedQuestsTotal(@Auth final Accessor accessor) {
+        final TotalAndStatisticsResponse TotalAndStatisticsResponse = dashboardService.getCompletedQuestsTotalAndStatistics(accessor.getMemberId());
         return ResponseEntity.ok().body(TotalAndStatisticsResponse);
     }
 
     @GetMapping("/monthly/{yearMonth}")
-    public ResponseEntity<MonthlySummaryResponse> getMonthlySummary(@PathVariable("yearMonth") final YearMonth yearMonth) {
-        final MonthlySummaryResponse monthlySummaryResponse = dashboardService.getMonthlySummary(yearMonth);
+    public ResponseEntity<MonthlySummaryResponse> getMonthlySummary(
+            @Auth final Accessor accessor,
+            @PathVariable("yearMonth") final YearMonth yearMonth
+    ) {
+        final MonthlySummaryResponse monthlySummaryResponse = dashboardService.getMonthlySummary(accessor.getMemberId(), yearMonth);
         return ResponseEntity.ok().body(monthlySummaryResponse);
     }
 }

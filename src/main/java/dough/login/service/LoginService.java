@@ -7,7 +7,6 @@ import dough.global.exception.BadRequestException;
 import dough.level.domain.Level;
 import dough.level.domain.repository.LevelRepository;
 import dough.login.LoginApiClient;
-import dough.login.config.jwt.JwtHeaderUtil;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.domain.LoginInfo;
 import dough.login.domain.MemberInfo;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +44,6 @@ public class LoginService {
     private final AppleLoginService appleLoginService;
     private final MemberRepository memberRepository;
     private final LevelRepository levelRepository;
-    private final TokenService tokenService;
     private final TokenProvider tokenProvider;
     private final BurnoutRepository burnoutRepository;
     private final QuestRepository questRepository;
@@ -62,8 +59,7 @@ public class LoginService {
         }
     }
 
-    public void logout() {
-        final Long memberId = tokenService.getMemberId();
+    public void logout(final Long memberId) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -96,8 +92,8 @@ public class LoginService {
         final MemberInfo memberInfo = findOrCreateMember(loginInfo);
         final Member member = memberInfo.getMember();
 
-        final String memberAccessToken = tokenProvider.generateToken(memberInfo.getMember(), Duration.ofHours(1));
-        final String refreshToken = tokenProvider.generateToken(memberInfo.getMember(), Duration.ofDays(14));
+        final String memberAccessToken = tokenProvider.generateAccessToken(member.getId().toString());
+        final String refreshToken = tokenProvider.generateRefreshToken();
 
         member.updateRefreshToken(refreshToken);
         memberRepository.save(member);
@@ -105,8 +101,7 @@ public class LoginService {
         return LoginResponse.of(memberAccessToken, member, false);
     }
 
-    public void signout() throws IOException {
-        final Long memberId = tokenService.getMemberId();
+    public void signout(final Long memberId) throws IOException {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -124,8 +119,7 @@ public class LoginService {
         memberRepository.delete(member);
     }
 
-    public MemberInfoResponse completeSignup(final SignUpRequest signUpRequest) {
-        final Long memberId = tokenService.getMemberId();
+    public MemberInfoResponse completeSignup(final Long memberId, final SignUpRequest signUpRequest) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -157,8 +151,7 @@ public class LoginService {
         notificationRepository.saveAll(notifications);
     }
 
-    public AccessTokenResponse renewAccessToken(final String refreshToken) {
-        final Long memberId = tokenService.getMemberId();
+    public AccessTokenResponse renewAccessToken(final Long memberId, final String refreshToken) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -166,13 +159,8 @@ public class LoginService {
             throw new AuthException(INVALID_REFRESH_TOKEN);
         }
 
-        final String accessToken = tokenProvider.generateToken(member, Duration.ofHours(1));
+        final String accessToken = tokenProvider.generateAccessToken(memberId.toString());
 
         return new AccessTokenResponse(accessToken);
-    }
-
-    public Long getMemberId() {
-        final String accessToken = JwtHeaderUtil.getAccessToken();
-        return tokenProvider.getMemberIdFromToken(accessToken);
     }
 }

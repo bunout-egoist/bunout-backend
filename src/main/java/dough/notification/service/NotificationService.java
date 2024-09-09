@@ -1,9 +1,6 @@
 package dough.notification.service;
 
 import dough.global.exception.BadRequestException;
-import dough.login.service.TokenService;
-import dough.member.domain.Member;
-import dough.member.domain.repository.MemberRepository;
 import dough.notification.NotificationRepository;
 import dough.notification.domain.Notification;
 import dough.notification.dto.request.NotificationUpdateRequest;
@@ -19,7 +16,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static dough.global.exception.ExceptionCode.NOT_FOUND_NOTIFICATION_ID;
 
 @Service
@@ -27,31 +23,18 @@ import static dough.global.exception.ExceptionCode.NOT_FOUND_NOTIFICATION_ID;
 @Transactional
 public class NotificationService {
 
-    private final MemberRepository memberRepository;
     private final NotificationRepository notificationRepository;
-    private final TokenService tokenService;
 
-    public List<NotificationResponse> getAllNotifications() {
-        final Long memberId = tokenService.getMemberId();
-        final Member member = memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-
-
-        final List<Notification> notifications = notificationRepository.findAllByMemberId(member.getId());
-
+    public List<NotificationResponse> getAllNotifications(final Long memberId) {
+        final List<Notification> notifications = notificationRepository.findAllByMemberId(memberId);
         return getNotificationsResponse(notifications);
     }
 
-    public List<NotificationResponse> updateNotifications(final NotificationsUpdateRequest notificationsUpdateRequest) {
-        final Long memberId = tokenService.getMemberId();
-        final Member member = memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-
-
+    public List<NotificationResponse> updateNotifications(final Long memberId, final NotificationsUpdateRequest notificationsUpdateRequest) {
         final Map<Long, Boolean> isCheckedOfId = notificationsUpdateRequest.getNotifications().stream()
                 .collect(Collectors.toMap(NotificationUpdateRequest::getId, NotificationUpdateRequest::getIsChecked));
 
-        final List<Notification> notifications = notificationRepository.findAllByMemberIdAndNotificationIds(member.getId(), isCheckedOfId.keySet());
+        final List<Notification> notifications = notificationRepository.findAllByMemberIdAndNotificationIds(memberId, isCheckedOfId.keySet());
 
         validateNotifications(isCheckedOfId.keySet(), notifications);
 
@@ -70,7 +53,7 @@ public class NotificationService {
         notificationRepository.saveAll(updatedNotifications);
 
         // TODO 더 좋은 방법이 없을지
-        final List<Notification> savedNotifications = notificationRepository.findAllByMemberId(member.getId());
+        final List<Notification> savedNotifications = notificationRepository.findAllByMemberId(memberId);
 
         return getNotificationsResponse(savedNotifications);
     }
