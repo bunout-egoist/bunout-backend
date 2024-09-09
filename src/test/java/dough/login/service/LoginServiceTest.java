@@ -2,6 +2,7 @@ package dough.login.service;
 
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
+import dough.login.config.jwt.TokenExtractor;
 import dough.login.dto.request.SignUpRequest;
 import dough.member.domain.repository.MemberRepository;
 import dough.notification.NotificationRepository;
@@ -37,6 +38,9 @@ class LoginServiceTest {
 
     @Mock
     private MemberRepository memberRepository;
+
+    @Mock
+    private TokenExtractor tokenExtractor;
 
     @Mock
     private BurnoutRepository burnoutRepository;
@@ -134,6 +138,22 @@ class LoginServiceTest {
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_QUEST_ID.getCode());
+    }
+
+    @DisplayName("액세스 토큰을 재발급 받을 수 있다.")
+    @Test
+    void renewAccessToken() {
+        // given
+        GOEUN.updateRefreshToken("Refresh Token");
+
+        given(memberRepository.findMemberById(GOEUN.getId()))
+                .willReturn(Optional.of(GOEUN));
+
+        // when
+        loginService.renewAccessToken(GOEUN.getId());
+
+        // then
+        verify(memberRepository).findMemberById(anyLong());
     }
 
     @Test

@@ -50,7 +50,7 @@ public class LoginController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<AccessTokenResponse> createNewAccessToken(@Auth final Accessor accessor) {
+    public ResponseEntity<AccessTokenResponse> renewAccessToken(@Auth final Accessor accessor) {
         final AccessTokenResponse accessTokenResponse = loginService.renewAccessToken(accessor.getMemberId());
         return ResponseEntity.ok().body(accessTokenResponse);
     }

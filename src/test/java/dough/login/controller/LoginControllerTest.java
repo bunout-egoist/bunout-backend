@@ -3,6 +3,7 @@ package dough.login.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.AbstractControllerTest;
 import dough.login.dto.request.SignUpRequest;
+import dough.login.dto.response.AccessTokenResponse;
 import dough.login.service.LoginService;
 import dough.member.dto.response.MemberInfoResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +26,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.JsonFieldType.NUMBER;
 import static org.springframework.restdocs.payload.JsonFieldType.STRING;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -164,6 +164,38 @@ public class LoginControllerTest extends AbstractControllerTest {
                         requestHeaders(
                                 headerWithName("Authorization")
                                         .description("엑세스 토큰")
+                        )
+                ));
+    }
+
+    @DisplayName("액세스 토큰을 재발급 받을 수 있다.")
+    @Test
+    void renewAccessToken() throws Exception {
+        // given
+        final AccessTokenResponse accessTokenResponse = new AccessTokenResponse("New Access Token");
+
+        when(loginService.renewAccessToken(anyLong()))
+                .thenReturn(accessTokenResponse);
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(post("/api/v1/token")
+                .header(AUTHORIZATION, MEMBER_TOKENS)
+                .header("RefreshToken", "Bearer Refresh Token"));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization")
+                                        .description("엑세스 토큰"),
+                                headerWithName("RefreshToken")
+                                        .description("리프레쉬 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("accessToken")
+                                        .type(STRING)
+                                        .description("액세스 토큰")
+                                        .attributes(field("constraint", "문자열"))
                         )
                 ));
     }
