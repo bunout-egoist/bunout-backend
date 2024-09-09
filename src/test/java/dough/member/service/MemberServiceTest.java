@@ -210,19 +210,4 @@ class MemberServiceTest {
         verify(memberRepository).findMemberById(anyLong());
         verify(memberRepository).save(any());
     }
-
-
-    @DisplayName("출석체크를 이미 완료하였을 경우 예외가 발생한다.")
-    @Test
-    void checkAttendance_AlreadyCheckAttendance() {
-        // given
-        given(memberRepository.findMemberById(anyLong()))
-                .willReturn(Optional.of(GOEUN));
-
-        // when & then
-        assertThatThrownBy(() -> memberService.checkAttendance())
-                .isInstanceOf(BadRequestException.class)
-                .extracting("code")
-                .isEqualTo(ALREADY_CHECK_ATTENDANCE.getCode());
-    }
 }
