@@ -668,15 +668,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </table>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/signup HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PUT /api/v1/signup/complete HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Authorization: Bearer accessToken
-Content-Length: 149
+Content-Length: 144
 Host: localhost:8080
 
 {
-  "nickname" : "nickname",
-  "gender" : "남자",
+  "nickname" : "jun",
+  "gender" : "남성",
   "birthYear" : 2002,
   "occupation" : "기타",
   "fixedQuestId" : 1,
