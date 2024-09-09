@@ -21,13 +21,18 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
+import static dough.member.fixture.MemberFixture.GOEUN;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 class SignUpServiceTest {
 
     @InjectMocks
     private SignUpService signUpService;
+
+    @InjectMocks
+    private LoginService loginService;
 
     @Mock
     private TokenProvider tokenProvider;
@@ -43,6 +48,9 @@ class SignUpServiceTest {
 
     @Mock
     private NotificationRepository notificationRepository;
+
+    @Mock
+    private TokenService tokenService;
 
     private SignUpRequest signUpRequest;
     private Member member;
@@ -127,5 +135,20 @@ class SignUpServiceTest {
         assertThrows(BadRequestException.class, () -> signUpService.updateMemberInfo(signUpRequest));
 
         verify(questRepository).findById(signUpRequest.getFixedQuestId());
+    }
+
+    @Test
+    @DisplayName("멤버는 탈퇴를 할 수 있다.")
+    void signout() {
+        // given
+        given(tokenService.getMemberId())
+                .willReturn(1L);
+        given(memberRepository.findMemberById(GOEUN.getId()))
+                .willReturn(Optional.of(GOEUN));
+
+        loginService.signout();
+
+        verify(tokenService).getMemberId();
+        verify(memberRepository).findMemberById(anyLong());
     }
 }
