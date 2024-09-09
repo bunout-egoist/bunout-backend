@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -95,13 +96,13 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Integer attendanceCount;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = REMOVE, orphanRemoval = true)
     private List<SelectedQuest> selectedQuests = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = REMOVE, orphanRemoval = true)
     private List<Feedback> Feedbacks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = REMOVE, orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();
 
     public Member(
