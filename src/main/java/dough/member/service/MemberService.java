@@ -107,7 +107,8 @@ public class MemberService {
         final LocalDate lastAttendanceDate = member.getAttendanceAt().toLocalDate();
 
         if (lastAttendanceDate.equals(currentAt.toLocalDate())) {
-            throw new BadRequestException(ALREADY_CHECK_ATTENDANCE);
+            final MemberLevel memberLevel = new MemberLevel(member, member.getLevel(), false);
+            return MemberAttendanceResponse.of(memberLevel);
         }
 
         final Integer attendanceCount = member.getAttendanceCount();
