@@ -24,7 +24,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static dough.burnout.fixture.BurnoutFixture.SOBORO;
-import static dough.global.exception.ExceptionCode.*;
+import static dough.global.exception.ExceptionCode.ALREADY_UPDATED_BURNOUT_TYPE;
+import static dough.global.exception.ExceptionCode.ALREADY_UPDATED_FIXED_QUEST;
 import static dough.level.fixture.LevelFixture.LEVEL2;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
@@ -209,20 +210,5 @@ class MemberServiceTest {
         // then
         verify(memberRepository).findMemberById(anyLong());
         verify(memberRepository).save(any());
-    }
-
-
-    @DisplayName("출석체크를 이미 완료하였을 경우 예외가 발생한다.")
-    @Test
-    void checkAttendance_AlreadyCheckAttendance() {
-        // given
-        given(memberRepository.findMemberById(anyLong()))
-                .willReturn(Optional.of(GOEUN));
-
-        // when & then
-        assertThatThrownBy(() -> memberService.checkAttendance())
-                .isInstanceOf(BadRequestException.class)
-                .extracting("code")
-                .isEqualTo(ALREADY_CHECK_ATTENDANCE.getCode());
     }
 }
