@@ -149,6 +149,25 @@ class LoginServiceTest {
     }
 
     @Test
+    @DisplayName("멤버는 로그아웃을 할 수 있다.")
+    void logout() throws IOException {
+        // given
+        GOEUN.updateRefreshToken("Refresh Token");
+
+        given(tokenService.getMemberId())
+                .willReturn(1L);
+        given(memberRepository.findMemberById(GOEUN.getId()))
+                .willReturn(Optional.of(GOEUN));
+
+        // when
+        loginService.logout();
+
+        // then
+        verify(tokenService).getMemberId();
+        verify(memberRepository).findMemberById(anyLong());
+    }
+
+    @Test
     @DisplayName("멤버는 탈퇴를 할 수 있다.")
     void signout() throws IOException {
         // given

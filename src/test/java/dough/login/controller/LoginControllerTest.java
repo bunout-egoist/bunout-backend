@@ -54,8 +54,8 @@ public class LoginControllerTest extends AbstractControllerTest {
                 .willReturn(1L);
 
         signUpRequest = new SignUpRequest(
-                "nickname",
-                "남자",
+                "jun",
+                "남성",
                 2002,
                 "기타",
                 1L,
@@ -64,7 +64,7 @@ public class LoginControllerTest extends AbstractControllerTest {
     }
 
     private ResultActions performPutCompleteSignupRequest(final SignUpRequest signUpRequest) throws Exception {
-        return mockMvc.perform(put("/api/v1/signup")
+        return mockMvc.perform(put("/api/v1/signup/complete")
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(signUpRequest))
                 .header(AUTHORIZATION, MEMBER_TOKENS));
@@ -142,6 +142,27 @@ public class LoginControllerTest extends AbstractControllerTest {
                                         .type(NUMBER)
                                         .description("레벨")
                                         .attributes(field("constraint", "양의 정수"))
+                        )
+                ));
+    }
+
+    @DisplayName("멤버는 로그아웃을 할 수 있다.")
+    @Test
+    void logout() throws Exception {
+        // given
+        doNothing().when(loginService)
+                .logout();
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(delete("/api/v1/logout")
+                .header(AUTHORIZATION, MEMBER_TOKENS));
+
+        // then
+        resultActions.andExpect(status().isNoContent())
+                .andDo(restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization")
+                                        .description("엑세스 토큰")
                         )
                 ));
     }

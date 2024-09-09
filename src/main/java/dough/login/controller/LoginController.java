@@ -4,6 +4,7 @@ import dough.login.dto.request.SignUpRequest;
 import dough.login.dto.response.LoginResponse;
 import dough.login.service.LoginService;
 import dough.member.dto.response.MemberInfoResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class LoginController {
         return ResponseEntity.ok().body(loginResponse);
     }
 
-    @PutMapping("/signup")
-    public ResponseEntity<MemberInfoResponse> completeSignup(@RequestBody final SignUpRequest signUpRequest) {
+    @PutMapping("/signup/complete")
+    public ResponseEntity<MemberInfoResponse> completeSignup(@RequestBody @Valid final SignUpRequest signUpRequest) {
         final MemberInfoResponse memberInfoResponse = loginService.completeSignup(signUpRequest);
         return ResponseEntity.ok().body(memberInfoResponse);
     }
