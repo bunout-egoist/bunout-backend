@@ -19,9 +19,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        // TODO 수정 필요
         OAuth2User user = super.loadUser(userRequest);
-        Member member = memberService.saveOrUpdate(user);
+        // Member member = memberService.saveOrUpdate(user);
 
-        return new MemberDetails(member, user.getAttributes());
+        return new MemberDetails(null, user.getAttributes());
     }
 }
