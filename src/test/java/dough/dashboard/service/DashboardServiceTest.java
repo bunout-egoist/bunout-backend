@@ -1,7 +1,6 @@
 package dough.dashboard.service;
 
 import dough.dashboard.dto.response.MonthlySummaryResponse;
-import dough.login.service.TokenService;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.CompletedQuestsCountElement;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static dough.member.fixture.MemberFixture.GOEUN;
@@ -34,9 +32,6 @@ class DashboardServiceTest {
     private DashboardService dashboardService;
 
     @Mock
-    private TokenService tokenService;
-
-    @Mock
     private MemberRepository memberRepository;
 
     @Mock
@@ -48,18 +43,13 @@ class DashboardServiceTest {
         // given
         final CompletedQuestsTotalElement completedQuestsTotalElement = new CompletedQuestsTotalElement(50L, 40L);
 
-
-        given(tokenService.getMemberId())
-                .willReturn(1L);
-        given(memberRepository.findMemberById(GOEUN.getId()))
-                .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.getCompletedQuestsTotalByMemberId(any()))
                 .willReturn(completedQuestsTotalElement);
         given(selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(anyLong(), anyInt(), anyInt()))
                 .willReturn(List.of(new CompletedQuestsCountElement(LocalDate.of(2024, 9, 7), 3L, 1L)));
 
         // when
-        final TotalAndStatisticsResponse actualResponse = dashboardService.getCompletedQuestsTotalAndStatistics();
+        final TotalAndStatisticsResponse actualResponse = dashboardService.getCompletedQuestsTotalAndStatistics(GOEUN.getId());
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
@@ -70,15 +60,11 @@ class DashboardServiceTest {
     @Test
     void getMonthlyDashboard() {
         // given
-        given(tokenService.getMemberId())
-                .willReturn(1L);
-        given(memberRepository.findMemberById(GOEUN.getId()))
-                .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(anyLong(), anyInt(), anyInt()))
                 .willReturn(List.of(new CompletedQuestsCountElement(LocalDate.now(), 10L, 10L)));
 
         // when
-        final MonthlySummaryResponse actualResponse = dashboardService.getMonthlySummary(YearMonth.of(2024, 8));
+        final MonthlySummaryResponse actualResponse = dashboardService.getMonthlySummary(GOEUN.getId(), YearMonth.of(2024, 8));
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()

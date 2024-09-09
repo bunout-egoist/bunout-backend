@@ -47,9 +47,6 @@ class LoginServiceTest {
     @Mock
     private NotificationRepository notificationRepository;
 
-    @Mock
-    private TokenService tokenService;
-
     private SignUpRequest signUpRequest;
 
     @BeforeEach
@@ -68,8 +65,6 @@ class LoginServiceTest {
     @Test
     void addtionalSignup() {
         // given
-        given(tokenService.getMemberId())
-                .willReturn(1L);
         given(memberRepository.findMemberById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
@@ -82,10 +77,9 @@ class LoginServiceTest {
                 .willReturn(GOEUN);
 
         // when
-        loginService.completeSignup(signUpRequest);
+        loginService.completeSignup(GOEUN.getId(), signUpRequest);
 
         // then
-        verify(tokenService).getMemberId();
         verify(memberRepository).findMemberById(anyLong());
         verify(burnoutRepository).findById(anyLong());
         verify(questRepository).findById(anyLong());
@@ -98,13 +92,11 @@ class LoginServiceTest {
     @Test
     void completeSignup_UserNotFound() {
         // given
-        given(tokenService.getMemberId())
-                .willReturn(1L);
         given(memberRepository.findMemberById(GOEUN.getId()))
                 .willReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> loginService.completeSignup(signUpRequest))
+        assertThatThrownBy(() -> loginService.completeSignup(GOEUN.getId(), signUpRequest))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_MEMBER_ID.getCode());
@@ -114,15 +106,13 @@ class LoginServiceTest {
     @Test
     void completeSignup_BurnoutNotFound() {
         // given
-        given(tokenService.getMemberId())
-                .willReturn(1L);
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
                 .willReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> loginService.completeSignup(signUpRequest))
+        assertThatThrownBy(() -> loginService.completeSignup(GOEUN.getId(), signUpRequest))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_BURNOUT_ID.getCode());
@@ -132,8 +122,6 @@ class LoginServiceTest {
     @DisplayName("추가 회원가입 시 고정 퀘스트 정보를 찾지 못하면 예외가 발생한다.")
     void completeSignup_QuestNotFound() {
         // given
-        given(tokenService.getMemberId())
-                .willReturn(1L);
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
@@ -142,7 +130,7 @@ class LoginServiceTest {
                 .willReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> loginService.completeSignup(signUpRequest))
+        assertThatThrownBy(() -> loginService.completeSignup(GOEUN.getId(), signUpRequest))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_QUEST_ID.getCode());
@@ -150,20 +138,17 @@ class LoginServiceTest {
 
     @Test
     @DisplayName("멤버는 로그아웃을 할 수 있다.")
-    void logout() throws IOException {
+    void logout() {
         // given
         GOEUN.updateRefreshToken("Refresh Token");
 
-        given(tokenService.getMemberId())
-                .willReturn(1L);
         given(memberRepository.findMemberById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
 
         // when
-        loginService.logout();
+        loginService.logout(GOEUN.getId());
 
         // then
-        verify(tokenService).getMemberId();
         verify(memberRepository).findMemberById(anyLong());
     }
 
@@ -173,16 +158,13 @@ class LoginServiceTest {
         // given
         GOEUN.updateRefreshToken("Refresh Token");
 
-        given(tokenService.getMemberId())
-                .willReturn(1L);
         given(memberRepository.findMemberById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
 
         // when
-        loginService.signout();
+        loginService.signout(GOEUN.getId());
 
         // then
-        verify(tokenService).getMemberId();
         verify(memberRepository).findMemberById(anyLong());
     }
 }

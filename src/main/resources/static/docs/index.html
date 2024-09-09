@@ -1249,6 +1249,11 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">멤버 닉네임</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentLevel</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">현재 레벨</p></td>
@@ -1283,6 +1288,7 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "nickname" : "goeun",
   "currentLevel" : 1,
   "nextLevel" : 2,
   "currentExp" : 45,
@@ -2141,7 +2147,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "countDetails" : [ {
-    "completedDate" : "2024-09-09",
+    "completedDate" : "2024-09-10",
     "dailyCount" : 10
   } ],
   "completedAllQuestsDateCount" : 0
@@ -2762,6 +2768,14 @@ Content-Length: 248
 <td class="tableblock halign-left valign-top"><p class="tableblock">소셜 로그인에 실패했습니다.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9007</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유효하지 않은 RefreshToken입니다.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9008</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유효하지 않은 AccessToken입니다.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">9999</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">서버에서 에러가 발생하였습니다.</p></td>
 </tr>
@@ -2773,7 +2787,7 @@ Content-Length: 248
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-09-09 15:33:29 +0900
+Last updated 2024-09-10 01:16:04 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

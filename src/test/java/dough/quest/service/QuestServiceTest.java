@@ -6,7 +6,6 @@ import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.keyword.KeywordCode;
 import dough.keyword.domain.repository.KeywordRepository;
-import dough.login.service.TokenService;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
 import dough.quest.domain.QuestFeedback;
@@ -51,9 +50,6 @@ public class QuestServiceTest {
 
     @InjectMocks
     private QuestService questService;
-
-    @Mock
-    private TokenService tokenService;
 
     @Mock
     private MemberRepository memberRepository;
@@ -136,35 +132,15 @@ public class QuestServiceTest {
         final LocalDate startDate = date.minusDays(3);
         final LocalDate endDate = date.plusDays(3);
 
-        given(tokenService.getMemberId())
-                .willReturn(1L);
-        given(memberRepository.findMemberById(GOEUN.getId()))
-                .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate))
                 .willReturn(List.of(QUEST_ELEMENT1));
 
         // when
-        final List<WeeklySummaryResponse> actualResponse = questService.getWeeklySummary(LocalDate.now());
+        final List<WeeklySummaryResponse> actualResponse = questService.getWeeklySummary(GOEUN.getId(), LocalDate.now());
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
                 .isEqualTo(List.of(WeeklySummaryResponse.of(LocalDate.of(2024, 8, 11), List.of(new QuestFeedback(BY_TYPE_QUEST1, "https://~")), 1L)));
-    }
-
-    @DisplayName("멤버 아이디가 존재하지 않을 경우 예외가 발생한다.")
-    @Test
-    void getWeeklySummary_NotFoundMemberId() {
-        // given
-        given(tokenService.getMemberId())
-                .willReturn(1L);
-        given(memberRepository.findMemberById(anyLong()))
-                .willReturn(Optional.empty());
-
-        // when & then
-        assertThatThrownBy(() -> questService.getWeeklySummary(LocalDate.now()))
-                .isInstanceOf(BadRequestException.class)
-                .extracting("code")
-                .isEqualTo(NOT_FOUND_MEMBER_ID.getCode());
     }
 
     @DisplayName("퀘스트를 업데이트 할 수 있다.")
@@ -275,15 +251,13 @@ public class QuestServiceTest {
     @Test
     void getFixedQuests() {
         // given
-        given(tokenService.getMemberId())
-                .willReturn(1L);
-        given(memberRepository.findMemberById(GOEUN.getId()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(questRepository.findFixedQuestsByBurnoutId(anyLong()))
                 .willReturn(List.of(FIXED_QUEST1, FIXED_QUEST2));
 
         // when
-        final FixedQuestListResponse actualResponses = questService.getFixedQuests();
+        final FixedQuestListResponse actualResponses = questService.getFixedQuests(GOEUN.getId());
 
         // then
         assertThat(actualResponses).usingRecursiveComparison()
@@ -296,15 +270,13 @@ public class QuestServiceTest {
         // given
         final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
 
-        given(tokenService.getMemberId())
-                .willReturn(1L);
-        given(memberRepository.findMemberById(GOEUN.getId()))
+        given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findTodayByTypeQuests(anyLong(), any()))
                 .willReturn(todayQuests);
 
         // when
-        final TodayQuestListResponse actualResponse = questService.updateTodayQuests();
+        final TodayQuestListResponse actualResponse = questService.updateTodayQuests(GOEUN.getId());
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()

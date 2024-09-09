@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import static dough.global.restdocs.RestDocsConfiguration.field;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -50,8 +51,8 @@ public class LoginControllerTest extends AbstractControllerTest {
     public void setup() {
         when(tokenProvider.validToken(any()))
                 .thenReturn(true);
-        given(tokenProvider.getMemberIdFromToken(any()))
-                .willReturn(1L);
+        given(tokenProvider.getSubject(any()))
+                .willReturn("1");
 
         signUpRequest = new SignUpRequest(
                 "jun",
@@ -83,7 +84,7 @@ public class LoginControllerTest extends AbstractControllerTest {
                 2
         );
 
-        when(loginService.completeSignup(any(SignUpRequest.class)))
+        when(loginService.completeSignup(anyLong(), any(SignUpRequest.class)))
                 .thenReturn(memberInfoResponse);
 
         // when
@@ -151,7 +152,7 @@ public class LoginControllerTest extends AbstractControllerTest {
     void logout() throws Exception {
         // given
         doNothing().when(loginService)
-                .logout();
+                .logout(anyLong());
 
         // when
         final ResultActions resultActions = mockMvc.perform(delete("/api/v1/logout")
@@ -172,7 +173,7 @@ public class LoginControllerTest extends AbstractControllerTest {
     void signout() throws Exception {
         // given
         doNothing().when(loginService)
-                .signout();
+                .signout(anyLong());
 
         // when
         final ResultActions resultActions = mockMvc.perform(delete("/api/v1/signout")

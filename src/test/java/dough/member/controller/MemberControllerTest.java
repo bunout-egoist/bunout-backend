@@ -50,8 +50,8 @@ class MemberControllerTest extends AbstractControllerTest {
     void setUp() {
         when(tokenProvider.validToken(any()))
                 .thenReturn(true);
-        given(tokenProvider.getMemberIdFromToken(any()))
-                .willReturn(1L);
+        given(tokenProvider.getSubject(any()))
+                .willReturn("1");
     }
 
     private ResultActions performPutUpdateMemberInfoRequest(final MemberInfoRequest memberInfoRequest) throws Exception {
@@ -87,13 +87,14 @@ class MemberControllerTest extends AbstractControllerTest {
                 2
         );
 
-        when(memberService.getMemberInfo())
+        when(memberService.getMemberInfo(anyLong()))
                 .thenReturn(memberInfoResponse);
 
+        // when
         final ResultActions resultActions = mockMvc.perform(get("/api/v1/members")
                 .header(AUTHORIZATION, MEMBER_TOKENS));
 
-        // when
+        // then
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
                         requestHeaders(
@@ -108,7 +109,7 @@ class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("nickname")
                                         .type(STRING)
                                         .description("멤버 닉네임")
-                                        .attributes(field("constraint", "문자열")),
+                                        .attributes(field("constraint", "5자 이내의 문자열")),
                                 fieldWithPath("burnoutName")
                                         .type(STRING)
                                         .description("번아웃 유형 이름")
@@ -123,9 +124,6 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
-
-        // then
-        verify(memberService).getMemberInfo();
     }
 
     @DisplayName("멤버 닉네임을 수정할 수 있다.")
@@ -141,12 +139,13 @@ class MemberControllerTest extends AbstractControllerTest {
                 2
         );
 
-        when(memberService.updateMemberInfo(any()))
+        when(memberService.updateMemberInfo(anyLong(), any()))
                 .thenReturn(memberInfoResponse);
 
+        // when
         final ResultActions resultActions = performPutUpdateMemberInfoRequest(memberInfoRequest);
 
-        // when
+        // then
         resultActions.andExpect(status().isOk())
                 .andDo(restDocs.document(
                         requestHeaders(
@@ -167,7 +166,7 @@ class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("nickname")
                                         .type(STRING)
                                         .description("멤버 닉네임")
-                                        .attributes(field("constraint", "문자열")),
+                                        .attributes(field("constraint", "5자 이내의 문자열")),
                                 fieldWithPath("burnoutName")
                                         .type(STRING)
                                         .description("번아웃 유형 이름")
@@ -182,9 +181,6 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
-
-        // then
-        verify(memberService).updateMemberInfo(any());
     }
 
     @DisplayName("닉네임이 5자를 초과할 경우 예외가 발생한다.")
@@ -207,7 +203,7 @@ class MemberControllerTest extends AbstractControllerTest {
         // given
         final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
 
-        doNothing().when(memberService).updateBurnout(any());
+        doNothing().when(memberService).updateBurnout(anyLong(), any());
 
         // when
         final ResultActions resultActions = performPutUpdateBurnout(burnoutRequest);
@@ -234,7 +230,7 @@ class MemberControllerTest extends AbstractControllerTest {
         // given
         final BurnoutRequest burnoutRequest = new BurnoutRequest(null);
 
-        doNothing().when(memberService).updateBurnout(any());
+        doNothing().when(memberService).updateBurnout(anyLong(), any());
 
         // when
         final ResultActions resultActions = performPutUpdateBurnout(burnoutRequest);
@@ -250,7 +246,7 @@ class MemberControllerTest extends AbstractControllerTest {
         // given
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
 
-        doNothing().when(memberService).updateFixedQuest(any());
+        doNothing().when(memberService).updateFixedQuest(anyLong(), any());
 
         // when
         final ResultActions resultActions = performPutUpdateFixedQuest(fixedQuestRequest);
@@ -277,7 +273,7 @@ class MemberControllerTest extends AbstractControllerTest {
         // given
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(null);
 
-        doNothing().when(memberService).updateFixedQuest(any());
+        doNothing().when(memberService).updateFixedQuest(anyLong(), any());
 
         // when
         final ResultActions resultActions = performPutUpdateFixedQuest(fixedQuestRequest);
@@ -292,6 +288,7 @@ class MemberControllerTest extends AbstractControllerTest {
     void checkAttendance() throws Exception {
         // given
         final MemberAttendanceResponse memberAttendanceResponse = new MemberAttendanceResponse(
+                "goeun",
                 1,
                 2,
                 45,
@@ -300,7 +297,7 @@ class MemberControllerTest extends AbstractControllerTest {
                 5
         );
 
-        when(memberService.checkAttendance())
+        when(memberService.checkAttendance(anyLong()))
                 .thenReturn(memberAttendanceResponse);
 
         // when
@@ -315,6 +312,10 @@ class MemberControllerTest extends AbstractControllerTest {
                                         .description("엑세스 토큰")
                         ),
                         responseFields(
+                                fieldWithPath("nickname")
+                                        .type(STRING)
+                                        .description("멤버 닉네임")
+                                        .attributes(field("constraint", "5자 이내의 문자열")),
                                 fieldWithPath("currentLevel")
                                         .type(NUMBER)
                                         .description("현재 레벨")
