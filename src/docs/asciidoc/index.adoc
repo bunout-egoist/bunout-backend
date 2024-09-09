@@ -18,6 +18,16 @@ include::{snippets}/login-controller-test/complete-signup/http-request.adoc[]
 include::{snippets}/login-controller-test/complete-signup/response-fields.adoc[]
 include::{snippets}/login-controller-test/complete-signup/response-body.adoc[]
 
+=== 액세스 토큰 재발급 (POST /api/v1/token)
+
+==== Request
+include::{snippets}/login-controller-test/renew-access-token/request-headers.adoc[]
+include::{snippets}/login-controller-test/renew-access-token/http-request.adoc[]
+
+==== Response (200 Success)
+include::{snippets}/login-controller-test/renew-access-token/response-fields.adoc[]
+include::{snippets}/login-controller-test/renew-access-token/http-response.adoc[]
+
 === 로그아웃 (DELETE /api/v1/logout)
 
 ==== Request
