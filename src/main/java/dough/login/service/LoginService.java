@@ -2,14 +2,17 @@ package dough.login.service;
 
 import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
+import dough.global.exception.AuthException;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.Level;
 import dough.level.domain.repository.LevelRepository;
 import dough.login.LoginApiClient;
+import dough.login.config.jwt.JwtHeaderUtil;
 import dough.login.config.jwt.TokenProvider;
 import dough.login.domain.LoginInfo;
 import dough.login.domain.MemberInfo;
 import dough.login.dto.request.SignUpRequest;
+import dough.login.dto.response.AccessTokenResponse;
 import dough.login.dto.response.LoginResponse;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
@@ -152,5 +155,24 @@ public class LoginService {
                 .toList();
 
         notificationRepository.saveAll(notifications);
+    }
+
+    public AccessTokenResponse renewAccessToken(final String refreshToken) {
+        final Long memberId = tokenService.getMemberId();
+        final Member member = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+
+        if (!member.getRefreshToken().equals(refreshToken)) {
+            throw new AuthException(INVALID_REFRESH_TOKEN);
+        }
+
+        final String accessToken = tokenProvider.generateToken(member, Duration.ofHours(1));
+
+        return new AccessTokenResponse(accessToken);
+    }
+
+    public Long getMemberId() {
+        final String accessToken = JwtHeaderUtil.getAccessToken();
+        return tokenProvider.getMemberIdFromToken(accessToken);
     }
 }

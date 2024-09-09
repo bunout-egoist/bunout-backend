@@ -1,6 +1,7 @@
 package dough.login.controller;
 
 import dough.login.dto.request.SignUpRequest;
+import dough.login.dto.response.AccessTokenResponse;
 import dough.login.dto.response.LoginResponse;
 import dough.login.service.LoginService;
 import dough.member.dto.response.MemberInfoResponse;
@@ -42,5 +43,11 @@ public class LoginController {
     public ResponseEntity<Void> signout() throws IOException {
         loginService.signout();
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/token")
+    public ResponseEntity<AccessTokenResponse> createNewAccessToken(@RequestHeader("RefreshToken") final String refreshToken) {
+        final AccessTokenResponse accessTokenResponse = loginService.renewAccessToken(refreshToken);
+        return ResponseEntity.ok().body(accessTokenResponse);
     }
 }
