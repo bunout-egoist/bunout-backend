@@ -1,6 +1,9 @@
 package dough.login.dto.request;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,8 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SignUpRequest {
-    @NotBlank(message = "access token을 입력해주세요.")
-    private String accessToken;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
     @Size(max = 5, message = "닉네임은 5자 이내로 입력해주세요.")
@@ -22,7 +23,7 @@ public class SignUpRequest {
     private String gender;
 
     @NotNull(message = "출생연도를 입력해주세요.")
-    private int birth_year;
+    private int birthYear;
 
     @NotBlank(message = "직업을 입력해주세요.")
     @Pattern(regexp = "학생|직장인|자영업|주부|무직|기타", message = "직업은 학생, 직장인, 자영업, 주부, 무직, 기타 중 하나여야 합니다.")
@@ -32,6 +33,5 @@ public class SignUpRequest {
     private Long fixedQuestId;
 
     @NotNull(message = "번아웃 아이디를 입력해주세요.")
-    private Long bunoutId;
-
+    private Long burnoutId;
 }
