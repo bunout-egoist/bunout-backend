@@ -7,6 +7,7 @@ import dough.login.config.oauth.OAuth2SuccessHandler;
 import dough.login.service.CustomOAuth2UserService;
 import dough.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@Slf4j
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
