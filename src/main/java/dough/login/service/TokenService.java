@@ -25,7 +25,6 @@ public class TokenService {
         }
         final Member member = memberRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-        ;
 
         return tokenProvider.generateToken(member, Duration.ofHours(1));
     }

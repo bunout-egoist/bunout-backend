@@ -158,11 +158,18 @@ public class Member extends BaseEntity {
             final String nickname,
             final String gender,
             final Integer birthYear,
-            final String occupation) {
+            final String occupation,
+            final Burnout burnout,
+            final Quest quest
+    ) {
         this.nickname = nickname;
         this.gender = gender;
         this.birthYear = birthYear;
         this.occupation = occupation;
+        this.burnout = burnout;
+        this.quest = quest;
+        this.burnoutLastModified = LocalDate.now();
+        this.fixedQuestLastModified = LocalDate.now();
     }
 
     public void updateMember(final String nickname) {
