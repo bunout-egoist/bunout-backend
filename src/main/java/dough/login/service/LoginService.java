@@ -163,7 +163,7 @@ public class LoginService {
             throw new AuthException(ALREADY_LOGOUT);
         }
 
-        if (!member.getRefreshToken().equals(refreshToken) || tokenProvider.validToken(refreshToken)) {
+        if (!member.getRefreshToken().equals(refreshToken) || !tokenProvider.validToken(refreshToken)) {
             throw new AuthException(INVALID_REFRESH_TOKEN);
         }
 
