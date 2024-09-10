@@ -87,7 +87,7 @@ class FeedbackControllerTest extends AbstractControllerTest {
                         responseFields(
                                 fieldWithPath("currentLevel").type(NUMBER).description("현재 레벨"),
                                 fieldWithPath("isLevelUp").type(BOOLEAN).description("레벨업 유무"),
-                                fieldWithPath("imageUrl").type(STRING).description("이미지 경로")
+                                fieldWithPath("imageUrl").type(STRING).description("이미지 Url")
                         )
                 ));
     }

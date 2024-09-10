@@ -52,7 +52,6 @@ public class NotificationService {
 
         notificationRepository.saveAll(updatedNotifications);
 
-        // TODO 더 좋은 방법이 없을지
         final List<Notification> savedNotifications = notificationRepository.findAllByMemberId(memberId);
 
         return getNotificationsResponse(savedNotifications);
