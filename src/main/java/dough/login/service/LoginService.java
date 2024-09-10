@@ -94,13 +94,14 @@ public class LoginService {
         final MemberInfo memberInfo = findOrCreateMember(loginInfo);
         final Member member = memberInfo.getMember();
 
-        final String memberAccessToken = tokenProvider.generateAccessToken(member.getId().toString());
         final String refreshToken = tokenProvider.generateRefreshToken();
 
         member.updateRefreshToken(refreshToken);
         memberRepository.save(member);
 
-        return LoginResponse.of(memberAccessToken, member, false);
+        final String memberAccessToken = tokenProvider.generateAccessToken(member.getId().toString());
+
+        return LoginResponse.of(memberAccessToken, member, memberInfo.getIsNewMember());
     }
 
     public void signout(final Long memberId) throws IOException {

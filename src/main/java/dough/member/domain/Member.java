@@ -66,8 +66,6 @@ public class Member extends BaseEntity {
     @Enumerated(value = STRING)
     private SocialLoginType socialLoginType;
 
-    private String email;
-
     private String occupation;
 
     private String gender;
@@ -109,7 +107,6 @@ public class Member extends BaseEntity {
             final String nickname,
             final String socialLoginId,
             final SocialLoginType socialLoginType,
-            final String email,
             final String occupation,
             final String gender,
             final Integer birthYear,
@@ -123,7 +120,6 @@ public class Member extends BaseEntity {
         this.role = roleType;
         this.socialLoginId = socialLoginId;
         this.socialLoginType = socialLoginType;
-        this.email = email;
         this.exp = 0;
         this.occupation = occupation;
         this.gender = gender;
