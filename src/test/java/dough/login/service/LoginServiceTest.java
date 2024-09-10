@@ -2,8 +2,9 @@ package dough.login.service;
 
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
-import dough.login.infrastructure.jwt.TokenExtractor;
 import dough.login.dto.request.SignUpRequest;
+import dough.login.infrastructure.jwt.TokenExtractor;
+import dough.login.infrastructure.jwt.TokenProvider;
 import dough.member.domain.repository.MemberRepository;
 import dough.notification.domain.repository.NotificationRepository;
 import dough.quest.domain.repository.QuestRepository;
@@ -41,6 +42,9 @@ class LoginServiceTest {
 
     @Mock
     private TokenExtractor tokenExtractor;
+
+    @Mock
+    private TokenProvider tokenProvider;
 
     @Mock
     private BurnoutRepository burnoutRepository;
@@ -146,14 +150,20 @@ class LoginServiceTest {
         // given
         GOEUN.updateRefreshToken("Refresh Token");
 
+        given(tokenExtractor.getRefreshToken())
+                .willReturn("Refresh Token");
         given(memberRepository.findMemberById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
+        given(tokenProvider.generateAccessToken(GOEUN.getId().toString()))
+                .willReturn("Access Token");
 
         // when
         loginService.renewAccessToken(GOEUN.getId());
 
         // then
+        verify(tokenExtractor).getRefreshToken();
         verify(memberRepository).findMemberById(anyLong());
+        verify(tokenProvider).generateAccessToken(anyString());
     }
 
     @Test
