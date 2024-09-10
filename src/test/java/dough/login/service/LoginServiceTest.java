@@ -154,6 +154,8 @@ class LoginServiceTest {
                 .willReturn("Refresh Token");
         given(memberRepository.findMemberById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
+        given(tokenProvider.validToken("Refresh Token"))
+                .willReturn(true);
         given(tokenProvider.generateAccessToken(GOEUN.getId().toString()))
                 .willReturn("Access Token");
 
@@ -163,6 +165,7 @@ class LoginServiceTest {
         // then
         verify(tokenExtractor).getRefreshToken();
         verify(memberRepository).findMemberById(anyLong());
+        verify(tokenProvider).validToken(anyString());
         verify(tokenProvider).generateAccessToken(anyString());
     }
 
