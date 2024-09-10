@@ -47,7 +47,10 @@ public enum ExceptionCode {
     FAIL_SOCIAL_LOGIN(9006, "소셜 로그인에 실패했습니다."),
     INVALID_REFRESH_TOKEN(9007, "유효하지 않은 RefreshToken입니다."),
     INVALID_ACCESS_TOKEN(9008, "유효하지 않은 AccessToken입니다."),
-    ALREADY_LOGOUT(9009, "이미 로그아웃된 회원입니다."),
+    EXPIRED_REFRESH_TOKEN(9010, "만료된 AccessToken입니다."),
+    EXPIRED_ACCESS_TOKEN(9011, "만료된 RefreshToken입니다."),
+    FAIL_TO_RENEW_ACCESS_TOKEN(9012, "액세스 토큰 갱신에 실패했습니다."),
+
 
     INTERNAL_SEVER_ERROR(9999, "서버에서 에러가 발생하였습니다.");
 

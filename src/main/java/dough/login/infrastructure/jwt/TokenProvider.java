@@ -1,5 +1,7 @@
 package dough.login.infrastructure.jwt;
 
+import dough.global.exception.ExpiredPeriodJwtException;
+import dough.global.exception.InvalidJwtException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +15,8 @@ import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
+
+import static dough.global.exception.ExceptionCode.*;
 
 @Service
 public class TokenProvider {
@@ -68,6 +72,46 @@ public class TokenProvider {
 
             return true;
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void validateRefreshToken(final String refreshToken) {
+        try {
+            getClaims(refreshToken);
+        } catch (final ExpiredJwtException e) {
+            throw new ExpiredPeriodJwtException(EXPIRED_REFRESH_TOKEN);
+        } catch (final JwtException | IllegalArgumentException e) {
+            throw new InvalidJwtException(INVALID_REFRESH_TOKEN);
+        }
+    }
+
+    private void validateAccessToken(final String accessToken) {
+        try {
+            getClaims(accessToken);
+        } catch (final ExpiredJwtException e) {
+            throw new ExpiredPeriodJwtException(EXPIRED_ACCESS_TOKEN);
+        } catch (final JwtException | IllegalArgumentException e) {
+            throw new InvalidJwtException(INVALID_ACCESS_TOKEN);
+        }
+    }
+
+    public boolean isValidRefreshAndInvalidAccess(final String refreshToken, final String accessToken) {
+        validateRefreshToken(refreshToken);
+        try {
+            validateAccessToken(accessToken);
+        } catch (final ExpiredPeriodJwtException e) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isValidRefreshAndValidAccess(final String refreshToken, final String accessToken) {
+        try {
+            validateRefreshToken(refreshToken);
+            validateAccessToken(accessToken);
+            return true;
+        } catch (final JwtException e) {
             return false;
         }
     }

@@ -4,6 +4,7 @@ import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.AuthException;
 import dough.global.exception.BadRequestException;
+import dough.global.exception.LoginException;
 import dough.level.domain.Level;
 import dough.level.domain.repository.LevelRepository;
 import dough.login.domain.LoginInfo;
@@ -154,21 +155,22 @@ public class LoginService {
         notificationRepository.saveAll(notifications);
     }
 
-    public AccessTokenResponse renewAccessToken(final Long memberId) {
+    public AccessTokenResponse renewAccessToken() {
+        final String accessToken = tokenExtractor.getAccessToken();
         final String refreshToken = tokenExtractor.getRefreshToken();
-        final Member member = memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        if (member.getRefreshToken().isEmpty()) {
-            throw new AuthException(ALREADY_LOGOUT);
+        if (tokenProvider.isValidRefreshAndInvalidAccess(refreshToken, accessToken)) {
+            final Member member = memberRepository.findByRefreshToken(refreshToken)
+                    .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+
+            final String newAccessToken = tokenProvider.generateAccessToken(member.getId().toString());
+            return new AccessTokenResponse(newAccessToken);
         }
 
-        if (!member.getRefreshToken().equals(refreshToken) || !tokenProvider.validToken(refreshToken)) {
-            throw new AuthException(INVALID_REFRESH_TOKEN);
+        if (tokenProvider.isValidRefreshAndValidAccess(refreshToken, accessToken)) {
+            return new AccessTokenResponse(accessToken);
         }
 
-        final String accessToken = tokenProvider.generateAccessToken(memberId.toString());
-
-        return new AccessTokenResponse(accessToken);
+        throw new LoginException(FAIL_TO_RENEW_ACCESS_TOKEN);
     }
 }
