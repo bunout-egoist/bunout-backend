@@ -7,7 +7,6 @@ import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
 import dough.level.service.LevelService;
-import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.SelectedQuest;
@@ -17,7 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import static dough.global.exception.ExceptionCode.*;
+import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
+import static dough.global.exception.ExceptionCode.NOT_FOUND_SELECTED_QUEST_ID;
 import static dough.quest.domain.type.QuestType.SPECIAL;
 
 @Service
@@ -28,11 +28,9 @@ public class FeedbackService {
     private final SelectedQuestRepository selectedQuestRepository;
     private final MemberRepository memberRepository;
     private final LevelService levelService;
-    private final TokenService tokenService;
     private final FileService fileService;
 
-    public FeedbackResponse createFeedback(final FeedbackRequest feedbackRequest, MultipartFile file) {
-        final Long memberId = tokenService.getMemberId();
+    public FeedbackResponse createFeedback(final Long memberId, final FeedbackRequest feedbackRequest, MultipartFile file) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 

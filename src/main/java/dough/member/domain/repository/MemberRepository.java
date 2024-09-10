@@ -8,11 +8,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findBySocialLoginId(String socialLoginId);
 
-    Optional<Member> findByEmail(String email);
+    Optional<Member> findByRefreshToken(final String refreshToken);
 
-    boolean existsBySocialLoginId(String socialLoginId);
+    Optional<Member> findBySocialLoginId(final String socialLoginId);
 
     @Query("""
             SELECT m

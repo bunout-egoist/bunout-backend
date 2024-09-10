@@ -25,6 +25,7 @@ import java.util.Set;
 import static dough.global.restdocs.RestDocsConfiguration.field;
 import static dough.quest.fixture.QuestFixture.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -55,8 +56,8 @@ public class DashboardControllerTest extends AbstractControllerTest {
     void setUp() {
         when(tokenProvider.validToken(any()))
                 .thenReturn(true);
-        given(tokenProvider.getMemberIdFromToken(any()))
-                .willReturn(1L);
+        given(tokenProvider.getSubject(any()))
+                .willReturn("1");
     }
 
     private ResultActions performGetMonthlySummaryRequest() throws Exception {
@@ -74,7 +75,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                 WeeklySummaryResponse.of(LocalDate.of(2024, 8, 14), List.of(new QuestFeedback(FIXED_QUEST1, "https://~")), 1L)
         );
 
-        when(questService.getWeeklySummary(any()))
+        when(questService.getWeeklySummary(anyLong(), any()))
                 .thenReturn(actualResponse);
 
         // when
@@ -180,7 +181,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                 Set.of("화"),
                 19L);
 
-        when(dashboardService.getCompletedQuestsTotalAndStatistics())
+        when(dashboardService.getCompletedQuestsTotalAndStatistics(anyLong()))
                 .thenReturn(totalResponse);
 
         // when
@@ -225,7 +226,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                 0L
         );
 
-        when(dashboardService.getMonthlySummary(any()))
+        when(dashboardService.getMonthlySummary(anyLong(), any()))
                 .thenReturn(monthlySummaryResponse);
 
         // when
@@ -272,7 +273,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                 0L
         );
 
-        when(dashboardService.getMonthlySummary(any()))
+        when(dashboardService.getMonthlySummary(anyLong(), any()))
                 .thenReturn(monthlySummaryResponse);
 
         // when

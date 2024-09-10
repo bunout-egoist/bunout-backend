@@ -3,7 +3,6 @@ package dough.quest.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.AbstractControllerTest;
 import dough.keyword.KeywordCode;
-import dough.login.service.TokenService;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.request.QuestRequest;
@@ -61,10 +60,6 @@ class QuestControllerTest extends AbstractControllerTest {
 
     @MockBean
     private QuestService questService;
-
-    @Mock
-    private TokenService tokenService;
-
     @Mock
     private MemberRepository memberRepository;
 
@@ -72,8 +67,8 @@ class QuestControllerTest extends AbstractControllerTest {
     void setUp() {
         when(tokenProvider.validToken(any()))
                 .thenReturn(true);
-        given(tokenProvider.getMemberIdFromToken(any()))
-                .willReturn(1L);
+        given(tokenProvider.getSubject(any()))
+                .willReturn("1");
     }
 
     private ResultActions performPutUpdateQuestRequest(
@@ -228,7 +223,7 @@ class QuestControllerTest extends AbstractControllerTest {
                 SOBORO, List.of(FIXED_QUEST1, FIXED_QUEST2)
         );
 
-        when(questService.getFixedQuests())
+        when(questService.getFixedQuests(anyLong()))
                 .thenReturn(fixedQuestListResponse);
 
         // when
@@ -283,11 +278,9 @@ class QuestControllerTest extends AbstractControllerTest {
         final TodayQuestListResponse todayQuestListResponse = TodayQuestListResponse.of(new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests);
 
         // given
-        given(tokenService.getMemberId())
-                .willReturn(1L);
         given(memberRepository.findMemberById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
-        when(questService.updateTodayQuests())
+        when(questService.updateTodayQuests(anyLong()))
                 .thenReturn(todayQuestListResponse);
 
         // when

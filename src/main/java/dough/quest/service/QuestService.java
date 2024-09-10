@@ -9,7 +9,6 @@ import dough.keyword.domain.Keyword;
 import dough.keyword.domain.repository.KeywordRepository;
 import dough.keyword.domain.type.ParticipationType;
 import dough.keyword.domain.type.PlaceType;
-import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
@@ -49,10 +48,8 @@ public class QuestService {
     private final BurnoutRepository burnoutRepository;
     private final MemberRepository memberRepository;
     private final KeywordRepository keywordRepository;
-    private final TokenService tokenService;
 
-    public TodayQuestListResponse updateTodayQuests() {
-        final Long memberId = tokenService.getMemberId();
+    public TodayQuestListResponse updateTodayQuests(final Long memberId) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -142,8 +139,7 @@ public class QuestService {
     }
 
     @Transactional(readOnly = true)
-    public FixedQuestListResponse getFixedQuests() {
-        final Long memberId = tokenService.getMemberId();
+    public FixedQuestListResponse getFixedQuests(final Long memberId) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -152,14 +148,10 @@ public class QuestService {
     }
 
     @Transactional(readOnly = true)
-    public List<WeeklySummaryResponse> getWeeklySummary(final LocalDate date) {
-        final Long memberId = tokenService.getMemberId();
-        final Member member = memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-
+    public List<WeeklySummaryResponse> getWeeklySummary(final Long memberId, final LocalDate date) {
         final LocalDate startDate = date.minusDays(3);
         final LocalDate endDate = date.plusDays(3);
-        final CompletedQuestElements completedQuestElements = new CompletedQuestElements(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(member.getId(), startDate, endDate));
+        final CompletedQuestElements completedQuestElements = new CompletedQuestElements(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate));
         final Map<LocalDate, List<QuestFeedback>> questFeedbackMap = completedQuestElements.toQuestFeedbackMap();
 
         return getWeeklySummaryResponses(questFeedbackMap);

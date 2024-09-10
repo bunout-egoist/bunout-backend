@@ -32,8 +32,6 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(NotificationController.class)
@@ -53,8 +51,8 @@ public class NotificationControllerTest extends AbstractControllerTest {
     void setUp() {
         when(tokenProvider.validToken(any()))
                 .thenReturn(true);
-        given(tokenProvider.getMemberIdFromToken(any()))
-                .willReturn(1L);
+        given(tokenProvider.getSubject(any()))
+                .willReturn("1");
     }
 
     @DisplayName("멤버의 전체 알림을 조회할 수 있다.")
@@ -67,7 +65,7 @@ public class NotificationControllerTest extends AbstractControllerTest {
                 NotificationResponse.of(REMAINING_NOTIFICATION)
         );
 
-        when(notificationService.getAllNotifications())
+        when(notificationService.getAllNotifications(anyLong()))
                 .thenReturn(notificationResponses);
 
         // when
@@ -138,7 +136,7 @@ public class NotificationControllerTest extends AbstractControllerTest {
                 NotificationResponse.of(REMAINING_NOTIFICATION)
         );
 
-        when(notificationService.updateNotifications(any()))
+        when(notificationService.updateNotifications(anyLong(), any()))
                 .thenReturn(notificationResponses);
 
         // when

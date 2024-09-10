@@ -73,8 +73,4 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              ORDER BY sq.completedDate
             """)
     List<CompletedQuestsCountElement> getCompletedQuestsCountByMemberIdAndDate(@Param("memberId") final Long memberId, @Param("year") final int year, @Param("month") final int month);
-
-//    @Modifying
-//    @Query("UPDATE SelectedQuest sq SET sq.feedback = :feedback, sq.questStatus = 'COMPLETED' WHERE sq.id = :selectedQuestId")
-//    void updateFeedbackAndStatus(Long selectedQuestId, Feedback feedback);
 }

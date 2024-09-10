@@ -15,7 +15,6 @@ public class MemberFixture {
             "goeun",
             "0000",
             KAKAO,
-            "goeun@mail.com",
             "기타",
             "여성",
             2002,
