@@ -6,19 +6,19 @@ import dough.global.exception.AuthException;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.Level;
 import dough.level.domain.repository.LevelRepository;
-import dough.login.infrastructure.oauth.LoginApiClient;
-import dough.login.infrastructure.jwt.TokenExtractor;
-import dough.login.infrastructure.jwt.TokenProvider;
 import dough.login.domain.LoginInfo;
 import dough.login.domain.MemberInfo;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.dto.response.AccessTokenResponse;
 import dough.login.dto.response.LoginResponse;
+import dough.login.infrastructure.jwt.TokenExtractor;
+import dough.login.infrastructure.jwt.TokenProvider;
+import dough.login.infrastructure.oauth.LoginApiClient;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.response.MemberInfoResponse;
-import dough.notification.domain.repository.NotificationRepository;
 import dough.notification.domain.Notification;
+import dough.notification.domain.repository.NotificationRepository;
 import dough.notification.domain.type.NotificationType;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
@@ -158,8 +158,11 @@ public class LoginService {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        if (!member.getRefreshToken().equals(refreshToken)) {
-            tokenProvider.validToken(refreshToken);
+        if (member.getRefreshToken().isEmpty()) {
+            throw new AuthException(ALREADY_LOGOUT);
+        }
+
+        if (!member.getRefreshToken().equals(refreshToken) || tokenProvider.validToken(refreshToken)) {
             throw new AuthException(INVALID_REFRESH_TOKEN);
         }
 
