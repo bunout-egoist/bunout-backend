@@ -1,10 +1,6 @@
 package dough.dashboard.service;
 
 import dough.dashboard.dto.response.MonthlySummaryResponse;
-import dough.global.exception.BadRequestException;
-import dough.login.service.TokenService;
-import dough.member.domain.Member;
-import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.CompletedQuestsCountElement;
 import dough.quest.dto.CompletedQuestsTotalElement;
@@ -20,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static dough.global.exception.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static java.time.format.TextStyle.SHORT;
 import static java.util.Locale.KOREAN;
 
@@ -30,8 +25,6 @@ import static java.util.Locale.KOREAN;
 public class DashboardService {
 
     private final SelectedQuestRepository selectedQuestRepository;
-    private final MemberRepository memberRepository;
-    private final TokenService tokenService;
 
     private static Long getCompletedAllQuestsDateCount(final List<CompletedQuestsCountElement> completedQuestsCountElements) {
         return completedQuestsCountElements.stream()
@@ -67,14 +60,10 @@ public class DashboardService {
                 .collect(Collectors.toSet());
     }
 
-    public MonthlySummaryResponse getMonthlySummary(final YearMonth yearMonth) {
-        final Long memberId = tokenService.getMemberId();
-        final Member member = memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-
+    public MonthlySummaryResponse getMonthlySummary(final Long memberId, final YearMonth yearMonth) {
         final int year = yearMonth.getYear();
         final int month = yearMonth.getMonthValue();
-        final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(member.getId(), year, month);
+        final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(memberId, year, month);
 
         final Long completedAllQuestsDateCount = getCompletedAllQuestsDateCount(completedQuestsCountElements);
 
@@ -84,15 +73,11 @@ public class DashboardService {
         );
     }
 
-    public TotalAndStatisticsResponse getCompletedQuestsTotalAndStatistics() {
-        final Long memberId = tokenService.getMemberId();
-        final Member member = memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-
+    public TotalAndStatisticsResponse getCompletedQuestsTotalAndStatistics(final Long memberId) {
         final YearMonth currentYearMonth = YearMonth.now();
 
-        final CompletedQuestsTotalElement completedQuestsTotalElement = selectedQuestRepository.getCompletedQuestsTotalByMemberId(member.getId());
-        final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(member.getId(), currentYearMonth.getYear(), currentYearMonth.getMonthValue());
+        final CompletedQuestsTotalElement completedQuestsTotalElement = selectedQuestRepository.getCompletedQuestsTotalByMemberId(memberId);
+        final List<CompletedQuestsCountElement> completedQuestsCountElements = selectedQuestRepository.getCompletedQuestsCountByMemberIdAndDate(memberId, currentYearMonth.getYear(), currentYearMonth.getMonthValue());
 
         final Set<String> highestAverageCompletionDays = getHighestAverageCompletionDays(completedQuestsCountElements);
         final Long averageCompletion = getAverageCompletion(completedQuestsCountElements, currentYearMonth);

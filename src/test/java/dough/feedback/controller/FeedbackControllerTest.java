@@ -18,11 +18,13 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.JsonFieldType.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -40,8 +42,8 @@ class FeedbackControllerTest extends AbstractControllerTest {
     void setUp() {
         when(tokenProvider.validToken(any()))
                 .thenReturn(true);
-        given(tokenProvider.getMemberIdFromToken(any()))
-                .willReturn(1L);
+        given(tokenProvider.getSubject(any()))
+                .willReturn("1");
     }
 
     @DisplayName("피드백을 생성할 수 있다.")
@@ -65,7 +67,7 @@ class FeedbackControllerTest extends AbstractControllerTest {
 
         // Mock 서비스 응답 설정
         FeedbackResponse feedbackResponse = new FeedbackResponse(5, true, "https://asdkfl.com");
-        given(feedbackService.createFeedback(any(FeedbackRequest.class), any(MultipartFile.class)))
+        given(feedbackService.createFeedback(anyLong(), any(FeedbackRequest.class), any(MultipartFile.class)))
                 .willReturn(feedbackResponse);
 
         // Multipart 요청 전송
@@ -85,7 +87,7 @@ class FeedbackControllerTest extends AbstractControllerTest {
                         responseFields(
                                 fieldWithPath("currentLevel").type(NUMBER).description("현재 레벨"),
                                 fieldWithPath("isLevelUp").type(BOOLEAN).description("레벨업 유무"),
-                                fieldWithPath("imageUrl").type(STRING).description("이미지 경로")
+                                fieldWithPath("imageUrl").type(STRING).description("이미지 Url")
                         )
                 ));
     }

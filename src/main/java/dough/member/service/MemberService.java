@@ -5,7 +5,6 @@ import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
 import dough.level.service.LevelService;
-import dough.login.service.TokenService;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.request.BurnoutRequest;
@@ -37,18 +36,15 @@ public class MemberService {
     private final QuestRepository questRepository;
     private final BurnoutRepository burnoutRepository;
     private final LevelService levelService;
-    private final TokenService tokenService;
 
     @Transactional(readOnly = true)
-    public MemberInfoResponse getMemberInfo() {
-        final Long memberId = tokenService.getMemberId();
+    public MemberInfoResponse getMemberInfo(final Long memberId) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
         return MemberInfoResponse.of(member);
     }
 
-    public MemberInfoResponse updateMemberInfo(final MemberInfoRequest memberInfoRequest) {
-        final Long memberId = tokenService.getMemberId();
+    public MemberInfoResponse updateMemberInfo(final Long memberId, final MemberInfoRequest memberInfoRequest) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -58,8 +54,7 @@ public class MemberService {
         return MemberInfoResponse.of(member);
     }
 
-    public void updateBurnout(final BurnoutRequest burnoutRequest) {
-        final Long memberId = tokenService.getMemberId();
+    public void updateBurnout(final Long memberId, final BurnoutRequest burnoutRequest) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -82,8 +77,7 @@ public class MemberService {
         }
     }
 
-    public void updateFixedQuest(final FixedQuestRequest fixedQuestRequest) {
-        final Long memberId = tokenService.getMemberId();
+    public void updateFixedQuest(final Long memberId, final FixedQuestRequest fixedQuestRequest) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
@@ -97,8 +91,7 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public MemberAttendanceResponse checkAttendance() {
-        final Long memberId = tokenService.getMemberId();
+    public MemberAttendanceResponse checkAttendance(final Long memberId) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 

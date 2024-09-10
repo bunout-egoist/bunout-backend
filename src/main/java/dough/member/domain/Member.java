@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.REMOVE;
 import static jakarta.persistence.EnumType.STRING;
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -38,15 +39,6 @@ public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-
-    @OneToMany(mappedBy = "member")
-    private List<SelectedQuest> selectedQuests = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Feedback> Feedbacks = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Notification> notifications = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "burnout_id")
@@ -74,15 +66,16 @@ public class Member extends BaseEntity {
     @Enumerated(value = STRING)
     private SocialLoginType socialLoginType;
 
-    private String email;
-
-    private Integer exp;
-
     private String occupation;
 
     private String gender;
 
     private Integer birthYear;
+
+    private String refreshToken;
+
+    @Column(nullable = false)
+    private Integer exp;
 
     @Column(nullable = false)
     private LocalDate burnoutLastModified;
@@ -100,25 +93,33 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Integer attendanceCount;
 
-    public Member(final Long id,
-                  final String nickname,
-                  final String socialLoginId,
-                  final SocialLoginType socialLoginType,
-                  final String email,
-                  final String occupation,
-                  final String gender,
-                  final Integer birthYear,
-                  final Burnout burnout,
-                  final RoleType roleType,
-                  final Level level,
-                  final Quest quest
+    @OneToMany(mappedBy = "member", cascade = REMOVE, orphanRemoval = true)
+    private List<SelectedQuest> selectedQuests = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = REMOVE, orphanRemoval = true)
+    private List<Feedback> Feedbacks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = REMOVE, orphanRemoval = true)
+    private List<Notification> notifications = new ArrayList<>();
+
+    public Member(
+            final Long id,
+            final String nickname,
+            final String socialLoginId,
+            final SocialLoginType socialLoginType,
+            final String occupation,
+            final String gender,
+            final Integer birthYear,
+            final Burnout burnout,
+            final RoleType roleType,
+            final Level level,
+            final Quest quest
     ) {
         this.id = id;
         this.nickname = nickname;
         this.role = roleType;
         this.socialLoginId = socialLoginId;
         this.socialLoginType = socialLoginType;
-        this.email = email;
         this.exp = 0;
         this.occupation = occupation;
         this.gender = gender;
@@ -133,15 +134,38 @@ public class Member extends BaseEntity {
         this.quest = quest;
     }
 
+    public Member(
+            final String socialLoginId,
+            final SocialLoginType socialLoginType,
+            final RoleType roleType,
+            final Level level
+    ) {
+        this.socialLoginId = socialLoginId;
+        this.socialLoginType = socialLoginType;
+        this.role = roleType;
+        this.level = level;
+    }
+
+    public void updateRefreshToken(final String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     public void updateMember(
             final String nickname,
             final String gender,
             final Integer birthYear,
-            final String occupation) {
+            final String occupation,
+            final Burnout burnout,
+            final Quest quest
+    ) {
         this.nickname = nickname;
         this.gender = gender;
         this.birthYear = birthYear;
         this.occupation = occupation;
+        this.burnout = burnout;
+        this.quest = quest;
+        this.burnoutLastModified = LocalDate.now();
+        this.fixedQuestLastModified = LocalDate.now();
     }
 
     public void updateMember(final String nickname) {

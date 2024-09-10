@@ -1,9 +1,8 @@
 package dough.notification.service;
 
-import dough.login.service.TokenService;
 import dough.member.domain.repository.MemberRepository;
-import dough.notification.NotificationRepository;
 import dough.notification.domain.Notification;
+import dough.notification.domain.repository.NotificationRepository;
 import dough.notification.dto.request.NotificationUpdateRequest;
 import dough.notification.dto.request.NotificationsUpdateRequest;
 import dough.notification.dto.response.NotificationResponse;
@@ -16,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.notification.domain.type.NotificationType.DAILY_QUEST;
@@ -35,9 +33,6 @@ public class NotificationServiceTest {
     private NotificationService notificationService;
 
     @Mock
-    private TokenService tokenService;
-
-    @Mock
     private MemberRepository memberRepository;
 
     @Mock
@@ -49,15 +44,11 @@ public class NotificationServiceTest {
         // given
         final List<Notification> notifications = List.of(BY_TYPE_NOTIFICATION);
 
-        given(tokenService.getMemberId())
-                .willReturn(1L);
-        given(memberRepository.findMemberById(GOEUN.getId()))
-                .willReturn(Optional.of(GOEUN));
         given(notificationRepository.findAllByMemberId(any()))
                 .willReturn(notifications);
 
         // when
-        final List<NotificationResponse> actualResponses = notificationService.getAllNotifications();
+        final List<NotificationResponse> actualResponses = notificationService.getAllNotifications(GOEUN.getId());
 
         // then
         assertThat(actualResponses).usingRecursiveComparison()
@@ -75,21 +66,15 @@ public class NotificationServiceTest {
                 new NotificationUpdateRequest(BY_TYPE_NOTIFICATION.getId(), false)
         ));
 
-        given(tokenService.getMemberId())
-                .willReturn(1L);
-        given(memberRepository.findMemberById(GOEUN.getId()))
-                .willReturn(Optional.of(GOEUN));
         given(notificationRepository.findAllByMemberIdAndNotificationIds(anyLong(), any()))
                 .willReturn(List.of(BY_TYPE_NOTIFICATION));
         given(notificationRepository.saveAll(any()))
                 .willReturn(List.of(updatedNotification));
 
         // when
-        notificationService.updateNotifications(notificationsUpdateRequest);
+        notificationService.updateNotifications(GOEUN.getId(), notificationsUpdateRequest);
 
         // then
-        verify(tokenService).getMemberId();
-        verify(memberRepository).findMemberById(anyLong());
         verify(notificationRepository).findAllByMemberIdAndNotificationIds(anyLong(), any());
         verify(notificationRepository).saveAll(any());
     }

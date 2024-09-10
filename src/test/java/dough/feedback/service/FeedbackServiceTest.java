@@ -6,7 +6,6 @@ import dough.feedback.dto.response.FeedbackResponse;
 import dough.global.exception.BadRequestException;
 import dough.level.domain.MemberLevel;
 import dough.level.service.LevelService;
-import dough.login.service.TokenService;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -41,9 +40,6 @@ class FeedbackServiceTest {
     private FeedbackService feedbackService;
 
     @Mock
-    private TokenService tokenService;
-
-    @Mock
     private LevelService levelService;
 
     @Mock
@@ -69,8 +65,6 @@ class FeedbackServiceTest {
 
         IN_PROGRESS_QUEST1.updateFeedback(FEEDBACK1);
 
-        given(tokenService.getMemberId())
-                .willReturn(1L);
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(selectedQuestRepository.findById(anyLong()))
@@ -85,7 +79,7 @@ class FeedbackServiceTest {
                 .willReturn(memberLevel.getMember());
 
         // when
-        final FeedbackResponse actualResponse = feedbackService.createFeedback(feedbackRequest, mockFile);
+        final FeedbackResponse actualResponse = feedbackService.createFeedback(GOEUN.getId(), feedbackRequest, mockFile);
 
         // then
         FeedbackResponse expectedResponse = FeedbackResponse.of(memberLevel, null);
@@ -104,7 +98,7 @@ class FeedbackServiceTest {
                 .willReturn(Optional.of(GOEUN));
 
         // when & then
-        assertThatThrownBy(() -> feedbackService.createFeedback(feedbackRequest, mockFile))
+        assertThatThrownBy(() -> feedbackService.createFeedback(GOEUN.getId(), feedbackRequest, mockFile))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_SELECTED_QUEST_ID.getCode());
@@ -118,7 +112,7 @@ class FeedbackServiceTest {
         MockMultipartFile mockFile = new MockMultipartFile("file", "test.txt", "text/plain", "Test content".getBytes());
 
         // when & then
-        assertThatThrownBy(() -> feedbackService.createFeedback(feedbackRequest, mockFile))
+        assertThatThrownBy(() -> feedbackService.createFeedback(GOEUN.getId(), feedbackRequest, mockFile))
                 .isInstanceOf(BadRequestException.class)
                 .extracting("code")
                 .isEqualTo(NOT_FOUND_MEMBER_ID.getCode());

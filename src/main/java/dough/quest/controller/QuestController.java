@@ -1,5 +1,7 @@
 package dough.quest.controller;
 
+import dough.login.domain.Auth;
+import dough.login.domain.Accessor;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;
 import dough.quest.dto.response.FixedQuestListResponse;
@@ -18,14 +20,14 @@ public class QuestController {
     private final QuestService questService;
 
     @GetMapping("/fixed")
-    public ResponseEntity<FixedQuestListResponse> getFixedQuests() {
-        final FixedQuestListResponse fixedQuestListResponse = questService.getFixedQuests();
+    public ResponseEntity<FixedQuestListResponse> getFixedQuests(@Auth final Accessor accessor) {
+        final FixedQuestListResponse fixedQuestListResponse = questService.getFixedQuests(accessor.getMemberId());
         return ResponseEntity.ok().body(fixedQuestListResponse);
     }
 
     @PostMapping("/today")
-    public ResponseEntity<TodayQuestListResponse> getTodayQuests() {
-        final TodayQuestListResponse todayQuestListResponse = questService.updateTodayQuests();
+    public ResponseEntity<TodayQuestListResponse> getTodayQuests(@Auth final Accessor accessor) {
+        final TodayQuestListResponse todayQuestListResponse = questService.updateTodayQuests(accessor.getMemberId());
         return ResponseEntity.ok().body(todayQuestListResponse);
     }
 

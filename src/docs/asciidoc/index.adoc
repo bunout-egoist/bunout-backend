@@ -5,65 +5,119 @@
 :toclevels: 4
 :sectlinks:
 
+== Login API
+
+=== 추가 회원가입 (PUT /api/v1/signup)
+
+==== Request
+include::{snippets}/login-controller-test/complete-signup/request-headers.adoc[]
+include::{snippets}/login-controller-test/complete-signup/request-fields.adoc[]
+include::{snippets}/login-controller-test/complete-signup/http-request.adoc[]
+
+==== Response (200 Success)
+include::{snippets}/login-controller-test/complete-signup/response-fields.adoc[]
+include::{snippets}/login-controller-test/complete-signup/response-body.adoc[]
+
+=== 액세스 토큰 재발급 (POST /api/v1/token)
+
+==== Request
+include::{snippets}/login-controller-test/renew-access-token/request-headers.adoc[]
+include::{snippets}/login-controller-test/renew-access-token/http-request.adoc[]
+
+==== Response (200 Success)
+include::{snippets}/login-controller-test/renew-access-token/response-fields.adoc[]
+include::{snippets}/login-controller-test/renew-access-token/http-response.adoc[]
+
+=== 로그아웃 (DELETE /api/v1/logout)
+
+==== Request
+include::{snippets}/login-controller-test/logout/request-headers.adoc[]
+include::{snippets}/login-controller-test/logout/http-request.adoc[]
+
+==== Response (204 No Content)
+include::{snippets}/login-controller-test/logout/http-response.adoc[]
+
+=== 회원탈퇴 (DELETE /api/v1/signout)
+
+==== Request
+include::{snippets}/login-controller-test/signout/request-headers.adoc[]
+include::{snippets}/login-controller-test/signout/http-request.adoc[]
+
+==== Response (204 No Content)
+include::{snippets}/login-controller-test/signout/http-response.adoc[]
+
 == Member API
 
 === 멤버 정보 조회 (GET /api/v1/members)
 
 ==== Request
+
 include::{snippets}/member-controller-test/get-member-info/request-headers.adoc[]
 include::{snippets}/member-controller-test/get-member-info/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/member-controller-test/get-member-info/response-fields.adoc[]
 include::{snippets}/member-controller-test/get-member-info/response-body.adoc[]
 
 === 멤버 닉네임 수정 (/api/v1/members)
 
 ==== Request
+
 include::{snippets}/member-controller-test/update-member-info/request-headers.adoc[]
 include::{snippets}/member-controller-test/update-member-info/request-fields.adoc[]
 include::{snippets}/member-controller-test/update-member-info/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/member-controller-test/update-member-info/response-fields.adoc[]
 include::{snippets}/member-controller-test/update-member-info/response-body.adoc[]
 
 ==== Response (400 Bad Request / 닉네임 길이 초과)
+
 include::{snippets}/member-controller-test/update-member-info_-nickname-size-invalid/http-response.adoc[]
 
 === 번아웃 유형 재설정 (PUT /api/v1/members/burnout)
 
 ==== Request
+
 include::{snippets}/member-controller-test/update-burnout/request-headers.adoc[]
 include::{snippets}/member-controller-test/update-burnout/request-fields.adoc[]
 include::{snippets}/member-controller-test/update-burnout/http-request.adoc[]
 
 ==== Response (204 No Content)
+
 include::{snippets}/member-controller-test/update-burnout/http-response.adoc[]
 
 ==== Response (400 Bad Request / 번아웃 아이디를 입력하지 않았을 경우)
+
 include::{snippets}/member-controller-test/update-burnout_-burnout-null/http-response.adoc[]
 
 === 고정 퀘스트 재설정 (PUT /api/v1/members/fixed)
 
 ==== Request
+
 include::{snippets}/member-controller-test/update-fixed-quest/request-headers.adoc[]
 include::{snippets}/member-controller-test/update-fixed-quest/request-fields.adoc[]
 include::{snippets}/member-controller-test/update-fixed-quest/http-request.adoc[]
 
 ==== Response (204 No Content)
+
 include::{snippets}/member-controller-test/update-fixed-quest/http-response.adoc[]
 
 ==== Response
+
 include::{snippets}/member-controller-test/update-fixed-quest_-fixed-quest-null/http-response.adoc[]
 
 === 출석 체크 (PUT /api/v1/members/attendance)
 
 === Request
+
 include::{snippets}/member-controller-test/check-attendance/request-headers.adoc[]
 include::{snippets}/member-controller-test/check-attendance/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/member-controller-test/check-attendance/response-fields.adoc[]
 include::{snippets}/member-controller-test/check-attendance/response-body.adoc[]
 
@@ -72,50 +126,60 @@ include::{snippets}/member-controller-test/check-attendance/response-body.adoc[]
 === 오늘 퀘스트 업데이트 (POST /api/v1/quests/today)
 
 ==== Request
+
 include::{snippets}/quest-controller-test/update-today-quests/request-headers.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/quest-controller-test/update-today-quests/response-fields.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/response-body.adoc[]
 
 === 고정 퀘스트 조회 (GET /api/v1/quests/fixed)
 
 ==== Request
+
 include::{snippets}/member-controller-test/get-member-info/request-headers.adoc[]
 include::{snippets}/quest-controller-test/get-fixed-quests/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/quest-controller-test/get-fixed-quests/response-fields.adoc[]
 include::{snippets}/quest-controller-test/get-fixed-quests/response-body.adoc[]
 
 === 퀘스트 추가: 관리자 API (POST /api/v1/quests)
 
 ==== Request
+
 include::{snippets}/quest-controller-test/create-quest/request-fields.adoc[]
 include::{snippets}/quest-controller-test/create-quest/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/quest-controller-test/create-quest/request-fields.adoc[]
 include::{snippets}/quest-controller-test/create-quest/http-response.adoc[]
 
 === 퀘스트 수정: 관리자 API (PUT /api/v1/quests/{questId})
 
 ==== Request
+
 include::{snippets}/quest-controller-test/update-quest/path-parameters.adoc[]
 include::{snippets}/quest-controller-test/update-quest/request-fields.adoc[]
 include::{snippets}/quest-controller-test/update-quest/http-request.adoc[]
 
 ==== Response (204 No Content)
+
 include::{snippets}/quest-controller-test/update-quest/http-response.adoc[]
 
 === 퀘스트 삭제: 관리자 API (DELETE /api/v1/quests/{questId})
 
 ==== Request
+
 include::{snippets}/quest-controller-test/delete-quest/path-parameters.adoc[]
 include::{snippets}/quest-controller-test/delete-quest/http-request.adoc[]
 
 ==== Response (204 No Content)
+
 include::{snippets}/quest-controller-test/delete-quest/http-response.adoc[]
 
 == Dashboard API
@@ -123,41 +187,50 @@ include::{snippets}/quest-controller-test/delete-quest/http-response.adoc[]
 === 주간 분석 (GET /api/v1/dashboard/weekly/{searchDate})
 
 ==== Request
+
 include::{snippets}/dashboard-controller-test/get-weekly-summary/request-headers.adoc[]
 include::{snippets}/dashboard-controller-test/get-weekly-summary/path-parameters.adoc[]
 include::{snippets}/dashboard-controller-test/get-weekly-summary/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/dashboard-controller-test/get-weekly-summary/response-fields.adoc[]
 include::{snippets}/dashboard-controller-test/get-weekly-summary/http-response.adoc[]
 
 ==== Request (조회 날짜가 형식에 맞지 않을 경우)
+
 include::{snippets}/dashboard-controller-test/get-weekly-summary_-invalid-local-date-type/http-request.adoc[]
 
 ==== Response (400 Bad Request)
+
 include::{snippets}/dashboard-controller-test/get-weekly-summary_-invalid-local-date-type/http-response.adoc[]
 
 === 월간 분석 (GET /api/v1/dashboard/monthly/{yearMonth})
 
 ==== Request
+
 include::{snippets}/dashboard-controller-test/get-monthly-summary/request-headers.adoc[]
 include::{snippets}/dashboard-controller-test/get-monthly-summary/path-parameters.adoc[]
 include::{snippets}/dashboard-controller-test/get-monthly-summary/http-request.adoc[]
 
 ==== Response (200 Success / 기록이 있을 경우)
+
 include::{snippets}/dashboard-controller-test/get-monthly-summary/response-fields.adoc[]
 include::{snippets}/dashboard-controller-test/get-monthly-summary/response-body.adoc[]
 
 ==== Response (200 Success / 기록이 없을 경우)
+
 include::{snippets}/dashboard-controller-test/get-monthly-summary_-no-summary/response-body.adoc[]
 
 === 퀘스트 총 개수 & 통계 (GET /api/v1/dashboard/total)
 
 ==== Request
+
 include::{snippets}/dashboard-controller-test/get-completed-quests-total-and-statistics/request-headers.adoc[]
 include::{snippets}/dashboard-controller-test/get-completed-quests-total-and-statistics/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/dashboard-controller-test/get-completed-quests-total-and-statistics/response-fields.adoc[]
 include::{snippets}/dashboard-controller-test/get-completed-quests-total-and-statistics/http-response.adoc[]
 
@@ -166,11 +239,13 @@ include::{snippets}/dashboard-controller-test/get-completed-quests-total-and-sta
 === 피드백 추가 (POST /api/v1/feedbacks)
 
 ==== Request
+
 include::{snippets}/feedback-controller-test/create-feedback/request-headers.adoc[]
 include::{snippets}/feedback-controller-test/create-feedback/request-fields.adoc[]
 include::{snippets}/feedback-controller-test/create-feedback/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/feedback-controller-test/create-feedback/response-fields.adoc[]
 include::{snippets}/feedback-controller-test/create-feedback/response-body.adoc[]
 
@@ -179,24 +254,29 @@ include::{snippets}/feedback-controller-test/create-feedback/response-body.adoc[
 === 알람 전체 조회 (GET /api/v1/notifications)
 
 ==== Request
+
 include::{snippets}/notification-controller-test/get-all-notifications/request-headers.adoc[]
 include::{snippets}/notification-controller-test/get-all-notifications/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/notification-controller-test/get-all-notifications/response-fields.adoc[]
 include::{snippets}/notification-controller-test/get-all-notifications/response-body.adoc[]
 
 === 알람 업데이트 (PUT /api/v1/notifications)
 
 ==== Request
+
 include::{snippets}/notification-controller-test/update-notifications/request-headers.adoc[]
 include::{snippets}/notification-controller-test/update-notifications/request-fields.adoc[]
 include::{snippets}/notification-controller-test/update-notifications/http-request.adoc[]
 
 ==== Response (200 Success)
+
 include::{snippets}/notification-controller-test/update-notifications/response-fields.adoc[]
 include::{snippets}/notification-controller-test/update-notifications/http-response.adoc[]
 
 == Exception Codes
+
 include::{snippets}/exception-code-controller-test/get-exception-codes/exception-code-response-fields.adoc[]
 
