@@ -145,6 +145,7 @@ public class Member extends BaseEntity {
         this.role = roleType;
         this.level = level;
         this.exp = 0;
+        this.attendanceCount = 0;
         this.burnoutLastModified = LocalDate.EPOCH;
         this.fixedQuestLastModified = LocalDate.EPOCH;
         this.lastLogin = LocalDateTime.now();
