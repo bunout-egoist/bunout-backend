@@ -4,7 +4,6 @@ import dough.login.infrastructure.jwt.TokenAuthenticationFilter;
 import dough.login.infrastructure.jwt.TokenProvider;
 import dough.login.infrastructure.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import dough.login.infrastructure.oauth.OAuth2SuccessHandler;
-import dough.login.service.CustomOAuth2UserService;
 import dough.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
-    private final CustomOAuth2UserService oAuth2UserCustomService;
 
     @Value("${cors.allowed.origins}")
     private List<String> allowedOrigins;
@@ -58,7 +56,6 @@ public class SecurityConfig {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorizationEndpoint -> authorizationEndpoint.authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(oAuth2UserCustomService))
                         .successHandler(oAuth2SuccessHandler())
                 )
                 .exceptionHandling(exceptionHandling -> exceptionHandling
