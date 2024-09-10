@@ -144,6 +144,11 @@ public class Member extends BaseEntity {
         this.socialLoginType = socialLoginType;
         this.role = roleType;
         this.level = level;
+        this.exp = 0;
+        this.burnoutLastModified = LocalDate.EPOCH;
+        this.fixedQuestLastModified = LocalDate.EPOCH;
+        this.lastLogin = LocalDateTime.now();
+        this.attendanceAt = LocalDate.EPOCH.atStartOfDay();
     }
 
     public void updateRefreshToken(final String refreshToken) {
