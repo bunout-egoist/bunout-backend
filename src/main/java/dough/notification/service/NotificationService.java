@@ -1,7 +1,7 @@
 package dough.notification.service;
 
 import dough.global.exception.BadRequestException;
-import dough.notification.NotificationRepository;
+import dough.notification.domain.repository.NotificationRepository;
 import dough.notification.domain.Notification;
 import dough.notification.dto.request.NotificationUpdateRequest;
 import dough.notification.dto.request.NotificationsUpdateRequest;

@@ -1,8 +1,8 @@
 package dough.notification.service;
 
 import dough.member.domain.repository.MemberRepository;
-import dough.notification.NotificationRepository;
 import dough.notification.domain.Notification;
+import dough.notification.domain.repository.NotificationRepository;
 import dough.notification.dto.request.NotificationUpdateRequest;
 import dough.notification.dto.request.NotificationsUpdateRequest;
 import dough.notification.dto.response.NotificationResponse;
@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.notification.domain.type.NotificationType.DAILY_QUEST;

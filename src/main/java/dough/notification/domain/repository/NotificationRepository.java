@@ -1,4 +1,4 @@
-package dough.notification;
+package dough.notification.domain.repository;
 
 import dough.notification.domain.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
