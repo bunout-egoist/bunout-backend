@@ -5,7 +5,6 @@ import dough.login.dto.response.AppleTokenResponse;
 import dough.login.dto.response.KakaoMemberResponse;
 import dough.login.dto.response.KakaoTokenResponse;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;

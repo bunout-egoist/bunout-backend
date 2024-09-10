@@ -18,7 +18,6 @@ public interface QuestRepository extends JpaRepository<Quest, Long> {
            """)
     void deleteByQuestId(@Param("questId") final Long questId);
 
-    @Modifying
     @Query("""
             SELECT quest
             FROM Quest quest
@@ -26,7 +25,6 @@ public interface QuestRepository extends JpaRepository<Quest, Long> {
            """)
     List<Quest> findFixedQuestsByBurnoutId(@Param("burnoutId") final Long burnoutId);
 
-    @Modifying
     @Query("""
             SELECT quest
             FROM Quest quest
