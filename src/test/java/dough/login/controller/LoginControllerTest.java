@@ -174,7 +174,7 @@ public class LoginControllerTest extends AbstractControllerTest {
         // given
         final AccessTokenResponse accessTokenResponse = new AccessTokenResponse("New Access Token");
 
-        when(loginService.renewAccessToken(anyLong()))
+        when(loginService.renewAccessToken())
                 .thenReturn(accessTokenResponse);
 
         // when

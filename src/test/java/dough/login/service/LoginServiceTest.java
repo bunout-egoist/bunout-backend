@@ -3,9 +3,11 @@ package dough.login.service;
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
 import dough.login.dto.request.SignUpRequest;
+import dough.login.dto.response.AccessTokenResponse;
 import dough.login.infrastructure.jwt.TokenExtractor;
 import dough.login.infrastructure.jwt.TokenProvider;
 import dough.member.domain.repository.MemberRepository;
+import dough.member.dto.response.MemberInfoResponse;
 import dough.notification.domain.repository.NotificationRepository;
 import dough.quest.domain.repository.QuestRepository;
 import jakarta.transaction.Transactional;
@@ -26,6 +28,7 @@ import static dough.global.exception.ExceptionCode.*;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.notification.fixture.notificationFixture.NotificationFixture.BY_TYPE_NOTIFICATION;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -152,21 +155,21 @@ class LoginServiceTest {
 
         given(tokenExtractor.getRefreshToken())
                 .willReturn("Refresh Token");
-        given(memberRepository.findMemberById(GOEUN.getId()))
-                .willReturn(Optional.of(GOEUN));
-        given(tokenProvider.validToken("Refresh Token"))
-                .willReturn(true);
-        given(tokenProvider.generateAccessToken(GOEUN.getId().toString()))
+        given(tokenExtractor.getAccessToken())
                 .willReturn("Access Token");
+        given(tokenProvider.isValidRefreshAndInvalidAccess("Refresh Token", "Access Token"))
+                .willReturn(true);
+        given(memberRepository.findByRefreshToken("Refresh Token"))
+                .willReturn(Optional.of(GOEUN));
+        given(tokenProvider.generateAccessToken(GOEUN.getId().toString()))
+                .willReturn("New Access Token");
 
         // when
-        loginService.renewAccessToken(GOEUN.getId());
+        final AccessTokenResponse accessTokenResponse = loginService.renewAccessToken();
 
         // then
-        verify(tokenExtractor).getRefreshToken();
-        verify(memberRepository).findMemberById(anyLong());
-        verify(tokenProvider).validToken(anyString());
-        verify(tokenProvider).generateAccessToken(anyString());
+        assertThat(accessTokenResponse)
+                .usingRecursiveComparison().isEqualTo(new AccessTokenResponse("New Access Token"));
     }
 
     @Test
