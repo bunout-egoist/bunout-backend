@@ -1,6 +1,6 @@
-package dough.login.config.oauth;
+package dough.login.infrastructure.oauth;
 
-import dough.login.util.CookieUtil;
+import dough.login.infrastructure.util.CookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

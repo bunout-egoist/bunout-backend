@@ -1,6 +1,6 @@
 package dough.notification.controller;
 
-import dough.auth.Auth;
+import dough.login.domain.Auth;
 import dough.login.domain.Accessor;
 import dough.notification.dto.request.NotificationsUpdateRequest;
 import dough.notification.dto.response.NotificationResponse;

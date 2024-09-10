@@ -1,6 +1,6 @@
 package dough.feedback.controller;
 
-import dough.auth.Auth;
+import dough.login.domain.Auth;
 import dough.feedback.dto.request.FeedbackRequest;
 import dough.feedback.dto.response.FeedbackResponse;
 import dough.feedback.service.FeedbackService;

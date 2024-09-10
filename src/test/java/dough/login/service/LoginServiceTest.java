@@ -2,10 +2,10 @@ package dough.login.service;
 
 import dough.burnout.domain.repository.BurnoutRepository;
 import dough.global.exception.BadRequestException;
-import dough.login.config.jwt.TokenExtractor;
+import dough.login.infrastructure.jwt.TokenExtractor;
 import dough.login.dto.request.SignUpRequest;
 import dough.member.domain.repository.MemberRepository;
-import dough.notification.NotificationRepository;
+import dough.notification.domain.repository.NotificationRepository;
 import dough.quest.domain.repository.QuestRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;

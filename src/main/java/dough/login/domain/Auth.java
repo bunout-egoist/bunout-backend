@@ -1,4 +1,4 @@
-package dough.auth;
+package dough.login.domain;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 

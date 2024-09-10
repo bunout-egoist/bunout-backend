@@ -1,6 +1,6 @@
 package dough.login.controller;
 
-import dough.auth.Auth;
+import dough.login.domain.Auth;
 import dough.login.domain.Accessor;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.dto.response.AccessTokenResponse;

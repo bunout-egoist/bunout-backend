@@ -1,9 +1,9 @@
-package dough.login.resolver;
+package dough.login.infrastructure.oauth;
 
-import dough.auth.Auth;
+import dough.login.domain.Auth;
 import dough.global.exception.BadRequestException;
-import dough.login.config.jwt.TokenExtractor;
-import dough.login.config.jwt.TokenProvider;
+import dough.login.infrastructure.jwt.TokenExtractor;
+import dough.login.infrastructure.jwt.TokenProvider;
 import dough.login.domain.Accessor;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

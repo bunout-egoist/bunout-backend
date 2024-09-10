@@ -1,4 +1,4 @@
-package dough.login;
+package dough.login.infrastructure.oauth;
 
 import dough.login.dto.response.ApplePublicKeyResponse;
 import dough.login.dto.response.AppleTokenResponse;

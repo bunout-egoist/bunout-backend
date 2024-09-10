@@ -1,8 +1,8 @@
-package dough.login.config.oauth;
+package dough.login.infrastructure.oauth;
 
 import dough.global.exception.BadRequestException;
-import dough.login.config.jwt.TokenProvider;
-import dough.login.util.CookieUtil;
+import dough.login.infrastructure.jwt.TokenProvider;
+import dough.login.infrastructure.util.CookieUtil;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;

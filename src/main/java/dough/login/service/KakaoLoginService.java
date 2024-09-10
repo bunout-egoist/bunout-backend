@@ -1,6 +1,6 @@
 package dough.login.service;
 
-import dough.login.LoginApiClient;
+import dough.login.infrastructure.oauth.LoginApiClient;
 import dough.login.domain.LoginInfo;
 import dough.login.dto.response.KakaoMemberResponse;
 import dough.login.dto.response.KakaoTokenResponse;

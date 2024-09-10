@@ -1,9 +1,9 @@
 package dough.global.config;
 
-import dough.login.config.jwt.TokenAuthenticationFilter;
-import dough.login.config.jwt.TokenProvider;
-import dough.login.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import dough.login.config.oauth.OAuth2SuccessHandler;
+import dough.login.infrastructure.jwt.TokenAuthenticationFilter;
+import dough.login.infrastructure.jwt.TokenProvider;
+import dough.login.infrastructure.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import dough.login.infrastructure.oauth.OAuth2SuccessHandler;
 import dough.login.service.CustomOAuth2UserService;
 import dough.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

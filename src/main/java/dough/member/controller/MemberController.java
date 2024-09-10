@@ -1,6 +1,6 @@
 package dough.member.controller;
 
-import dough.auth.Auth;
+import dough.login.domain.Auth;
 import dough.login.domain.Accessor;
 import dough.member.dto.request.BurnoutRequest;
 import dough.member.dto.request.FixedQuestRequest;

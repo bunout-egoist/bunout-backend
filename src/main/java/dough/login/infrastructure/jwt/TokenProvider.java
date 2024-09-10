@@ -1,4 +1,4 @@
-package dough.login.config.jwt;
+package dough.login.infrastructure.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -17,12 +17,11 @@ import java.util.Set;
 @Service
 public class TokenProvider {
 
+    public static final String EMPTY_SUBJECT = "";
     private final String issuer;
     private final Key secretKey;
     private final Long accessExpirationTime;
     private final Long refreshExpirationTime;
-
-    public static final String EMPTY_SUBJECT = "";
 
     public TokenProvider(
             @Value("${jwt.issuer}") final String issuer,
@@ -63,9 +62,9 @@ public class TokenProvider {
     public boolean validToken(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(secretKey) // 비밀 키 설정
-                    .build() // JwtParser 빌드
-                    .parseClaimsJws(token); // 토큰 파싱
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token);
 
             return true;
         } catch (Exception e) {

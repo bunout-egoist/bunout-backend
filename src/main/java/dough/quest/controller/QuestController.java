@@ -1,6 +1,6 @@
 package dough.quest.controller;
 
-import dough.auth.Auth;
+import dough.login.domain.Auth;
 import dough.login.domain.Accessor;
 import dough.quest.dto.request.QuestRequest;
 import dough.quest.dto.request.QuestUpdateRequest;

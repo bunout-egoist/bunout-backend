@@ -1,9 +1,9 @@
 package dough.global;
 
 import dough.global.restdocs.RestDocsConfiguration;
-import dough.login.config.jwt.TokenExtractor;
-import dough.login.config.jwt.TokenProvider;
-import dough.login.resolver.LoginArgumentResolver;
+import dough.login.infrastructure.jwt.TokenExtractor;
+import dough.login.infrastructure.jwt.TokenProvider;
+import dough.login.infrastructure.oauth.LoginArgumentResolver;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

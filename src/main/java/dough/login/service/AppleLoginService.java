@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.exception.BadRequestException;
 import dough.global.exception.LoginException;
-import dough.login.LoginApiClient;
+import dough.login.infrastructure.oauth.LoginApiClient;
 import dough.login.domain.LoginInfo;
 import dough.login.dto.response.ApplePublicKeyResponse;
 import dough.login.dto.response.AppleTokenResponse;

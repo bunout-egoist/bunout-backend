@@ -1,6 +1,5 @@
-package dough.login.config.oauth;
+package dough.login.infrastructure.oauth;
 
-import dough.login.resolver.LoginArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

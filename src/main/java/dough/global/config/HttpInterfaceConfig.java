@@ -1,6 +1,6 @@
 package dough.global.config;
 
-import dough.login.LoginApiClient;
+import dough.login.infrastructure.oauth.LoginApiClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;

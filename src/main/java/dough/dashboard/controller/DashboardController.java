@@ -1,6 +1,6 @@
 package dough.dashboard.controller;
 
-import dough.auth.Auth;
+import dough.login.domain.Auth;
 import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.dashboard.service.DashboardService;

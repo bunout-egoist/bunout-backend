@@ -1,4 +1,4 @@
-package dough.login.util;
+package dough.login.infrastructure.util;
 
 
 import jakarta.servlet.http.Cookie;

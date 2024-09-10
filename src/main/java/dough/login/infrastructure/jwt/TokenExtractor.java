@@ -1,4 +1,4 @@
-package dough.login.config.jwt;
+package dough.login.infrastructure.jwt;
 
 import dough.global.exception.InvalidJwtException;
 import jakarta.servlet.http.HttpServletRequest;
