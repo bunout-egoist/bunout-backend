@@ -63,7 +63,7 @@ public class QuestService {
 
         final KeywordCode keywordCode = getKeywords(todayQuests);
 
-        return TodayQuestListResponse.of(keywordCode, todayQuests);
+        return TodayQuestListResponse.of(member, keywordCode, todayQuests);
     }
 
     private List<SelectedQuest> createTodayQuests(final Member member, final LocalDate currentDate) {
