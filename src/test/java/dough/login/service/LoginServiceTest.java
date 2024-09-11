@@ -7,7 +7,6 @@ import dough.login.dto.response.AccessTokenResponse;
 import dough.login.infrastructure.jwt.TokenExtractor;
 import dough.login.infrastructure.jwt.TokenProvider;
 import dough.member.domain.repository.MemberRepository;
-import dough.member.dto.response.MemberInfoResponse;
 import dough.notification.domain.repository.NotificationRepository;
 import dough.quest.domain.repository.QuestRepository;
 import jakarta.transaction.Transactional;
@@ -74,9 +73,9 @@ class LoginServiceTest {
 
     @DisplayName("멤버의 추가 회원가입을 진행할 수 있다.")
     @Test
-    void addtionalSignup() {
+    void completeSignup() {
         // given
-        given(memberRepository.findMemberById(GOEUN.getId()))
+        given(memberRepository.findById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
                 .willReturn(Optional.of(SOBORO));
@@ -91,7 +90,7 @@ class LoginServiceTest {
         loginService.completeSignup(GOEUN.getId(), signUpRequest);
 
         // then
-        verify(memberRepository).findMemberById(anyLong());
+        verify(memberRepository).findById(anyLong());
         verify(burnoutRepository).findById(anyLong());
         verify(questRepository).findById(anyLong());
         verify(notificationRepository).saveAll(any());
@@ -103,7 +102,7 @@ class LoginServiceTest {
     @Test
     void completeSignup_UserNotFound() {
         // given
-        given(memberRepository.findMemberById(GOEUN.getId()))
+        given(memberRepository.findById(GOEUN.getId()))
                 .willReturn(Optional.empty());
 
         // when & then
@@ -117,7 +116,7 @@ class LoginServiceTest {
     @Test
     void completeSignup_BurnoutNotFound() {
         // given
-        given(memberRepository.findMemberById(anyLong()))
+        given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
                 .willReturn(Optional.empty());
@@ -133,7 +132,7 @@ class LoginServiceTest {
     @DisplayName("추가 회원가입 시 고정 퀘스트 정보를 찾지 못하면 예외가 발생한다.")
     void completeSignup_QuestNotFound() {
         // given
-        given(memberRepository.findMemberById(anyLong()))
+        given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
                 .willReturn(Optional.of(SOBORO));
@@ -194,13 +193,13 @@ class LoginServiceTest {
         // given
         GOEUN.updateRefreshToken("Refresh Token");
 
-        given(memberRepository.findMemberById(GOEUN.getId()))
+        given(memberRepository.findById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
 
         // when
         loginService.signout(GOEUN.getId());
 
         // then
-        verify(memberRepository).findMemberById(anyLong());
+        verify(memberRepository).findById(anyLong());
     }
 }

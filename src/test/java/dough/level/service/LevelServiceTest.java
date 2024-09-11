@@ -20,6 +20,7 @@ import static dough.level.fixture.LevelFixture.LEVEL1;
 import static dough.level.fixture.LevelFixture.LEVEL2;
 import static dough.login.domain.type.RoleType.MEMBER;
 import static dough.login.domain.type.SocialLoginType.KAKAO;
+import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -41,31 +42,17 @@ public class LevelServiceTest {
     @Test
     void updateLevel() {
         // given
-        final Member member = new Member(
-                1L,
-                "goeun",
-                "0000",
-                KAKAO,
-                "기타",
-                "여성",
-                2002,
-                SOBORO,
-                MEMBER,
-                LEVEL1,
-                FIXED_QUEST1
-        );
-
-        member.updateExp(25);
+        GOEUN.updateExp(25);
 
         given(levelRepository.findTopByExp(anyInt(), any()))
                 .willReturn(List.of(LEVEL2));
 
         // when
-        final MemberLevel actualMemberLevel = levelService.updateLevel(member);
+        final MemberLevel actualMemberLevel = levelService.updateLevel(GOEUN);
 
         // then
         assertThat(actualMemberLevel).usingRecursiveComparison()
-                .isEqualTo(new MemberLevel(member, LEVEL2, true));
+                .isEqualTo(new MemberLevel(GOEUN, LEVEL2, true));
     }
 
     @DisplayName("레벨이 존재하지 않을 경우 예외가 발생한다.")
@@ -83,7 +70,8 @@ public class LevelServiceTest {
                 SOBORO,
                 MEMBER,
                 LEVEL1,
-                FIXED_QUEST1
+                FIXED_QUEST1,
+                "apple token"
         );
 
         member.updateExp(25);

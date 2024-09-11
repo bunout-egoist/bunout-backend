@@ -215,7 +215,7 @@ class QuestControllerTest extends AbstractControllerTest {
                 ));
     }
 
-    @DisplayName("번아웃 유형에 해당하는 고정퀘스트를 조회할 수 있다.")
+    @DisplayName("멤버의 번아웃 유형에 해당하는 고정퀘스트를 조회할 수 있다.")
     @Test
     void getFixedQuests() throws Exception {
         // given
@@ -227,7 +227,7 @@ class QuestControllerTest extends AbstractControllerTest {
                 .thenReturn(fixedQuestListResponse);
 
         // when
-        final ResultActions resultActions = mockMvc.perform(get("/api/v1/quests/fixed", 1L)
+        final ResultActions resultActions = mockMvc.perform(get("/api/v1/quests/fixed")
                 .header(AUTHORIZATION, MEMBER_TOKENS));
 
         // then
@@ -270,12 +270,63 @@ class QuestControllerTest extends AbstractControllerTest {
                 ));
     }
 
+    @DisplayName("번아웃 유형에 해당하는 고정퀘스트를 조회할 수 있다.")
+    @Test
+    void getFixedQuestsByBurnoutId() throws Exception {
+        // given
+        final FixedQuestListResponse fixedQuestListResponse = FixedQuestListResponse.of(
+                SOBORO, List.of(FIXED_QUEST1, FIXED_QUEST2)
+        );
+
+        when(questService.getFixedQuestsByBurnoutId(anyLong()))
+                .thenReturn(fixedQuestListResponse);
+
+        // when
+        final ResultActions resultActions = mockMvc.perform(get("/api/v1/quests/fixed/{burnoutId}", 1L));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andDo(restDocs.document(
+                        responseFields(
+                                fieldWithPath("burnoutName")
+                                        .type(STRING)
+                                        .description("번아웃 이름")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("fixedQuests[0].questId")
+                                        .type(NUMBER)
+                                        .description("고정 퀘스트 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("fixedQuests[0].activity")
+                                        .type(STRING)
+                                        .description("퀘스트 활동")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("fixedQuests[0].description")
+                                        .type(STRING)
+                                        .description("퀘스트 상세 내용")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("fixedQuests[1].questId")
+                                        .type(NUMBER)
+                                        .description("고정 퀘스트 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("fixedQuests[1].activity")
+                                        .type(STRING)
+                                        .description("퀘스트 활동")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("fixedQuests[1].description")
+                                        .type(STRING)
+                                        .description("퀘스트 상세 내용")
+                                        .attributes(field("constraint", "문자열"))
+                        )
+                ));
+    }
+
+
     @DisplayName("오늘의 퀘스트를 받을 수 있다.")
     @Test
     void updateTodayQuests() throws Exception {
         // given
         final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
-        final TodayQuestListResponse todayQuestListResponse = TodayQuestListResponse.of(new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests);
+        final TodayQuestListResponse todayQuestListResponse = TodayQuestListResponse.of(GOEUN, new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests);
 
         // given
         given(memberRepository.findMemberById(GOEUN.getId()))
@@ -295,6 +346,10 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .description("엑세스 토큰")
                         ),
                         responseFields(
+                                fieldWithPath("burnoutId")
+                                        .type(NUMBER)
+                                        .description("번아웃 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("placeKeyword")
                                         .type(STRING)
                                         .description("장소 키워드")

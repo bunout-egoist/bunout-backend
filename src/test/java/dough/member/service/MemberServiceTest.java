@@ -115,6 +115,7 @@ class MemberServiceTest {
     @Test
     void changeBurnoutType_AlreadyUpdatedBurnoutType() {
         // given
+        GOEUN.updateBurnout(SOBORO, LocalDate.now().withDayOfMonth(1));
         final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
 
         given(memberRepository.findMemberById(anyLong()))
@@ -192,5 +193,6 @@ class MemberServiceTest {
         // then
         verify(memberRepository).findMemberById(anyLong());
         verify(memberRepository).save(any());
+        verify(levelService).updateLevel(any());
     }
 }

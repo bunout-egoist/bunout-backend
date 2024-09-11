@@ -135,17 +135,28 @@ include::{snippets}/quest-controller-test/update-today-quests/http-request.adoc[
 include::{snippets}/quest-controller-test/update-today-quests/response-fields.adoc[]
 include::{snippets}/quest-controller-test/update-today-quests/response-body.adoc[]
 
-=== 고정 퀘스트 조회 (GET /api/v1/quests/fixed)
+=== 멤버의 고정 퀘스트 조회 (GET /api/v1/quests/fixed)
 
 ==== Request
 
-include::{snippets}/member-controller-test/get-member-info/request-headers.adoc[]
+include::{snippets}/quest-controller-test/get-fixed-quests/request-headers.adoc[]
 include::{snippets}/quest-controller-test/get-fixed-quests/http-request.adoc[]
 
 ==== Response (200 Success)
 
 include::{snippets}/quest-controller-test/get-fixed-quests/response-fields.adoc[]
 include::{snippets}/quest-controller-test/get-fixed-quests/response-body.adoc[]
+
+=== 고정 퀘스트 조회 (GET /api/v1/quests/fixed/{burnoutId})
+
+==== Request
+
+include::{snippets}/quest-controller-test/get-fixed-quests-by-burnout-id/http-request.adoc[]
+
+==== Response (200 Success)
+
+include::{snippets}/quest-controller-test/get-fixed-quests-by-burnout-id/response-fields.adoc[]
+include::{snippets}/quest-controller-test/get-fixed-quests-by-burnout-id/response-body.adoc[]
 
 === 퀘스트 추가: 관리자 API (POST /api/v1/quests)
 

@@ -17,6 +17,7 @@ public class MemberAttendanceResponse {
     private final Integer requiredExp;
     private final Boolean isLevelUp;
     private final Integer attendanceCount;
+    private final Long burnoutId;
 
     public static MemberAttendanceResponse of(final MemberLevel memberLevel) {
         final Level currentLevel = memberLevel.getLevel();
@@ -30,7 +31,8 @@ public class MemberAttendanceResponse {
                 requiredExp - (currentLevel.getAccumulatedExp() - member.getExp()),
                 requiredExp,
                 memberLevel.getIsLevelUp(),
-                member.getAttendanceCount()
+                member.getAttendanceCount(),
+                member.getBurnout().getId()
         );
     }
 }

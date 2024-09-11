@@ -74,6 +74,8 @@ public class Member extends BaseEntity {
 
     private String refreshToken;
 
+    private String appleToken;
+
     @Column(nullable = false)
     private Integer exp;
 
@@ -113,7 +115,8 @@ public class Member extends BaseEntity {
             final Burnout burnout,
             final RoleType roleType,
             final Level level,
-            final Quest quest
+            final Quest quest,
+            final String appleToken
     ) {
         this.id = id;
         this.nickname = nickname;
@@ -125,13 +128,14 @@ public class Member extends BaseEntity {
         this.gender = gender;
         this.birthYear = birthYear;
         this.burnout = burnout;
-        this.burnoutLastModified = LocalDate.now();
-        this.fixedQuestLastModified = LocalDate.now();
+        this.burnoutLastModified = LocalDate.EPOCH;
+        this.fixedQuestLastModified = LocalDate.EPOCH;
         this.lastLogin = LocalDateTime.now();
         this.attendanceAt = LocalDate.EPOCH.atStartOfDay();
         this.attendanceCount = 0;
         this.level = level;
         this.quest = quest;
+        this.appleToken = appleToken;
     }
 
     public Member(
@@ -140,16 +144,17 @@ public class Member extends BaseEntity {
             final RoleType roleType,
             final Level level
     ) {
-        this.socialLoginId = socialLoginId;
-        this.socialLoginType = socialLoginType;
-        this.role = roleType;
-        this.level = level;
-        this.exp = 0;
-        this.attendanceCount = 0;
-        this.burnoutLastModified = LocalDate.EPOCH;
-        this.fixedQuestLastModified = LocalDate.EPOCH;
-        this.lastLogin = LocalDateTime.now();
-        this.attendanceAt = LocalDate.EPOCH.atStartOfDay();
+        this(null, null, socialLoginId, socialLoginType, null, null, null, null, roleType, level, null, null);
+    }
+
+    public Member(
+            final String socialLoginId,
+            final SocialLoginType socialLoginType,
+            final RoleType roleType,
+            final Level level,
+            final String appleToken
+    ) {
+        this(null, null, socialLoginId, socialLoginType, null, null, null, null, roleType, level, null, appleToken);
     }
 
     public void updateRefreshToken(final String refreshToken) {

@@ -63,7 +63,7 @@ public class QuestService {
 
         final KeywordCode keywordCode = getKeywords(todayQuests);
 
-        return TodayQuestListResponse.of(keywordCode, todayQuests);
+        return TodayQuestListResponse.of(member, keywordCode, todayQuests);
     }
 
     private List<SelectedQuest> createTodayQuests(final Member member, final LocalDate currentDate) {
@@ -145,6 +145,16 @@ public class QuestService {
 
         final List<Quest> fixedQuests = questRepository.findFixedQuestsByBurnoutId(member.getBurnout().getId());
         return FixedQuestListResponse.of(member.getBurnout(), fixedQuests);
+    }
+
+    @Transactional(readOnly = true)
+    public FixedQuestListResponse getFixedQuestsByBurnoutId(final Long burnoutId) {
+        final Burnout burnout = burnoutRepository.findById(burnoutId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
+
+        final List<Quest> fixedQuests = questRepository.findFixedQuestsByBurnoutId(burnout.getId());
+
+        return FixedQuestListResponse.of(burnout, fixedQuests);
     }
 
     @Transactional(readOnly = true)

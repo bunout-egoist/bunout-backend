@@ -18,4 +18,5 @@ public class AppleTokenResponse {
     private String idToken;
     private String refreshToken;
     private String tokenType;
+    private String error;
 }

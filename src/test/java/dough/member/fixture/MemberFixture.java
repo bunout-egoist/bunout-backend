@@ -21,6 +21,7 @@ public class MemberFixture {
             SOBORO,
             MEMBER,
             LEVEL1,
-            FIXED_QUEST1
+            FIXED_QUEST1,
+            "apple token"
     );
 }

@@ -3,12 +3,13 @@ package dough.login.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dough.global.exception.BadRequestException;
-import dough.global.exception.LoginException;
-import dough.login.infrastructure.oauth.LoginApiClient;
 import dough.login.domain.LoginInfo;
 import dough.login.dto.response.ApplePublicKeyResponse;
 import dough.login.dto.response.AppleTokenResponse;
-import io.jsonwebtoken.*;
+import dough.login.infrastructure.oauth.LoginApiClient;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.openssl.PEMParser;
@@ -38,7 +39,8 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
-import static dough.global.exception.ExceptionCode.*;
+import static dough.global.exception.ExceptionCode.FAIL_TO_APPLE_LOGIN;
+import static dough.global.exception.ExceptionCode.FAIL_TO_GET_PUBLIC_KEY;
 import static dough.login.domain.type.SocialLoginType.APPLE;
 
 @Service
@@ -49,62 +51,56 @@ public class AppleLoginService {
 
     @Value("${apple.client-id}")
     private String clientId;
+
     @Value("${apple.team-id}")
     private String teamId;
+
     @Value("${apple.key-id}")
     private String keyId;
-    @Value("${apple.redirect-uri}")
-    private String redirectUri;
 
-    public LoginInfo login(final String code) {
+    public LoginInfo login(final String code, final String authorizationCode) {
         try {
             final Claims claims = getClaimsFromAppleToken(code);
             final String socialLoginId = claims.getSubject();
 
-            final AppleTokenResponse appleTokenResponse = loginApiClient.getAppleToken(tokenRequestParams(code));
+            final AppleTokenResponse appleTokenResponse = loginApiClient.getAppleToken(tokenRequestParams(authorizationCode));
 
-            return new LoginInfo(socialLoginId, APPLE);
+            return new LoginInfo(socialLoginId, appleTokenResponse.getRefreshToken(), APPLE);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException | IOException e) {
             throw new BadRequestException(FAIL_TO_APPLE_LOGIN);
         }
     }
 
-    private Claims getClaimsFromAppleToken(String identityToken) throws NoSuchAlgorithmException, InvalidKeySpecException, UnsupportedEncodingException, JsonProcessingException {
-        try {
-            final ApplePublicKeyResponse applePublicKeyResponse = loginApiClient.getAppleAuthPublicKey();
+    public void revoke(final String appleToken) throws IOException {
+        final String clientSecret = makeClientSecret();
+        loginApiClient.revokeToken(clientSecret, appleToken, clientId);
+    }
 
-            final String identityTokenHeader = identityToken.substring(0, identityToken.indexOf("."));
-            final Map<String, String> header = new ObjectMapper().readValue(new String(Base64.getDecoder().decode(identityTokenHeader), "UTF-8"), Map.class);
-            final ApplePublicKeyResponse.Key key = applePublicKeyResponse.getMatchedKeyBy(header.get("kid"), header.get("alg"))
-                    .orElseThrow(() -> new BadRequestException(FAIL_TO_GET_PUBLIC_KEY));
+    private Claims getClaimsFromAppleToken(final String identityToken) throws NoSuchAlgorithmException, InvalidKeySpecException, UnsupportedEncodingException, JsonProcessingException {
+        final ApplePublicKeyResponse applePublicKeyResponse = loginApiClient.getAppleAuthPublicKey();
 
-            final byte[] nBytes = Base64.getUrlDecoder().decode(key.getN());
-            final byte[] eBytes = Base64.getUrlDecoder().decode(key.getE());
+        final String identityTokenHeader = identityToken.split("\\.")[0];
+        final Map<String, String> header = new ObjectMapper().readValue(new String(Base64.getDecoder().decode(identityTokenHeader), "UTF-8"), Map.class);
+        final ApplePublicKeyResponse.Key key = applePublicKeyResponse.getMatchedKeyBy(header.get("kid"), header.get("alg"))
+                .orElseThrow(() -> new BadRequestException(FAIL_TO_GET_PUBLIC_KEY));
 
-            final BigInteger n = new BigInteger(1, nBytes);
-            final BigInteger e = new BigInteger(1, eBytes);
+        final byte[] nBytes = Base64.getUrlDecoder().decode(key.getN());
+        final byte[] eBytes = Base64.getUrlDecoder().decode(key.getE());
 
-            final RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(n, e);
-            final KeyFactory keyFactory = KeyFactory.getInstance(key.getKty());
-            final PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+        final BigInteger n = new BigInteger(1, nBytes);
+        final BigInteger e = new BigInteger(1, eBytes);
 
-            final Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(publicKey)
-                    .build()
-                    .parseClaimsJws(identityToken)
-                    .getBody();
+        final RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(n, e);
+        final KeyFactory keyFactory = KeyFactory.getInstance(key.getKty());
+        final PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
-            return claims;
+        final Claims claims = Jwts.parserBuilder()
+                .setSigningKey(publicKey)
+                .build()
+                .parseClaimsJws(identityToken)
+                .getBody();
 
-        } catch (MalformedJwtException e) {
-            throw new LoginException(MALFORMED_TOKEN);
-        } catch (ExpiredJwtException e) {
-            throw new LoginException(EXPIRED_TOKEN);
-        } catch (UnsupportedJwtException e) {
-            throw new LoginException(UNSUPPORTED_TOKEN);
-        } catch (IllegalArgumentException e) {
-            throw new LoginException(INVALID_TOKEN);
-        }
+        return claims;
     }
 
     public String makeClientSecret() throws IOException {
@@ -134,7 +130,6 @@ public class AppleLoginService {
     private MultiValueMap<String, String> tokenRequestParams(final String code) throws IOException {
         final MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("redirect_uri", redirectUri);
         params.add("client_id", clientId);
         params.add("code", code);
         params.add("client_secret", makeClientSecret());

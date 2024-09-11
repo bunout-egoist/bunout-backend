@@ -2,7 +2,6 @@ package dough.login.service;
 
 import dough.burnout.domain.Burnout;
 import dough.burnout.domain.repository.BurnoutRepository;
-import dough.global.exception.AuthException;
 import dough.global.exception.BadRequestException;
 import dough.global.exception.LoginException;
 import dough.level.domain.Level;
@@ -34,7 +33,6 @@ import java.util.List;
 import static dough.global.exception.ExceptionCode.*;
 import static dough.login.domain.type.RoleType.MEMBER;
 import static dough.login.domain.type.SocialLoginType.APPLE;
-import static dough.login.domain.type.SocialLoginType.KAKAO;
 
 @Service
 @Transactional
@@ -52,14 +50,14 @@ public class LoginService {
     private final QuestRepository questRepository;
     private final NotificationRepository notificationRepository;
 
-    public LoginResponse login(final String provider, final String code) {
-        if (provider.equals(KAKAO.getCode())) {
-            return saveMember(kakaoLoginService.login(code));
-        } else if (provider.equals(APPLE.getCode())) {
-            return saveMember(appleLoginService.login(code));
-        } else {
-            throw new BadRequestException(FAIL_SOCIAL_LOGIN);
-        }
+    public LoginResponse login(final String code) {
+        final LoginInfo loginInfo = kakaoLoginService.login(code);
+        return saveMember(loginInfo);
+    }
+
+    public LoginResponse login(final String idToken, final String authorizationCode) {
+        final LoginInfo loginInfo = appleLoginService.login(idToken, authorizationCode);
+        return saveMember(loginInfo);
     }
 
     public void logout(final Long memberId) {
@@ -85,7 +83,8 @@ public class LoginService {
                 loginInfo.getSocialLoginId(),
                 loginInfo.getSocialLoginType(),
                 MEMBER,
-                level
+                level,
+                loginInfo.getAppleToken()
         );
 
         return new MemberInfo(member, true);
@@ -106,16 +105,14 @@ public class LoginService {
     }
 
     public void signout(final Long memberId) throws IOException {
-        final Member member = memberRepository.findMemberById(memberId)
+        final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final String refreshToken = member.getRefreshToken();
 
-        // TODO 로직 확인
         if (!refreshToken.isEmpty()) {
             if (member.getSocialLoginType().equals(APPLE)) {
-                final String clientSecret = appleLoginService.makeClientSecret();
-                loginApiClient.revokeToken(clientSecret, refreshToken, "com.bunout.services");
+                appleLoginService.revoke(member.getAppleToken());
             }
             member.updateRefreshToken(null);
         }
@@ -124,7 +121,7 @@ public class LoginService {
     }
 
     public MemberInfoResponse completeSignup(final Long memberId, final SignUpRequest signUpRequest) {
-        final Member member = memberRepository.findMemberById(memberId)
+        final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final Burnout burnout = burnoutRepository.findById(signUpRequest.getBurnoutId())
