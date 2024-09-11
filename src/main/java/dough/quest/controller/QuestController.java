@@ -25,6 +25,12 @@ public class QuestController {
         return ResponseEntity.ok().body(fixedQuestListResponse);
     }
 
+    @GetMapping("/fixed/{burnoutId}")
+    public ResponseEntity<FixedQuestListResponse> getFixedQuests(@PathVariable final Long burnoutId) {
+        final FixedQuestListResponse fixedQuestListResponse = questService.getFixedQuestsByBurnoutId(burnoutId);
+        return ResponseEntity.ok().body(fixedQuestListResponse);
+    }
+
     @PostMapping("/today")
     public ResponseEntity<TodayQuestListResponse> getTodayQuests(@Auth final Accessor accessor) {
         final TodayQuestListResponse todayQuestListResponse = questService.updateTodayQuests(accessor.getMemberId());

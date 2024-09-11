@@ -148,6 +148,16 @@ public class QuestService {
     }
 
     @Transactional(readOnly = true)
+    public FixedQuestListResponse getFixedQuestsByBurnoutId(final Long burnoutId) {
+        final Burnout burnout = burnoutRepository.findById(burnoutId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
+
+        final List<Quest> fixedQuests = questRepository.findFixedQuestsByBurnoutId(burnout.getId());
+
+        return FixedQuestListResponse.of(burnout, fixedQuests);
+    }
+
+    @Transactional(readOnly = true)
     public List<WeeklySummaryResponse> getWeeklySummary(final Long memberId, final LocalDate date) {
         final LocalDate startDate = date.minusDays(3);
         final LocalDate endDate = date.plusDays(3);

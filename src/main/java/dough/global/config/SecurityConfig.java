@@ -30,6 +30,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
+
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
@@ -49,8 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**", "/img/**", "/css/**", "/static/js/**", "/docs/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/token", "/api/v1/refreshToken").permitAll()
-                        .requestMatchers("/api/v1/quests").permitAll()
+                        .requestMatchers("/api/v1/quests", "/api/v1/quests/fixed/**").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
