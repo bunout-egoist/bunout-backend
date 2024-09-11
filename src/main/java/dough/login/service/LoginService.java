@@ -83,7 +83,8 @@ public class LoginService {
                 loginInfo.getSocialLoginId(),
                 loginInfo.getSocialLoginType(),
                 MEMBER,
-                level
+                level,
+                loginInfo.getAppleToken()
         );
 
         return new MemberInfo(member, true);
