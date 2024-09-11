@@ -247,7 +247,7 @@ public class QuestServiceTest {
                 .isEqualTo(ALREADY_USED_QUEST_ID.getCode());
     }
 
-    @DisplayName("번아웃 유형에 해당하는 고정퀘스트를 조회할 수 있다.")
+    @DisplayName("멤버의 번아웃 유형에 해당하는 고정퀘스트를 조회할 수 있다.")
     @Test
     void getFixedQuests() {
         // given
@@ -258,6 +258,23 @@ public class QuestServiceTest {
 
         // when
         final FixedQuestListResponse actualResponses = questService.getFixedQuests(GOEUN.getId());
+
+        // then
+        assertThat(actualResponses).usingRecursiveComparison()
+                .isEqualTo(FixedQuestListResponse.of(SOBORO, List.of(FIXED_QUEST1, FIXED_QUEST2)));
+    }
+
+    @DisplayName("번아웃 유형에 해당하는 고정퀘스트를 조회할 수 있다.")
+    @Test
+    void getFixedQuestsByBurnoutId() {
+        // given
+        given(burnoutRepository.findById(anyLong()))
+                .willReturn(Optional.of(SOBORO));
+        given(questRepository.findFixedQuestsByBurnoutId(anyLong()))
+                .willReturn(List.of(FIXED_QUEST1, FIXED_QUEST2));
+
+        // when
+        final FixedQuestListResponse actualResponses = questService.getFixedQuestsByBurnoutId(SOBORO.getId());
 
         // then
         assertThat(actualResponses).usingRecursiveComparison()
@@ -280,6 +297,6 @@ public class QuestServiceTest {
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(TodayQuestListResponse.of(new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests));
+                .isEqualTo(TodayQuestListResponse.of(GOEUN, new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests));
     }
 }

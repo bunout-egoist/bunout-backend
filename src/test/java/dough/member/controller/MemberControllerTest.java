@@ -294,7 +294,8 @@ class MemberControllerTest extends AbstractControllerTest {
                 45,
                 50,
                 false,
-                5
+                5,
+                1L
         );
 
         when(memberService.checkAttendance(anyLong()))
@@ -339,6 +340,10 @@ class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("attendanceCount")
                                         .type(NUMBER)
                                         .description("현재 출석 점수")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("burnoutId")
+                                        .type(NUMBER)
+                                        .description("번아웃 아이디")
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
