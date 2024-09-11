@@ -519,27 +519,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_response_200_success_6">Response (200 Success)</a></li>
 </ul>
 </li>
-<li><a href="#_고정_퀘스트_조회_get_apiv1questsfixed">고정 퀘스트 조회 (GET /api/v1/quests/fixed)</a>
+<li><a href="#_멤버의_고정_퀘스트_조회_get_apiv1questsfixed">멤버의 고정 퀘스트 조회 (GET /api/v1/quests/fixed)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_11">Request</a></li>
 <li><a href="#_response_200_success_7">Response (200 Success)</a></li>
 </ul>
 </li>
-<li><a href="#_퀘스트_추가_관리자_api_post_apiv1quests">퀘스트 추가: 관리자 API (POST /api/v1/quests)</a>
+<li><a href="#_고정_퀘스트_조회_get_apiv1questsfixedburnoutid">고정 퀘스트 조회 (GET /api/v1/quests/fixed/{burnoutId})</a>
 <ul class="sectlevel3">
 <li><a href="#_request_12">Request</a></li>
 <li><a href="#_response_200_success_8">Response (200 Success)</a></li>
 </ul>
 </li>
-<li><a href="#_퀘스트_수정_관리자_api_put_apiv1questsquestid">퀘스트 수정: 관리자 API (PUT /api/v1/quests/{questId})</a>
+<li><a href="#_퀘스트_추가_관리자_api_post_apiv1quests">퀘스트 추가: 관리자 API (POST /api/v1/quests)</a>
 <ul class="sectlevel3">
 <li><a href="#_request_13">Request</a></li>
+<li><a href="#_response_200_success_9">Response (200 Success)</a></li>
+</ul>
+</li>
+<li><a href="#_퀘스트_수정_관리자_api_put_apiv1questsquestid">퀘스트 수정: 관리자 API (PUT /api/v1/quests/{questId})</a>
+<ul class="sectlevel3">
+<li><a href="#_request_14">Request</a></li>
 <li><a href="#_response_204_no_content_5">Response (204 No Content)</a></li>
 </ul>
 </li>
 <li><a href="#_퀘스트_삭제_관리자_api_delete_apiv1questsquestid">퀘스트 삭제: 관리자 API (DELETE /api/v1/quests/{questId})</a>
 <ul class="sectlevel3">
-<li><a href="#_request_14">Request</a></li>
+<li><a href="#_request_15">Request</a></li>
 <li><a href="#_response_204_no_content_6">Response (204 No Content)</a></li>
 </ul>
 </li>
@@ -549,23 +555,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_주간_분석_get_apiv1dashboardweeklysearchdate">주간 분석 (GET /api/v1/dashboard/weekly/{searchDate})</a>
 <ul class="sectlevel3">
-<li><a href="#_request_15">Request</a></li>
-<li><a href="#_response_200_success_9">Response (200 Success)</a></li>
+<li><a href="#_request_16">Request</a></li>
+<li><a href="#_response_200_success_10">Response (200 Success)</a></li>
 <li><a href="#_request_조회_날짜가_형식에_맞지_않을_경우">Request (조회 날짜가 형식에 맞지 않을 경우)</a></li>
 <li><a href="#_response_400_bad_request">Response (400 Bad Request)</a></li>
 </ul>
 </li>
 <li><a href="#_월간_분석_get_apiv1dashboardmonthlyyearmonth">월간 분석 (GET /api/v1/dashboard/monthly/{yearMonth})</a>
 <ul class="sectlevel3">
-<li><a href="#_request_16">Request</a></li>
+<li><a href="#_request_17">Request</a></li>
 <li><a href="#_response_200_success_기록이_있을_경우">Response (200 Success / 기록이 있을 경우)</a></li>
 <li><a href="#_response_200_success_기록이_없을_경우">Response (200 Success / 기록이 없을 경우)</a></li>
 </ul>
 </li>
 <li><a href="#_퀘스트_총_개수_통계_get_apiv1dashboardtotal">퀘스트 총 개수 &amp; 통계 (GET /api/v1/dashboard/total)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_17">Request</a></li>
-<li><a href="#_response_200_success_10">Response (200 Success)</a></li>
+<li><a href="#_request_18">Request</a></li>
+<li><a href="#_response_200_success_11">Response (200 Success)</a></li>
 </ul>
 </li>
 </ul>
@@ -574,8 +580,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_피드백_추가_post_apiv1feedbacks">피드백 추가 (POST /api/v1/feedbacks)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_18">Request</a></li>
-<li><a href="#_response_200_success_11">Response (200 Success)</a></li>
+<li><a href="#_request_19">Request</a></li>
+<li><a href="#_response_200_success_12">Response (200 Success)</a></li>
 </ul>
 </li>
 </ul>
@@ -584,14 +590,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_알람_전체_조회_get_apiv1notifications">알람 전체 조회 (GET /api/v1/notifications)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_19">Request</a></li>
-<li><a href="#_response_200_success_12">Response (200 Success)</a></li>
+<li><a href="#_request_20">Request</a></li>
+<li><a href="#_response_200_success_13">Response (200 Success)</a></li>
 </ul>
 </li>
 <li><a href="#_알람_업데이트_put_apiv1notifications">알람 업데이트 (PUT /api/v1/notifications)</a>
 <ul class="sectlevel3">
-<li><a href="#_request_20">Request</a></li>
-<li><a href="#_response_200_success_13">Response (200 Success)</a></li>
+<li><a href="#_request_21">Request</a></li>
+<li><a href="#_response_200_success_14">Response (200 Success)</a></li>
 </ul>
 </li>
 </ul>
@@ -1361,6 +1367,11 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">현재 출석 점수</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>burnoutId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">번아웃 아이디</p></td>
+</tr>
 </tbody>
 </table>
 <div class="listingblock">
@@ -1372,7 +1383,8 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
   "currentExp" : 45,
   "requiredExp" : 50,
   "isLevelUp" : false,
-  "attendanceCount" : 5
+  "attendanceCount" : 5,
+  "burnoutId" : 1
 }</code></pre>
 </div>
 </div>
@@ -1430,6 +1442,11 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>burnoutId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">번아웃 아이디</p></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>placeKeyword</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
@@ -1520,6 +1537,7 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "burnoutId" : 1,
   "placeKeyword" : "어디서든",
   "participationKeyword" : "혼자서",
   "todayQuests" : [ {
@@ -1545,7 +1563,7 @@ Content-Type: application/x-www-form-urlencoded</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_고정_퀘스트_조회_get_apiv1questsfixed"><a class="link" href="#_고정_퀘스트_조회_get_apiv1questsfixed">고정 퀘스트 조회 (GET /api/v1/quests/fixed)</a></h3>
+<h3 id="_멤버의_고정_퀘스트_조회_get_apiv1questsfixed"><a class="link" href="#_멤버의_고정_퀘스트_조회_get_apiv1questsfixed">멤버의 고정 퀘스트 조회 (GET /api/v1/quests/fixed)</a></h3>
 <div class="sect3">
 <h4 id="_request_11"><a class="link" href="#_request_11">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
@@ -1646,9 +1664,95 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_퀘스트_추가_관리자_api_post_apiv1quests"><a class="link" href="#_퀘스트_추가_관리자_api_post_apiv1quests">퀘스트 추가: 관리자 API (POST /api/v1/quests)</a></h3>
+<h3 id="_고정_퀘스트_조회_get_apiv1questsfixedburnoutid"><a class="link" href="#_고정_퀘스트_조회_get_apiv1questsfixedburnoutid">고정 퀘스트 조회 (GET /api/v1/quests/fixed/{burnoutId})</a></h3>
 <div class="sect3">
 <h4 id="_request_12"><a class="link" href="#_request_12">Request</a></h4>
+<div class="paragraph">
+<p>include::C:\Users\Goeun\SpringProject\dough\build\generated-snippets/quest-controller-test/</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/quests/fixed HTTP/1.1
+Authorization: Bearer accessToken
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_200_success_8"><a class="link" href="#_response_200_success_8">Response (200 Success)</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>burnoutName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">번아웃 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[0].questId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[0].activity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 활동</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[0].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 상세 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[1].questId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">고정 퀘스트 아이디</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[1].activity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 활동</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fixedQuests[1].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">퀘스트 상세 내용</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
+  "burnoutName" : "소보로",
+  "fixedQuests" : [ {
+    "questId" : 3,
+    "activity" : "5분간 명상하기",
+    "description" : "아침시간, 조용한 방 안에서"
+  }, {
+    "questId" : 3,
+    "activity" : "1분간 칭찬하기",
+    "description" : "아침시간, 거울을 보며"
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_퀘스트_추가_관리자_api_post_apiv1quests"><a class="link" href="#_퀘스트_추가_관리자_api_post_apiv1quests">퀘스트 추가: 관리자 API (POST /api/v1/quests)</a></h3>
+<div class="sect3">
+<h4 id="_request_13"><a class="link" href="#_request_13">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1720,7 +1824,7 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_200_success_8"><a class="link" href="#_response_200_success_8">Response (200 Success)</a></h4>
+<h4 id="_response_200_success_9"><a class="link" href="#_response_200_success_9">Response (200 Success)</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1782,7 +1886,7 @@ Host: localhost:8080
 <div class="sect2">
 <h3 id="_퀘스트_수정_관리자_api_put_apiv1questsquestid"><a class="link" href="#_퀘스트_수정_관리자_api_put_apiv1questsquestid">퀘스트 수정: 관리자 API (PUT /api/v1/quests/{questId})</a></h3>
 <div class="sect3">
-<h4 id="_request_13"><a class="link" href="#_request_13">Request</a></h4>
+<h4 id="_request_14"><a class="link" href="#_request_14">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/v1/quests/{questId}</caption>
 <colgroup>
@@ -1884,7 +1988,7 @@ Host: localhost:8080
 <div class="sect2">
 <h3 id="_퀘스트_삭제_관리자_api_delete_apiv1questsquestid"><a class="link" href="#_퀘스트_삭제_관리자_api_delete_apiv1questsquestid">퀘스트 삭제: 관리자 API (DELETE /api/v1/quests/{questId})</a></h3>
 <div class="sect3">
-<h4 id="_request_14"><a class="link" href="#_request_14">Request</a></h4>
+<h4 id="_request_15"><a class="link" href="#_request_15">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 2. /api/v1/quests/{questId}</caption>
 <colgroup>
@@ -1928,7 +2032,7 @@ Host: localhost:8080</code></pre>
 <div class="sect2">
 <h3 id="_주간_분석_get_apiv1dashboardweeklysearchdate"><a class="link" href="#_주간_분석_get_apiv1dashboardweeklysearchdate">주간 분석 (GET /api/v1/dashboard/weekly/{searchDate})</a></h3>
 <div class="sect3">
-<h4 id="_request_15"><a class="link" href="#_request_15">Request</a></h4>
+<h4 id="_request_16"><a class="link" href="#_request_16">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1975,7 +2079,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_200_success_9"><a class="link" href="#_response_200_success_9">Response (200 Success)</a></h4>
+<h4 id="_response_200_success_10"><a class="link" href="#_response_200_success_10">Response (200 Success)</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2137,7 +2241,7 @@ Content-Length: 199
 <div class="sect2">
 <h3 id="_월간_분석_get_apiv1dashboardmonthlyyearmonth"><a class="link" href="#_월간_분석_get_apiv1dashboardmonthlyyearmonth">월간 분석 (GET /api/v1/dashboard/monthly/{yearMonth})</a></h3>
 <div class="sect3">
-<h4 id="_request_16"><a class="link" href="#_request_16">Request</a></h4>
+<h4 id="_request_17"><a class="link" href="#_request_17">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2225,7 +2329,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-json hljs" data-lang="json">{
   "countDetails" : [ {
-    "completedDate" : "2024-09-10",
+    "completedDate" : "2024-09-12",
     "dailyCount" : 10
   } ],
   "completedAllQuestsDateCount" : 0
@@ -2248,7 +2352,7 @@ Host: localhost:8080</code></pre>
 <div class="sect2">
 <h3 id="_퀘스트_총_개수_통계_get_apiv1dashboardtotal"><a class="link" href="#_퀘스트_총_개수_통계_get_apiv1dashboardtotal">퀘스트 총 개수 &amp; 통계 (GET /api/v1/dashboard/total)</a></h3>
 <div class="sect3">
-<h4 id="_request_17"><a class="link" href="#_request_17">Request</a></h4>
+<h4 id="_request_18"><a class="link" href="#_request_18">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2276,7 +2380,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_200_success_10"><a class="link" href="#_response_200_success_10">Response (200 Success)</a></h4>
+<h4 id="_response_200_success_11"><a class="link" href="#_response_200_success_11">Response (200 Success)</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2337,7 +2441,7 @@ Content-Length: 124
 <div class="sect2">
 <h3 id="_피드백_추가_post_apiv1feedbacks"><a class="link" href="#_피드백_추가_post_apiv1feedbacks">피드백 추가 (POST /api/v1/feedbacks)</a></h3>
 <div class="sect3">
-<h4 id="_request_18"><a class="link" href="#_request_18">Request</a></h4>
+<h4 id="_request_19"><a class="link" href="#_request_19">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2408,7 +2512,7 @@ Test file content
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_200_success_11"><a class="link" href="#_response_200_success_11">Response (200 Success)</a></h4>
+<h4 id="_response_200_success_12"><a class="link" href="#_response_200_success_12">Response (200 Success)</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2454,7 +2558,7 @@ Test file content
 <div class="sect2">
 <h3 id="_알람_전체_조회_get_apiv1notifications"><a class="link" href="#_알람_전체_조회_get_apiv1notifications">알람 전체 조회 (GET /api/v1/notifications)</a></h3>
 <div class="sect3">
-<h4 id="_request_19"><a class="link" href="#_request_19">Request</a></h4>
+<h4 id="_request_20"><a class="link" href="#_request_20">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2482,7 +2586,7 @@ Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_200_success_12"><a class="link" href="#_response_200_success_12">Response (200 Success)</a></h4>
+<h4 id="_response_200_success_13"><a class="link" href="#_response_200_success_13">Response (200 Success)</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2566,7 +2670,7 @@ Host: localhost:8080</code></pre>
 <div class="sect2">
 <h3 id="_알람_업데이트_put_apiv1notifications"><a class="link" href="#_알람_업데이트_put_apiv1notifications">알람 업데이트 (PUT /api/v1/notifications)</a></h3>
 <div class="sect3">
-<h4 id="_request_20"><a class="link" href="#_request_20">Request</a></h4>
+<h4 id="_request_21"><a class="link" href="#_request_21">Request</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -2655,7 +2759,7 @@ Host: localhost:8080
 </div>
 </div>
 <div class="sect3">
-<h4 id="_response_200_success_13"><a class="link" href="#_response_200_success_13">Response (200 Success)</a></h4>
+<h4 id="_response_200_success_14"><a class="link" href="#_response_200_success_14">Response (200 Success)</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -2873,7 +2977,7 @@ Content-Length: 248
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-09-10 11:11:32 +0900
+Last updated 2024-09-12 01:47:53 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
