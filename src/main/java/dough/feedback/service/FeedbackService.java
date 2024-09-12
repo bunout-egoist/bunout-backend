@@ -30,14 +30,14 @@ public class FeedbackService {
     private final LevelService levelService;
     private final FileService fileService;
 
-    public FeedbackResponse createFeedback(final Long memberId, final FeedbackRequest feedbackRequest, MultipartFile file) {
+    public FeedbackResponse createFeedback(final Long memberId, final FeedbackRequest feedbackRequest, final MultipartFile file) {
         final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final SelectedQuest selectedQuest = selectedQuestRepository.findById(feedbackRequest.getSelectedQuestId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_SELECTED_QUEST_ID));
 
-        String imageUrl = fileService.upload(file);
+        final String imageUrl = getImageUrl(file);
 
         final Feedback feedback = new Feedback(
                 member,
@@ -63,5 +63,12 @@ public class FeedbackService {
         memberRepository.save(memberLevel.getMember());
 
         return FeedbackResponse.of(memberLevel, imageUrl);
+    }
+
+    private String getImageUrl(final MultipartFile file) {
+        if (file == null) {
+            return null;
+        }
+        return fileService.upload(file);
     }
 }
