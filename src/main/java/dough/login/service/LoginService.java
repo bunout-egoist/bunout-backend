@@ -13,7 +13,6 @@ import dough.login.dto.response.AccessTokenResponse;
 import dough.login.dto.response.LoginResponse;
 import dough.login.infrastructure.jwt.TokenExtractor;
 import dough.login.infrastructure.jwt.TokenProvider;
-import dough.login.infrastructure.oauth.LoginApiClient;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.response.MemberInfoResponse;
@@ -39,7 +38,6 @@ import static dough.login.domain.type.SocialLoginType.APPLE;
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final LoginApiClient loginApiClient;
     private final KakaoLoginService kakaoLoginService;
     private final AppleLoginService appleLoginService;
     private final MemberRepository memberRepository;
@@ -61,7 +59,7 @@ public class LoginService {
     }
 
     public void logout(final Long memberId) {
-        final Member member = memberRepository.findMemberById(memberId)
+        final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         member.updateRefreshToken(null);
@@ -145,11 +143,13 @@ public class LoginService {
     }
 
     private void createAllNotifications(final Member member) {
-        final List<Notification> notifications = Arrays.stream(NotificationType.values())
-                .map(notificationType -> new Notification(member, notificationType))
-                .toList();
+        if (member.getNotifications().isEmpty()) {
+            final List<Notification> notifications = Arrays.stream(NotificationType.values())
+                    .map(notificationType -> new Notification(member, notificationType))
+                    .toList();
 
-        notificationRepository.saveAll(notifications);
+            notificationRepository.saveAll(notifications);
+        }
     }
 
     public AccessTokenResponse renewAccessToken() {

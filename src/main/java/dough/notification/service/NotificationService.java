@@ -25,6 +25,7 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
+    @Transactional(readOnly = true)
     public List<NotificationResponse> getAllNotifications(final Long memberId) {
         final List<Notification> notifications = notificationRepository.findAllByMemberId(memberId);
         return getNotificationsResponse(notifications);

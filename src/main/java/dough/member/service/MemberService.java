@@ -55,7 +55,7 @@ public class MemberService {
     }
 
     public void updateBurnout(final Long memberId, final BurnoutRequest burnoutRequest) {
-        final Member member = memberRepository.findMemberById(memberId)
+        final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final Burnout burnout = burnoutRepository.findById(burnoutRequest.getBurnoutId())
@@ -78,7 +78,7 @@ public class MemberService {
     }
 
     public void updateFixedQuest(final Long memberId, final FixedQuestRequest fixedQuestRequest) {
-        final Member member = memberRepository.findMemberById(memberId)
+        final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final Quest quest = questRepository.findById(fixedQuestRequest.getFixedQuestId())

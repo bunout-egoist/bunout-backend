@@ -177,14 +177,14 @@ class LoginServiceTest {
         // given
         GOEUN.updateRefreshToken("Refresh Token");
 
-        given(memberRepository.findMemberById(GOEUN.getId()))
+        given(memberRepository.findById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
 
         // when
         loginService.logout(GOEUN.getId());
 
         // then
-        verify(memberRepository).findMemberById(anyLong());
+        verify(memberRepository).findById(anyLong());
     }
 
     @Test
