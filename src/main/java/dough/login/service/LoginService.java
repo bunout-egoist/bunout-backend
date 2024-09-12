@@ -61,7 +61,7 @@ public class LoginService {
     }
 
     public void logout(final Long memberId) {
-        final Member member = memberRepository.findMemberById(memberId)
+        final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         member.updateRefreshToken(null);
@@ -145,11 +145,13 @@ public class LoginService {
     }
 
     private void createAllNotifications(final Member member) {
-        final List<Notification> notifications = Arrays.stream(NotificationType.values())
-                .map(notificationType -> new Notification(member, notificationType))
-                .toList();
+        if (member.getNotifications().isEmpty()) {
+            final List<Notification> notifications = Arrays.stream(NotificationType.values())
+                    .map(notificationType -> new Notification(member, notificationType))
+                    .toList();
 
-        notificationRepository.saveAll(notifications);
+            notificationRepository.saveAll(notifications);
+        }
     }
 
     public AccessTokenResponse renewAccessToken() {

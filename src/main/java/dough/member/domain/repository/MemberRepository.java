@@ -19,7 +19,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             JOIN FETCH m.burnout
             JOIN FETCH m.quest
             JOIN FETCH m.level
-            JOIN FETCH m.notifications
             WHERE m.id = :memberId
             """)
     Optional<Member> findMemberById(@Param("memberId") final Long memberId);

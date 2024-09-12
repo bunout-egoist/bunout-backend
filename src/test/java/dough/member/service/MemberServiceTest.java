@@ -95,7 +95,7 @@ class MemberServiceTest {
         final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
         GOEUN.updateBurnout(SOBORO, LocalDate.of(2024, 7, 11));
 
-        given(memberRepository.findMemberById(anyLong()))
+        given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(memberRepository.save(any()))
                 .willReturn(GOEUN);
@@ -106,7 +106,7 @@ class MemberServiceTest {
         memberService.updateBurnout(GOEUN.getId(), burnoutRequest);
 
         // then
-        verify(memberRepository).findMemberById(any());
+        verify(memberRepository).findById(any());
         verify(memberRepository).save(any());
         verify(burnoutRepository).findById(anyLong());
     }
@@ -118,7 +118,7 @@ class MemberServiceTest {
         GOEUN.updateBurnout(SOBORO, LocalDate.now().withDayOfMonth(1));
         final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
 
-        given(memberRepository.findMemberById(anyLong()))
+        given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
                 .willReturn(Optional.of(SOBORO));
@@ -137,7 +137,7 @@ class MemberServiceTest {
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
         GOEUN.updateFixedQuest(FIXED_QUEST1, LocalDate.of(2024, 8, 3));
 
-        given(memberRepository.findMemberById(anyLong()))
+        given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(questRepository.findById(anyLong()))
                 .willReturn(Optional.of(FIXED_QUEST1));
@@ -148,7 +148,7 @@ class MemberServiceTest {
         memberService.updateFixedQuest(GOEUN.getId(), fixedQuestRequest);
 
         // then
-        verify(memberRepository).findMemberById(anyLong());
+        verify(memberRepository).findById(anyLong());
         verify(questRepository).findById(anyLong());
         verify(memberRepository).save(any());
     }
@@ -160,7 +160,7 @@ class MemberServiceTest {
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
         GOEUN.updateFixedQuest(FIXED_QUEST1, LocalDate.now());
 
-        given(memberRepository.findMemberById(anyLong()))
+        given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(questRepository.findById(anyLong()))
                 .willReturn(Optional.of(FIXED_QUEST1));
