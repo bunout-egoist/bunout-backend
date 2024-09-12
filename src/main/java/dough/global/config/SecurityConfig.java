@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**", "/img/**", "/css/**", "/static/js/**", "/docs/**").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/quests", "/api/v1/quests/fixed/**").permitAll()
+                        .requestMatchers("/api/v1/quests", "/api/v1/quests/fixed/**", "/api/v1/token").permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
