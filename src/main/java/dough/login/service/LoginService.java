@@ -13,7 +13,6 @@ import dough.login.dto.response.AccessTokenResponse;
 import dough.login.dto.response.LoginResponse;
 import dough.login.infrastructure.jwt.TokenExtractor;
 import dough.login.infrastructure.jwt.TokenProvider;
-import dough.login.infrastructure.oauth.LoginApiClient;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import dough.member.dto.response.MemberInfoResponse;
@@ -39,7 +38,6 @@ import static dough.login.domain.type.SocialLoginType.APPLE;
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final LoginApiClient loginApiClient;
     private final KakaoLoginService kakaoLoginService;
     private final AppleLoginService appleLoginService;
     private final MemberRepository memberRepository;
