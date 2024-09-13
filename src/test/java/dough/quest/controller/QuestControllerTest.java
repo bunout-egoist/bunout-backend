@@ -88,7 +88,6 @@ class QuestControllerTest extends AbstractControllerTest {
                 "15분 운동하기",
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "유형별",
-                3,
                 true,
                 false,
                 "소보로"
@@ -117,10 +116,6 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("퀘스트 타입 (고정/유형별/스페셜)")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("difficulty")
-                                        .type(NUMBER)
-                                        .description("난이도")
-                                        .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("isOutside")
                                         .type(BOOLEAN)
                                         .description("퀘스트가 밖에서 진행되는지 여부")
@@ -145,7 +140,6 @@ class QuestControllerTest extends AbstractControllerTest {
                 "20분 운동하기",
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "스페셜",
-                4,
                 false,
                 false,
                 "소보로"
@@ -176,10 +170,6 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("퀘스트 타입 (고정/유형별/스페셜)")
                                         .attributes(field("constraint", "문자열")),
-                                fieldWithPath("difficulty")
-                                        .type(NUMBER)
-                                        .description("난이도")
-                                        .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("isOutside")
                                         .type(BOOLEAN)
                                         .description("퀘스트가 밖에서 진행되는지 여부")

@@ -21,9 +21,6 @@ public class QuestRequest {
     @NotBlank(message = "퀘스트 타입을 입력해주세요.")
     private String questType;
 
-    @NotNull(message = "퀘스트 난이도를 입력해주세요.")
-    private Integer difficulty;
-
     @NotNull(message = "퀘스트가 밖에서 진행되는지 여부를 입력해주세요.")
     private Boolean isOutside;
 

@@ -74,7 +74,6 @@ public class QuestServiceTest {
                 "15분 운동하기",
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "유형별퀘스트",
-                3,
                 true,
                 false,
                 "소보로"
@@ -104,7 +103,6 @@ public class QuestServiceTest {
                 "15분 운동하기",
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "퀘스트 타입 오류",
-                3,
                 true,
                 false,
                 "소보로"
@@ -151,7 +149,6 @@ public class QuestServiceTest {
                 "20분 운동하기",
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "스페셜퀘스트",
-                4,
                 true,
                 false,
                 "소보로"
@@ -184,7 +181,6 @@ public class QuestServiceTest {
                 "20분 운동하기",
                 "점심시간, 몸과 마음을 건강하게 유지하며",
                 "스페셜퀘스트",
-                4,
                 true,
                 false,
                 "소보로"
@@ -289,7 +285,7 @@ public class QuestServiceTest {
 
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
-        given(selectedQuestRepository.findTodayByTypeQuests(anyLong(), any()))
+        given(selectedQuestRepository.findTodayQuests(anyLong(), any()))
                 .willReturn(todayQuests);
 
         // when
