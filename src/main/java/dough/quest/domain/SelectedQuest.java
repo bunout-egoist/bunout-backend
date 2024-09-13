@@ -43,9 +43,11 @@ public class SelectedQuest extends BaseEntity {
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
+    @Column(nullable = false)
     @Enumerated(value = STRING)
     private QuestStatus questStatus = IN_PROGRESS;
 
+    @Column(nullable = false)
     private LocalDate dueDate;
 
     private LocalDate completedDate;
