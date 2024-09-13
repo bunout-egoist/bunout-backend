@@ -15,7 +15,6 @@ public class QuestFixture {
             "15분 운동하기",
             "점심시간, 몸과 마음을 건강하게 유지하며",
             BY_TYPE,
-            5,
             SOBORO,
             OUTSIDE_ALONE
     );
@@ -25,7 +24,6 @@ public class QuestFixture {
             "5분간 새로운 책 읽기",
             "아침시간, 표지가 예쁜",
             BY_TYPE,
-            2,
             SOBORO,
             INSIDE_ALONE
     );
@@ -35,7 +33,6 @@ public class QuestFixture {
             "5분간 명상하기",
             "아침시간, 조용한 방 안에서",
             FIXED,
-            2,
             SOBORO,
             INSIDE_ALONE
     );
@@ -45,7 +42,6 @@ public class QuestFixture {
             "1분간 칭찬하기",
             "아침시간, 거울을 보며",
             FIXED,
-            3,
             SOBORO,
             INSIDE_ALONE
     );

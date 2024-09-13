@@ -91,7 +91,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
-        return selectedQuestRepository.findTodayByTypeQuests(member.getId(), currentDate);
+        return selectedQuestRepository.findTodayQuests(member.getId(), currentDate);
     }
 
     private Quest getTodaySpecialQuest(final Long burnoutId) {
@@ -116,7 +116,7 @@ public class QuestService {
         final int neededCount = 2 - incompleteByTypeQuests.size();
 
         if (neededCount > 0) {
-            final List<Quest> todayByTypeQuests = questRepository.findTodayByTypeQuestsByMemberId(member.getId(), member.getLevel().getLevel(), member.getBurnout().getId());
+            final List<Quest> todayByTypeQuests = questRepository.findTodayByTypeQuestsByMemberId(member.getId(), member.getBurnout().getId());
             final Map<Long, List<Quest>> groupedByKeyword = todayByTypeQuests.stream()
                     .collect(Collectors.groupingBy(quest -> quest.getKeyword().getId()));
 
@@ -192,7 +192,6 @@ public class QuestService {
                 questRequest.getActivity(),
                 questRequest.getDescription(),
                 questType,
-                questRequest.getDifficulty(),
                 burnout,
                 keyword
         );
@@ -217,7 +216,6 @@ public class QuestService {
                 questUpdateRequest.getActivity(),
                 questUpdateRequest.getDescription(),
                 questType,
-                questUpdateRequest.getDifficulty(),
                 burnout,
                 keyword
         );

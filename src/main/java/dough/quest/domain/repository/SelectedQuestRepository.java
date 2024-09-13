@@ -32,7 +32,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              JOIN FETCH sq.quest q
              JOIN FETCH sq.member m
              JOIN FETCH q.keyword k
-             WHERE sq.questStatus = 'IN_PROGRESS' AND sq.member.id = :memberId AND sq.quest.questType = 'BY_TYPE' AND q.difficulty = m.level.level
+             WHERE sq.questStatus = 'IN_PROGRESS' AND sq.member.id = :memberId AND sq.quest.questType = 'BY_TYPE'
             """)
     List<SelectedQuest> findIncompleteByTypeQuestsByMemberId(@Param("memberId") final Long memberId);
 
@@ -40,10 +40,10 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              SELECT sq
              FROM SelectedQuest sq
              JOIN FETCH sq.quest q
-             JOIN FETCH q.keyword k
+             LEFT JOIN FETCH q.keyword k
              WHERE sq.member.id = :memberId AND sq.dueDate = :date
             """)
-    List<SelectedQuest> findTodayByTypeQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
+    List<SelectedQuest> findTodayQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
 
     @Query("""
              SELECT new dough.quest.dto.CompletedQuestsTotalElement(
