@@ -42,15 +42,12 @@ public class Quest extends BaseEntity {
     @Enumerated(value = STRING)
     private QuestType questType;
 
-    @Column(nullable = false)
-    private Integer difficulty;
-
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "burnout_id", nullable = false)
+    @JoinColumn(name = "burnout_id")
     private Burnout burnout;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "keyword_id", nullable = false)
+    @JoinColumn(name = "keyword_id")
     private Keyword keyword;
 
     @OneToMany(mappedBy = "quest")
@@ -64,7 +61,6 @@ public class Quest extends BaseEntity {
             final String activity,
             final String description,
             final QuestType questType,
-            final Integer difficulty,
             final Burnout burnout,
             final Keyword keyword
     ) {
@@ -72,7 +68,6 @@ public class Quest extends BaseEntity {
         this.activity = activity;
         this.description = description;
         this.questType = questType;
-        this.difficulty = difficulty;
         this.burnout = burnout;
         this.keyword = keyword;
     }
@@ -81,10 +76,9 @@ public class Quest extends BaseEntity {
             final String activity,
             final String description,
             final QuestType questType,
-            final Integer difficulty,
             final Burnout burnout,
             final Keyword keyword
     ) {
-        this(null, activity, description, questType, difficulty, burnout, keyword);
+        this(null, activity, description, questType, burnout, keyword);
     }
 }
