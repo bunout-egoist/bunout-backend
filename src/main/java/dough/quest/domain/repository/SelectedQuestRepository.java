@@ -32,14 +32,14 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              JOIN FETCH sq.quest q
              JOIN FETCH sq.member m
              JOIN FETCH q.keyword k
-             WHERE sq.questStatus = 'IN_PROGRESS' AND sq.member.id = :memberId AND sq.quest.questType = 'BY_TYPE'
+             WHERE sq.questStatus = 'IN_PROGRESS' AND sq.member.id = :memberId AND sq.quest.questType = 'BY_TYPE' AND q.burnout.id = :burnoutId
             """)
-    List<SelectedQuest> findIncompleteByTypeQuestsByMemberId(@Param("memberId") final Long memberId);
+    List<SelectedQuest> findIncompleteByTypeQuestsByMemberId(@Param("memberId") final Long memberId, @Param("burnoutId") final Long burnoutId);
 
     @Query("""
              SELECT sq
              FROM SelectedQuest sq
-             JOIN FETCH sq.quest q
+             LEFT JOIN FETCH sq.quest q
              LEFT JOIN FETCH q.keyword k
              WHERE sq.member.id = :memberId AND sq.dueDate = :date
             """)
