@@ -100,7 +100,7 @@ public class MemberService {
         final LocalDate lastAttendanceDate = member.getAttendanceAt().toLocalDate();
 
         if (lastAttendanceDate.equals(currentAt.toLocalDate())) {
-            final MemberLevel memberLevel = new MemberLevel(member, member.getLevel(), false);
+            final MemberLevel memberLevel = levelService.updateLevel(member);
             return MemberAttendanceResponse.of(memberLevel);
         }
 

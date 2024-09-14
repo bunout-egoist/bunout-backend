@@ -54,7 +54,7 @@ public class QuestService {
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate currentDate = LocalDate.now();
-        final List<SelectedQuest> todayQuests = getTodayQuests(member, currentDate);
+        final List<SelectedQuest> todayQuests = selectedQuestRepository.findTodayQuests(member.getId(), currentDate);
 
         if (todayQuests.isEmpty()) {
             createTodayQuests(member, currentDate)
@@ -88,10 +88,6 @@ public class QuestService {
         final String placeCode = PlaceType.getPlaceCode(keywords);
 
         return new KeywordCode(placeCode, participationCode);
-    }
-
-    private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
-        return selectedQuestRepository.findTodayQuests(member.getId(), currentDate);
     }
 
     private Quest getTodaySpecialQuest(final Long burnoutId) {
@@ -130,7 +126,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> getIncompleteByTypeQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberId(member.getId());
+        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberId(member.getId(), member.getBurnout().getId());
         return incompleteByTypeQuests.stream()
                 .map(incompleteByTypeQuest -> {
                     incompleteByTypeQuest.updateDueDate(currentDate);

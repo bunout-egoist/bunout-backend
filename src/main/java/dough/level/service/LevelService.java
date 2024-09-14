@@ -1,6 +1,5 @@
 package dough.level.service;
 
-import dough.global.exception.BadRequestException;
 import dough.level.domain.Level;
 import dough.level.domain.MemberLevel;
 import dough.level.domain.repository.LevelRepository;
@@ -12,8 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static dough.global.exception.ExceptionCode.NOT_FOUND_LEVEL_ID;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -24,18 +21,31 @@ public class LevelService {
     public MemberLevel updateLevel(final Member member) {
         final Level currentLevel = member.getLevel();
 
-        if (member.getExp() >= currentLevel.getAccumulatedExp()) {
-            final List<Level> levels = levelRepository.findTopByExp(member.getExp(), PageRequest.of(0, 1));
-
-            if (levels.isEmpty()) {
-                throw new BadRequestException(NOT_FOUND_LEVEL_ID);
-            }
-
-            final Level newLevel = levels.get(0);
-            member.updateLevel(newLevel);
-            return new MemberLevel(member, newLevel, true);
+        if (member.getExp() < currentLevel.getAccumulatedExp()) {
+            return new MemberLevel(member, currentLevel, false, calculateCurrentExp(member, currentLevel));
         }
 
-        return new MemberLevel(member, currentLevel, false);
+        final Level nextLevel = findNextLevel(member.getExp(), currentLevel);
+
+        if (nextLevel.equals(currentLevel)) {
+            return new MemberLevel(member, currentLevel, false, currentLevel.getRequiredExp());
+        }
+
+        member.updateLevel(nextLevel);
+        return new MemberLevel(member, nextLevel, true, calculateCurrentExp(member, nextLevel));
+    }
+
+    private Level findNextLevel(final Integer memberExp, final Level currentLevel) {
+        final List<Level> levels = levelRepository.findTopByExp(memberExp, PageRequest.of(0, 1));
+
+        if (levels.isEmpty()) {
+            return currentLevel;
+        }
+
+        return levels.get(0);
+    }
+
+    private Integer calculateCurrentExp(final Member member, final Level level) {
+        return level.getRequiredExp() - (level.getAccumulatedExp() - member.getExp());
     }
 }

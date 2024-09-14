@@ -22,13 +22,15 @@ public class MemberAttendanceResponse {
     public static MemberAttendanceResponse of(final MemberLevel memberLevel) {
         final Level currentLevel = memberLevel.getLevel();
         final Integer requiredExp = currentLevel.getRequiredExp();
+        final Integer accumulatedExp = currentLevel.getAccumulatedExp();
         final Member member = memberLevel.getMember();
+        final Integer currentExp = accumulatedExp <= member.getExp() ? requiredExp : requiredExp - (accumulatedExp - member.getExp());
 
         return new MemberAttendanceResponse(
                 member.getNickname(),
                 currentLevel.getLevel(),
                 currentLevel.getLevel() + 1,
-                requiredExp - (currentLevel.getAccumulatedExp() - member.getExp()),
+                currentExp,
                 requiredExp,
                 memberLevel.getIsLevelUp(),
                 member.getAttendanceCount(),
