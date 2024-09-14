@@ -178,7 +178,7 @@ class MemberServiceTest {
         // given
         GOEUN.updateAttendance(LocalDateTime.now().minusDays(7), 2, 5);
 
-        final MemberLevel memberLevel = new MemberLevel(GOEUN, LEVEL2, true);
+        final MemberLevel memberLevel = new MemberLevel(GOEUN, LEVEL2, true, 30);
 
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));

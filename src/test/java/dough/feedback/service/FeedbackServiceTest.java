@@ -61,7 +61,7 @@ class FeedbackServiceTest {
         FeedbackRequest feedbackRequest = new FeedbackRequest(1L, 5);
         MockMultipartFile mockFile = new MockMultipartFile("file", "test.txt", "text/plain", "Test content".getBytes());
 
-        final MemberLevel memberLevel = new MemberLevel(GOEUN, LEVEL2, true);
+        final MemberLevel memberLevel = new MemberLevel(GOEUN, LEVEL2, true, 30);
 
         IN_PROGRESS_QUEST1.updateFeedback(FEEDBACK1);
 
