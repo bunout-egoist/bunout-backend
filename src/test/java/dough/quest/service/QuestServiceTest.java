@@ -1,14 +1,12 @@
 package dough.quest.service;
 
 import dough.burnout.domain.repository.BurnoutRepository;
-import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.global.exception.BadRequestException;
 import dough.global.exception.InvalidDomainException;
 import dough.keyword.KeywordCode;
 import dough.keyword.domain.repository.KeywordRepository;
 import dough.member.domain.repository.MemberRepository;
 import dough.quest.domain.Quest;
-import dough.quest.domain.QuestFeedback;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
@@ -24,7 +22,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +31,6 @@ import static dough.keyword.domain.type.ParticipationType.ALONE;
 import static dough.keyword.domain.type.PlaceType.ANYWHERE;
 import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
 import static dough.member.fixture.MemberFixture.GOEUN;
-import static dough.quest.fixture.CompletedQuestElementFixture.QUEST_ELEMENT1;
 import static dough.quest.fixture.QuestFixture.*;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
 import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST2;
@@ -118,27 +114,6 @@ public class QuestServiceTest {
                 .isInstanceOf(InvalidDomainException.class)
                 .extracting("code")
                 .isEqualTo(INVALID_QUEST_TYPE.getCode());
-    }
-
-    @DisplayName("달성한 퀘스트의 상세 정보를 조회할 수 있다.")
-    @Test
-    void getWeeklySummary() {
-        // given
-        final Long memberId = 1L;
-
-        final LocalDate date = LocalDate.now();
-        final LocalDate startDate = date.minusDays(3);
-        final LocalDate endDate = date.plusDays(3);
-
-        given(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate))
-                .willReturn(List.of(QUEST_ELEMENT1));
-
-        // when
-        final List<WeeklySummaryResponse> actualResponse = questService.getWeeklySummary(GOEUN.getId(), LocalDate.now());
-
-        // then
-        assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(List.of(WeeklySummaryResponse.of(LocalDate.of(2024, 8, 11), List.of(new QuestFeedback(BY_TYPE_QUEST1, "https://~")), 1L)));
     }
 
     @DisplayName("퀘스트를 업데이트 할 수 있다.")
@@ -285,7 +260,7 @@ public class QuestServiceTest {
 
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
-        given(selectedQuestRepository.findTodayQuests(anyLong(), any()))
+        given(selectedQuestRepository.findTodayQuests(anyLong(), any(), any()))
                 .willReturn(todayQuests);
 
         // when

@@ -1,6 +1,5 @@
 package dough.quest.domain.repository;
 
-import dough.global.annotation.TimeTrace;
 import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.dto.CompletedQuestElement;
@@ -12,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Long> {
 
@@ -32,6 +32,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              JOIN FETCH sq.quest q
              JOIN FETCH sq.member m
              JOIN FETCH q.keyword k
+             JOIN FETCH sq.feedback f
              WHERE sq.questStatus = 'IN_PROGRESS' AND sq.member.id = :memberId AND sq.quest.questType = 'BY_TYPE' AND q.burnout.id = :burnoutId
             """)
     List<SelectedQuest> findIncompleteByTypeQuestsByMemberId(@Param("memberId") final Long memberId, @Param("burnoutId") final Long burnoutId);
@@ -41,9 +42,11 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              FROM SelectedQuest sq
              LEFT JOIN FETCH sq.quest q
              LEFT JOIN FETCH q.keyword k
-             WHERE sq.member.id = :memberId AND sq.dueDate = :date
+             LEFT JOIN FETCH sq.member m
+             LEFT JOIN FETCH sq.feedback f
+             WHERE m.id = :memberId AND sq.dueDate = :date AND (q.burnout.id = :burnoutId OR q.questType = 'SPECIAL')
             """)
-    List<SelectedQuest> findTodayQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
+    List<SelectedQuest> findTodayQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date, @Param("burnoutId") final Long burnoutId);
 
     @Query("""
              SELECT new dough.quest.dto.CompletedQuestsTotalElement(
@@ -57,7 +60,15 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
             """)
     CompletedQuestsTotalElement getCompletedQuestsTotalByMemberId(@Param("memberId") final Long memberId);
 
-    @TimeTrace
+    @Query("""
+            SELECT sq
+            FROM SelectedQuest sq
+            LEFT JOIN FETCH sq.quest q
+            LEFT JOIN FETCH sq.feedback f
+            WHERE sq.dueDate = :date AND q.questType = 'SPECIAL'
+            """)
+    Optional<SelectedQuest> findSpecialQuestByDate(@Param("date") final LocalDate date);
+
     @Query("""
              SELECT new dough.quest.dto.CompletedQuestsCountElement(
                  sq.completedDate,

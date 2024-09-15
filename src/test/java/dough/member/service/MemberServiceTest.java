@@ -92,7 +92,7 @@ class MemberServiceTest {
     @Test
     void changeBurnoutType() {
         // given
-        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
+        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L, null);
         GOEUN.updateBurnout(SOBORO, LocalDate.of(2024, 7, 11));
 
         given(memberRepository.findById(anyLong()))
@@ -116,7 +116,7 @@ class MemberServiceTest {
     void changeBurnoutType_AlreadyUpdatedBurnoutType() {
         // given
         GOEUN.updateBurnout(SOBORO, LocalDate.now().withDayOfMonth(1));
-        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
+        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L, null);
 
         given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));

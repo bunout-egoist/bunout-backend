@@ -7,7 +7,6 @@ import dough.global.AbstractControllerTest;
 import dough.quest.domain.QuestFeedback;
 import dough.quest.dto.CompletedQuestsCountElement;
 import dough.quest.dto.response.TotalAndStatisticsResponse;
-import dough.quest.service.QuestService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,9 +46,6 @@ public class DashboardControllerTest extends AbstractControllerTest {
     private static final String MEMBER_TOKENS = "Bearer accessToken";
 
     @MockBean
-    private QuestService questService;
-
-    @MockBean
     private DashboardService dashboardService;
 
     @BeforeEach
@@ -75,7 +71,7 @@ public class DashboardControllerTest extends AbstractControllerTest {
                 WeeklySummaryResponse.of(LocalDate.of(2024, 8, 14), List.of(new QuestFeedback(FIXED_QUEST1, "https://~")), 1L)
         );
 
-        when(questService.getWeeklySummary(anyLong(), any()))
+        when(dashboardService.getWeeklySummary(anyLong(), any()))
                 .thenReturn(actualResponse);
 
         // when
