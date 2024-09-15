@@ -6,18 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static lombok.AccessLevel.PROTECTED;
+import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor(access = PROTECTED)
+@NoArgsConstructor(access = PRIVATE)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AppleTokenResponse {
+public class AppleLoginResponse {
 
-    private String accessToken;
-    private String expiresIn;
-    private String idToken;
-    private String refreshToken;
-    private String tokenType;
-    private String error;
+    private String state;
+    private String code;
+    private String id_token;
+    private String user;
 }

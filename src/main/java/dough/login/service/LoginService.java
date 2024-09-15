@@ -10,6 +10,7 @@ import dough.login.domain.LoginInfo;
 import dough.login.domain.MemberInfo;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.dto.response.AccessTokenResponse;
+import dough.login.dto.response.AppleLoginResponse;
 import dough.login.dto.response.LoginResponse;
 import dough.login.infrastructure.jwt.TokenExtractor;
 import dough.login.infrastructure.jwt.TokenProvider;
@@ -53,8 +54,8 @@ public class LoginService {
         return saveMember(loginInfo);
     }
 
-    public LoginResponse login(final String idToken, final String authorizationCode) {
-        final LoginInfo loginInfo = appleLoginService.login(idToken, authorizationCode);
+    public LoginResponse login(final AppleLoginResponse appleLoginResponse) {
+        final LoginInfo loginInfo = appleLoginService.login(appleLoginResponse.getId_token(), appleLoginResponse.getCode());
         return saveMember(loginInfo);
     }
 
