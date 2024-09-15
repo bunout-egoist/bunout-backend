@@ -28,9 +28,9 @@ public interface QuestRepository extends JpaRepository<Quest, Long> {
     @Query("""
             SELECT quest
             FROM Quest quest
-            WHERE quest.burnout.id = :burnoutId AND quest.questType = 'SPECIAL'
+            WHERE quest.questType = 'SPECIAL'
            """)
-    List<Quest> findSpecialQuestByBurnoutId(@Param("burnoutId") final Long burnoutId);
+    List<Quest> findSpecialQuestByBurnoutId();
 
     @Query("""
             SELECT q
