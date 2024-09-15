@@ -37,7 +37,7 @@ public class FeedbackService {
         final SelectedQuest selectedQuest = selectedQuestRepository.findById(feedbackRequest.getSelectedQuestId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_SELECTED_QUEST_ID));
 
-        final String imageUrl = getImageUrl(file);
+        final String imageUrl = getImageUrl(file, selectedQuest.getId());
 
         final Feedback feedback = new Feedback(
                 member,
@@ -65,10 +65,10 @@ public class FeedbackService {
         return FeedbackResponse.of(memberLevel, imageUrl);
     }
 
-    private String getImageUrl(final MultipartFile file) {
+    private String getImageUrl(final MultipartFile file, Long questId) {
         if (file == null) {
             return null;
         }
-        return fileService.upload(file);
+        return fileService.upload(file, questId);
     }
 }
