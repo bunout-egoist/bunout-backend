@@ -10,6 +10,7 @@ import dough.member.dto.request.FixedQuestRequest;
 import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.quest.domain.repository.QuestRepository;
+import dough.quest.domain.repository.SelectedQuestRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +29,7 @@ import static dough.global.exception.ExceptionCode.ALREADY_UPDATED_FIXED_QUEST;
 import static dough.level.fixture.LevelFixture.LEVEL2;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.FIXED_QUEST1;
+import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST3;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -50,6 +52,9 @@ class MemberServiceTest {
 
     @Mock
     private QuestRepository questRepository;
+
+    @Mock
+    private SelectedQuestRepository selectedQuestRepository;
 
     @Mock
     private BurnoutRepository burnoutRepository;
@@ -92,23 +97,27 @@ class MemberServiceTest {
     @Test
     void changeBurnoutType() {
         // given
-        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L, null);
+        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L, 3L);
         GOEUN.updateBurnout(SOBORO, LocalDate.of(2024, 7, 11));
 
         given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
-        given(memberRepository.save(any()))
-                .willReturn(GOEUN);
         given(burnoutRepository.findById(anyLong()))
                 .willReturn(Optional.of(SOBORO));
+        given(questRepository.findById(anyLong()))
+                .willReturn(Optional.of(FIXED_QUEST1));
+        given(memberRepository.save(any()))
+                .willReturn(GOEUN);
 
         // when
         memberService.updateBurnout(GOEUN.getId(), burnoutRequest);
 
         // then
-        verify(memberRepository).findById(any());
-        verify(memberRepository).save(any());
+        verify(memberRepository).findById(anyLong());
         verify(burnoutRepository).findById(anyLong());
+        verify(questRepository).findById(anyLong());
+        verify(memberRepository).save(any());
+
     }
 
     @DisplayName("번아웃 유형이 이번 달에 수정된 기록이 있을 경우 예외가 발생한다.")
@@ -116,12 +125,14 @@ class MemberServiceTest {
     void changeBurnoutType_AlreadyUpdatedBurnoutType() {
         // given
         GOEUN.updateBurnout(SOBORO, LocalDate.now().withDayOfMonth(1));
-        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L, null);
+        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L, 3L);
 
         given(memberRepository.findById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
         given(burnoutRepository.findById(anyLong()))
                 .willReturn(Optional.of(SOBORO));
+        given(questRepository.findById(any()))
+                .willReturn(Optional.of(FIXED_QUEST1));
 
         // when & then
         assertThatThrownBy(() -> memberService.updateBurnout(GOEUN.getId(), burnoutRequest))
@@ -141,6 +152,8 @@ class MemberServiceTest {
                 .willReturn(Optional.of(GOEUN));
         given(questRepository.findById(anyLong()))
                 .willReturn(Optional.of(FIXED_QUEST1));
+        given(selectedQuestRepository.save(any()))
+                .willReturn(IN_PROGRESS_QUEST3);
         given(memberRepository.save(any()))
                 .willReturn(GOEUN);
 
@@ -150,6 +163,7 @@ class MemberServiceTest {
         // then
         verify(memberRepository).findById(anyLong());
         verify(questRepository).findById(anyLong());
+        verify(selectedQuestRepository).save(any());
         verify(memberRepository).save(any());
     }
 
