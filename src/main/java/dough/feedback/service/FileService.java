@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Objects;
 import java.util.UUID;
@@ -32,11 +33,13 @@ public class FileService {
                 questId + "-" +
                 Objects.requireNonNull(multipartFile.getOriginalFilename());
 
-        File file = new File(System.getProperty("java.io.tmpdir"), uniqueFileName);
+        File file = new File(uniqueFileName);
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(multipartFile.getBytes());
-        } catch (IOException | java.io.IOException e) {
-            throw new RuntimeException("Error converting multipart file", e);
+        } catch (IOException | FileNotFoundException e) {
+            throw new RuntimeException();
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
         }
         return file;
     }

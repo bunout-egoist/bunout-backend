@@ -31,7 +31,7 @@ public class FeedbackService {
     private final FileService fileService;
 
     public FeedbackResponse createFeedback(final Long memberId, final FeedbackRequest feedbackRequest, final MultipartFile file) {
-        final Member member = memberRepository.findById(memberId)
+        final Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final SelectedQuest selectedQuest = selectedQuestRepository.findById(feedbackRequest.getSelectedQuestId())
