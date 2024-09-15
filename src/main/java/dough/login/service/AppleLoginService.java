@@ -58,9 +58,9 @@ public class AppleLoginService {
     @Value("${apple.key-id}")
     private String keyId;
 
-    public LoginInfo login(final String code, final String authorizationCode) {
+    public LoginInfo login(final String idToken, final String authorizationCode) {
         try {
-            final Claims claims = getClaimsFromAppleToken(code);
+            final Claims claims = getClaimsFromAppleToken(idToken);
             final String socialLoginId = claims.getSubject();
 
             final AppleTokenResponse appleTokenResponse = loginApiClient.getAppleToken(tokenRequestParams(authorizationCode));
