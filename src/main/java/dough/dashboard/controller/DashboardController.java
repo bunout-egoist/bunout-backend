@@ -1,12 +1,11 @@
 package dough.dashboard.controller;
 
-import dough.login.domain.Auth;
 import dough.dashboard.dto.response.MonthlySummaryResponse;
 import dough.dashboard.dto.response.WeeklySummaryResponse;
 import dough.dashboard.service.DashboardService;
 import dough.login.domain.Accessor;
+import dough.login.domain.Auth;
 import dough.quest.dto.response.TotalAndStatisticsResponse;
-import dough.quest.service.QuestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,6 @@ import java.util.List;
 @RequestMapping("/api/v1/dashboard")
 public class DashboardController {
 
-    public final QuestService questService;
     public final DashboardService dashboardService;
 
     @GetMapping("/weekly/{searchDate}")
@@ -32,7 +30,7 @@ public class DashboardController {
             @Auth final Accessor accessor,
             @PathVariable("searchDate") @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate date
     ) {
-        final List<WeeklySummaryResponse> detailResponse = questService.getWeeklySummary(accessor.getMemberId(), date);
+        final List<WeeklySummaryResponse> detailResponse = dashboardService.getWeeklySummary(accessor.getMemberId(), date);
         return ResponseEntity.ok().body(detailResponse);
     }
 

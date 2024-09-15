@@ -1,7 +1,8 @@
 package dough.dashboard.service;
 
 import dough.dashboard.dto.response.MonthlySummaryResponse;
-import dough.member.domain.repository.MemberRepository;
+import dough.dashboard.dto.response.WeeklySummaryResponse;
+import dough.quest.domain.QuestFeedback;
 import dough.quest.domain.repository.SelectedQuestRepository;
 import dough.quest.dto.CompletedQuestsCountElement;
 import dough.quest.dto.CompletedQuestsTotalElement;
@@ -20,6 +21,8 @@ import java.util.List;
 import java.util.Set;
 
 import static dough.member.fixture.MemberFixture.GOEUN;
+import static dough.quest.fixture.CompletedQuestElementFixture.QUEST_ELEMENT1;
+import static dough.quest.fixture.QuestFixture.BY_TYPE_QUEST1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -32,10 +35,28 @@ class DashboardServiceTest {
     private DashboardService dashboardService;
 
     @Mock
-    private MemberRepository memberRepository;
-
-    @Mock
     private SelectedQuestRepository selectedQuestRepository;
+
+    @DisplayName("달성한 퀘스트의 상세 정보를 조회할 수 있다.")
+    @Test
+    void getWeeklySummary() {
+        // given
+        final Long memberId = 1L;
+
+        final LocalDate date = LocalDate.now();
+        final LocalDate startDate = date.minusDays(3);
+        final LocalDate endDate = date.plusDays(3);
+
+        given(selectedQuestRepository.findCompletedQuestsByMemberIdAndDate(memberId, startDate, endDate))
+                .willReturn(List.of(QUEST_ELEMENT1));
+
+        // when
+        final List<WeeklySummaryResponse> actualResponse = dashboardService.getWeeklySummary(GOEUN.getId(), LocalDate.now());
+
+        // then
+        assertThat(actualResponse).usingRecursiveComparison()
+                .isEqualTo(List.of(WeeklySummaryResponse.of(LocalDate.of(2024, 8, 11), List.of(new QuestFeedback(BY_TYPE_QUEST1, "https://~")), 1L)));
+    }
 
     @DisplayName("스페셜 퀘스트와 데일리 퀘스트의 총합과 통계를 조회할 수 있다.")
     @Test
