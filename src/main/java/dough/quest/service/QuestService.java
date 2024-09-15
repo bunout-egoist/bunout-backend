@@ -121,6 +121,13 @@ public class QuestService {
         return false;
     }
 
+    private Boolean isFixedQuestUpdated(final Member member, final LocalDate currentDate) {
+        if (member.getFixedQuestLastModified().equals(currentDate)) {
+            return true;
+        }
+        return false;
+    }
+
     private List<SelectedQuest> updateTodayByTypeQuests(final Member member, final LocalDate currentDate) {
         final List<SelectedQuest> incompleteByTypeQuests = getIncompleteByTypeQuests(member, currentDate);
 
