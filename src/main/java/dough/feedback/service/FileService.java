@@ -51,8 +51,6 @@ public class FileService {
     }
 
     private void removeNewFile(File uploadFile) {
-        if (!uploadFile.delete()) {
-            throw new RuntimeException("Failed to delete temporary file");
-        }
+        uploadFile.delete();
     }
 }
