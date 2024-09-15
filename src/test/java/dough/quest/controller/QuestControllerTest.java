@@ -30,8 +30,7 @@ import static dough.keyword.domain.type.ParticipationType.ALONE;
 import static dough.keyword.domain.type.PlaceType.ANYWHERE;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.*;
-import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
-import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST2;
+import static dough.quest.fixture.SelectedQuestFixture.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -315,7 +314,7 @@ class QuestControllerTest extends AbstractControllerTest {
     @Test
     void updateTodayQuests() throws Exception {
         // given
-        final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
+        final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, COMPLETED_QUEST1);
         final TodayQuestListResponse todayQuestListResponse = TodayQuestListResponse.of(GOEUN, new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests);
 
         // given
@@ -380,6 +379,11 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("선택된 퀘스트 상태")
                                         .attributes(field("constraint", "문자열")),
+                                fieldWithPath("todayQuests[0].imageUrl")
+                                        .type(STRING)
+                                        .optional()
+                                        .description("완료한 퀘스트 피드백 imageUrl")
+                                        .attributes(field("constraint", "문자열")),
                                 fieldWithPath("todayQuests[1].selectedQuestId")
                                         .type(NUMBER)
                                         .description("선택된 퀘스트 아이디")
@@ -407,6 +411,11 @@ class QuestControllerTest extends AbstractControllerTest {
                                 fieldWithPath("todayQuests[1].questStatus")
                                         .type(STRING)
                                         .description("선택된 퀘스트 상태")
+                                        .attributes(field("constraint", "문자열")),
+                                fieldWithPath("todayQuests[1].imageUrl")
+                                        .type(STRING)
+                                        .optional()
+                                        .description("완료한 퀘스트 피드백 imageUrl")
                                         .attributes(field("constraint", "문자열"))
                         )
                 ));

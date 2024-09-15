@@ -24,14 +24,15 @@ public class TodayQuestResponse {
 
     public static TodayQuestResponse of(final SelectedQuest selectedQuest) {
         final Quest quest = selectedQuest.getQuest();
+        final String imageUrl = selectedQuest.getFeedback() != null ? selectedQuest.getFeedback().getImageUrl() : null;
 
         if (quest.getQuestType().equals(BY_TYPE)) {
-            return byTypeResponse(selectedQuest, quest);
+            return byTypeResponse(selectedQuest, quest, imageUrl);
         }
-        return fixedAndSpecialResponse(selectedQuest, quest);
+        return fixedAndSpecialResponse(selectedQuest, quest, imageUrl);
     }
 
-    public static TodayQuestResponse byTypeResponse(final SelectedQuest selectedQuest, final Quest quest) {
+    public static TodayQuestResponse byTypeResponse(final SelectedQuest selectedQuest, final Quest quest, String imageUrl) {
         return new TodayQuestResponse(
                 selectedQuest.getId(),
                 quest.getActivity(),
@@ -40,11 +41,11 @@ public class TodayQuestResponse {
                 PlaceType.getMappedPlaceType(quest.getKeyword().getIsOutside()).getCode(),
                 ParticipationType.getMappedParticipationType(quest.getKeyword().getIsGroup()).getCode(),
                 selectedQuest.getQuestStatus().toString(),
-                selectedQuest.getFeedback().getImageUrl()
+                imageUrl
         );
     }
 
-    public static TodayQuestResponse fixedAndSpecialResponse(final SelectedQuest selectedQuest, final Quest quest) {
+    public static TodayQuestResponse fixedAndSpecialResponse(final SelectedQuest selectedQuest, final Quest quest, final String imageUrl) {
         return new TodayQuestResponse(
                 selectedQuest.getId(),
                 quest.getActivity(),
@@ -53,7 +54,7 @@ public class TodayQuestResponse {
                 null,
                 null,
                 selectedQuest.getQuestStatus().toString(),
-                selectedQuest.getFeedback().getImageUrl()
+                imageUrl
         );
     }
 }
