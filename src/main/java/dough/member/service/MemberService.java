@@ -13,7 +13,9 @@ import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberAttendanceResponse;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.quest.domain.Quest;
+import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
+import dough.quest.domain.repository.SelectedQuestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final QuestRepository questRepository;
     private final BurnoutRepository burnoutRepository;
+    private final SelectedQuestRepository selectedQuestRepository;
     private final LevelService levelService;
 
     @Transactional(readOnly = true)
@@ -61,14 +64,14 @@ public class MemberService {
         final Burnout burnout = burnoutRepository.findById(burnoutRequest.getBurnoutId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
 
-//        final Quest quest = questRepository.findById(burnoutRequest.getFixedQuestId())
-//                .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
-
+        final Quest fixedQuest = questRepository.findById(burnoutRequest.getFixedQuestId())
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
+        
         final LocalDate currentDate = LocalDate.now();
         validateBurnoutUpdate(member.getBurnoutLastModified(), currentDate);
 
         member.updateBurnout(burnout, currentDate);
-//        member.updateFixedQuest(quest, currentDate);
+        member.updateFixedQuest(fixedQuest, member.getFixedQuestLastModified());
 
         memberRepository.save(member);
     }
@@ -86,13 +89,18 @@ public class MemberService {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
-        final Quest quest = questRepository.findById(fixedQuestRequest.getFixedQuestId())
+        final Quest fixedQuest = questRepository.findById(fixedQuestRequest.getFixedQuestId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
 
         final LocalDate currentDate = LocalDate.now();
+
         validFixedQuestUpdate(member.getFixedQuestLastModified(), currentDate);
 
-        member.updateFixedQuest(quest, currentDate);
+        member.updateFixedQuest(fixedQuest, currentDate);
+
+        final SelectedQuest selectedQuest = new SelectedQuest(member, fixedQuest);
+
+        selectedQuestRepository.save(selectedQuest);
         memberRepository.save(member);
     }
 

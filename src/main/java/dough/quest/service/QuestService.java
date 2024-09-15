@@ -31,8 +31,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static dough.global.exception.ExceptionCode.*;
-import static dough.quest.domain.type.QuestType.BY_TYPE;
-import static dough.quest.domain.type.QuestType.SPECIAL;
+import static dough.quest.domain.type.QuestType.*;
 import static java.time.DayOfWeek.*;
 
 @Service
@@ -72,7 +71,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> todayQuests = selectedQuestRepository.findTodayQuests(member.getId(), currentDate, member.getBurnout().getId());
+        final List<SelectedQuest> todayQuests = findTodayQuests(member, currentDate);
 
         if (todayQuests.isEmpty() || todayQuests.size() == 1 && todayQuests.get(0).getQuest().getQuestType().equals(SPECIAL)) {
             if (isBurnoutUpdated(member, currentDate)) {
@@ -84,6 +83,26 @@ public class QuestService {
         }
 
         return todayQuests;
+    }
+
+    private List<SelectedQuest> findTodayQuests(final Member member, final LocalDate currentDate) {
+        final List<SelectedQuest> todayQuests = selectedQuestRepository.findTodayQuests(member.getId(), currentDate, member.getBurnout().getId());
+
+        return todayQuests.stream()
+                .filter(todayQuest -> {
+                    final Quest quest = todayQuest.getQuest();
+                    final Long fixedQuestId = member.getQuest().getId();
+
+                    if (quest.getQuestType().equals(FIXED) && (quest.getId().equals(fixedQuestId))) {
+                        return true;
+                    } else if (quest.getQuestType().equals(BY_TYPE) && (quest.getBurnout().getId().equals(member.getBurnout().getId()))) {
+                        return true;
+                    } else if (quest.getQuestType().equals(SPECIAL)) {
+                        return true;
+                    }
+                    return false;
+                })
+                .collect(Collectors.toList());
     }
 
     private KeywordCode getKeywords(final List<SelectedQuest> todayQuests) {
@@ -116,13 +135,6 @@ public class QuestService {
 
     private Boolean isBurnoutUpdated(final Member member, final LocalDate currentDate) {
         if (member.getBurnoutLastModified().equals(currentDate)) {
-            return true;
-        }
-        return false;
-    }
-
-    private Boolean isFixedQuestUpdated(final Member member, final LocalDate currentDate) {
-        if (member.getFixedQuestLastModified().equals(currentDate)) {
             return true;
         }
         return false;
