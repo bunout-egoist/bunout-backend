@@ -5,8 +5,7 @@ import dough.quest.domain.SelectedQuest;
 import static dough.feedback.fixture.FeedbackFixture.FEEDBACK1;
 import static dough.feedback.fixture.FeedbackFixture.FEEDBACK2;
 import static dough.member.fixture.MemberFixture.GOEUN;
-import static dough.quest.fixture.QuestFixture.BY_TYPE_QUEST1;
-import static dough.quest.fixture.QuestFixture.BY_TYPE_QUEST2;
+import static dough.quest.fixture.QuestFixture.*;
 
 public class SelectedQuestFixture {
 
@@ -36,6 +35,13 @@ public class SelectedQuestFixture {
             4L,
             GOEUN,
             BY_TYPE_QUEST2,
+            null
+    );
+
+    public static final SelectedQuest IN_PROGRESS_QUEST3 = new SelectedQuest(
+            3L,
+            GOEUN,
+            FIXED_QUEST1,
             null
     );
 }
