@@ -13,4 +13,7 @@ public class BurnoutRequest {
 
     @NotNull(message = "번아웃 아이디를 입력해주세요.")
     private Long burnoutId;
+
+    // TODO Not Null 필요
+    private Long fixedQuestId;
 }

@@ -61,10 +61,15 @@ public class MemberService {
         final Burnout burnout = burnoutRepository.findById(burnoutRequest.getBurnoutId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
 
+//        final Quest quest = questRepository.findById(burnoutRequest.getFixedQuestId())
+//                .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
+
         final LocalDate currentDate = LocalDate.now();
         validateBurnoutUpdate(member.getBurnoutLastModified(), currentDate);
 
         member.updateBurnout(burnout, currentDate);
+//        member.updateFixedQuest(quest, currentDate);
+
         memberRepository.save(member);
     }
 

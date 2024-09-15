@@ -32,6 +32,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              JOIN FETCH sq.quest q
              JOIN FETCH sq.member m
              JOIN FETCH q.keyword k
+             JOIN FETCH sq.feedback f
              WHERE sq.questStatus = 'IN_PROGRESS' AND sq.member.id = :memberId AND sq.quest.questType = 'BY_TYPE' AND q.burnout.id = :burnoutId
             """)
     List<SelectedQuest> findIncompleteByTypeQuestsByMemberId(@Param("memberId") final Long memberId, @Param("burnoutId") final Long burnoutId);
@@ -42,6 +43,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              LEFT JOIN FETCH sq.quest q
              LEFT JOIN FETCH q.keyword k
              LEFT JOIN FETCH sq.member m
+             LEFT JOIN FETCH sq.feedback f
              WHERE m.id = :memberId AND sq.dueDate = :date AND (q.burnout.id = :burnoutId OR q.questType = 'SPECIAL')
             """)
     List<SelectedQuest> findTodayQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date, @Param("burnoutId") final Long burnoutId);
@@ -62,6 +64,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
             SELECT sq
             FROM SelectedQuest sq
             LEFT JOIN FETCH sq.quest q
+            LEFT JOIN FETCH sq.feedback f
             WHERE sq.dueDate = :date AND q.questType = 'SPECIAL'
             """)
     Optional<SelectedQuest> findSpecialQuestByDate(@Param("date") final LocalDate date);

@@ -201,7 +201,7 @@ class MemberControllerTest extends AbstractControllerTest {
     @Test
     void updateBurnout() throws Exception {
         // given
-        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L);
+        final BurnoutRequest burnoutRequest = new BurnoutRequest(1L, 2L);
 
         doNothing().when(memberService).updateBurnout(anyLong(), any());
 
@@ -219,6 +219,10 @@ class MemberControllerTest extends AbstractControllerTest {
                                 fieldWithPath("burnoutId")
                                         .type(NUMBER)
                                         .description("번아웃 아이디")
+                                        .attributes(field("constraint", "양의 정수")),
+                                fieldWithPath("fixedQuestId")
+                                        .type(NUMBER)
+                                        .description("고정 퀘스트 아이디")
                                         .attributes(field("constraint", "양의 정수"))
                         )
                 ));
@@ -228,7 +232,7 @@ class MemberControllerTest extends AbstractControllerTest {
     @Test
     void updateBurnout_BurnoutNull() throws Exception {
         // given
-        final BurnoutRequest burnoutRequest = new BurnoutRequest(null);
+        final BurnoutRequest burnoutRequest = new BurnoutRequest(null, null);
 
         doNothing().when(memberService).updateBurnout(anyLong(), any());
 
