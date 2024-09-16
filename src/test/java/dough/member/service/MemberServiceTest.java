@@ -174,10 +174,8 @@ class MemberServiceTest {
         final FixedQuestRequest fixedQuestRequest = new FixedQuestRequest(FIXED_QUEST1.getId());
         GOEUN.updateFixedQuest(FIXED_QUEST1, LocalDate.now());
 
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findById(GOEUN.getId()))
                 .willReturn(Optional.of(GOEUN));
-        given(questRepository.findById(anyLong()))
-                .willReturn(Optional.of(FIXED_QUEST1));
 
         // when & then
         assertThatThrownBy(() -> memberService.updateFixedQuest(GOEUN.getId(), fixedQuestRequest))

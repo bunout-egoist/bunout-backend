@@ -232,7 +232,7 @@ class MemberControllerTest extends AbstractControllerTest {
     @Test
     void updateBurnout_BurnoutNull() throws Exception {
         // given
-        final BurnoutRequest burnoutRequest = new BurnoutRequest(null, null);
+        final BurnoutRequest burnoutRequest = new BurnoutRequest(null, 2L);
 
         doNothing().when(memberService).updateBurnout(anyLong(), any());
 

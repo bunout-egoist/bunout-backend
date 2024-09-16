@@ -89,12 +89,11 @@ public class MemberService {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
+        final LocalDate currentDate = LocalDate.now();
+        validFixedQuestUpdate(member.getFixedQuestLastModified(), currentDate);
+
         final Quest fixedQuest = questRepository.findById(fixedQuestRequest.getFixedQuestId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
-
-        final LocalDate currentDate = LocalDate.now();
-
-        validFixedQuestUpdate(member.getFixedQuestLastModified(), currentDate);
 
         member.updateFixedQuest(fixedQuest, currentDate);
 
@@ -142,5 +141,14 @@ public class MemberService {
                 throw new BadRequestException(ALREADY_UPDATED_FIXED_QUEST);
             }
         }
+    }
+
+    private void saveNewFixedQuest() {
+
+    }
+
+    private void updateMember() {
+
+
     }
 }
