@@ -57,7 +57,7 @@ public class QuestService {
     }
 
     private List<SelectedQuest> createTodayQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> todayQuests = updateTodayByTypeQuests(member, currentDate);
+        final List<SelectedQuest> todayQuests = updateTodayByTypeQuests(member, member.getBurnout(), currentDate);
 
         if (isSpecialQuestDay(currentDate)) {
             final SelectedQuest specialQuest = selectedQuestRepository.findSpecialQuestByDate(currentDate)
@@ -73,12 +73,7 @@ public class QuestService {
     private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
         final List<SelectedQuest> todayQuests = findTodayQuests(member, currentDate);
 
-        if (todayQuests.isEmpty() || todayQuests.size() == 1 && todayQuests.get(0).getQuest().getQuestType().equals(SPECIAL)) {
-            if (isBurnoutUpdated(member, currentDate)) {
-                return createTodayQuests(member, currentDate)
-                        .stream()
-                        .collect(Collectors.toList());
-            }
+        if (todayQuests.isEmpty()) {
             todayQuests.addAll(createTodayQuests(member, currentDate));
         }
 
@@ -86,16 +81,16 @@ public class QuestService {
     }
 
     private List<SelectedQuest> findTodayQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> todayQuests = selectedQuestRepository.findTodayQuests(member.getId(), currentDate, member.getBurnout().getId());
+        final List<SelectedQuest> todayQuests = selectedQuestRepository.findTodayQuests(member.getId(), currentDate);
 
         return todayQuests.stream()
                 .filter(todayQuest -> {
                     final Quest quest = todayQuest.getQuest();
-                    final Long fixedQuestId = member.getQuest().getId();
+                    final Quest fixedQuest = member.getQuest();
 
-                    if (quest.getQuestType().equals(FIXED) && (quest.getId().equals(fixedQuestId))) {
+                    if (quest.getQuestType().equals(FIXED) && (quest.equals(fixedQuest))) {
                         return true;
-                    } else if (quest.getQuestType().equals(BY_TYPE) && (quest.getBurnout().getId().equals(member.getBurnout().getId()))) {
+                    } else if (quest.getQuestType().equals(BY_TYPE) && (quest.getBurnout().equals(member.getBurnout()))) {
                         return true;
                     } else if (quest.getQuestType().equals(SPECIAL)) {
                         return true;
@@ -133,20 +128,13 @@ public class QuestService {
                 dayOfWeek.equals(SUNDAY);
     }
 
-    private Boolean isBurnoutUpdated(final Member member, final LocalDate currentDate) {
-        if (member.getBurnoutLastModified().equals(currentDate)) {
-            return true;
-        }
-        return false;
-    }
-
-    private List<SelectedQuest> updateTodayByTypeQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteByTypeQuests = getIncompleteByTypeQuests(member, currentDate);
+    public List<SelectedQuest> updateTodayByTypeQuests(final Member member, final Burnout burnout, final LocalDate currentDate) {
+        final List<SelectedQuest> incompleteByTypeQuests = getIncompleteByTypeQuests(member, burnout, currentDate);
 
         final int neededCount = 2 - incompleteByTypeQuests.size();
 
         if (neededCount > 0) {
-            final List<Quest> todayByTypeQuests = questRepository.findTodayByTypeQuestsByMemberId(member.getId(), member.getBurnout().getId());
+            final List<Quest> todayByTypeQuests = questRepository.findTodayByTypeQuestsByMemberId(member.getId(), burnout.getId());
             final Map<Long, List<Quest>> groupedByKeyword = todayByTypeQuests.stream()
                     .collect(Collectors.groupingBy(quest -> quest.getKeyword().getId()));
 
@@ -159,8 +147,8 @@ public class QuestService {
         return incompleteByTypeQuests;
     }
 
-    private List<SelectedQuest> getIncompleteByTypeQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberId(member.getId(), member.getBurnout().getId());
+    private List<SelectedQuest> getIncompleteByTypeQuests(final Member member, final Burnout burnout, final LocalDate currentDate) {
+        final List<SelectedQuest> incompleteByTypeQuests = selectedQuestRepository.findIncompleteByTypeQuestsByMemberId(member.getId(), burnout.getId(), currentDate);
         return incompleteByTypeQuests.stream()
                 .map(incompleteByTypeQuest -> {
                     incompleteByTypeQuest.updateDueDate(currentDate);

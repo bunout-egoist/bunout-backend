@@ -54,9 +54,6 @@ class MemberServiceTest {
     private QuestRepository questRepository;
 
     @Mock
-    private SelectedQuestRepository selectedQuestRepository;
-
-    @Mock
     private BurnoutRepository burnoutRepository;
 
     @DisplayName("멤버의 닉네임을 조회할 수 있다.")
@@ -152,8 +149,6 @@ class MemberServiceTest {
                 .willReturn(Optional.of(GOEUN));
         given(questRepository.findById(anyLong()))
                 .willReturn(Optional.of(FIXED_QUEST1));
-        given(selectedQuestRepository.save(any()))
-                .willReturn(IN_PROGRESS_QUEST3);
         given(memberRepository.save(any()))
                 .willReturn(GOEUN);
 
@@ -163,7 +158,6 @@ class MemberServiceTest {
         // then
         verify(memberRepository).findById(anyLong());
         verify(questRepository).findById(anyLong());
-        verify(selectedQuestRepository).save(any());
         verify(memberRepository).save(any());
     }
 

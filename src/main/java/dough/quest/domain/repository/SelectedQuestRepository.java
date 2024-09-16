@@ -29,13 +29,14 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
     @Query("""
              SELECT sq
              FROM SelectedQuest sq
-             JOIN FETCH sq.quest q
-             JOIN FETCH sq.member m
-             JOIN FETCH q.keyword k
-             JOIN FETCH sq.feedback f
-             WHERE sq.questStatus = 'IN_PROGRESS' AND sq.member.id = :memberId AND sq.quest.questType = 'BY_TYPE' AND q.burnout.id = :burnoutId
+             LEFT JOIN FETCH sq.quest q
+             LEFT JOIN FETCH sq.member m
+             LEFT JOIN FETCH q.keyword k
+             LEFT JOIN FETCH sq.feedback f
+             WHERE sq.questStatus = 'IN_PROGRESS' AND sq.member.id = :memberId 
+             AND sq.quest.questType = 'BY_TYPE' AND q.burnout.id = :burnoutId AND sq.dueDate < :date
             """)
-    List<SelectedQuest> findIncompleteByTypeQuestsByMemberId(@Param("memberId") final Long memberId, @Param("burnoutId") final Long burnoutId);
+    List<SelectedQuest> findIncompleteByTypeQuestsByMemberId(@Param("memberId") final Long memberId, @Param("burnoutId") final Long burnoutId, @Param("date") final LocalDate date);
 
     @Query("""
              SELECT sq
@@ -44,9 +45,9 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              LEFT JOIN FETCH q.keyword k
              LEFT JOIN FETCH sq.member m
              LEFT JOIN FETCH sq.feedback f
-             WHERE m.id = :memberId AND sq.dueDate = :date AND (q.burnout.id = :burnoutId OR q.questType = 'SPECIAL')
+             WHERE m.id = :memberId AND sq.dueDate = :date
             """)
-    List<SelectedQuest> findTodayQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date, @Param("burnoutId") final Long burnoutId);
+    List<SelectedQuest> findTodayQuests(@Param("memberId") final Long memberId, @Param("date") final LocalDate date);
 
     @Query("""
              SELECT new dough.quest.dto.CompletedQuestsTotalElement(
