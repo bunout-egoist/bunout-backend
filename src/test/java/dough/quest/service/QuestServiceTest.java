@@ -260,7 +260,7 @@ public class QuestServiceTest {
 
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
-        given(selectedQuestRepository.findTodayQuests(anyLong(), any(), any()))
+        given(selectedQuestRepository.findTodayQuests(anyLong(), any()))
                 .willReturn(todayQuests);
 
         // when

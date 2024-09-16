@@ -16,6 +16,7 @@ import dough.quest.domain.Quest;
 import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
 import dough.quest.domain.repository.SelectedQuestRepository;
+import dough.quest.service.QuestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
+import java.util.List;
 import java.util.Optional;
 
 import static dough.global.exception.ExceptionCode.*;
@@ -39,6 +41,7 @@ public class MemberService {
     private final BurnoutRepository burnoutRepository;
     private final SelectedQuestRepository selectedQuestRepository;
     private final LevelService levelService;
+    private final QuestService questService;
 
     @Transactional(readOnly = true)
     public MemberInfoResponse getMemberInfo(final Long memberId) {
@@ -66,9 +69,12 @@ public class MemberService {
 
         final Quest fixedQuest = questRepository.findById(burnoutRequest.getFixedQuestId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
-        
+
         final LocalDate currentDate = LocalDate.now();
         validateBurnoutUpdate(member.getBurnoutLastModified(), currentDate);
+
+        updateTodayByTypeQuests(member, burnout, currentDate);
+        updateTodayFixedQuest(member, fixedQuest);
 
         member.updateBurnout(burnout, currentDate);
         member.updateFixedQuest(fixedQuest, member.getFixedQuestLastModified());
@@ -76,30 +82,20 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    private void validateBurnoutUpdate(final LocalDate lastModified, final LocalDate currentDate) {
-        if (Optional.ofNullable(lastModified).isPresent()) {
-
-            if (currentDate.withDayOfMonth(1).equals(lastModified.withDayOfMonth(1))) {
-                throw new BadRequestException(ALREADY_UPDATED_BURNOUT_TYPE);
-            }
-        }
-    }
-
     public void updateFixedQuest(final Long memberId, final FixedQuestRequest fixedQuestRequest) {
         final Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final LocalDate currentDate = LocalDate.now();
+
         validFixedQuestUpdate(member.getFixedQuestLastModified(), currentDate);
 
         final Quest fixedQuest = questRepository.findById(fixedQuestRequest.getFixedQuestId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
 
+        updateTodayFixedQuest(member, fixedQuest);
+
         member.updateFixedQuest(fixedQuest, currentDate);
-
-        final SelectedQuest selectedQuest = new SelectedQuest(member, fixedQuest);
-
-        selectedQuestRepository.save(selectedQuest);
         memberRepository.save(member);
     }
 
@@ -131,6 +127,31 @@ public class MemberService {
         return MemberAttendanceResponse.of(memberLevel);
     }
 
+    private void updateTodayByTypeQuests(final Member member, final Burnout burnout, final LocalDate currentDate) {
+        if (!member.getBurnout().equals(burnout)) {
+            final List<SelectedQuest> todayByTypeQuests = questService.updateTodayByTypeQuests(member, burnout, currentDate);
+            if (!todayByTypeQuests.isEmpty()) {
+                selectedQuestRepository.saveAll(todayByTypeQuests);
+            }
+        }
+    }
+
+    private void updateTodayFixedQuest(final Member member, final Quest fixedQuest) {
+        if (!member.getQuest().equals(fixedQuest)) {
+            final SelectedQuest selectedQuest = new SelectedQuest(member, fixedQuest);
+            selectedQuestRepository.save(selectedQuest);
+        }
+    }
+
+    private void validateBurnoutUpdate(final LocalDate lastModified, final LocalDate currentDate) {
+        if (Optional.ofNullable(lastModified).isPresent()) {
+
+            if (currentDate.withDayOfMonth(1).equals(lastModified.withDayOfMonth(1))) {
+                throw new BadRequestException(ALREADY_UPDATED_BURNOUT_TYPE);
+            }
+        }
+    }
+
     private void validFixedQuestUpdate(final LocalDate lastModified, final LocalDate currentDate) {
         if (Optional.ofNullable(lastModified).isPresent()) {
 
@@ -141,14 +162,5 @@ public class MemberService {
                 throw new BadRequestException(ALREADY_UPDATED_FIXED_QUEST);
             }
         }
-    }
-
-    private void saveNewFixedQuest() {
-
-    }
-
-    private void updateMember() {
-
-
     }
 }
