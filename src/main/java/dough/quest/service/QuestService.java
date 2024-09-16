@@ -73,16 +73,19 @@ public class QuestService {
     private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
         final List<SelectedQuest> todayQuests = findTodayQuests(member, currentDate);
 
-        if (todayQuests.isEmpty() || todayQuests.size() == 1 && todayQuests.get(0).getQuest().getQuestType().equals(SPECIAL)) {
-            if (isBurnoutUpdated(member, currentDate)) {
-                return createTodayQuests(member, currentDate)
-                        .stream()
-                        .collect(Collectors.toList());
-            }
+        if (todayQuests.isEmpty()) {
             todayQuests.addAll(createTodayQuests(member, currentDate));
         }
+        else if(todayQuests.size() == 1 && todayQuests.get(0).getQuest().getQuestType().equals(SPECIAL)) {
+            if (isBurnoutUpdated(member, currentDate)) {
+                todayQuests.clear();
+                todayQuests.addAll(createTodayQuests(member, currentDate));
+            }
+        }
 
-        return todayQuests;
+        return todayQuests.stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     private List<SelectedQuest> findTodayQuests(final Member member, final LocalDate currentDate) {
