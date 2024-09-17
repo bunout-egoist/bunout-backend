@@ -4,7 +4,6 @@ import dough.login.domain.Accessor;
 import dough.login.domain.Auth;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.dto.response.AccessTokenResponse;
-import dough.login.dto.response.AppleLoginResponse;
 import dough.login.dto.response.LoginResponse;
 import dough.login.service.LoginService;
 import dough.member.dto.response.MemberInfoResponse;
@@ -33,8 +32,11 @@ public class LoginController {
     }
 
     @PostMapping("/auth/login/apple")
-    public ResponseEntity<LoginResponse> appleLogin(final AppleLoginResponse response) {
-        final LoginResponse loginResponse = loginService.login(response);
+    public ResponseEntity<LoginResponse> appleLogin(
+            @RequestParam("idToken") final String idToken,
+            @RequestParam("authorizationCode") final String authorizationCode
+    ) {
+        final LoginResponse loginResponse = loginService.login(idToken, authorizationCode);
         return ResponseEntity.ok().body(loginResponse);
     }
 
