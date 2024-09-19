@@ -78,6 +78,9 @@ dependencies {
 
 	// AWS
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// FCM
+	implementation 'com.google.firebase:firebase-admin:9.1.1'
 }
 
 jar {
