@@ -4,9 +4,11 @@ import dough.login.domain.Accessor;
 import dough.login.domain.Auth;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.dto.response.AccessTokenResponse;
+import dough.login.dto.response.AppleLoginResponse;
 import dough.login.dto.response.LoginResponse;
 import dough.login.service.LoginService;
 import dough.member.dto.response.MemberInfoResponse;
+import dough.pushNotification.dto.request.FcmTokenRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,18 +27,16 @@ public class LoginController {
 
     @PostMapping("/auth/login/kakao")
     public ResponseEntity<LoginResponse> kakaoLogin(
-            @RequestParam("code") final String code
+            @RequestParam("code") final String code,
+            @RequestBody FcmTokenRequest fcmTokenRequest
     ) {
-        final LoginResponse loginResponse = loginService.login(code);
+        final LoginResponse loginResponse = loginService.login(code, fcmTokenRequest);
         return ResponseEntity.ok().body(loginResponse);
     }
 
     @PostMapping("/auth/login/apple")
-    public ResponseEntity<LoginResponse> appleLogin(
-            @RequestParam("idToken") final String idToken,
-            @RequestParam("authorizationCode") final String authorizationCode
-    ) {
-        final LoginResponse loginResponse = loginService.login(idToken, authorizationCode);
+    public ResponseEntity<LoginResponse> appleLogin(final AppleLoginResponse response) {
+        final LoginResponse loginResponse = loginService.login(response);
         return ResponseEntity.ok().body(loginResponse);
     }
 
