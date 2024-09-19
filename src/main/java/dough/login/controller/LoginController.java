@@ -28,7 +28,7 @@ public class LoginController {
     @PostMapping("/auth/login/kakao")
     public ResponseEntity<LoginResponse> kakaoLogin(
             @RequestParam("code") final String code,
-            @RequestBody @Valid FcmTokenRequest fcmTokenRequest
+            @RequestBody FcmTokenRequest fcmTokenRequest
     ) {
         final LoginResponse loginResponse = loginService.login(code, fcmTokenRequest);
         return ResponseEntity.ok().body(loginResponse);
