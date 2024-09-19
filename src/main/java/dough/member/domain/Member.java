@@ -76,6 +76,8 @@ public class Member extends BaseEntity {
 
     private String appleToken;
 
+    private String notificationToken;
+
     @Column(nullable = false)
     private Integer exp;
 
@@ -159,6 +161,10 @@ public class Member extends BaseEntity {
 
     public void updateRefreshToken(final String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updateNotificationToken(final String notificationToken) {
+        this.notificationToken = notificationToken;
     }
 
     public void updateMember(

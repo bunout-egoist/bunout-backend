@@ -20,6 +20,7 @@ import dough.member.dto.response.MemberInfoResponse;
 import dough.notification.domain.Notification;
 import dough.notification.domain.repository.NotificationRepository;
 import dough.notification.domain.type.NotificationType;
+import dough.pushNotification.dto.request.FcmTokenRequest;
 import dough.quest.domain.Quest;
 import dough.quest.domain.repository.QuestRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,14 +50,14 @@ public class LoginService {
     private final QuestRepository questRepository;
     private final NotificationRepository notificationRepository;
 
-    public LoginResponse login(final String code) {
+    public LoginResponse login(final String code, final FcmTokenRequest fcmTokenRequest) {
         final LoginInfo loginInfo = kakaoLoginService.login(code);
-        return saveMember(loginInfo);
+        return saveMember(loginInfo, fcmTokenRequest.getFcmToken());
     }
 
     public LoginResponse login(final AppleLoginResponse appleLoginResponse) {
         final LoginInfo loginInfo = appleLoginService.login(appleLoginResponse.getId_token(), appleLoginResponse.getCode());
-        return saveMember(loginInfo);
+        return saveMember(loginInfo, appleLoginResponse.getNotificationToken());
     }
 
     public void logout(final Long memberId) {
@@ -64,6 +65,7 @@ public class LoginService {
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         member.updateRefreshToken(null);
+        member.updateNotificationToken(null);
 
         memberRepository.save(member);
     }
@@ -89,13 +91,14 @@ public class LoginService {
         return new MemberInfo(member, true);
     }
 
-    private LoginResponse saveMember(final LoginInfo loginInfo) {
+    private LoginResponse saveMember(final LoginInfo loginInfo, final String notificationToken) {
         final MemberInfo memberInfo = findOrCreateMember(loginInfo);
         final Member member = memberInfo.getMember();
 
         final String refreshToken = tokenProvider.generateRefreshToken();
 
         member.updateRefreshToken(refreshToken);
+        member.updateNotificationToken(notificationToken);
         memberRepository.save(member);
 
         final String memberAccessToken = tokenProvider.generateAccessToken(member.getId().toString());
