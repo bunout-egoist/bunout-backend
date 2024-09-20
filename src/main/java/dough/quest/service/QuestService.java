@@ -59,10 +59,20 @@ public class QuestService {
         final List<SelectedQuest> todayQuests = updateTodayByTypeQuests(member, member.getBurnout(), currentDate);
 
         if (isSpecialQuestDay(currentDate)) {
-            final SelectedQuest specialQuest = selectedQuestRepository.findSpecialQuest()
-                    .orElse(new SelectedQuest(member, getTodaySpecialQuest()));
-            todayQuests.add(specialQuest);
+            final Quest newSpecialQuest = getTodaySpecialQuest();
+            selectedQuestRepository.findInProgressSpecialQuest()
+                    .map(specialQuest -> {
+                        specialQuest.updateSelectedQuest(newSpecialQuest, currentDate);
+                        todayQuests.add(specialQuest);
+                        return specialQuest;
+                    })
+                    .orElseGet(() -> {
+                        final SelectedQuest newQuest = new SelectedQuest(member, newSpecialQuest);
+                        todayQuests.add(newQuest);
+                        return newQuest;
+                    });
         }
+
         todayQuests.add(new SelectedQuest(member, member.getQuest()));
 
         return selectedQuestRepository.saveAll(todayQuests);
@@ -119,7 +129,7 @@ public class QuestService {
     }
 
     private Quest getTodaySpecialQuest() {
-        final List<Quest> specialQuests = questRepository.findSpecialQuestByBurnoutId();
+        final List<Quest> specialQuests = questRepository.findSpecialQuest();
         Collections.shuffle(specialQuests);
         if (!specialQuests.isEmpty()) {
             return specialQuests.get(0);
