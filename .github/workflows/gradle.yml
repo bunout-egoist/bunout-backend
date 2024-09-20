@@ -94,7 +94,7 @@ jobs:
       - name: Make firebase directory
         if: contains(github.ref, 'main')
         run: |
-          mkdir -p ./src/main/resources/firebase
+          mkdir -p ./src/main/
         shell: bash
 
       - name: Create FCM key JSON
