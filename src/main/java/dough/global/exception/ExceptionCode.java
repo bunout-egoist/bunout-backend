@@ -21,8 +21,8 @@ public enum ExceptionCode {
     ALREADY_UPDATED_BURNOUT_TYPE(3001, "번아웃 유형은 이번 달에 이미 수정되었습니다."),
     ALREADY_UPDATED_FIXED_QUEST(3002, "고정 퀘스트는 이번 주에 재설정되었습니다."),
 
-    // 4000 feedback
-
+    // 4000 pushNotification
+    FAIL_TO_FCM_REQUEST(4000, "FCM 요청에 실패했습니다."),
 
     // 5000 burnout
     NOT_FOUND_BURNOUT_ID(5000, "요청하신 ID에 해당하는 번아웃 유형을 찾을 수 없습니다."),
