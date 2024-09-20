@@ -7,7 +7,6 @@ import dough.login.infrastructure.oauth.OAuth2SuccessHandler;
 import dough.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,10 +20,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.List;
+import java.util.Arrays;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,9 +31,6 @@ public class SecurityConfig {
 
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
-
-    @Value("${cors.allowed.origins}")
-    private List<String> allowedOrigins;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -88,9 +83,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedOriginPatterns(allowedOrigins);
-        config.setExposedHeaders(List.of("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "https://appleid.apple.com", "https://bunout.info"));
+        config.setExposedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true);
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
