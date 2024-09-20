@@ -94,15 +94,15 @@ jobs:
       - name: Make firebase directory
         if: contains(github.ref, 'main')
         run: |
-          mkdir -p ./src/main/
-        shell: bash
-
+          mkdir -p ./src/main/resources/firebase
+      
       - name: Create FCM key JSON
         if: contains(github.ref, 'main')
         uses: jsdaniell/create-json@1.1.2
         with:
-          destination: ./src/main/resources/firebase/bunout-2ed63-firebase-adminsdk-5dr7p-2f2195cbc8.json
-          data: ${{ secrets.FIREBASE_SECRET_KEY }}
+          name: bunout-2ed63-firebase-adminsdk-5dr7p-2f2195cbc8.json
+          json: ${{ secrets.FIREBASE_SECRET_KEY }}
+          dir: ./src/main/resources/firebase 
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
