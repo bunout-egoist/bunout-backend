@@ -56,6 +56,15 @@ jobs:
           echo "${{ secrets.YML_JWT }}" > ./application-jwt.yml
         shell: bash
 
+      - name: Make application-fcm.yml
+        if: |
+          contains(github.ref, 'main')
+        run: |
+          cd ./src/main/resources 
+          touch ./application-fcm.yml 
+          echo "${{ secrets.YML_JWT }}" > ./application-fcm.yml
+        shell: bash
+
       - name: Make application-oauth.yml
         if: |
           contains(github.ref, 'main')
@@ -80,6 +89,14 @@ jobs:
         run: |
           mkdir -p ./src/main/resources/keys
           echo "${{ secrets.APPLE_KEY }}" > ./src/main/resources/keys/AuthKey_D69RVU73XV.p8
+        shell: bash
+
+      - name: Make fcm key.yml
+        if: |
+          contains(github.ref, 'main')
+        run: |
+          mkdir -p ./src/main/resources/firebase
+          echo "${{ secrets.FIREBASE_SECRET_KEY }}" > ./src/main/resources/firebase/bunout-2ed63-firebase-adminsdk-5dr7p-2f2195cbc8.json
         shell: bash
 
       - name: Grant execute permission for gradlew
