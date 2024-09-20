@@ -35,8 +35,12 @@ public class LoginController {
     }
 
     @PostMapping("/auth/login/apple")
-    public ResponseEntity<LoginResponse> appleLogin(final AppleLoginResponse response) {
-        final LoginResponse loginResponse = loginService.login(response);
+    public ResponseEntity<LoginResponse> appleLogin(
+            @RequestParam("idToken") final String idToken,
+            @RequestParam("authorizationCode") final String authorizationCode,
+            @RequestBody FcmTokenRequest fcmTokenRequest
+    ) {
+        final LoginResponse loginResponse = loginService.login(idToken, authorizationCode, fcmTokenRequest);
         return ResponseEntity.ok().body(loginResponse);
     }
 

@@ -55,9 +55,9 @@ public class LoginService {
         return saveMember(loginInfo, fcmTokenRequest.getFcmToken());
     }
 
-    public LoginResponse login(final AppleLoginResponse appleLoginResponse) {
-        final LoginInfo loginInfo = appleLoginService.login(appleLoginResponse.getId_token(), appleLoginResponse.getCode());
-        return saveMember(loginInfo, appleLoginResponse.getNotificationToken());
+    public LoginResponse login(final String idToken, final String authorizationCode, final FcmTokenRequest fcmTokenRequest) {
+        final LoginInfo loginInfo = appleLoginService.login(idToken, authorizationCode);
+        return saveMember(loginInfo, fcmTokenRequest.getFcmToken());
     }
 
     public void logout(final Long memberId) {
