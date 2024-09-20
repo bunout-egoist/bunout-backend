@@ -27,11 +27,10 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static dough.global.exception.ExceptionCode.*;
-import static dough.quest.domain.type.QuestType.*;
+import static dough.quest.domain.type.QuestType.BY_TYPE;
 import static java.time.DayOfWeek.*;
 
 @Service
@@ -60,9 +59,8 @@ public class QuestService {
         final List<SelectedQuest> todayQuests = updateTodayByTypeQuests(member, member.getBurnout(), currentDate);
 
         if (isSpecialQuestDay(currentDate)) {
-            final SelectedQuest specialQuest = selectedQuestRepository.findSpecialQuestByDate(currentDate)
+            final SelectedQuest specialQuest = selectedQuestRepository.findSpecialQuest()
                     .orElse(new SelectedQuest(member, getTodaySpecialQuest()));
-            specialQuest.updateDueDate(currentDate);
             todayQuests.add(specialQuest);
         }
         todayQuests.add(new SelectedQuest(member, member.getQuest()));
@@ -70,34 +68,42 @@ public class QuestService {
         return selectedQuestRepository.saveAll(todayQuests);
     }
 
+    private List<SelectedQuest> updateTodayByTypeQuests(final Member member, final Burnout burnout, final LocalDate currentDate) {
+        final List<SelectedQuest> incompleteByTypeQuests = getIncompleteByTypeQuests(member, burnout, currentDate);
+
+        final int requiredCount = calculateRequiredQuestsCount(incompleteByTypeQuests.size());
+
+        if (requiredCount > 0) {
+            getQuestsByLimitedCount(member, requiredCount, incompleteByTypeQuests)
+                    .forEach(todayByTypeQuest -> incompleteByTypeQuests.add(new SelectedQuest(member, todayByTypeQuest)));
+        }
+
+        return incompleteByTypeQuests;
+    }
+
+    private int calculateRequiredQuestsCount(final int currentCount) {
+        return Math.max(0, 2 - currentCount);
+    }
+
+    private List<Quest> getQuestsByLimitedCount(final Member member, final int requiredCount, final List<SelectedQuest> incompleteByTypeQuests) {
+        final List<Quest> todayByTypeQuests = questRepository.findTodayByTypeQuestsByMemberId(member.getId(), member.getBurnout().getId());
+
+        return todayByTypeQuests.stream()
+                .collect(Collectors.groupingBy(quest -> quest.getKeyword().getId()))
+                .values().stream()
+                .flatMap(List::stream)
+                .limit(requiredCount)
+                .collect(Collectors.toList());
+    }
+
     private List<SelectedQuest> getTodayQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> todayQuests = findTodayQuests(member, currentDate);
+        final List<SelectedQuest> todayQuests = selectedQuestRepository.findTodayQuests(member.getId(), currentDate);
 
         if (todayQuests.isEmpty()) {
             todayQuests.addAll(createTodayQuests(member, currentDate));
         }
 
         return todayQuests;
-    }
-
-    private List<SelectedQuest> findTodayQuests(final Member member, final LocalDate currentDate) {
-        final List<SelectedQuest> todayQuests = selectedQuestRepository.findTodayQuests(member.getId(), currentDate);
-
-        return todayQuests.stream()
-                .filter(todayQuest -> {
-                    final Quest quest = todayQuest.getQuest();
-                    final Quest fixedQuest = member.getQuest();
-
-                    if (quest.getQuestType().equals(FIXED) && (quest.equals(fixedQuest))) {
-                        return true;
-                    } else if (quest.getQuestType().equals(BY_TYPE) && (quest.getBurnout().equals(member.getBurnout()))) {
-                        return true;
-                    } else if (quest.getQuestType().equals(SPECIAL)) {
-                        return true;
-                    }
-                    return false;
-                })
-                .collect(Collectors.toList());
     }
 
     private KeywordCode getKeywords(final List<SelectedQuest> todayQuests) {
@@ -126,25 +132,6 @@ public class QuestService {
         return dayOfWeek.equals(MONDAY) ||
                 dayOfWeek.equals(THURSDAY) ||
                 dayOfWeek.equals(SUNDAY);
-    }
-
-    public List<SelectedQuest> updateTodayByTypeQuests(final Member member, final Burnout burnout, final LocalDate currentDate) {
-        final List<SelectedQuest> incompleteByTypeQuests = getIncompleteByTypeQuests(member, burnout, currentDate);
-
-        final int neededCount = 2 - incompleteByTypeQuests.size();
-
-        if (neededCount > 0) {
-            final List<Quest> todayByTypeQuests = questRepository.findTodayByTypeQuestsByMemberId(member.getId(), burnout.getId());
-            final Map<Long, List<Quest>> groupedByKeyword = todayByTypeQuests.stream()
-                    .collect(Collectors.groupingBy(quest -> quest.getKeyword().getId()));
-
-            groupedByKeyword.values().stream()
-                    .flatMap(List::stream)
-                    .limit(neededCount)
-                    .collect(Collectors.toList())
-                    .forEach(todayByTypeQuest -> incompleteByTypeQuests.add(new SelectedQuest(member, todayByTypeQuest)));
-        }
-        return incompleteByTypeQuests;
     }
 
     private List<SelectedQuest> getIncompleteByTypeQuests(final Member member, final Burnout burnout, final LocalDate currentDate) {
