@@ -17,7 +17,7 @@ public class FCMConfig {
     @PostConstruct
     public void initialize() {
         try {
-            FileInputStream serviceAccount = new FileInputStream("./src/main/resources/firebase/bunout-2ed63-firebase-adminsdk-5dr7p-2f2195cbc8.json");
+            FileInputStream serviceAccount = new FileInputStream("firebase/bunout-2ed63-firebase-adminsdk-5dr7p-2f2195cbc8.json");
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
