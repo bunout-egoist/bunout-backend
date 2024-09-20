@@ -91,13 +91,18 @@ jobs:
           echo "${{ secrets.APPLE_KEY }}" > ./src/main/resources/keys/AuthKey_D69RVU73XV.p8
         shell: bash
 
-      - name: Make fcm key.yml
-        if: |
-          contains(github.ref, 'main')
+      - name: Make firebase directory
+        if: contains(github.ref, 'main')
         run: |
           mkdir -p ./src/main/resources/firebase
-          echo "${{ secrets.FIREBASE_SECRET_KEY }}" > ./src/main/resources/firebase/bunout-2ed63-firebase-adminsdk-5dr7p-2f2195cbc8.json
         shell: bash
+
+      - name: Create FCM key JSON
+        if: contains(github.ref, 'main')
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          destination: ./src/main/resources/firebase/bunout-2ed63-firebase-adminsdk-5dr7p-2f2195cbc8.json
+          data: ${{ secrets.FIREBASE_SECRET_KEY }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
