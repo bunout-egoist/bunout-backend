@@ -89,9 +89,9 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedOriginPatterns(allowedOrigins);
         config.setExposedHeaders(List.of("*"));
-//        config.setAllowCredentials(true);
+        config.setAllowCredentials(true);
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
