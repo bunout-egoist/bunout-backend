@@ -18,4 +18,5 @@ public class AppleLoginResponse {
     private String code;
     private String id_token;
     private String user;
+    private String notificationToken;
 }

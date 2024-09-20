@@ -41,3 +41,6 @@ src/main/resources/*.yml
 
 ### apple key.p8 ###
 src/main/resources/keys/*.p8
+
+### firebase private key ###
+src/main/resources/firebase/*.json
