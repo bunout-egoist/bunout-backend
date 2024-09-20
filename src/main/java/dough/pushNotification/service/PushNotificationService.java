@@ -5,6 +5,7 @@ import dough.global.exception.BadRequestException;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import static dough.global.exception.ExceptionCode.FAIL_TO_FCM_REQUEST;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PushNotificationService {
 
     private final MemberRepository memberRepository;
@@ -104,7 +106,7 @@ public class PushNotificationService {
     private void sendBatchMessages(List<Message> messages) {
         try {
             BatchResponse response = FirebaseMessaging.getInstance().sendAll(messages);
-            System.out.println(response.getSuccessCount() + " messages were sent successfully");
+            log.info("{} messages were sent successfully", response.getSuccessCount());
         } catch (Exception e) {
             throw new BadRequestException(FAIL_TO_FCM_REQUEST);
         }
