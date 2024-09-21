@@ -4,7 +4,6 @@ import dough.login.domain.Accessor;
 import dough.login.domain.Auth;
 import dough.login.dto.request.SignUpRequest;
 import dough.login.dto.response.AccessTokenResponse;
-import dough.login.dto.response.AppleLoginResponse;
 import dough.login.dto.response.LoginResponse;
 import dough.login.service.LoginService;
 import dough.member.dto.response.MemberInfoResponse;
