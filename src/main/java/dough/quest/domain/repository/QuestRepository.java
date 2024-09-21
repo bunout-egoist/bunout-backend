@@ -30,7 +30,7 @@ public interface QuestRepository extends JpaRepository<Quest, Long> {
             FROM Quest quest
             WHERE quest.questType = 'SPECIAL'
            """)
-    List<Quest> findSpecialQuestByBurnoutId();
+    List<Quest> findSpecialQuest();
 
     @Query("""
             SELECT q
