@@ -66,9 +66,9 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
             FROM SelectedQuest sq
             LEFT JOIN FETCH sq.quest q
             LEFT JOIN FETCH sq.feedback f
-            WHERE q.questType = 'SPECIAL' AND sq.questStatus = "IN_PROGRESS"
+            WHERE q.questType = 'SPECIAL' AND sq.questStatus = 'IN_PROGRESS' AND sq.member.id = :memberId
             """)
-    Optional<SelectedQuest> findInProgressSpecialQuest();
+    List<SelectedQuest> findInProgressSpecialQuestsByMemberId(@Param("memberId") final Long memberId);
 
     @Query("""
              SELECT new dough.quest.dto.CompletedQuestsCountElement(
