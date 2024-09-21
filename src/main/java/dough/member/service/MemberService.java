@@ -13,10 +13,7 @@ import dough.member.dto.request.MemberInfoRequest;
 import dough.member.dto.response.MemberAttendanceResponse;
 import dough.member.dto.response.MemberInfoResponse;
 import dough.quest.domain.Quest;
-import dough.quest.domain.SelectedQuest;
 import dough.quest.domain.repository.QuestRepository;
-import dough.quest.domain.repository.SelectedQuestRepository;
-import dough.quest.service.QuestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
-import java.util.List;
 import java.util.Optional;
 
 import static dough.global.exception.ExceptionCode.*;
@@ -39,9 +35,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final QuestRepository questRepository;
     private final BurnoutRepository burnoutRepository;
-    private final SelectedQuestRepository selectedQuestRepository;
     private final LevelService levelService;
-    private final QuestService questService;
 
     @Transactional(readOnly = true)
     public MemberInfoResponse getMemberInfo(final Long memberId) {
@@ -73,9 +67,6 @@ public class MemberService {
         final LocalDate currentDate = LocalDate.now();
         validateBurnoutUpdate(member.getBurnoutLastModified(), currentDate);
 
-        updateTodayByTypeQuests(member, burnout, currentDate);
-        updateTodayFixedQuest(member, fixedQuest);
-
         member.updateBurnout(burnout, currentDate);
         member.updateFixedQuest(fixedQuest, member.getFixedQuestLastModified());
 
@@ -92,8 +83,6 @@ public class MemberService {
 
         final Quest fixedQuest = questRepository.findById(fixedQuestRequest.getFixedQuestId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_QUEST_ID));
-
-        updateTodayFixedQuest(member, fixedQuest);
 
         member.updateFixedQuest(fixedQuest, currentDate);
         memberRepository.save(member);
@@ -125,22 +114,6 @@ public class MemberService {
         memberRepository.save(memberLevel.getMember());
 
         return MemberAttendanceResponse.of(memberLevel);
-    }
-
-    private void updateTodayByTypeQuests(final Member member, final Burnout burnout, final LocalDate currentDate) {
-        if (!member.getBurnout().equals(burnout)) {
-            final List<SelectedQuest> todayByTypeQuests = questService.updateTodayByTypeQuests(member, burnout, currentDate);
-            if (!todayByTypeQuests.isEmpty()) {
-                selectedQuestRepository.saveAll(todayByTypeQuests);
-            }
-        }
-    }
-
-    private void updateTodayFixedQuest(final Member member, final Quest fixedQuest) {
-        if (!member.getQuest().equals(fixedQuest)) {
-            final SelectedQuest selectedQuest = new SelectedQuest(member, fixedQuest);
-            selectedQuestRepository.save(selectedQuest);
-        }
     }
 
     private void validateBurnoutUpdate(final LocalDate lastModified, final LocalDate currentDate) {
