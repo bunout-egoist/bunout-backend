@@ -70,12 +70,17 @@ public class LoginService {
     }
 
     private MemberInfo findOrCreateMember(final LoginInfo loginInfo) {
-        return memberRepository.findBySocialLoginId(loginInfo.getSocialLoginId())
-                .map(member -> new MemberInfo(member, false))
+        final Member member = memberRepository.findBySocialLoginId(loginInfo.getSocialLoginId())
                 .orElseGet(() -> createMember(loginInfo));
+
+        if (member.getBurnout() == null) {
+            return new MemberInfo(member, true);
+        }
+
+        return new MemberInfo(member, false);
     }
 
-    private MemberInfo createMember(final LoginInfo loginInfo) {
+    private Member createMember(final LoginInfo loginInfo) {
         final Level level = levelRepository.findByLevel(1)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_LEVEL_ID));
 
@@ -87,7 +92,7 @@ public class LoginService {
                 loginInfo.getAppleToken()
         );
 
-        return new MemberInfo(member, true);
+        return member;
     }
 
     private LoginResponse saveMember(final LoginInfo loginInfo, final String notificationToken) {
