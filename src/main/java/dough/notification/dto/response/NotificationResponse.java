@@ -12,12 +12,14 @@ public class NotificationResponse {
     private final Long id;
     private final NotificationType notificationType;
     private final Boolean isChecked;
+    private final Boolean isFcmExisted;
 
     public static NotificationResponse of(final Notification notification) {
         return new NotificationResponse(
                 notification.getId(),
                 notification.getNotificationType(),
-                notification.getIsChecked()
+                notification.getIsChecked(),
+                !notification.getMember().getNotificationToken().isEmpty()
         );
     }
 }

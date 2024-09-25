@@ -59,6 +59,10 @@ public class NotificationControllerTest extends AbstractControllerTest {
     @Test
     void getAllNotifications() throws Exception {
         // given
+        BY_TYPE_NOTIFICATION.getMember().updateNotificationToken("arefsrgdthbfgvdaserfwtyujhn bf");
+        SPECIAL_NOTIFICATION.getMember().updateNotificationToken("asvgrsbgvfaecdaefvsgrbdhbgvfs");
+        REMAINING_NOTIFICATION.getMember().updateNotificationToken("advfsrdtnhfgcfbvdrtsgdyfhujnhgdzsA");
+
         final List<NotificationResponse> notificationResponses = List.of(
                 NotificationResponse.of(BY_TYPE_NOTIFICATION),
                 NotificationResponse.of(SPECIAL_NOTIFICATION),
@@ -92,6 +96,10 @@ public class NotificationControllerTest extends AbstractControllerTest {
                                         .type(BOOLEAN)
                                         .description("알림 여부")
                                         .attributes(field("constraint", "불리언")),
+                                fieldWithPath("[0].isFcmExisted")
+                                        .type(BOOLEAN)
+                                        .description("FCM토큰 여부")
+                                        .attributes(field("constraint", "불리언")),
                                 fieldWithPath("[1].id")
                                         .type(NUMBER)
                                         .description("알림 아이디")
@@ -104,6 +112,10 @@ public class NotificationControllerTest extends AbstractControllerTest {
                                         .type(BOOLEAN)
                                         .description("알림 여부")
                                         .attributes(field("constraint", "불리언")),
+                                fieldWithPath("[1].isFcmExisted")
+                                        .type(BOOLEAN)
+                                        .description("FCM토큰 여부")
+                                        .attributes(field("constraint", "불리언")),
                                 fieldWithPath("[2].id")
                                         .type(NUMBER)
                                         .description("알림 아이디")
@@ -115,6 +127,10 @@ public class NotificationControllerTest extends AbstractControllerTest {
                                 fieldWithPath("[2].isChecked")
                                         .type(BOOLEAN)
                                         .description("알림 여부")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("[2].isFcmExisted")
+                                        .type(BOOLEAN)
+                                        .description("FCM토큰 여부")
                                         .attributes(field("constraint", "불리언"))
                         )
                 ));
@@ -124,6 +140,10 @@ public class NotificationControllerTest extends AbstractControllerTest {
     @Test
     void updateNotifications() throws Exception {
         // given
+        BY_TYPE_NOTIFICATION.getMember().updateNotificationToken("arefsrgdthbfgvdaserfwtyujhn bf");
+        SPECIAL_NOTIFICATION.getMember().updateNotificationToken("asvgrsbgvfaecdaefvsgrbdhbgvfs");
+        REMAINING_NOTIFICATION.getMember().updateNotificationToken("advfsrdtnhfgcfbvdrtsgdyfhujnhgdzsA");
+
         final NotificationsUpdateRequest notificationsUpdateRequest = new NotificationsUpdateRequest(List.of(
                 new NotificationUpdateRequest(BY_TYPE_NOTIFICATION.getId(), true),
                 new NotificationUpdateRequest(SPECIAL_NOTIFICATION.getId(), true),
@@ -152,32 +172,6 @@ public class NotificationControllerTest extends AbstractControllerTest {
                                 headerWithName("Authorization")
                                         .description("엑세스 토큰")
                         ),
-                        requestFields(
-                                fieldWithPath("notifications[0].id")
-                                        .type(NUMBER)
-                                        .description("알림 아이디")
-                                        .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("notifications[0].isChecked")
-                                        .type(BOOLEAN)
-                                        .description("알림 여부")
-                                        .attributes(field("constraint", "불리언")),
-                                fieldWithPath("notifications[1].id")
-                                        .type(NUMBER)
-                                        .description("알림 아이디")
-                                        .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("notifications[1].isChecked")
-                                        .type(BOOLEAN)
-                                        .description("알림 여부")
-                                        .attributes(field("constraint", "불리언")),
-                                fieldWithPath("notifications[2].id")
-                                        .type(NUMBER)
-                                        .description("알림 아이디")
-                                        .attributes(field("constraint", "양의 정수")),
-                                fieldWithPath("notifications[2].isChecked")
-                                        .type(BOOLEAN)
-                                        .description("알림 여부")
-                                        .attributes(field("constraint", "불리언"))
-                        ),
                         responseFields(
                                 fieldWithPath("[0].id")
                                         .type(NUMBER)
@@ -191,6 +185,10 @@ public class NotificationControllerTest extends AbstractControllerTest {
                                         .type(BOOLEAN)
                                         .description("알림 여부")
                                         .attributes(field("constraint", "불리언")),
+                                fieldWithPath("[0].isFcmExisted")
+                                        .type(BOOLEAN)
+                                        .description("FCM토큰 여부")
+                                        .attributes(field("constraint", "불리언")),
                                 fieldWithPath("[1].id")
                                         .type(NUMBER)
                                         .description("알림 아이디")
@@ -203,6 +201,10 @@ public class NotificationControllerTest extends AbstractControllerTest {
                                         .type(BOOLEAN)
                                         .description("알림 여부")
                                         .attributes(field("constraint", "불리언")),
+                                fieldWithPath("[1].isFcmExisted")
+                                        .type(BOOLEAN)
+                                        .description("FCM토큰 여부")
+                                        .attributes(field("constraint", "불리언")),
                                 fieldWithPath("[2].id")
                                         .type(NUMBER)
                                         .description("알림 아이디")
@@ -214,6 +216,10 @@ public class NotificationControllerTest extends AbstractControllerTest {
                                 fieldWithPath("[2].isChecked")
                                         .type(BOOLEAN)
                                         .description("알림 여부")
+                                        .attributes(field("constraint", "불리언")),
+                                fieldWithPath("[2].isFcmExisted")
+                                        .type(BOOLEAN)
+                                        .description("FCM토큰 여부")
                                         .attributes(field("constraint", "불리언"))
                         )
                 ));

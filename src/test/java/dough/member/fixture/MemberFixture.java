@@ -24,4 +24,8 @@ public class MemberFixture {
             FIXED_QUEST1,
             "apple token"
     );
+
+    public void memberUpdateFCMToken(Member member) {
+        member.updateNotificationToken("dkjkasfljckmalcask");
+    }
 }
