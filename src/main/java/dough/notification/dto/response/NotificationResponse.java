@@ -19,7 +19,7 @@ public class NotificationResponse {
                 notification.getId(),
                 notification.getNotificationType(),
                 notification.getIsChecked(),
-                !notification.getMember().getNotificationToken().isEmpty()
+                notification.getMember().getNotificationToken() == null
         );
     }
 }
