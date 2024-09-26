@@ -13,7 +13,8 @@ public class Accessor {
 
     public Accessor(
             final Long memberId,
-            final RoleType role) {
+            final RoleType role
+    ) {
         this.memberId = memberId;
         this.role = role;
     }
