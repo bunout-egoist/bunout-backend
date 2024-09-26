@@ -13,6 +13,7 @@ import java.util.List;
 public class TodayQuestListResponse {
 
     private final Long burnoutId;
+    private final Integer level;
     private final String placeKeyword;
     private final String participationKeyword;
     private final List<TodayQuestResponse> todayQuests;
@@ -28,6 +29,7 @@ public class TodayQuestListResponse {
 
         return new TodayQuestListResponse(
                 member.getBurnout().getId(),
+                member.getLevel().getLevel(),
                 keywordCode.getPlaceCode(),
                 keywordCode.getParticipationCode(),
                 todayQuestResponses

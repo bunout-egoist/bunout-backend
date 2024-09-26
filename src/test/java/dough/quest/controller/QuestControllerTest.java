@@ -347,6 +347,10 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("누구와 키워드")
                                         .attributes(field("constraint", "문자열")),
+                                fieldWithPath("level")
+                                        .type(NUMBER)
+                                        .description("레벨")
+                                        .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("todayQuests")
                                         .type(ARRAY)
                                         .description("오늘 퀘스트")
