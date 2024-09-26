@@ -15,11 +15,14 @@ public class NotificationResponse {
     private final Boolean isFcmExisted;
 
     public static NotificationResponse of(final Notification notification) {
+        boolean flag_fcmToken = notification.getMember().getNotificationToken() == null;
+        boolean flag_isChecked = true;
+        if(!flag_fcmToken) {flag_isChecked=false;}
         return new NotificationResponse(
                 notification.getId(),
                 notification.getNotificationType(),
-                notification.getIsChecked(),
-                notification.getMember().getNotificationToken() == null
+                flag_isChecked,
+                flag_fcmToken
         );
     }
 }
