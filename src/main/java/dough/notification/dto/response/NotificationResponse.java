@@ -12,12 +12,17 @@ public class NotificationResponse {
     private final Long id;
     private final NotificationType notificationType;
     private final Boolean isChecked;
+    private final Boolean isFcmExisted;
 
     public static NotificationResponse of(final Notification notification) {
+        boolean flag_fcmToken = notification.getMember().getNotificationToken() != null;
+        boolean flag_isChecked = notification.getIsChecked();
+        if(!flag_fcmToken) {flag_isChecked=false;}
         return new NotificationResponse(
                 notification.getId(),
                 notification.getNotificationType(),
-                notification.getIsChecked()
+                flag_isChecked,
+                flag_fcmToken
         );
     }
 }
