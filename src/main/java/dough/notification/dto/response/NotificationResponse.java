@@ -16,7 +16,7 @@ public class NotificationResponse {
 
     public static NotificationResponse of(final Notification notification) {
         boolean flag_fcmToken = notification.getMember().getNotificationToken() == null;
-        boolean flag_isChecked = true;
+        boolean flag_isChecked = notification.getIsChecked();
         if(!flag_fcmToken) {flag_isChecked=false;}
         return new NotificationResponse(
                 notification.getId(),
