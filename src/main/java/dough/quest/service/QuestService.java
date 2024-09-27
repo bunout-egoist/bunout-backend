@@ -139,8 +139,8 @@ public class QuestService {
     private Boolean isSpecialQuestDay(final LocalDate currentDate) {
         final DayOfWeek dayOfWeek = currentDate.getDayOfWeek();
         return dayOfWeek.equals(MONDAY) ||
-                dayOfWeek.equals(THURSDAY) ||
-                dayOfWeek.equals(SUNDAY);
+                dayOfWeek.equals(WEDNESDAY) ||
+                dayOfWeek.equals(SATURDAY);
     }
 
     private SelectedQuest createOrUpdateSpecialQuest(final Member member, final LocalDate currentDate) {
