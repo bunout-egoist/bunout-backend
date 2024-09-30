@@ -1,5 +1,6 @@
 package dough.quest.dto.response;
 
+import dough.burnout.domain.Burnout;
 import dough.keyword.KeywordCode;
 import dough.member.domain.Member;
 import dough.quest.domain.SelectedQuest;
@@ -19,6 +20,7 @@ public class TodayQuestListResponse {
     private final List<TodayQuestResponse> todayQuests;
 
     public static TodayQuestListResponse of(
+            final Burnout burnout,
             final Member member,
             final KeywordCode keywordCode,
             final List<SelectedQuest> todayQuests
@@ -28,7 +30,7 @@ public class TodayQuestListResponse {
                 .toList();
 
         return new TodayQuestListResponse(
-                member.getBurnout().getId(),
+                burnout.getId(),
                 member.getLevel().getLevel(),
                 keywordCode.getPlaceCode(),
                 keywordCode.getParticipationCode(),

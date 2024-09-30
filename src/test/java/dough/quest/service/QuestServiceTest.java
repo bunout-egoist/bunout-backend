@@ -32,8 +32,7 @@ import static dough.keyword.domain.type.PlaceType.ANYWHERE;
 import static dough.keyword.fixture.KeywordFixture.OUTSIDE_ALONE;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.*;
-import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
-import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST2;
+import static dough.quest.fixture.SelectedQuestFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.*;
@@ -256,7 +255,7 @@ public class QuestServiceTest {
     @Test
     void updateTodayQuests() {
         // given
-        final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2);
+        final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, IN_PROGRESS_QUEST2, IN_PROGRESS_QUEST3);
 
         given(memberRepository.findMemberById(anyLong()))
                 .willReturn(Optional.of(GOEUN));
@@ -268,6 +267,6 @@ public class QuestServiceTest {
 
         // then
         assertThat(actualResponse).usingRecursiveComparison()
-                .isEqualTo(TodayQuestListResponse.of(GOEUN, new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests));
+                .isEqualTo(TodayQuestListResponse.of(SOBORO, GOEUN, new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests));
     }
 }
