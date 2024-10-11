@@ -84,7 +84,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "https://appleid.apple.com", "https://app.bunout.info"));
+        config.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "https://appleid.apple.com", "https://app.bunout.info", "https://fcm.googleapis.com"));
         config.setExposedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true);
 
