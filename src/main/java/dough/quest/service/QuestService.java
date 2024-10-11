@@ -27,10 +27,12 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static dough.global.exception.ExceptionCode.*;
 import static dough.quest.domain.type.QuestType.BY_TYPE;
+import static dough.quest.domain.type.QuestType.FIXED;
 import static java.time.DayOfWeek.*;
 
 @Service
@@ -51,8 +53,9 @@ public class QuestService {
         final LocalDate currentDate = LocalDate.now();
         final List<SelectedQuest> todayQuests = getTodayQuests(member, currentDate);
         final KeywordCode keywordCode = getKeywords(todayQuests);
+        final Burnout burnout = findBurnoutFromFixedQuest(todayQuests);
 
-        return TodayQuestListResponse.of(member, keywordCode, todayQuests);
+        return TodayQuestListResponse.of(burnout, member, keywordCode, todayQuests);
     }
 
     private List<SelectedQuest> createTodayQuests(final Member member, final LocalDate currentDate) {
@@ -139,8 +142,8 @@ public class QuestService {
     private Boolean isSpecialQuestDay(final LocalDate currentDate) {
         final DayOfWeek dayOfWeek = currentDate.getDayOfWeek();
         return dayOfWeek.equals(MONDAY) ||
-                dayOfWeek.equals(THURSDAY) ||
-                dayOfWeek.equals(SUNDAY);
+                dayOfWeek.equals(WEDNESDAY) ||
+                dayOfWeek.equals(SATURDAY);
     }
 
     private SelectedQuest createOrUpdateSpecialQuest(final Member member, final LocalDate currentDate) {
@@ -154,6 +157,18 @@ public class QuestService {
         final SelectedQuest specialQuest = specialQuests.get(0);
         specialQuest.updateSelectedQuest(newSpecialQuest, currentDate);
         return specialQuest;
+    }
+
+    private boolean isFixedQuest(final SelectedQuest todayQuest) {
+        return todayQuest.getQuest().getQuestType().equals(FIXED);
+    }
+
+    private Burnout findBurnoutFromFixedQuest(final List<SelectedQuest> todayQuests) {
+        return todayQuests.stream()
+                .filter(this::isFixedQuest)
+                .map(todayQuest -> todayQuest.getQuest().getBurnout())
+                .findFirst()
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
     }
 
     @Transactional(readOnly = true)

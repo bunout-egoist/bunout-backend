@@ -30,7 +30,8 @@ import static dough.keyword.domain.type.ParticipationType.ALONE;
 import static dough.keyword.domain.type.PlaceType.ANYWHERE;
 import static dough.member.fixture.MemberFixture.GOEUN;
 import static dough.quest.fixture.QuestFixture.*;
-import static dough.quest.fixture.SelectedQuestFixture.*;
+import static dough.quest.fixture.SelectedQuestFixture.COMPLETED_QUEST1;
+import static dough.quest.fixture.SelectedQuestFixture.IN_PROGRESS_QUEST1;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -315,7 +316,7 @@ class QuestControllerTest extends AbstractControllerTest {
     void updateTodayQuests() throws Exception {
         // given
         final List<SelectedQuest> todayQuests = List.of(IN_PROGRESS_QUEST1, COMPLETED_QUEST1);
-        final TodayQuestListResponse todayQuestListResponse = TodayQuestListResponse.of(GOEUN, new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests);
+        final TodayQuestListResponse todayQuestListResponse = TodayQuestListResponse.of(SOBORO, GOEUN, new KeywordCode(ANYWHERE.getCode(), ALONE.getCode()), todayQuests);
 
         // given
         given(memberRepository.findMemberById(GOEUN.getId()))
@@ -347,6 +348,10 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("누구와 키워드")
                                         .attributes(field("constraint", "문자열")),
+                                fieldWithPath("level")
+                                        .type(NUMBER)
+                                        .description("레벨")
+                                        .attributes(field("constraint", "양의 정수")),
                                 fieldWithPath("todayQuests")
                                         .type(ARRAY)
                                         .description("오늘 퀘스트")

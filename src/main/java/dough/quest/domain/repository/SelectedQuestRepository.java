@@ -42,6 +42,7 @@ public interface SelectedQuestRepository extends JpaRepository<SelectedQuest, Lo
              SELECT sq
              FROM SelectedQuest sq
              LEFT JOIN FETCH sq.quest q
+             LEFT JOIN FETCH q.burnout b
              LEFT JOIN FETCH q.keyword k
              LEFT JOIN FETCH sq.member m
              LEFT JOIN FETCH sq.feedback f
