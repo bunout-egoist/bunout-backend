@@ -210,7 +210,7 @@ class QuestControllerTest extends AbstractControllerTest {
     void getFixedQuests() throws Exception {
         // given
         final FixedQuestListResponse fixedQuestListResponse = FixedQuestListResponse.of(
-                SOBORO, List.of(FIXED_QUEST1, FIXED_QUEST2)
+                GOEUN, SOBORO, List.of(FIXED_QUEST1, FIXED_QUEST2)
         );
 
         when(questService.getFixedQuests(anyLong()))
@@ -232,6 +232,10 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("번아웃 이름")
                                         .attributes(field("constraint", "문자열")),
+                                fieldWithPath("nickname")
+                                        .type(STRING)
+                                        .description("멤버 닉네임")
+                                        .attributes(field("constraint", "5자 이내의 문자열")),
                                 fieldWithPath("fixedQuests[0].questId")
                                         .type(NUMBER)
                                         .description("고정 퀘스트 아이디")
@@ -265,10 +269,10 @@ class QuestControllerTest extends AbstractControllerTest {
     void getFixedQuestsByBurnoutId() throws Exception {
         // given
         final FixedQuestListResponse fixedQuestListResponse = FixedQuestListResponse.of(
-                SOBORO, List.of(FIXED_QUEST1, FIXED_QUEST2)
+                GOEUN, SOBORO, List.of(FIXED_QUEST1, FIXED_QUEST2)
         );
 
-        when(questService.getFixedQuestsByBurnoutId(anyLong()))
+        when(questService.getFixedQuestsByBurnoutId(anyLong(), anyLong()))
                 .thenReturn(fixedQuestListResponse);
 
         // when
@@ -282,6 +286,10 @@ class QuestControllerTest extends AbstractControllerTest {
                                         .type(STRING)
                                         .description("번아웃 이름")
                                         .attributes(field("constraint", "문자열")),
+                                fieldWithPath("nickname")
+                                        .type(STRING)
+                                        .description("멤버 닉네임")
+                                        .attributes(field("constraint", "5자 이내의 문자열")),
                                 fieldWithPath("fixedQuests[0].questId")
                                         .type(NUMBER)
                                         .description("고정 퀘스트 아이디")
