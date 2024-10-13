@@ -27,7 +27,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static dough.global.exception.ExceptionCode.*;
@@ -177,17 +176,20 @@ public class QuestService {
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         final List<Quest> fixedQuests = questRepository.findFixedQuestsByBurnoutId(member.getBurnout().getId());
-        return FixedQuestListResponse.of(member.getBurnout(), fixedQuests);
+        return FixedQuestListResponse.of(member, member.getBurnout(), fixedQuests);
     }
 
     @Transactional(readOnly = true)
-    public FixedQuestListResponse getFixedQuestsByBurnoutId(final Long burnoutId) {
+    public FixedQuestListResponse getFixedQuestsByBurnoutId(final Long memberId, final Long burnoutId) {
+        final Member member = memberRepository.findMemberById(memberId)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+
         final Burnout burnout = burnoutRepository.findById(burnoutId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_BURNOUT_ID));
 
         final List<Quest> fixedQuests = questRepository.findFixedQuestsByBurnoutId(burnout.getId());
 
-        return FixedQuestListResponse.of(burnout, fixedQuests);
+        return FixedQuestListResponse.of(member, burnout, fixedQuests);
     }
 
     public void save(final QuestRequest questRequest) {
