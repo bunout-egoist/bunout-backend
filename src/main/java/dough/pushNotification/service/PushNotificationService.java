@@ -2,48 +2,59 @@ package dough.pushNotification.service;
 
 import com.google.api.core.ApiFuture;
 import com.google.firebase.messaging.*;
-import com.google.storage.v2.NotificationConfigOrBuilder;
 import dough.global.exception.BadRequestException;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import static dough.global.exception.ExceptionCode.FAIL_TO_FCM_REQUEST;
+import static dough.global.exception.ExceptionCode.*;
 
-@Service
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class PushNotificationService {
 
     private final MemberRepository memberRepository;
-    private static final int BATCH_SIZE = 500;
+//    private static final int BATCH_SIZE = 500;
 
     @Scheduled(cron = "0 0 9 * * ?")
     public void sendDailyQuest() {
-        sendNotification("%s님, 오늘의 퀘스트가 도착했어요!", null, null, null);
+        try {
+            sendNotification("%s님, 오늘의 퀘스트가 도착했어요!", null);
+        }
+        catch (Exception e) {
+            throw new BadRequestException(FAIL_TO_REQUEST_DAILY_PUSH_REQUEST);
+        }
     }
 
     @Scheduled(cron = "0 0 18 * * ?")
     public void sendLeftQuest() {
-        sendNotification("잠깐! 🤚 %s님, 집에 가기 전에 번아웃 잊지 않으셨죠?!",
-                null, null, null);
+        try {
+            sendNotification("잠깐! 🤚 %s님, 집에 가기 전에 번아웃 잊지 않으셨죠?!",
+                    null);
+        }
+        catch (Exception e) {
+            throw new BadRequestException(FAIL_TO_REQUEST_LEFT_PUSH_REQUEST);
+        }
     }
 
     @Scheduled(cron = "0 0 13 * * 1,3,7")
     public void sendSpecialQuest() {
-        sendNotification("[%s], 지금 뭐해?", "스페셜 퀘스트가 도착했어요!", null, null);
+        try {
+            sendNotification("[%s], 지금 뭐해?", "스페셜 퀘스트가 도착했어요!");
+        }
+        catch (Exception e) {
+            throw new BadRequestException(FAIL_TO_REQUEST_SPECIAL_PUSH_REQUEST);
+        }
     }
 
-    private void sendNotification(String titleTemplate, String bodyTemplate, String clickAction, Map<String, String> customData) {
+    private void sendNotification(String titleTemplate, String bodyTemplate) {
         List<Member> members = memberRepository.findAll();
 
         List<Message> messages = new LinkedList<>();
@@ -55,23 +66,6 @@ public class PushNotificationService {
         }
 
         sendBatchMessages(messages);
-    }
-
-    private List<String> getValidTokens(List<Member> members) {
-        return members.stream()
-                .map(Member::getNotificationToken)
-                .filter(token -> token != null && !token.isEmpty())
-                .collect(Collectors.toList());
-    }
-
-    private int calculateNumberOfBatches(int totalSize) {
-        return (totalSize + BATCH_SIZE - 1) / BATCH_SIZE;
-    }
-
-    private List<String> getBatchTokens(List<String> tokens, int batchIndex) {
-        int start = batchIndex * BATCH_SIZE;
-        int end = Math.min(start + BATCH_SIZE, tokens.size());
-        return tokens.subList(start, end);
     }
 
     private Message buildMessageForMember(Member member, String token, String titleTemplate, String bodyTemplate) {
@@ -108,13 +102,10 @@ public class PushNotificationService {
 
     private void sendBatchMessages(List<Message> messages) {
         try {
-            // Send messages asynchronously
             ApiFuture<BatchResponse> futureResponse = FirebaseMessaging.getInstance().sendEachAsync(messages);
 
-            // Wait for the single result
             BatchResponse response = futureResponse.get(); // This may throw an InterruptedException or ExecutionException
 
-            // Process success count directly from the single response
             log.info("{} messages were sent successfully", response.getSuccessCount());
 
         } catch (Exception e) {

@@ -23,6 +23,9 @@ public enum ExceptionCode {
 
     // 4000 pushNotification
     FAIL_TO_FCM_REQUEST(4000, "FCM 요청에 실패했습니다."),
+    FAIL_TO_REQUEST_DAILY_PUSH_REQUEST(4001, "DAILY QUEST 알림 요청에 실패했습니다"),
+    FAIL_TO_REQUEST_LEFT_PUSH_REQUEST(4002, "LEFT 알림 요청에 실패했습니다"),
+    FAIL_TO_REQUEST_SPECIAL_PUSH_REQUEST(4003, "SPECIAL QUEST 알림 요청에 실패했습니다"),
 
     // 5000 burnout
     NOT_FOUND_BURNOUT_ID(5000, "요청하신 ID에 해당하는 번아웃 유형을 찾을 수 없습니다."),
