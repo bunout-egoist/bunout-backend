@@ -1,6 +1,8 @@
 package dough.pushNotification.service;
 
+import com.google.api.core.ApiFuture;
 import com.google.firebase.messaging.*;
+import com.google.storage.v2.NotificationConfigOrBuilder;
 import dough.global.exception.BadRequestException;
 import dough.member.domain.Member;
 import dough.member.domain.repository.MemberRepository;
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,17 +46,15 @@ public class PushNotificationService {
     private void sendNotification(String titleTemplate, String bodyTemplate, String clickAction, Map<String, String> customData) {
         List<Member> members = memberRepository.findAll();
 
-        List<String> tokens = getValidTokens(members);
+        List<Message> messages = new LinkedList<>();
 
-        IntStream.range(0, calculateNumberOfBatches(tokens.size())).forEach(i -> {
-            List<String> batchTokens = getBatchTokens(tokens, i);
+        for(int i=0; i<members.size(); i++) {
+            if(members.get(i).getNotificationToken() != null) {
+                messages.add(buildMessageForMember(members.get(i), members.get(i).getNotificationToken(), titleTemplate, bodyTemplate));
+            }
+        }
 
-            List<Message> messages = batchTokens.stream()
-                    .map(token -> buildMessageForMember(members.get(tokens.indexOf(token)), token, titleTemplate, bodyTemplate, clickAction, customData))
-                    .collect(Collectors.toList());
-
-            sendBatchMessages(messages);
-        });
+        sendBatchMessages(messages);
     }
 
     private List<String> getValidTokens(List<Member> members) {
@@ -73,7 +74,7 @@ public class PushNotificationService {
         return tokens.subList(start, end);
     }
 
-    private Message buildMessageForMember(Member member, String token, String titleTemplate, String bodyTemplate, String clickAction, Map<String, String> customData) {
+    private Message buildMessageForMember(Member member, String token, String titleTemplate, String bodyTemplate) {
         String nickname = member.getNickname();
         String title = String.format(titleTemplate, nickname);
         String body = bodyTemplate != null ? String.format(bodyTemplate, nickname) : null;
@@ -83,32 +84,44 @@ public class PushNotificationService {
                 .setNotification(Notification.builder()
                         .setTitle(title)
                         .setBody(body)
+                        .setImage("https://bunout-bucket.s3.ap-northeast-2.amazonaws.com/image.jpg")
                         .build())
                 .setAndroidConfig(AndroidConfig.builder()
+                        .setTtl(3600 * 1000)
                         .setNotification(AndroidNotification.builder()
                                 .setTitle(title)
                                 .setBody(body)
-                                .setClickAction(clickAction)
+                                .setIcon("https://bunout-bucket.s3.ap-northeast-2.amazonaws.com/image.jpg")
                                 .build())
                         .build())
                 .setApnsConfig(ApnsConfig.builder()
                         .setAps(Aps.builder()
-                                .putCustomData("alert", Map.of(
-                                        "title", title,
-                                        "body", body
-                                ))
-                                .putCustomData("sound", "default")
+                                .setBadge(42)
                                 .build())
+                        .build())
+                .setWebpushConfig(WebpushConfig.builder()
+                        .putHeader("ttl", "300")
+                        .putData("icon", "https://bunout-bucket.s3.ap-northeast-2.amazonaws.com/image.jpg")
                         .build())
                 .build();
     }
 
     private void sendBatchMessages(List<Message> messages) {
         try {
-            BatchResponse response = FirebaseMessaging.getInstance().sendAll(messages);
+            // Send messages asynchronously
+            ApiFuture<BatchResponse> futureResponse = FirebaseMessaging.getInstance().sendEachAsync(messages);
+
+            // Wait for the single result
+            BatchResponse response = futureResponse.get(); // This may throw an InterruptedException or ExecutionException
+
+            // Process success count directly from the single response
             log.info("{} messages were sent successfully", response.getSuccessCount());
+
         } catch (Exception e) {
+            log.error("Failed to send batch messages", e);
             throw new BadRequestException(FAIL_TO_FCM_REQUEST);
         }
     }
+
+
 }
