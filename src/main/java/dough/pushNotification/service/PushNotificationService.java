@@ -88,8 +88,6 @@ public class PushNotificationService {
                 .setWebpushConfig(WebpushConfig.builder()
                         .putHeader("ttl", "300")
                         .setNotification(WebpushNotification.builder()
-                                .setTitle(title)
-                                .setBody(body)
                                 .setIcon("https://bunout-bucket.s3.ap-northeast-2.amazonaws.com/%EC%B9%98%ED%82%A8_%EA%B8%B0%ED%94%84%ED%8B%B0%EC%BD%98_1.jpg")
                                 .setIcon("https://bunout-bucket.s3.ap-northeast-2.amazonaws.com/image.jpg") // 아이콘 URL 지정
                                 .build())
