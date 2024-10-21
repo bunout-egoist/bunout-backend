@@ -21,7 +21,6 @@ import static dough.global.exception.ExceptionCode.*;
 public class PushNotificationService {
 
     private final MemberRepository memberRepository;
-//    private static final int BATCH_SIZE = 500;
 
     @Scheduled(cron = "0 0 9 * * ?")
     public void sendDailyQuest() {
@@ -78,24 +77,20 @@ public class PushNotificationService {
                 .setNotification(Notification.builder()
                         .setTitle(title)
                         .setBody(body)
-                        .setImage("https://bunout-bucket.s3.ap-northeast-2.amazonaws.com/image.jpg")
                         .build())
                 .setAndroidConfig(AndroidConfig.builder()
                         .setTtl(3600 * 1000)
-                        .setNotification(AndroidNotification.builder()
-                                .setTitle(title)
-                                .setBody(body)
-                                .setIcon("https://bunout-bucket.s3.ap-northeast-2.amazonaws.com/image.jpg")
-                                .build())
                         .build())
                 .setApnsConfig(ApnsConfig.builder()
                         .setAps(Aps.builder()
-                                .setBadge(42)
                                 .build())
                         .build())
                 .setWebpushConfig(WebpushConfig.builder()
                         .putHeader("ttl", "300")
-                        .putData("icon", "https://bunout-bucket.s3.ap-northeast-2.amazonaws.com/image.jpg")
+                        .setNotification(WebpushNotification.builder()
+                                .setIcon("https://bunout-bucket.s3.ap-northeast-2.amazonaws.com/%EC%B9%98%ED%82%A8_%EA%B8%B0%ED%94%84%ED%8B%B0%EC%BD%98_1.jpg")
+                                .setIcon("https://bunout-bucket.s3.ap-northeast-2.amazonaws.com/image.jpg") // 아이콘 URL 지정
+                                .build())
                         .build())
                 .build();
     }
@@ -104,7 +99,7 @@ public class PushNotificationService {
         try {
             ApiFuture<BatchResponse> futureResponse = FirebaseMessaging.getInstance().sendEachAsync(messages);
 
-            BatchResponse response = futureResponse.get(); // This may throw an InterruptedException or ExecutionException
+            BatchResponse response = futureResponse.get();
 
             log.info("{} messages were sent successfully", response.getSuccessCount());
 
@@ -113,6 +108,4 @@ public class PushNotificationService {
             throw new BadRequestException(FAIL_TO_FCM_REQUEST);
         }
     }
-
-
 }
