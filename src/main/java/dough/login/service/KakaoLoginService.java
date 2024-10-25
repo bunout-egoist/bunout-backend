@@ -5,6 +5,7 @@ import dough.login.domain.LoginInfo;
 import dough.login.dto.response.KakaoMemberResponse;
 import dough.login.dto.response.KakaoTokenResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import static dough.login.domain.type.SocialLoginType.KAKAO;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class KakaoLoginService {
 
     private final LoginApiClient loginApiClient;
@@ -31,7 +33,9 @@ public class KakaoLoginService {
 
     public LoginInfo login(final String code) {
         final KakaoTokenResponse kakaoTokenResponse = loginApiClient.getKakaoToken(tokenRequestParams(code));
+        log.info(kakaoTokenResponse.getAccessToken());
         final KakaoMemberResponse kakaoMemberResponse = loginApiClient.getKakaoMemberInfo("Bearer " + kakaoTokenResponse.getAccessToken());
+        log.info(kakaoMemberResponse.getId().toString());
         return new LoginInfo(kakaoMemberResponse.getId().toString(), KAKAO);
     }
 
