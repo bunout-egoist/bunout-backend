@@ -29,9 +29,7 @@ public class LoginController {
             @RequestParam("code") final String code,
             @RequestBody FcmTokenRequest fcmTokenRequest
     ) {
-        log.info(code);
         final LoginResponse loginResponse = loginService.login(code, fcmTokenRequest);
-        log.info(loginResponse.getIsNewMember().toString());
         return ResponseEntity.ok().body(loginResponse);
     }
 
