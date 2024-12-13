@@ -32,6 +32,7 @@ public class SecurityConfig {
     private final MemberRepository memberRepository;
     private final TokenProvider tokenProvider;
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
