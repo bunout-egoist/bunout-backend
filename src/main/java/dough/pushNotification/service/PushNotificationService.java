@@ -70,7 +70,7 @@ public class PushNotificationService {
     private Message buildMessageForMember(Member member, String token, String titleTemplate, String bodyTemplate) {
         String nickname = member.getNickname();
         String title = String.format(titleTemplate, nickname);
-        String body = bodyTemplate != null ? String.format(bodyTemplate, nickname) : null;
+        String body = bodyTemplate != null ? String.format(bodyTemplate, nickname) : "";
 
         return Message.builder()
                 .setToken(token)
