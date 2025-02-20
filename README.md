@@ -1,5 +1,5 @@
 
-![Phone-capture-1](https://github.com/user-attachments/assets/673bc9c4-f49b-406e-8d48-3b29f96bc2df)
+<img src="https://github.com/user-attachments/assets/673bc9c4-f49b-406e-8d48-3b29f96bc2df" width="300">
 ![Phone-capture-6](https://github.com/user-attachments/assets/e37b0744-2d47-407b-804e-afd6768225d6)
 ![Phone-capture](https://github.com/user-attachments/assets/aad375a2-25b8-4524-a9a7-394956b757c5)
 ![Phone-capture-3](https://github.com/user-attachments/assets/30341f63-73dd-4700-b597-fb3939b2f536)
