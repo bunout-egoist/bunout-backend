@@ -1,3 +1,9 @@
+# 0. 에고이스트 팀 소개
+
+# 1. 수상 성과 및 지원 사업
+![image](https://github.com/user-attachments/assets/f4b0e02e-24f0-4e4a-983c-5a09453a07f7)울산광역시 정신건강 인식개선 아이디어 공모전 장려상![image](https://github.com/user-attachments/assets/9965dfa9-f411-43c8-b4bc-0a14a8d50333)
+
+
 # 1. 제목 사진
 <p align="center">
     <img src="https://github.com/user-attachments/assets/52e2ec70-b706-4caf-95dd-1c28c024b470" width="100%">
