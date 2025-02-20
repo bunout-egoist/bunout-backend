@@ -16,9 +16,12 @@
 <img src="https://github.com/user-attachments/assets/9b0d3b69-5b36-46df-9c96-2447919d8fff" width="800">
 ## 팀원 정보
 
-| 이름         | 역할           | 연락처                |
-|--------------|----------------|-----------------------|
-| 김철수       | 프로젝트 매니저 | chulsoo@example.com   |
-| 이영희       | 프론트엔드 개발자 | younghee@example.com  |
-| 박지훈       | 백엔드 개발자    | jihoon@example.com    |
-| 최유리       | 디자이너       | yuri@example.com      |
+## 팀원 정보
+
+| Picture | Name     | Position                         |
+|---------|----------|----------------------------------|
+| ![김송목](#) | 김송목  | Leader, Backend, DevOps, ML    |
+| ![이강욱](#) | 이강욱  | Tech Leader, Backend, DevOps   |
+| ![이세진](#) | 이세진  | Plan Leader, Backend           |
+| ![구희원](#) | 구희원  | Reminder, Frontend             |
+| ![조중현](#) | 조중현  | Planner, Frontend, GitHub      |
