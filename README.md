@@ -14,3 +14,11 @@
 <img src="https://github.com/user-attachments/assets/490f15c5-f6b3-444a-9982-bd3511731dfb" width="800">
 <br>
 <img src="https://github.com/user-attachments/assets/9b0d3b69-5b36-46df-9c96-2447919d8fff" width="800">
+## 팀원 정보
+
+| 이름         | 역할           | 연락처                |
+|--------------|----------------|-----------------------|
+| 김철수       | 프로젝트 매니저 | chulsoo@example.com   |
+| 이영희       | 프론트엔드 개발자 | younghee@example.com  |
+| 박지훈       | 백엔드 개발자    | jihoon@example.com    |
+| 최유리       | 디자이너       | yuri@example.com      |
