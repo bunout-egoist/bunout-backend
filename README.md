@@ -48,6 +48,13 @@
 
 ---
 
+# 5. ERD 설계
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/4bf432f9-19be-4b4d-9923-8ec23b54ad99" width="800" alt="ERD 설계도">
+</p>
+
+---
+
 # 6. 팀원 소개
 <p align="center">
     <img src="https://github.com/user-attachments/assets/9b0d3b69-5b36-46df-9c96-2447919d8fff" width="800" alt="팀원 소개">
