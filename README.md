@@ -1,40 +1,27 @@
-<div align="center">
-    <img src="https://github.com/user-attachments/assets/abcb0083-9342-483b-99ae-bff5fa3a7097" width="120">
-    
-    <h1 style="margin-top: 10px;">🌟 Our Mission & Value 🌟</h1>
-    
+<center>
+    <h1 style="margin-top: 10px; color: #222;">🌟 Our Mission & Value 🌟</h1>
     <p style="font-size: 20px; font-weight: bold; color: #333;">일상에 무너지지 않는 자아를 만들어 내일을 지킵니다.</p>
+    <img src="https://github.com/user-attachments/assets/9403061d-535c-40ac-baa0-86415cbff406" width="800" style="border-radius: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);">
     
-    <img src="https://github.com/user-attachments/assets/9403061d-535c-40ac-baa0-86415cbff406" width="800" style="border-radius: 10px;">
-</div>
+    <h1 style="margin-top: 50px; color: #222;">🏆 Award 🏆</h1>
+    <p style="font-size: 18px; color: #444;">울산광역시 정신건강 인식개선 아이디어 공모전 장려상</p>
+    <img src="https://github.com/user-attachments/assets/f4b0e02e-24f0-4e4a-983c-5a09453a07f7" width="120" style="border-radius: 10px;">
+</center>
 
-<hr style="border: 1px solid #ddd; margin: 40px 0;">
+<hr style="margin: 40px 0; border: 1px solid #ddd;">
 
-<div align="center">
-    <h1>🏆 Award 🏆</h1>
-    
-    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 18px; font-weight: bold; color: #555;">
-        <img src="https://github.com/user-attachments/assets/f4b0e02e-24f0-4e4a-983c-5a09453a07f7" width="24">
-        <span>울산광역시 정신건강 인식개선 아이디어 공모전 장려상</span>
-        <img src="https://github.com/user-attachments/assets/9965dfa9-f411-43c8-b4bc-0a14a8d50333" width="24">
-    </div>
-</div>
+<center>
+    <h2 style="color: #222;">📢 2024년 청년 창업지원 프로젝트 『메이커프로젝트』 📢</h2>
+    <ul style="list-style: none; padding: 0; font-size: 18px; color: #333;">
+        <li>✅ 팝업 부스 운영</li>
+        <li>✅ 앱 개발 지원</li>
+    </ul>
+</center>
 
-<hr style="border: 1px solid #ddd; margin: 40px 0;">
+<center>
+    <img src="https://github.com/user-attachments/assets/52e2ec70-b706-4caf-95dd-1c28c024b470" width="90%" style="border-radius: 10px;">
+</center>
 
-<div align="center">
-    <h2>🚀 2024년 청년 창업지원 프로젝트 『메이커프로젝트』 🚀</h2>
-    
-    <div style="font-size: 18px; font-weight: bold; color: #444; line-height: 1.8;">
-        <p>✅ 팝업 부스 운영</p>
-        <p>✅ 앱 개발 지원</p>
-    </div>
-</div>
-
-<p align="center">
-    <!-- 하단 이미지 -->
-    <img src="https://github.com/user-attachments/assets/52e2ec70-b706-4caf-95dd-1c28c024b470" width="100%" style="border-radius: 10px;">
-</p>
 
 ---
 
