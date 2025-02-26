@@ -91,11 +91,11 @@
 | **youngsun**     | R&D     | <a href="mailto:dlduddd091@gmail.com" target="_blank"><img src="https://img.shields.io/badge/Gmail-EA4335?style=flat-square&logo=gmail&logoColor=white"/></a> |
 | **sihyeon**         | Business Developer | <a href="mailto:sinoh1120@gmail.com" target="_blank"><img src="https://img.shields.io/badge/Gmail-EA4335?style=flat-square&logo=gmail&logoColor=white"/></a>   |
 | **gahyun**       |  Designer    | <a href="mailto:ghleeoo@naver.com" target="_blank"><img src="https://img.shields.io/badge/Gmail-EA4335?style=flat-square&logo=gmail&logoColor=white"/></a> |
-| **Jaelim**       | Frontend Developer    | https://github.com/heidi)](https://github.com/jllee000   |
-| **Goeun**       | Backend Developer | [[GitHub](https://github.com/david)](https://github.com/hagoeun0119)   |
-| **Junhee**       | Backend Developer | [[GitHub](https://github.com/frank)](https://github.com/karl21-02)   |
+| **Jaelim**       | Frontend Developer    | <a href="https://github.com/jllee000" target="_blank"><img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+</a> |
+| **Goeun**       | Backend Developer | <a href="https://github.com/hagoeun0119" target="_blank"><img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+</a>  |
+| **Junhee**       | Backend Developer | <a href="https://github.com/hagoeun0119(https://github.com/karl21-02)" target="_blank"><img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">  |
   <a href="mailto:manuna530@gmail.com" target="_blank"><img src="https://img.shields.io/badge/Gmail-EA4335?style=flat-square&logo=gmail&logoColor=white"/></a>
 <br>
-<img src="https://github.com/user-attachments/assets/9b0d3b69-5b36-46df-9c96-2447919d8fff" width="800" alt="Team Introduction">
-
 </div>
