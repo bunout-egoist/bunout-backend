@@ -20,17 +20,12 @@
         <p>✅ 앱 개발 지원</p>
     </div>
 </div>
-
----
-
-# 2. 제목 사진
 <p align="center">
     <img src="https://github.com/user-attachments/assets/52e2ec70-b706-4caf-95dd-1c28c024b470" width="100%" alt="제목 사진">
 </p>
 
 ---
 
-# 3. 앱 화면 사진으로 쥬요 기능 소개
 <p align="center">
     <img src="https://github.com/user-attachments/assets/673bc9c4-f49b-406e-8d48-3b29f96bc2df" width="300" alt="앱 화면 사진 1">
     <img src="https://github.com/user-attachments/assets/e37b0744-2d47-407b-804e-afd6768225d6" width="300" alt="앱 화면 사진 2">
