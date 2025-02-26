@@ -65,7 +65,7 @@
 ---
 
 <div align="center">
-    <h1 style="font-size: 32px; color: #4CAF50; margin: 20px 0;">5. System Architecture</h1>
+    <h1 style="font-size: 36px; color: #4CAF50; margin: 20px 0; font-family: 'Arial', sans-serif; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);">✨ System Architecture ✨</h1>
     <img src="https://github.com/user-attachments/assets/490f15c5-f6b3-444a-9982-bd3511731dfb" width="800" alt="System Architecture">
     <p style="font-size: 18px; font-weight: bold; color: #555;">System Architecture Diagram</p>
 </div>
@@ -73,8 +73,8 @@
 ---
 
 <div align="center">
-    <h1 style="font-size: 32px; color: #FF9800; margin: 20px 0;">6. ERD (Entity Relationship Diagram)</h1>
-    <img src="https://github.com/user-attachments/assets/490f15c5-f6b3-444a-9982-bd3511731dfb" width="800" alt="ERD">
+    <h1 style="font-size: 36px; color: #FF9800; margin: 20px 0; font-family: 'Arial', sans-serif; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);">📊 ERD (Entity Relationship Diagram) 📊</h1>
+    <img src="https://github.com/user-attachments/assets/85dd63f7-e40d-415f-91d0-632bdbb096e0" width="800" alt="ERD">
     <p style="font-size: 18px; font-weight: bold; color: #555;">Entity Relationship Diagram</p>
 </div>
 
