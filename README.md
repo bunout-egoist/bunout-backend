@@ -47,33 +47,40 @@
 
 ---
 
-# 4. 기술 스택
 <div align="center">
     <h1>🛠️ 기술 스택 🛠️</h1>
     
     <div>
-        ### Frontend
-        - React
-        - Vite
-        - PWA
+        <h3>Frontend</h3>
+        <ul>
+            <li>React</li>
+            <li>Vite</li>
+            <li>PWA</li>
+        </ul>
     </div>
     
     <div>
-        ### Backend
-        - Spring Boot
-        - Java
+        <h3>Backend</h3>
+        <ul>
+            <li>Spring Boot</li>
+            <li>Java</li>
+        </ul>
     </div>
     
     <div>
-        ### Database
-        - MySQL
-        - AWS RDS
+        <h3>Database</h3>
+        <ul>
+            <li>MySQL</li>
+            <li>AWS RDS</li>
+        </ul>
     </div>
     
     <div>
-        ### Infrastructure
-        - AWS EC2
-        - Docker
+        <h3>Infrastructure</h3>
+        <ul>
+            <li>AWS EC2</li>
+            <li>Docker</li>
+        </ul>
     </div>
 </div>
 
