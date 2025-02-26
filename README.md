@@ -54,18 +54,15 @@
 
 | 분야          | 기술           | 설명                     |
 |:-------------:|:--------------:|:-----------------------:|
-| **Frontend**  |                |                         |
-|               | React          | UI 라이브러리           |
+| **Frontend**  | React          | UI 라이브러리           |
 |               | Vite           | 빌드 도구               |
 |               | PWA            | 프로그레시브 웹 앱      |
-| **Backend**   |                |                         |
-|               | Spring Boot    | 프레임워크               |
+| **Backend**   | Spring Boot    | 프레임워크               |
 |               | Java           | 프로그래밍 언어         |
 | **Database**  |                |                         |
 |               | MySQL          | 관계형 DB               |
-|               | AWS RDS        | 관리형 DB               |
-| **Infrastructure** |           |                         |
-|               | AWS EC2       | 클라우드 서버           |
+|               | AWS RDS        | AWS DB               |
+|  **Infrastructure** | AWS EC2       | 클라우드 서버           |
 |               | Docker         | 컨테이너화 도구         |
 
 
