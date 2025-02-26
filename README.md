@@ -1,21 +1,16 @@
 <div align="center">
-    <!-- 로고 이미지 -->
     <img src="https://github.com/user-attachments/assets/abcb0083-9342-483b-99ae-bff5fa3a7097" width="120">
     
-    <!-- 메인 제목 -->
     <h1 style="margin-top: 10px;">🌟 Our Mission & Value 🌟</h1>
     
-    <!-- 미션 내용 -->
     <p style="font-size: 20px; font-weight: bold; color: #333;">일상에 무너지지 않는 자아를 만들어 내일을 지킵니다.</p>
     
-    <!-- 메인 이미지 -->
     <img src="https://github.com/user-attachments/assets/9403061d-535c-40ac-baa0-86415cbff406" width="800" style="border-radius: 10px;">
 </div>
 
 <hr style="border: 1px solid #ddd; margin: 40px 0;">
 
 <div align="center">
-    <!-- 수상 내역 -->
     <h1>🏆 Award 🏆</h1>
     
     <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 18px; font-weight: bold; color: #555;">
@@ -28,7 +23,6 @@
 <hr style="border: 1px solid #ddd; margin: 40px 0;">
 
 <div align="center">
-    <!-- 프로젝트 소개 -->
     <h2>🚀 2024년 청년 창업지원 프로젝트 『메이커프로젝트』 🚀</h2>
     
     <div style="font-size: 18px; font-weight: bold; color: #444; line-height: 1.8;">
