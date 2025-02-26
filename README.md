@@ -1,12 +1,12 @@
 # 0. 에고이스트 팀 소개
-<p align="center">
-    Mission & Value
-    # **Mission**
-    **일상에 무너지지 않는 자아를 만들어 내일을 지킵니다.**
-    
-    <img src="https://github.com/user-attachments/assets/747cad55-bbac-42f0-bbb9-ed94f2d32fd7" width="18">
-</p>
+# Mission & Value
 
+## Mission
+
+**일상에 무너지지 않는 자아를 만들어 내일을 지킵니다.**
+
+
+    <img src="https://github.com/user-attachments/assets/747cad55-bbac-42f0-bbb9-ed94f2d32fd7" width="18">
 ---
 
 # 1. 수상 성과 및 지원 사업
