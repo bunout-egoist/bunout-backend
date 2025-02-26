@@ -13,11 +13,13 @@
     <span style="font-size: 16px; line-height: 1.5;">울산광역시 정신건강 인식개선 아이디어 공모전 장려상</span>
     <img src="https://github.com/user-attachments/assets/9965dfa9-f411-43c8-b4bc-0a14a8d50333" width="18" alt="수상 사진 2">
 </div>
-
-### 2024년 청년 창업지원 프로젝트『메이커프로젝트』
-- 팝업 부스 운영
-- 앱 개발 지원
-
+<div>
+    <h2>📢 2024년 청년 창업지원 프로젝트 『메이커프로젝트』</h2>
+    <ul style="list-style-type: none; padding: 0; font-size: 18px;">
+        <li>✅ 팝업 부스 운영</li>
+        <li>✅ 앱 개발 지원</li>
+    </ul>
+</div>
 ---
 
 # 2. 제목 사진
