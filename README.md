@@ -8,14 +8,16 @@
 ---
 
 <div align="center">
-    <h1>Award</h1>
-    <img src="https://github.com/user-attachments/assets/f4b0e02e-24f0-4e4a-983c-5a09453a07f7" width="18" alt="수상 사진 1"> 
-    <span style="font-size: 16px; line-height: 1.5;">울산광역시 정신건강 인식개선 아이디어 공모전 장려상</span>
-    <img src="https://github.com/user-attachments/assets/9965dfa9-f411-43c8-b4bc-0a14a8d50333" width="18" alt="수상 사진 2">
+    <h1>🏆 Award 🏆</h1>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 18px; font-weight: bold; color: #555;">
+        <img src="https://github.com/user-attachments/assets/f4b0e02e-24f0-4e4a-983c-5a09453a07f7" width="24">
+        <span>울산광역시 정신건강 인식개선 아이디어 공모전 장려상</span>
+        <img src="https://github.com/user-attachments/assets/9965dfa9-f411-43c8-b4bc-0a14a8d50333" width="24">
+    </div>
 </div>
 <div>
-    <h2>📢 2024년 청년 창업지원 프로젝트 『메이커프로젝트』</h2>
-    <div style="font-size: 18px;">
+    <h2>🚀 2024년 청년 창업지원 프로젝트 『메이커프로젝트』 🚀</h2>
+    <div style="font-size: 18px; font-weight: bold; color: #444; line-height: 1.8;">
         <p>✅ 팝업 부스 운영</p>
         <p>✅ 앱 개발 지원</p>
     </div>
