@@ -32,6 +32,7 @@
     <img src="https://github.com/user-attachments/assets/132fea58-0bfd-43d4-84ec-f2e708294ae2" width="300" alt="앱 화면 사진 6">
 </p>
 
+
 ---
 
 # 4. 기술 스택
