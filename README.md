@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="![에고이스트](https://github.com/user-attachments/assets/abcb0083-9342-483b-99ae-bff5fa3a7097)" width="800"> 
+    <img src="https://github.com/user-attachments/assets/abcb0083-9342-483b-99ae-bff5fa3a7097" width="300"> 
     <h1>Mission & Value</h1>
     <p><strong>일상에 무너지지 않는 자아를 만들어 내일을 지킵니다.</strong></p>
     <img src="https://github.com/user-attachments/assets/9403061d-535c-40ac-baa0-86415cbff406" width="800"> 
