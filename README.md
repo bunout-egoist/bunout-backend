@@ -49,7 +49,104 @@
 
 # 4. 기술 스택
 <p align="center">
-    <!-- 기술 스택 내용 추가 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기술 스택</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        td > div {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .tag {
+            background-color: #eee;
+            border-radius: 5px;
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>기술 스택</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>분야</th>
+                <th>사용 기술</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Frontend</td>
+                <td>
+                    <div>
+                        <span class="tag">React</span>
+                        <span class="tag">Vite</span>
+                        <span class="tag">FullCalendar</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Backend</td>
+                <td>
+                    <div>
+                        <span class="tag">Java</span>
+                        <span class="tag">Spring Boot</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Database</td>
+                <td>
+                    <div>
+                        <span class="tag">MySQL</span>
+                        <span class="tag">Redis</span>
+                        <span class="tag">AWS RDS</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Infrastructure</td>
+                <td>
+                    <div>
+                        <span class="tag">Amazon EC2</span>
+                        <span class="tag">AWS ELB</span>
+                        <span class="tag">Docker Compose</span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Monitoring</td>
+                <td>
+                    <div>
+                        <span class="tag">Prometheus</span>
+                        <span class="tag">Grafana</span>
+                        <span class="tag">AWS CloudWatch</span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </p>
 
 ---
