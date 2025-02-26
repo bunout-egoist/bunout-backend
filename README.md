@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fefbac781-747a-4f70-ab0f-0d3c53917b00%2F598fbe80-740c-426a-9207-7e1dafc37275%2Flogo-trans.png?table=block&id=f1e60907-eefd-4631-8e5e-c1d25b8b6fd9&spaceId=efbac781-747a-4f70-ab0f-0d3c53917b00&width=250&userId=a75af174-e2ae-4396-bd26-84f2bc9d5d6a&cache=v2" width="800"> 
+    <img src="![에고이스트](https://github.com/user-attachments/assets/abcb0083-9342-483b-99ae-bff5fa3a7097)" width="800"> 
     <h1>Mission & Value</h1>
     <p><strong>일상에 무너지지 않는 자아를 만들어 내일을 지킵니다.</strong></p>
     <img src="https://github.com/user-attachments/assets/9403061d-535c-40ac-baa0-86415cbff406" width="800"> 
