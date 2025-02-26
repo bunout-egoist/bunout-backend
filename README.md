@@ -83,8 +83,8 @@
 <div align="center">
     <h1 style="font-size: 36px; color: #3A86FF; margin: 20px 0; font-family: 'Arial', sans-serif; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);">👥 Our TEAM 👥</h1>
     <img src="https://github.com/user-attachments/assets/9b0d3b69-5b36-46df-9c96-2447919d8fff" width="800" alt="팀원 소개">
-    <br>
     <p style="font-size: 18px; font-weight: bold; color: #555;">Meet our talented team members!</p>
+    
 | Name            | Position         | Contact                                |
 |:---------------:|:----------------:|:-------------------------------------:|
 | **juhyeon**       | Lead | <a href="mailto:juhyeon.im.kr@gmail.com" target="_blank"><img src="https://img.shields.io/badge/Gmail-EA4335?style=flat-square&logo=gmail&logoColor=white"/></a> |
