@@ -48,106 +48,45 @@
 ---
 
 # 4. 기술 스택
-<p align="center">
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>기술 스택</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        td > div {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .tag {
-            background-color: #eee;
-            border-radius: 5px;
-            padding: 5px 10px;
-        }
-    </style>
-</head>
-<body>
+<div align="center">
+    <h1 style="margin: 20px 0; font-size: 36px;">🛠️ 기술 스택 🛠️</h1>
+    
+    <div style="display: flex; flex-direction: column; align-items: center;">
+        <div style="margin: 10px; padding: 20px; border: 2px solid #4CAF50; border-radius: 10px; width: 60%;">
+            <h2 style="font-size: 28px;">Frontend</h2>
+            <div style="display: flex; justify-content: center; gap: 15px;">
+                <span class="tag" style="background-color: #e1f5fe; padding: 10px; border-radius: 5px;">React</span>
+                <span class="tag" style="background-color: #e1f5fe; padding: 10px; border-radius: 5px;">Vite</span>
+                <span class="tag" style="background-color: #e1f5fe; padding: 10px; border-radius: 5px;">PWA</span>
+            </div>
+        </div>
 
-<h2>기술 스택</h2>
+        <div style="margin: 10px; padding: 20px; border: 2px solid #ff9800; border-radius: 10px; width: 60%;">
+            <h2 style="font-size: 28px;">Backend</h2>
+            <div style="display: flex; justify-content: center; gap: 15px;">
+                <span class="tag" style="background-color: #ffe0b2; padding: 10px; border-radius: 5px;">Spring Boot</span>
+                <span class="tag" style="background-color: #ffe0b2; padding: 10px; border-radius: 5px;">Java</span>
+            </div>
+        </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>분야</th>
-                <th>사용 기술</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Frontend</td>
-                <td>
-                    <div>
-                        <span class="tag">React</span>
-                        <span class="tag">Vite</span>
-                        <span class="tag">FullCalendar</span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>Backend</td>
-                <td>
-                    <div>
-                        <span class="tag">Java</span>
-                        <span class="tag">Spring Boot</span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>Database</td>
-                <td>
-                    <div>
-                        <span class="tag">MySQL</span>
-                        <span class="tag">Redis</span>
-                        <span class="tag">AWS RDS</span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>Infrastructure</td>
-                <td>
-                    <div>
-                        <span class="tag">Amazon EC2</span>
-                        <span class="tag">AWS ELB</span>
-                        <span class="tag">Docker Compose</span>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>Monitoring</td>
-                <td>
-                    <div>
-                        <span class="tag">Prometheus</span>
-                        <span class="tag">Grafana</span>
-                        <span class="tag">AWS CloudWatch</span>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</p>
+        <div style="margin: 10px; padding: 20px; border: 2px solid #2196f3; border-radius: 10px; width: 60%;">
+            <h2 style="font-size: 28px;">Database</h2>
+            <div style="display: flex; justify-content: center; gap: 15px;">
+                <span class="tag" style="background-color: #bbdefb; padding: 10px; border-radius: 5px;">MySQL</span>
+                <span class="tag" style="background-color: #bbdefb; padding: 10px; border-radius: 5px;">AWS RDS</span>
+            </div>
+        </div>
+
+        <div style="margin: 10px; padding: 20px; border: 2px solid #9c27b0; border-radius: 10px; width: 60%;">
+            <h2 style="font-size: 28px;">Infrastructure</h2>
+            <div style="display: flex; justify-content: center; gap: 15px;">
+                <span class="tag" style="background-color: #e1bee7; padding: 10px; border-radius: 5px;">AWS EC2</span>
+                <span class="tag" style="background-color: #e1bee7; padding: 10px; border-radius: 5px;">Docker</span>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 ---
 
