@@ -1,26 +1,37 @@
-<center>
-    <h1 style="margin-top: 10px; color: #222;">🌟 Our Mission & Value 🌟</h1>
-    <p style="font-size: 20px; font-weight: bold; color: #333;">일상에 무너지지 않는 자아를 만들어 내일을 지킵니다.</p>
-    <img src="https://github.com/user-attachments/assets/9403061d-535c-40ac-baa0-86415cbff406" width="800" style="border-radius: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);">
-    
-    <h1 style="margin-top: 50px; color: #222;">🏆 Award 🏆</h1>
-    <p style="font-size: 18px; color: #444;">울산광역시 정신건강 인식개선 아이디어 공모전 장려상</p>
-    <img src="https://github.com/user-attachments/assets/f4b0e02e-24f0-4e4a-983c-5a09453a07f7" width="120" style="border-radius: 10px;">
-</center>
+<p align="center">
+    <h1>🌟 Our Mission & Value 🌟</h1>
+    <strong>일상에 무너지지 않는 자아를 만들어 내일을 지킵니다.</strong>
+</p>
 
-<hr style="margin: 40px 0; border: 1px solid #ddd;">
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/9403061d-535c-40ac-baa0-86415cbff406" width="800">
+</p>
 
-<center>
-    <h2 style="color: #222;">📢 2024년 청년 창업지원 프로젝트 『메이커프로젝트』 📢</h2>
-    <ul style="list-style: none; padding: 0; font-size: 18px; color: #333;">
-        <li>✅ 팝업 부스 운영</li>
-        <li>✅ 앱 개발 지원</li>
-    </ul>
-</center>
+---
 
-<center>
-    <img src="https://github.com/user-attachments/assets/52e2ec70-b706-4caf-95dd-1c28c024b470" width="90%" style="border-radius: 10px;">
-</center>
+<p align="center">
+    <h1>🏆 Award 🏆</h1>
+    울산광역시 정신건강 인식개선 아이디어 공모전 장려상
+</p>
+
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/f4b0e02e-24f0-4e4a-983c-5a09453a07f7" width="120">
+</p>
+
+---
+
+<p align="center">
+    <h2>📢 2024년 청년 창업지원 프로젝트 『메이커프로젝트』 📢</h2>
+</p>
+
+<ul align="center">
+    <li>✅ 팝업 부스 운영</li>
+    <li>✅ 앱 개발 지원</li>
+</ul>
+
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/52e2ec70-b706-4caf-95dd-1c28c024b470" width="90%">
+</p>
 
 
 ---
