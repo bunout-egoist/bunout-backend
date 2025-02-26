@@ -59,8 +59,7 @@
 |               | PWA            | 프로그레시브 웹 앱      |
 | **Backend**   | Spring Boot    | 프레임워크               |
 |               | Java           | 프로그래밍 언어         |
-| **Database**  |                |                         |
-|               | MySQL          | 관계형 DB               |
+| **Database**  | MySQL          | 관계형 DB               |
 |               | AWS RDS        | AWS DB               |
 |  **Infrastructure** | AWS EC2       | 클라우드 서버           |
 |               | Docker         | 컨테이너화 도구         |
