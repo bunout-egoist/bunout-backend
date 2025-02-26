@@ -83,7 +83,6 @@
 <div align="center">
     <h1 style="font-size: 36px; color: #3A86FF; margin: 20px 0; font-family: 'Arial', sans-serif; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);">👥 Our TEAM 👥</h1>
     <p style="font-size: 18px; font-weight: bold; color: #555;">Meet our talented team members!</p>
-    <img src="https://github.com/user-attachments/assets/9b0d3b69-5b36-46df-9c96-2447919d8fff" width="800" alt="Team Introduction">
 
 | Name            | Position         | Contact                                |
 |:---------------:|:----------------:|:-------------------------------------:|
@@ -95,4 +94,8 @@
 | **Jaelim**       | Frontend Developer    | [[GitHub](https://github.com/heidi)](https://github.com/jllee000)   |
 | **Goeun**       | Backend Developer | [[GitHub](https://github.com/david)](https://github.com/hagoeun0119)   |
 | **Junhee**       | Backend Developer | [[GitHub](https://github.com/frank)](https://github.com/karl21-02)   |
+
+<br>
+<img src="https://github.com/user-attachments/assets/9b0d3b69-5b36-46df-9c96-2447919d8fff" width="800" alt="Team Introduction">
+
 </div>
