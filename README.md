@@ -1,7 +1,7 @@
 <div align="center">
     <img src="https://github.com/user-attachments/assets/abcb0083-9342-483b-99ae-bff5fa3a7097" width="120"> 
-    <h1>Our Mission & Value</h1>
-    <p><strong>일상에 무너지지 않는 자아를 만들어 내일을 지킵니다.</strong></p>
+    <h1 style="margin-top: 10px;">🌟 Our Mission & Value 🌟</h1>
+    <p style="font-size: 20px; font-weight: bold; color: #333;">일상에 무너지지 않는 자아를 만들어 내일을 지킵니다.</p>
     <img src="https://github.com/user-attachments/assets/9403061d-535c-40ac-baa0-86415cbff406" width="800"> 
 </div>
 
@@ -15,13 +15,21 @@
         <img src="https://github.com/user-attachments/assets/9965dfa9-f411-43c8-b4bc-0a14a8d50333" width="24">
     </div>
 </div>
-<div>
+
+---
+
+<div align="center">
     <h2>🚀 2024년 청년 창업지원 프로젝트 『메이커프로젝트』 🚀</h2>
-    <div style="font-size: 18px; font-weight: bold; color: #444; line-height: 1.8;">
-        <p>✅ 팝업 부스 운영</p>
-        <p>✅ 앱 개발 지원</p>
-    </div>
 </div>
+
+<div style="font-size: 18px; font-weight: bold; color: #444; line-height: 1.8; text-align: center;">
+    <p>✅ 팝업 부스 운영</p>
+    <p>✅ 앱 개발 지원</p>
+</div>
+
+---
+
+### 📌 **앱 제목 사진**
 <p align="center">
     <img src="https://github.com/user-attachments/assets/52e2ec70-b706-4caf-95dd-1c28c024b470" width="100%" alt="제목 사진">
 </p>
