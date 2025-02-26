@@ -10,11 +10,11 @@
 <div align="center">
     <h1>🏆 Award 🏆</h1>
     <div style="display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 18px; font-weight: bold; color: #555;">
-        <img src="https://github.com/user-attachments/assets/f4b0e02e-24f0-4e4a-983c-5a09453a07f7" width="24">
-        <span>울산광역시 정신건강 인식개선 아이디어 공모전 장려상</span>
-        <img src="https://github.com/user-attachments/assets/9965dfa9-f411-43c8-b4bc-0a14a8d50333" width="24">
+        <p>🥇 울산광역시 정신건강 인식개선 아이디어 공모전 장려상 🏅</p>
+        <p>🎖️ 국내 최대 대학생 연합 디지털 헬스케어 창업 동아리 MEDILUX 장기 프로젝트 우수상 🥈</p>
     </div>
 </div>
+
 
 ---
 
