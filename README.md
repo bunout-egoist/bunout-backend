@@ -6,6 +6,7 @@
 <p align="center">
     <img src="https://github.com/user-attachments/assets/f4b0e02e-24f0-4e4a-983c-5a09453a07f7" width="18" alt="수상 사진 1"> 
     <span style="font-size: 16px; line-height: 1.5;">울산광역시 정신건강 인식개선 아이디어 공모전 장려상</span>
+    
     <img src="https://github.com/user-attachments/assets/9965dfa9-f411-43c8-b4bc-0a14a8d50333" width="18" alt="수상 사진 2">
 </p>
 
