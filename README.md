@@ -49,44 +49,33 @@
 
 # 4. 기술 스택
 <div align="center">
-    <h1 style="margin: 20px 0; font-size: 36px;">🛠️ 기술 스택 🛠️</h1>
+    <h1>🛠️ 기술 스택 🛠️</h1>
     
-    <div style="display: flex; flex-direction: column; align-items: center;">
-        <div style="margin: 10px; padding: 20px; border: 2px solid #4CAF50; border-radius: 10px; width: 60%;">
-            <h2 style="font-size: 28px;">Frontend</h2>
-            <div style="display: flex; justify-content: center; gap: 15px;">
-                <span class="tag" style="background-color: #e1f5fe; padding: 10px; border-radius: 5px;">React</span>
-                <span class="tag" style="background-color: #e1f5fe; padding: 10px; border-radius: 5px;">Vite</span>
-                <span class="tag" style="background-color: #e1f5fe; padding: 10px; border-radius: 5px;">PWA</span>
-            </div>
-        </div>
-
-        <div style="margin: 10px; padding: 20px; border: 2px solid #ff9800; border-radius: 10px; width: 60%;">
-            <h2 style="font-size: 28px;">Backend</h2>
-            <div style="display: flex; justify-content: center; gap: 15px;">
-                <span class="tag" style="background-color: #ffe0b2; padding: 10px; border-radius: 5px;">Spring Boot</span>
-                <span class="tag" style="background-color: #ffe0b2; padding: 10px; border-radius: 5px;">Java</span>
-            </div>
-        </div>
-
-        <div style="margin: 10px; padding: 20px; border: 2px solid #2196f3; border-radius: 10px; width: 60%;">
-            <h2 style="font-size: 28px;">Database</h2>
-            <div style="display: flex; justify-content: center; gap: 15px;">
-                <span class="tag" style="background-color: #bbdefb; padding: 10px; border-radius: 5px;">MySQL</span>
-                <span class="tag" style="background-color: #bbdefb; padding: 10px; border-radius: 5px;">AWS RDS</span>
-            </div>
-        </div>
-
-        <div style="margin: 10px; padding: 20px; border: 2px solid #9c27b0; border-radius: 10px; width: 60%;">
-            <h2 style="font-size: 28px;">Infrastructure</h2>
-            <div style="display: flex; justify-content: center; gap: 15px;">
-                <span class="tag" style="background-color: #e1bee7; padding: 10px; border-radius: 5px;">AWS EC2</span>
-                <span class="tag" style="background-color: #e1bee7; padding: 10px; border-radius: 5px;">Docker</span>
-            </div>
-        </div>
+    <div>
+        ### Frontend
+        - React
+        - Vite
+        - PWA
+    </div>
+    
+    <div>
+        ### Backend
+        - Spring Boot
+        - Java
+    </div>
+    
+    <div>
+        ### Database
+        - MySQL
+        - AWS RDS
+    </div>
+    
+    <div>
+        ### Infrastructure
+        - AWS EC2
+        - Docker
     </div>
 </div>
-
 
 ---
 
