@@ -80,7 +80,7 @@
 
 ---
 
-# 6. 팀원 소개
+# TEAM
 <p align="center">
     <img src="https://github.com/user-attachments/assets/9b0d3b69-5b36-46df-9c96-2447919d8fff" width="800" alt="팀원 소개">
 </p>
