@@ -29,7 +29,6 @@
 
 ---
 
-### 📌
 <p align="center">
     <img src="https://github.com/user-attachments/assets/52e2ec70-b706-4caf-95dd-1c28c024b470" width="100%" alt="제목 사진">
 </p>
